@@ -39,12 +39,6 @@
   }
 }
 @font-face {
-  font-family: MuhikuPlug;
-  src: url("../fonts/MuhikuPlug.eot?q9mcqj");
-  src: url("../fonts/MuhikuPlug.eot?q9mcqj#iefix") format("embedded-opentype"),
-    url("../fonts/MuhikuPlug.ttf?q9mcqj") format("truetype"),
-    url("../fonts/MuhikuPlug.woff?q9mcqj") format("woff"),
-    url("../fonts/MuhikuPlug.svg?q9mcqj#MuhikuPlug") format("svg");
   font-weight: 400;
   font-style: normal;
   font-display: block;

@@ -1,17 +1,11 @@
-/**
- * MuhikuPlug CSS Variables
- */
-/*=====  Primary Color  ======*/
+
 $muhikuforms:					#7e3bd0;
 $muhikuforms-soft:				lighten($muhikuforms, 40%);
 
-/*=====  Semantic Color  ======*/
-// Colors for notifications
 $green:							#4bce61;
 $red:							#fa5252;
 $orange:						#ffba00;
 $blue:							#0095ff;
 
-/*=====  Neutral colors  ======*/
 @import 'colors';
 @import 'grids';

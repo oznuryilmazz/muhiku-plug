@@ -1,11 +1,5 @@
- /**
-  * Row
-  **/
- .mhk-row {
+.mhk-row {
 	 @include create-row();
  }
 
- /**
-  * Columns
-  **/
  @include make-grid-columns();

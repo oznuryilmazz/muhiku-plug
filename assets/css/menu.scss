@@ -1,19 +1,8 @@
-/**
- * menu.scss
- * Styles applied to dashboard menu items added via MuhikuPlug.
- * Adds icons to top level menu items, etc.
- */
 
-/**
- * Imports
- */
 @import 'mixins/mixins';
 @import 'variables/variables';
 @import 'fonts';
 
-/**
- * Styling begins.
- */
 #mhk-modal-wrap {
 	display: none;
 	background-color: #fff;

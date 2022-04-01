@@ -1,5 +1,3 @@
-// Margin and Padding
-
 @each $breakpoint in map-keys($grid-breakpoints) {
 	@include media-breakpoint-up($breakpoint) {
 		$infix: breakpoint-infix($breakpoint, $grid-breakpoints);
@@ -28,7 +26,6 @@
 			}
 		}
 
-		// Negative margins (e.g., where `.mhk-mb-n1` is negative version of `.mhk-mb-1`)
 		@each $size, $length in $grid-spacers {
 			@if $size != 0 {
 				.mhk-m#{$infix}-n#{$size} {
@@ -53,7 +50,6 @@
 			}
 		}
 
-		// Some special margin utils
 		.mhk-m#{$infix}-auto {
 			margin: auto !important;
 		}

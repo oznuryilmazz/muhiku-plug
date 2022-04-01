@@ -1,7 +1,3 @@
-/**
- * Media of at least the minimum breakpoint width. No query for the smallest breakpoint.
- * Makes the @content apply to the given breakpoint and wider.
- **/
 @mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
 	$min: breakpoint-min($name, $breakpoints);
 	@if $min {
@@ -14,11 +10,6 @@
 	}
 }
 
-/**
- * Grid system
- *
- * Generate semantic grid columns with these mixins.
- **/
 @mixin create-container($gutter: $grid-gutter) {
 	width: 100%;
 	padding-right: $gutter;
@@ -33,7 +24,6 @@
 	}
 }
 
-// For each breakpoint, define the maximum width of the container in a media query
 @mixin create-container-max-widths($max-widths: $container-max-widths, $breakpoints: $grid-breakpoints) {
 	@each $breakpoint, $container-max-width in $max-widths {
 		@include media-breakpoint-up($breakpoint, $breakpoints) {
@@ -56,9 +46,6 @@
 
 @mixin make-col($size, $columns: $grid-columns) {
 	flex: 0 0 percentage($size / $columns);
-	// Add a `max-width` to ensure content within each column does not blow out
-	// the width of the column. Applies to IE10+ and Firefox. Chrome and Safari
-	// do not appear to require this.
 	max-width: percentage($size / $columns);
 }
 
@@ -67,11 +54,6 @@
 	margin-left: if($num == 0, 0, percentage($num));
 }
 
-// Row columns
-//
-// Specify on a parent element(e.g., .row) to force immediate children into NN
-// numberof columns. Supports wrapping to new lines, but does not do a Masonry
-// style grid.
 @mixin row-cols($count) {
 	& > * {
 		flex: 0 0 auto;
@@ -91,7 +73,6 @@
 		$infix: breakpoint-infix($breakpoint, $breakpoints);
 
 		@if $columns > 0 {
-			// Allow columns to stretch full width below their breakpoints
 			@for $i from 1 through $columns {
 				.mhk-col#{$infix}-#{$i} {
 					@extend %grid-column;
@@ -105,9 +86,8 @@
 		}
 
 		@include media-breakpoint-up($breakpoint, $breakpoints) {
-			// Provide basic `.col-{bp}` classes for equal-width flexbox columns
 			.mhk-col#{$infix} {
-				flex: 1 0 0%; // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
+				flex: 1 0 0%; 
 			}
 
 			.mhk-row-cols#{$infix}-auto > * {
@@ -133,9 +113,8 @@
 					}
 				}
 
-				// `$columns - 1` because offsetting by the width of an entire row isn't possible
 				@for $i from 0 through ($columns - 1) {
-					@if not ($infix == '' and $i == 0) { // Avoid emitting useless .offset-0
+					@if not ($infix == '' and $i == 0) { 
 						.mhk-offset#{$infix}-#{$i} {
 							@include make-col-offset($i, $columns);
 						}
@@ -143,9 +122,6 @@
 				}
 			}
 
-			// Gutters
-			//
-			// Make use of `.g-*`, `.gx-*` or `.gy-*` utilities to change spacing between the columns.
 			@each $key, $value in $grid-spacers {
 				.mhk-g#{$infix}-#{$key},
 				.mhk-gx#{$infix}-#{$key} {

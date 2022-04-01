@@ -1,6 +1,3 @@
-/**
- * Display Variations
- **/
 $displays: none, inline, inline-block, block, table, table-row, table-cell, flex, inline-flex;
 
 @each $breakpoint in map-keys($grid-breakpoints) {
@@ -15,11 +12,6 @@ $displays: none, inline, inline-block, block, table, table-row, table-cell, flex
 	}
 }
 
-/**
-* Flex variation
-*
-* Custom styles for additional flex alignment options.
-**/
 @each $breakpoint in map-keys($grid-breakpoints) {
 	@include media-breakpoint-up($breakpoint) {
 		$infix: breakpoint-infix($breakpoint, $grid-breakpoints);

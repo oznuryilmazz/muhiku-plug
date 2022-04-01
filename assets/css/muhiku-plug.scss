@@ -1,21 +1,9 @@
-/**
- * muhiku-plug.scss
- * Governs the general look and feel of MuhikuPlug sections of sites using themes that do not
- * integrate with MuhikuPlug specifically.
- */
-
-/**
- * Imports
- */
 @import 'mixins/mixins';
 @import 'variables/variables';
 @import 'animation';
 @import 'fonts';
 @import 'clearings';
 
-/**
- * Global styles
- */
 .screen-reader-text {
 	clip: rect(1px, 1px, 1px, 1px);
 	height: 1px;
@@ -24,17 +12,10 @@
 	width: 1px;
 	word-wrap: normal !important;
 }
-
-/**
- * Utility classes
- */
 .clear {
 	clear: both;
 }
 
-/**
- * Main MuhikuPlug styles
- */
 .muhiku-plug {
 	*,
 	*::before,

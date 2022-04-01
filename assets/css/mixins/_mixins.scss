@@ -1,13 +1,7 @@
-//Helpers
 @import 'breakpoints';
 
-// layouts
 @import 'grids';
 
-/**
- * _mixins.scss
- * MuhikuPlug Mixins
- */
 @mixin clearfix() {
 	*zoom: 1;
 
@@ -22,9 +16,6 @@
 	}
 }
 
-/**
- * Objects
- */
 @mixin menu() {
 	@include clearfix();
 
@@ -60,7 +51,7 @@
 }
 
 @mixin icon( $glyph: '\e001' ) {
-	font-family: 'MuhikuPlug';
+	
 	speak: none;
 	font-weight: normal;
 	font-variant: normal;
@@ -96,7 +87,7 @@
 }
 
 @mixin iconbefore( $glyph: '\e001' ) {
-	font-family: 'MuhikuPlug';
+	
 	speak: none;
 	font-weight: normal;
 	font-variant: normal;
