@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Validation Class.
+ * MHK_Validation Class.
  */
-class EVF_Validation {
+class MHK_Validation {
 
 	/**
 	 * Validates an email using WordPress native is_email function.

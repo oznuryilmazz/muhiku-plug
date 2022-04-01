@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Guten Block Class.
  */
-class EVF_Form_Block {
+class MHK_Form_Block {
 
 	/**
 	 * Constructor.
@@ -73,7 +73,7 @@ class EVF_Form_Block {
 			'muhiku-plug-block-editor',
 			mhk()->plugin_url() . '/assets/css/muhiku-plug.css',
 			array( 'wp-edit-blocks' ),
-			defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( mhk()->plugin_path() . '/assets/css/muhiku-plug.css' ) : EVF_VERSION
+			defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( mhk()->plugin_path() . '/assets/css/muhiku-plug.css' ) : MHK_VERSION
 		);
 
 		if ( defined( 'EFP_PLUGIN_FILE' ) ) {
@@ -89,7 +89,7 @@ class EVF_Form_Block {
 				'muhiku-plug-block-editor',
 				mhk()->plugin_url() . '/assets/js/admin/gutenberg/form-block.min.js',
 				array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-components' ),
-				defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( mhk()->plugin_path() . '/assets/js/admin/gutenberg/form-block.min.js' ) : EVF_VERSION,
+				defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( mhk()->plugin_path() . '/assets/js/admin/gutenberg/form-block.min.js' ) : MHK_VERSION,
 				true
 			);
 		}
@@ -170,8 +170,8 @@ class EVF_Form_Block {
 			);
 		}
 
-		return EVF_Shortcodes::shortcode_wrapper(
-			array( 'EVF_Shortcode_Form', 'output' ),
+		return MHK_Shortcodes::shortcode_wrapper(
+			array( 'MHK_Shortcode_Form', 'output' ),
 			array(
 				'id'          => $form_id,
 				'title'       => $title,
@@ -187,4 +187,4 @@ class EVF_Form_Block {
 	}
 }
 
-new EVF_Form_Block();
+new MHK_Form_Block();

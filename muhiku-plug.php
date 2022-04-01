@@ -16,9 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-// Define EVF_PLUGIN_FILE.
-if ( ! defined( 'EVF_PLUGIN_FILE' ) ) {
-	define( 'EVF_PLUGIN_FILE', __FILE__ );
+// Define MHK_PLUGIN_FILE.
+if ( ! defined( 'MHK_PLUGIN_FILE' ) ) {
+	define( 'MHK_PLUGIN_FILE', __FILE__ );
 }
 
 // Include the main MuhikuPlug class.
@@ -29,7 +29,7 @@ if ( ! class_exists( 'MuhikuPlug' ) ) {
 /**
  * Main instance of MuhikuPlug.
  *
- * Returns the main instance of EVF to prevent the need to use globals.
+ * Returns the main instance of MHK to prevent the need to use globals.
  *
  * @since  1.0.0
  * @return MuhikuPlug

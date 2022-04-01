@@ -9,14 +9,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Admin_Menus', false ) ) {
-	return new EVF_Admin_Menus();
+if ( class_exists( 'MHK_Admin_Menus', false ) ) {
+	return new MHK_Admin_Menus();
 }
 
 /**
- * EVF_Admin_Menus Class.
+ * MHK_Admin_Menus Class.
  */
-class EVF_Admin_Menus {
+class MHK_Admin_Menus {
 
 	/**
 	 * Hook in tabs.
@@ -98,13 +98,13 @@ class EVF_Admin_Menus {
 		mhk()->form_fields();
 
 		// Include builder pages.
-		EVF_Admin_Builder::get_builder_pages();
+		MHK_Admin_Builder::get_builder_pages();
 
 		// Get current tab/section.
 		$current_tab = empty( $_GET['tab'] ) ? 'fields' : sanitize_title( wp_unslash( $_GET['tab'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
 
 		if ( ! isset( $_GET['tab'], $_GET['form_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$forms_table_list = new EVF_Admin_Forms_Table_List();
+			$forms_table_list = new MHK_Admin_Forms_Table_List();
 
 			// Add screen option.
 			add_screen_option(
@@ -134,7 +134,7 @@ class EVF_Admin_Menus {
 		global $entries_table_list;
 
 		if ( ! isset( $_GET['view-entry'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$entries_table_list = new EVF_Admin_Entries_Table_List();
+			$entries_table_list = new MHK_Admin_Entries_Table_List();
 
 			// Add screen option.
 			add_screen_option(
@@ -165,7 +165,7 @@ class EVF_Admin_Menus {
 		global $current_tab, $current_section;
 
 		// Include settings pages.
-		EVF_Admin_Settings::get_settings_pages();
+		MHK_Admin_Settings::get_settings_pages();
 
 		// Get current tab/section.
 		$current_tab     = empty( $_GET['tab'] ) ? 'general' : sanitize_title( wp_unslash( $_GET['tab'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
@@ -173,16 +173,16 @@ class EVF_Admin_Menus {
 
 		// Save settings if data has been posted.
 		if ( apply_filters( '' !== $current_section ? "everest_forms_save_settings_{$current_tab}_{$current_section}" : "everest_forms_save_settings_{$current_tab}", ! empty( $_POST ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			EVF_Admin_Settings::save();
+			MHK_Admin_Settings::save();
 		}
 
 		// Add any posted messages.
 		if ( ! empty( $_GET['mhk_error'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			EVF_Admin_Settings::add_error( wp_kses_post( wp_unslash( $_GET['mhk_error'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			MHK_Admin_Settings::add_error( wp_kses_post( wp_unslash( $_GET['mhk_error'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 
 		if ( ! empty( $_GET['mhk_message'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			EVF_Admin_Settings::add_message( wp_kses_post( wp_unslash( $_GET['mhk_message'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			MHK_Admin_Settings::add_message( wp_kses_post( wp_unslash( $_GET['mhk_message'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 
 		do_action( 'everest_forms_settings_page_init' );
@@ -296,36 +296,36 @@ class EVF_Admin_Menus {
 	 * Init the settings page.
 	 */
 	public function builder_page() {
-		EVF_Admin_Forms::page_output();
+		MHK_Admin_Forms::page_output();
 	}
 
 	/**
 	 * Init the entries page.
 	 */
 	public function entries_page() {
-		EVF_Admin_Entries::page_output();
+		MHK_Admin_Entries::page_output();
 	}
 
 	/**
 	 * Init the settings page.
 	 */
 	public function settings_page() {
-		EVF_Admin_Settings::output();
+		MHK_Admin_Settings::output();
 	}
 
 	/**
 	 * Init the status page.
 	 */
 	public function tools_page() {
-		EVF_Admin_Tools::output();
+		MHK_Admin_Tools::output();
 	}
 
 	/**
 	 * Init the addons page.
 	 */
 	public function addons_page() {
-		EVF_Admin_Addons::output();
+		MHK_Admin_Addons::output();
 	}
 }
 
-return new EVF_Admin_Menus();
+return new MHK_Admin_Menus();

@@ -10,11 +10,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Abstract EVF_Admin_Form_Panel Class
+ * Abstract MHK_Admin_Form_Panel Class
  *
  * @deprecated 1.2.0
  */
-abstract class EVF_Admin_Form_Panel {
+abstract class MHK_Admin_Form_Panel {
 
 	/**
 	 * Full name of the panel.

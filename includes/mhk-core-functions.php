@@ -11,10 +11,10 @@
 defined( 'ABSPATH' ) || exit;
 
 // Include core functions (available in both admin and frontend).
-require EVF_ABSPATH . 'includes/mhk-conditional-functions.php';
-require EVF_ABSPATH . 'includes/mhk-deprecated-functions.php';
-require EVF_ABSPATH . 'includes/mhk-formatting-functions.php';
-require EVF_ABSPATH . 'includes/mhk-entry-functions.php';
+require MHK_ABSPATH . 'includes/mhk-conditional-functions.php';
+require MHK_ABSPATH . 'includes/mhk-deprecated-functions.php';
+require MHK_ABSPATH . 'includes/mhk-formatting-functions.php';
+require MHK_ABSPATH . 'includes/mhk-entry-functions.php';
 
 /**
  * Define a constant if it is not already defined.
@@ -32,18 +32,18 @@ function mhk_maybe_define_constant( $name, $value ) {
 /**
  * Get template part.
  *
- * EVF_TEMPLATE_DEBUG_MODE will prevent overrides in themes from taking priority.
+ * MHK_TEMPLATE_DEBUG_MODE will prevent overrides in themes from taking priority.
  *
  * @param mixed  $slug Template slug.
  * @param string $name Template name (default: '').
  */
 function mhk_get_template_part( $slug, $name = '' ) {
-	$cache_key = sanitize_key( implode( '-', array( 'template-part', $slug, $name, EVF_VERSION ) ) );
+	$cache_key = sanitize_key( implode( '-', array( 'template-part', $slug, $name, MHK_VERSION ) ) );
 	$template  = (string) wp_cache_get( $cache_key, 'muhiku-plug' );
 
 	if ( ! $template ) {
 		if ( $name ) {
-			$template = EVF_TEMPLATE_DEBUG_MODE ? '' : locate_template(
+			$template = MHK_TEMPLATE_DEBUG_MODE ? '' : locate_template(
 				array(
 					"{$slug}-{$name}.php",
 					mhk()->template_path() . "{$slug}-{$name}.php",
@@ -58,7 +58,7 @@ function mhk_get_template_part( $slug, $name = '' ) {
 
 		if ( ! $template ) {
 			// If template file doesn't exist, look in yourtheme/slug.php and yourtheme/muhiku-plug/slug.php.
-			$template = EVF_TEMPLATE_DEBUG_MODE ? '' : locate_template(
+			$template = MHK_TEMPLATE_DEBUG_MODE ? '' : locate_template(
 				array(
 					"{$slug}.php",
 					mhk()->template_path() . "{$slug}.php",
@@ -86,7 +86,7 @@ function mhk_get_template_part( $slug, $name = '' ) {
  * @param string $default_path  Default path. (default: '').
  */
 function mhk_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
-	$cache_key = sanitize_key( implode( '-', array( 'template', $template_name, $template_path, $default_path, EVF_VERSION ) ) );
+	$cache_key = sanitize_key( implode( '-', array( 'template', $template_name, $template_path, $default_path, MHK_VERSION ) ) );
 	$template  = (string) wp_cache_get( $cache_key, 'muhiku-plug' );
 
 	if ( ! $template ) {
@@ -181,7 +181,7 @@ function mhk_locate_template( $template_name, $template_path = '', $default_path
 	);
 
 	// Get default template/.
-	if ( ! $template || EVF_TEMPLATE_DEBUG_MODE ) {
+	if ( ! $template || MHK_TEMPLATE_DEBUG_MODE ) {
 		$template = $default_path . $template_name;
 	}
 
@@ -271,7 +271,7 @@ function mhk_setcookie( $name, $value, $expire = 0, $secure = false, $httponly =
  * @return string the log file path.
  */
 function mhk_get_log_file_path( $handle ) {
-	return EVF_Log_Handler_File::get_log_file_path( $handle );
+	return MHK_Log_Handler_File::get_log_file_path( $handle );
 }
 
 /**
@@ -453,9 +453,9 @@ function mhk_transaction_query( $type = 'start', $force = false ) {
 
 	$wpdb->hide_errors();
 
-	mhk_maybe_define_constant( 'EVF_USE_TRANSACTIONS', true );
+	mhk_maybe_define_constant( 'MHK_USE_TRANSACTIONS', true );
 
-	if ( EVF_USE_TRANSACTIONS || $force ) {
+	if ( MHK_USE_TRANSACTIONS || $force ) {
 		switch ( $type ) {
 			case 'commit':
 				$wpdb->query( 'COMMIT' );
@@ -517,7 +517,7 @@ function mhk_set_time_limit( $limit = 0 ) {
  * @since 1.2.0
  */
 function mhk_nocache_headers() {
-	EVF_Cache_Helper::set_nocache_constants();
+	MHK_Cache_Helper::set_nocache_constants();
 	nocache_headers();
 }
 
@@ -527,16 +527,16 @@ function mhk_nocache_headers() {
  * Use the everest_forms_logging_class filter to change the logging class. You may provide one of the following:
  *     - a class name which will be instantiated as `new $class` with no arguments
  *     - an instance which will be used directly as the logger
- * In either case, the class or instance *must* implement EVF_Logger_Interface.
+ * In either case, the class or instance *must* implement MHK_Logger_Interface.
  *
- * @see EVF_Logger_Interface
+ * @see MHK_Logger_Interface
  *
- * @return EVF_Logger
+ * @return MHK_Logger
  */
 function mhk_get_logger() {
 	static $logger = null;
 
-	$class = apply_filters( 'everest_forms_logging_class', 'EVF_Logger' );
+	$class = apply_filters( 'everest_forms_logging_class', 'MHK_Logger' );
 
 	if ( null !== $logger && is_string( $class ) && is_a( $logger, $class ) ) {
 		return $logger;
@@ -544,21 +544,21 @@ function mhk_get_logger() {
 
 	$implements = class_implements( $class );
 
-	if ( is_array( $implements ) && in_array( 'EVF_Logger_Interface', $implements, true ) ) {
+	if ( is_array( $implements ) && in_array( 'MHK_Logger_Interface', $implements, true ) ) {
 		$logger = is_object( $class ) ? $class : new $class();
 	} else {
 		mhk_doing_it_wrong(
 			__FUNCTION__,
 			sprintf(
-				/* translators: 1: class name 2: everest_forms_logging_class 3: EVF_Logger_Interface */
+				/* translators: 1: class name 2: everest_forms_logging_class 3: MHK_Logger_Interface */
 				__( 'The class %1$s provided by %2$s filter must implement %3$s.', 'muhiku-plug' ),
 				'<code>' . esc_html( is_object( $class ) ? get_class( $class ) : $class ) . '</code>',
 				'<code>everest_forms_logging_class</code>',
-				'<code>EVF_Logger_Interface</code>'
+				'<code>MHK_Logger_Interface</code>'
 			),
 			'1.2'
 		);
-		$logger = is_a( $logger, 'EVF_Logger' ) ? $logger : new EVF_Logger();
+		$logger = is_a( $logger, 'MHK_Logger' ) ? $logger : new MHK_Logger();
 	}
 
 	return $logger;
@@ -623,11 +623,11 @@ function mhk_print_r( $expression, $return = false ) {
  * @return array
  */
 function mhk_register_default_log_handler( $handlers ) {
-	if ( defined( 'EVF_LOG_HANDLER' ) && class_exists( EVF_LOG_HANDLER ) ) {
-		$handler_class   = EVF_LOG_HANDLER;
+	if ( defined( 'MHK_LOG_HANDLER' ) && class_exists( MHK_LOG_HANDLER ) ) {
+		$handler_class   = MHK_LOG_HANDLER;
 		$default_handler = new $handler_class();
 	} else {
-		$default_handler = new EVF_Log_Handler_File();
+		$default_handler = new MHK_Log_Handler_File();
 	}
 
 	array_push( $handlers, $default_handler );
@@ -694,7 +694,7 @@ function mhk_switch_to_site_locale() {
 		// Filter on plugin_locale so load_plugin_textdomain loads the correct locale.
 		add_filter( 'plugin_locale', 'get_locale' );
 
-		// Init EVF locale.
+		// Init MHK locale.
 		mhk()->load_plugin_textdomain();
 	}
 }
@@ -711,7 +711,7 @@ function mhk_restore_locale() {
 		// Remove filter.
 		remove_filter( 'plugin_locale', 'get_locale' );
 
-		// Init EVF locale.
+		// Init MHK locale.
 		mhk()->load_plugin_textdomain();
 	}
 }
@@ -748,15 +748,15 @@ function mhk_get_var( &$var, $default = null ) {
  * @return array
  */
 function mhk_enable_mhk_plugin_headers( $headers ) {
-	if ( ! class_exists( 'EVF_Plugin_Updates' ) ) {
+	if ( ! class_exists( 'MHK_Plugin_Updates' ) ) {
 		include_once dirname( __FILE__ ) . '/admin/plugin-updates/class-mhk-plugin-updates.php';
 	}
 
-	// EVF requires at least - allows developers to define which version of Muhiku Plug the plugin requires to run.
-	$headers[] = EVF_Plugin_Updates::VERSION_REQUIRED_HEADER;
+	// MHK requires at least - allows developers to define which version of Muhiku Plug the plugin requires to run.
+	$headers[] = MHK_Plugin_Updates::VERSION_REQUIRED_HEADER;
 
-	// EVF tested up to - allows developers to define which version of Muhiku Plug they have tested up to.
-	$headers[] = EVF_Plugin_Updates::VERSION_TESTED_HEADER;
+	// MHK tested up to - allows developers to define which version of Muhiku Plug they have tested up to.
+	$headers[] = MHK_Plugin_Updates::VERSION_TESTED_HEADER;
 
 	return $headers;
 }
@@ -836,7 +836,7 @@ function mhk_is_active_theme( $theme ) {
  * @since 1.0.0
  */
 function mhk_cleanup_session_data() {
-	$session_class = apply_filters( 'everest_forms_session_handler', 'EVF_Session_Handler' );
+	$session_class = apply_filters( 'everest_forms_session_handler', 'MHK_Session_Handler' );
 	$session       = new $session_class();
 
 	if ( is_callable( array( $session, 'cleanup_sessions' ) ) ) {
@@ -1531,7 +1531,7 @@ function mhk_get_license_plan() {
 
 		if ( false === $license_data ) {
 			$license_data = json_decode(
-				EVF_Updater_Key_API::check(
+				MHK_Updater_Key_API::check(
 					array(
 						'license' => $license_key,
 					)
@@ -2021,7 +2021,7 @@ function mhk_get_all_fields_settings() {
  * @return string
  */
 function mhk_debug_data( $expression, $return = false ) {
-	if ( defined( 'EVF_DEBUG' ) && true === EVF_DEBUG ) {
+	if ( defined( 'MHK_DEBUG' ) && true === MHK_DEBUG ) {
 
 		if ( ! $return ) {
 			echo '<textarea style="color:#666;background:#fff;margin: 20px 0;width:100%;height:500px;font-size:12px;font-family: Consolas,Monaco,Lucida Console,monospace;direction: ltr;unicode-bidi: embed;line-height: 1.4;padding: 4px 6px 1px;" readonly>';
@@ -2424,7 +2424,7 @@ function mhk_is_amp( $check_theme_support = true ) {
 }
 
 /**
- * EVF KSES.
+ * MHK KSES.
  *
  * @since 1.8.2.1
  *
@@ -2578,7 +2578,7 @@ function mhk_sanitize_entry( $entry = array() ) {
 }
 
 /**
- * EVF Get json file contents.
+ * MHK Get json file contents.
  *
  * @param mixed $file File path.
  * @param mixed $to_array Returned data in array.
@@ -2591,7 +2591,7 @@ function mhk_get_json_file_contents( $file, $to_array = false ) {
 }
 
 /**
- * EVF file get contents.
+ * MHK file get contents.
  *
  * @param mixed $file File path.
  */
@@ -2600,7 +2600,7 @@ function mhk_file_get_contents( $file ) {
 		global $wp_filesystem;
 		require_once ABSPATH . '/wp-admin/includes/file.php';
 		WP_Filesystem();
-		$local_file = preg_replace( '/\\\\|\/\//', '/', plugin_dir_path( EVF_PLUGIN_FILE ) . $file );
+		$local_file = preg_replace( '/\\\\|\/\//', '/', plugin_dir_path( MHK_PLUGIN_FILE ) . $file );
 		if ( $wp_filesystem->exists( $local_file ) ) {
 			$response = $wp_filesystem->get_contents( $local_file );
 			return $response;

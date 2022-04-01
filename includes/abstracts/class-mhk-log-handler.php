@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Abstract EVF Log Handler Class
+ * Abstract MHK Log Handler Class
  */
-abstract class EVF_Log_Handler implements EVF_Log_Handler_Interface {
+abstract class MHK_Log_Handler implements MHK_Log_Handler_Interface {
 
 	/**
 	 * Formats a timestamp for use in log messages.

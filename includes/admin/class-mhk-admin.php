@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Admin class.
+ * MHK_Admin class.
  */
-class EVF_Admin {
+class MHK_Admin {
 
 	/**
 	 * Constructor.
@@ -106,7 +106,7 @@ class EVF_Admin {
 			}
 
 			// On these pages, or during these events, disable the redirect.
-			if ( 'mhk-welcome' === $current_page || EVF_Admin_Notices::has_notice( 'install' ) || apply_filters( 'everest_forms_prevent_automatic_wizard_redirect', false ) || isset( $_GET['activate-multi'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( 'mhk-welcome' === $current_page || MHK_Admin_Notices::has_notice( 'install' ) || apply_filters( 'everest_forms_prevent_automatic_wizard_redirect', false ) || isset( $_GET['activate-multi'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 				delete_transient( '_mhk_activation_redirect' );
 				$do_redirect = false;
 			}
@@ -178,4 +178,4 @@ class EVF_Admin {
 	}
 }
 
-return new EVF_Admin();
+return new MHK_Admin();

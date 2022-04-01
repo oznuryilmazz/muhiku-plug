@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Builder_Settings', false ) ) {
-	return new EVF_Builder_Settings();
+if ( class_exists( 'MHK_Builder_Settings', false ) ) {
+	return new MHK_Builder_Settings();
 }
 
 /**
- * EVF_Builder_Settings class.
+ * MHK_Builder_Settings class.
  */
-class EVF_Builder_Settings extends EVF_Builder_Page {
+class MHK_Builder_Settings extends MHK_Builder_Page {
 
 	/**
 	 * Constructor.
@@ -611,4 +611,4 @@ class EVF_Builder_Settings extends EVF_Builder_Page {
 	}
 }
 
-return new EVF_Builder_Settings();
+return new MHK_Builder_Settings();

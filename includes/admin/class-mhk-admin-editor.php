@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'EVF_Admin_Editor', false ) ) {
-	return new EVF_Admin_Editor();
+if ( ! class_exists( 'MHK_Admin_Editor', false ) ) {
+	return new MHK_Admin_Editor();
 }
 
 /**
- * EVF_Admin_Editor Class.
+ * MHK_Admin_Editor Class.
  */
-class EVF_Admin_Editor {
+class MHK_Admin_Editor {
 
 	/**
 	 * Constructor.
@@ -108,4 +108,4 @@ class EVF_Admin_Editor {
 	}
 }
 
-return new EVF_Admin_Editor();
+return new MHK_Admin_Editor();

@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Admin_Forms class.
+ * MHK_Admin_Forms class.
  */
-class EVF_Admin_Forms {
+class MHK_Admin_Forms {
 
 	/**
 	 * Initialize the forms admin actions.
@@ -104,7 +104,7 @@ class EVF_Admin_Forms {
 		if ( false === $template_data ) {
 			$template_data     = mhk_get_json_file_contents( 'assets/extensions-json/templates/all_templates.json' );
 			// Removing directory so the templates can be reinitialized.
-			$folder_path = untrailingslashit( plugin_dir_path( EVF_PLUGIN_FILE ) . '/assets/images/templates' );
+			$folder_path = untrailingslashit( plugin_dir_path( MHK_PLUGIN_FILE ) . '/assets/images/templates' );
 
 			foreach ( $template_data->templates as $template_tuple ) {
 				// We retrieve the image, then use them instead of the remote server.
@@ -122,7 +122,7 @@ class EVF_Admin_Forms {
 
 				// If it exists, utilize this file instead of remote file.
 				if ( $exists ) {
-					$template_tuple->image = plugin_dir_url( EVF_PLUGIN_FILE ) . 'assets/images/templates/' . end( $temp_name );
+					$template_tuple->image = plugin_dir_url( MHK_PLUGIN_FILE ) . 'assets/images/templates/' . end( $temp_name );
 				}
 			}
 
@@ -271,4 +271,4 @@ class EVF_Admin_Forms {
 	}
 }
 
-new EVF_Admin_Forms();
+new MHK_Admin_Forms();

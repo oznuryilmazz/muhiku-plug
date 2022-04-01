@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Admin_Forms class.
+ * MHK_Admin_Forms class.
  */
-class EVF_Admin_Import_Export {
+class MHK_Admin_Import_Export {
 
 	/**
 	 * Constructor.
@@ -175,4 +175,4 @@ class EVF_Admin_Import_Export {
 	}
 }
 
-new EVF_Admin_Import_Export();
+new MHK_Admin_Import_Export();

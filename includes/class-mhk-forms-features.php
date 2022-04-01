@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Features Class.
  */
-class EVF_Forms_Features {
+class MHK_Forms_Features {
 
 	/**
 	 * Constructor.
@@ -34,4 +34,4 @@ class EVF_Forms_Features {
 	}
 }
 
-new EVF_Forms_Features();
+new MHK_Forms_Features();

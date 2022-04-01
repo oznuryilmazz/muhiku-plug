@@ -9,13 +9,13 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF Logger Interface
+ * MHK Logger Interface
  *
  * Functions that must be defined to correctly fulfill logger API.
  *
  * @version 1.0.0
  */
-interface EVF_Logger_Interface {
+interface MHK_Logger_Interface {
 
 	/**
 	 * Add a log entry.
@@ -29,7 +29,7 @@ interface EVF_Logger_Interface {
 	 *
 	 * @return bool True if log was added, otherwise false.
 	 */
-	public function add( $handle, $message, $level = EVF_Log_Levels::NOTICE );
+	public function add( $handle, $message, $level = MHK_Log_Levels::NOTICE );
 
 	/**
 	 * Add a log entry.

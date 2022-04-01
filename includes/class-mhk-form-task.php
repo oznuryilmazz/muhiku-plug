@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Form_Task class.
+ * MHK_Form_Task class.
  */
-class EVF_Form_Task {
+class MHK_Form_Task {
 
 	/**
 	 * Holds errors.
@@ -322,7 +322,7 @@ class EVF_Form_Task {
 
 					foreach ( $errors[ $form_id ] as $field_id => $error_fields ) {
 						$field            = $this->form_data['fields'][ $field_id ];
-						$field_properties = EVF_Shortcode_Form::get_field_properties( $field, $this->form_data );
+						$field_properties = MHK_Shortcode_Form::get_field_properties( $field, $this->form_data );
 
 						if ( is_string( $error_fields ) ) {
 
@@ -501,7 +501,7 @@ class EVF_Form_Task {
 		$settings = $this->form_data['settings'];
 		$message  = isset( $settings['successful_form_submission_message'] ) ? $settings['successful_form_submission_message'] : __( 'Thanks for contacting us! We will be in touch with you shortly.', 'muhiku-plug' );
 
-		if ( defined( 'EVF_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'everest_forms_pdf_download_after_submit', 'no' ) ) {
+		if ( defined( 'MHK_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'everest_forms_pdf_download_after_submit', 'no' ) ) {
 			global $__everest_form_id;
 			global $__everest_form_entry_id;
 			$__everest_form_id       = $form_id;
@@ -520,7 +520,7 @@ class EVF_Form_Task {
 			$response_data['form_id']  = $form_id;
 			$response_data['entry_id'] = $entry_id;
 
-			if ( defined( 'EVF_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'everest_forms_pdf_download_after_submit', 'no' ) ) {
+			if ( defined( 'MHK_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'everest_forms_pdf_download_after_submit', 'no' ) ) {
 				$response_data['pdf_download'] = true;
 				$pdf_download_message          = get_option( 'everest_forms_pdf_custom_download_text', '' );
 				if ( empty( $pdf_download_message ) ) {
@@ -844,7 +844,7 @@ class EVF_Form_Task {
 			$attachment = '';
 
 			// Create new email.
-			$emails = new EVF_Emails();
+			$emails = new MHK_Emails();
 			$emails->__set( 'form_data', $form_data );
 			$emails->__set( 'fields', $fields );
 			$emails->__set( 'entry_id', $entry_id );
@@ -994,7 +994,7 @@ class EVF_Form_Task {
 		wp_cache_delete( $form_id, 'mhk-entries-ids' );
 		wp_cache_delete( $form_id, 'mhk-last-entries-count' );
 		wp_cache_delete( $form_id, 'mhk-search-entries' );
-		wp_cache_delete( EVF_Cache_Helper::get_cache_prefix( 'entries' ) . '_unread_count', 'entries' );
+		wp_cache_delete( MHK_Cache_Helper::get_cache_prefix( 'entries' ) . '_unread_count', 'entries' );
 
 		do_action( 'everest_forms_complete_entry_save', $entry_id, $fields, $entry, $form_id, $form_data );
 

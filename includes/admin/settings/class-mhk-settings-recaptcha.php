@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Settings_reCAPTCHA', false ) ) {
-	return new EVF_Settings_reCAPTCHA();
+if ( class_exists( 'MHK_Settings_reCAPTCHA', false ) ) {
+	return new MHK_Settings_reCAPTCHA();
 }
 
 /**
- * EVF_Settings_reCAPTCHA.
+ * MHK_Settings_reCAPTCHA.
  */
-class EVF_Settings_reCAPTCHA extends EVF_Settings_Page {
+class MHK_Settings_reCAPTCHA extends MHK_Settings_Page {
 
 	/**
 	 * Constructor.
@@ -198,8 +198,8 @@ class EVF_Settings_reCAPTCHA extends EVF_Settings_Page {
 	public function save() {
 		$settings = $this->get_settings();
 
-		EVF_Admin_Settings::save_fields( $settings );
+		MHK_Admin_Settings::save_fields( $settings );
 	}
 }
 
-return new EVF_Settings_reCAPTCHA();
+return new MHK_Settings_reCAPTCHA();

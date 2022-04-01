@@ -1,17 +1,17 @@
 <?php
 /**
- * MuhikuPlug EVF_AJAX. AJAX Event Handlers.
+ * MuhikuPlug MHK_AJAX. AJAX Event Handlers.
  *
- * @class   EVF_AJAX
+ * @class   MHK_AJAX
  * @package MuhikuPlug/Classes
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_AJAX class.
+ * MHK_AJAX class.
  */
-class EVF_AJAX {
+class MHK_AJAX {
 
 	/**
 	 * Hook in ajax handlers.
@@ -23,13 +23,13 @@ class EVF_AJAX {
 	}
 
 	/**
-	 * Set EVF AJAX constant and headers.
+	 * Set MHK AJAX constant and headers.
 	 */
 	public static function define_ajax() {
 		// @codingStandardsIgnoreStart
 		if ( ! empty( $_GET['mhk-ajax'] ) ) {
 			mhk_maybe_define_constant( 'DOING_AJAX', true );
-			mhk_maybe_define_constant( 'EVF_DOING_AJAX', true );
+			mhk_maybe_define_constant( 'MHK_DOING_AJAX', true );
 			if ( ! WP_DEBUG || ( WP_DEBUG && ! WP_DEBUG_DISPLAY ) ) {
 				@ini_set( 'display_errors', 0 ); // Turn off display_errors during AJAX events to prevent malformed JSON.
 			}
@@ -39,7 +39,7 @@ class EVF_AJAX {
 	}
 
 	/**
-	 * Send headers for EVF Ajax Requests.
+	 * Send headers for MHK Ajax Requests.
 	 *
 	 * @since 1.0.0
 	 */
@@ -58,7 +58,7 @@ class EVF_AJAX {
 	}
 
 	/**
-	 * Check for EVF Ajax request and fire action.
+	 * Check for MHK Ajax request and fire action.
 	 */
 	public static function do_mhk_ajax() {
 		global $wp_query;
@@ -107,7 +107,7 @@ class EVF_AJAX {
 			if ( $nopriv ) {
 				add_action( 'wp_ajax_nopriv_everest_forms_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
-				// EVF AJAX can be used for frontend ajax requests.
+				// MHK AJAX can be used for frontend ajax requests.
 				add_action( 'mhk_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
@@ -530,7 +530,7 @@ class EVF_AJAX {
 		}
 
 		$api = json_decode(
-			EVF_Updater_Key_API::version(
+			MHK_Updater_Key_API::version(
 				array(
 					'license'   => get_option( 'muhiku-plug-pro_license_key' ),
 					'item_name' => ! empty( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
@@ -692,14 +692,14 @@ class EVF_AJAX {
 				add_query_arg(
 					array(
 						'action'        => 'deactivate',
-						'plugin'        => EVF_PLUGIN_BASENAME,
+						'plugin'        => MHK_PLUGIN_BASENAME,
 						'plugin_status' => $status,
 						'paged'         => $page,
 						's'             => $s,
 					),
 					admin_url( 'plugins.php' )
 				),
-				'deactivate-plugin_' . EVF_PLUGIN_BASENAME
+				'deactivate-plugin_' . MHK_PLUGIN_BASENAME
 			)
 		);
 
@@ -784,7 +784,7 @@ class EVF_AJAX {
 	public static function import_form_action() {
 		try {
 			check_ajax_referer( 'process-import-ajax-nonce', 'security' );
-			EVF_Admin_Import_Export::import_form();
+			MHK_Admin_Import_Export::import_form();
 		} catch ( Exception $e ) {
 			wp_send_json_error(
 				array(
@@ -831,4 +831,4 @@ class EVF_AJAX {
 	}
 }
 
-EVF_AJAX::init();
+MHK_AJAX::init();

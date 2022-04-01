@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Abstract Integration Class.
  */
-abstract class EVF_Integration extends EVF_Settings_API {
+abstract class MHK_Integration extends MHK_Settings_API {
 
 	/**
 	 * Yes or no based on whether the integration is enabled.

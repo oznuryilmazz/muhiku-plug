@@ -8,12 +8,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'EVF_Settings_Page', false ) ) :
+if ( ! class_exists( 'MHK_Settings_Page', false ) ) :
 
 	/**
-	 * EVF_Settings_Page.
+	 * MHK_Settings_Page.
 	 */
-	abstract class EVF_Settings_Page {
+	abstract class MHK_Settings_Page {
 
 		/**
 		 * Setting page id.
@@ -117,7 +117,7 @@ if ( ! class_exists( 'EVF_Settings_Page', false ) ) :
 		public function output() {
 			$settings = $this->get_settings();
 
-			EVF_Admin_Settings::output_fields( $settings );
+			MHK_Admin_Settings::output_fields( $settings );
 		}
 
 		/**
@@ -127,7 +127,7 @@ if ( ! class_exists( 'EVF_Settings_Page', false ) ) :
 			global $current_section;
 
 			$settings = $this->get_settings();
-			EVF_Admin_Settings::save_fields( $settings );
+			MHK_Admin_Settings::save_fields( $settings );
 
 			if ( $current_section ) {
 				do_action( 'everest_forms_update_options_' . $this->id . '_' . $current_section );

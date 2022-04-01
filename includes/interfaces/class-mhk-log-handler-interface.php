@@ -9,13 +9,13 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF Log Handler Interface
+ * MHK Log Handler Interface
  *
  * Functions that must be defined to correctly fulfill log handler API.
  *
  * @version 1.0.0
  */
-interface EVF_Log_Handler_Interface {
+interface MHK_Log_Handler_Interface {
 
 	/**
 	 * Handle a log entry.

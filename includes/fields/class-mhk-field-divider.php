@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Divider Class.
+ * MHK_Field_Divider Class.
  */
-class EVF_Field_Divider extends EVF_Form_Fields {
+class MHK_Field_Divider extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

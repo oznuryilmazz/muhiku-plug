@@ -11,14 +11,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Include dependencies.
  */
-if ( ! class_exists( 'EVF_CSV_Exporter', false ) ) {
-	require_once EVF_ABSPATH . 'includes/export/abstract-mhk-csv-exporter.php';
+if ( ! class_exists( 'MHK_CSV_Exporter', false ) ) {
+	require_once MHK_ABSPATH . 'includes/export/abstract-mhk-csv-exporter.php';
 }
 
 /**
- * EVF_Entry_CSV_Exporter Class.
+ * MHK_Entry_CSV_Exporter Class.
  */
-class EVF_Entry_CSV_Exporter extends EVF_CSV_Exporter {
+class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 
 	/**
 	 * Form ID.
@@ -124,7 +124,7 @@ class EVF_Entry_CSV_Exporter extends EVF_CSV_Exporter {
 	 * Prepare and get quiz report data in CSV format.
 	 */
 	public function get_quiz_report() {
-		$form_data          = EVF()->form->get(
+		$form_data          = MHK()->form->get(
 			absint( $this->form_id ),
 			array(
 				'content_only' => true,

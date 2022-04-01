@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Post types Class.
  */
-class EVF_Post_Types {
+class MHK_Post_Types {
 
 	/**
 	 * Hook in methods.
@@ -135,4 +135,4 @@ class EVF_Post_Types {
 	}
 }
 
-EVF_Post_Types::init();
+MHK_Post_Types::init();

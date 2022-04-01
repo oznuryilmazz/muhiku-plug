@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 				<select name="log_file">
 					<?php foreach ( $logs as $log_key => $log_file ) : ?>
 						<?php
-							$timestamp = filemtime( EVF_LOG_DIR . $log_file );
+							$timestamp = filemtime( MHK_LOG_DIR . $log_file );
 							/* translators: 1: last access date 2: last access time */
 							$date = sprintf( __( '%1$s at %2$s', 'muhiku-plug' ), date_i18n( mhk_date_format(), $timestamp ), date_i18n( mhk_time_format(), $timestamp ) );
 						?>
@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 		<div class="clear"></div>
 	</div>
 	<div id="log-viewer">
-		<pre><?php echo esc_html( file_get_contents( EVF_LOG_DIR . $viewed_log ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents ?></pre>
+		<pre><?php echo esc_html( file_get_contents( MHK_LOG_DIR . $viewed_log ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents ?></pre>
 	</div>
 <?php else : ?>
 	<div class="updated muhiku-plug-message inline"><p><?php esc_html_e( 'There are currently no logs to view.', 'muhiku-plug' ); ?></p></div>

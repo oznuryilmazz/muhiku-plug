@@ -15,7 +15,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 /**
  * Entries table list class.
  */
-class EVF_Admin_Entries_Table_List extends WP_List_Table {
+class MHK_Admin_Entries_Table_List extends WP_List_Table {
 
 	/**
 	 * Form ID.
@@ -27,14 +27,14 @@ class EVF_Admin_Entries_Table_List extends WP_List_Table {
 	/**
 	 * Forms object.
 	 *
-	 * @var EVF_Form_Handler
+	 * @var MHK_Form_Handler
 	 */
 	public $form;
 
 	/**
 	 * Forms object.
 	 *
-	 * @var EVF_Form_Handler[]
+	 * @var MHK_Form_Handler[]
 	 */
 	public $forms;
 
@@ -461,7 +461,7 @@ class EVF_Admin_Entries_Table_List extends WP_List_Table {
 				case 'star':
 				case 'unstar':
 					foreach ( $entry_ids as $entry_id ) {
-						if ( EVF_Admin_Entries::update_status( $entry_id, $doaction ) ) {
+						if ( MHK_Admin_Entries::update_status( $entry_id, $doaction ) ) {
 							$count ++;
 						}
 					}
@@ -477,7 +477,7 @@ class EVF_Admin_Entries_Table_List extends WP_List_Table {
 				case 'read':
 				case 'unread':
 					foreach ( $entry_ids as $entry_id ) {
-						if ( EVF_Admin_Entries::update_status( $entry_id, $doaction ) ) {
+						if ( MHK_Admin_Entries::update_status( $entry_id, $doaction ) ) {
 							$count ++;
 						}
 					}
@@ -492,7 +492,7 @@ class EVF_Admin_Entries_Table_List extends WP_List_Table {
 					break;
 				case 'trash':
 					foreach ( $entry_ids as $entry_id ) {
-						if ( EVF_Admin_Entries::update_status( $entry_id, 'trash' ) ) {
+						if ( MHK_Admin_Entries::update_status( $entry_id, 'trash' ) ) {
 							$count ++;
 						}
 					}
@@ -507,7 +507,7 @@ class EVF_Admin_Entries_Table_List extends WP_List_Table {
 					break;
 				case 'untrash':
 					foreach ( $entry_ids as $entry_id ) {
-						if ( EVF_Admin_Entries::update_status( $entry_id, 'publish' ) ) {
+						if ( MHK_Admin_Entries::update_status( $entry_id, 'publish' ) ) {
 							$count ++;
 						}
 					}
@@ -522,7 +522,7 @@ class EVF_Admin_Entries_Table_List extends WP_List_Table {
 					break;
 				case 'delete':
 					foreach ( $entry_ids as $entry_id ) {
-						if ( EVF_Admin_Entries::remove_entry( $entry_id ) ) {
+						if ( MHK_Admin_Entries::remove_entry( $entry_id ) ) {
 							$count ++;
 						}
 					}

@@ -11,9 +11,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Settings_API class.
+ * MHK_Settings_API class.
  */
-abstract class EVF_Settings_API {
+abstract class MHK_Settings_API {
 
 	/**
 	 * The plugin ID. Used for option names.

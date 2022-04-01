@@ -14,28 +14,28 @@ defined( 'ABSPATH' ) || exit;
  * Update DB Version.
  */
 function mhk_update_100_db_version() {
-	EVF_Install::update_db_version( '1.0.0' );
+	MHK_Install::update_db_version( '1.0.0' );
 }
 
 /**
  * Update DB Version.
  */
 function mhk_update_101_db_version() {
-	EVF_Install::update_db_version( '1.0.1' );
+	MHK_Install::update_db_version( '1.0.1' );
 }
 
 /**
  * Update DB Version.
  */
 function mhk_update_102_db_version() {
-	EVF_Install::update_db_version( '1.0.2' );
+	MHK_Install::update_db_version( '1.0.2' );
 }
 
 /**
  * Update DB Version.
  */
 function mhk_update_103_db_version() {
-	EVF_Install::update_db_version( '1.0.3' );
+	MHK_Install::update_db_version( '1.0.3' );
 }
 
 /**
@@ -65,7 +65,7 @@ function mhk_update_110_update_forms() {
  * Update DB Version.
  */
 function mhk_update_110_db_version() {
-	EVF_Install::update_db_version( '1.1.0' );
+	MHK_Install::update_db_version( '1.1.0' );
 }
 
 /**
@@ -92,7 +92,7 @@ function mhk_update_116_delete_options() {
  * Update DB Version.
  */
 function mhk_update_116_db_version() {
-	EVF_Install::update_db_version( '1.1.6' );
+	MHK_Install::update_db_version( '1.1.6' );
 }
 
 /**
@@ -184,21 +184,21 @@ function mhk_update_140_db_multiple_email() {
  * Update DB Version.
  */
 function mhk_update_120_db_version() {
-	EVF_Install::update_db_version( '1.2.0' );
+	MHK_Install::update_db_version( '1.2.0' );
 }
 
 /**
  * Update DB Version.
  */
 function mhk_update_130_db_version() {
-	EVF_Install::update_db_version( '1.3.0' );
+	MHK_Install::update_db_version( '1.3.0' );
 }
 
 /**
  * Update DB Version.
  */
 function mhk_update_140_db_version() {
-	EVF_Install::update_db_version( '1.4.0' );
+	MHK_Install::update_db_version( '1.4.0' );
 }
 
 /**
@@ -212,7 +212,7 @@ function mhk_update_144_delete_options() {
  * Update DB Version.
  */
 function mhk_update_144_db_version() {
-	EVF_Install::update_db_version( '1.4.4' );
+	MHK_Install::update_db_version( '1.4.4' );
 }
 
 /**
@@ -262,7 +262,7 @@ function mhk_update_149_no_payment_options() {
  * Update DB Version.
  */
 function mhk_update_149_db_version() {
-	EVF_Install::update_db_version( '1.4.9' );
+	MHK_Install::update_db_version( '1.4.9' );
 }
 
 /**
@@ -293,14 +293,14 @@ function mhk_update_150_field_datetime_type() {
  * Update DB Version.
  */
 function mhk_update_150_db_version() {
-	EVF_Install::update_db_version( '1.5.0' );
+	MHK_Install::update_db_version( '1.5.0' );
 }
 
 /**
  * Update DB Version.
  */
 function mhk_update_160_db_version() {
-	EVF_Install::update_db_version( '1.6.0' );
+	MHK_Install::update_db_version( '1.6.0' );
 }
 
 /**
@@ -379,5 +379,5 @@ function mhk_update_175_restore_draft_forms() {
  * Update DB Version.
  */
 function mhk_update_175_db_version() {
-	EVF_Install::update_db_version( '1.7.5' );
+	MHK_Install::update_db_version( '1.7.5' );
 }

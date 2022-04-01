@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Captcha Class.
+ * MHK_Field_Captcha Class.
  */
-class EVF_Field_Captcha extends EVF_Form_Fields {
+class MHK_Field_Captcha extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

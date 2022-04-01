@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Builder_Fields', false ) ) {
-	return new EVF_Builder_Fields();
+if ( class_exists( 'MHK_Builder_Fields', false ) ) {
+	return new MHK_Builder_Fields();
 }
 
 /**
- * EVF_Builder_Fields class.
+ * MHK_Builder_Fields class.
  */
-class EVF_Builder_Fields extends EVF_Builder_Page {
+class MHK_Builder_Fields extends MHK_Builder_Page {
 
 	/**
 	 * Contains information for multi-part forms.
@@ -73,7 +73,7 @@ class EVF_Builder_Fields extends EVF_Builder_Page {
 					</div>
 				</div>
 				<div class="hidden muhiku-plug-fields-not-found">
-					<img src="<?php echo esc_attr( plugin_dir_url( EVF_PLUGIN_FILE ) . 'assets/images/fields-not-found.png' ); ?>" />
+					<img src="<?php echo esc_attr( plugin_dir_url( MHK_PLUGIN_FILE ) . 'assets/images/fields-not-found.png' ); ?>" />
 					<h3 class="muhiku-plug-fields-not-found__title"><?php esc_html_e( 'Oops!', 'muhiku-plug' ); ?></h3>
 					<span><?php esc_html_e( 'There is not such field that you are searching for.', 'muhiku-plug' ); ?></span>
 				</div>
@@ -186,11 +186,11 @@ class EVF_Builder_Fields extends EVF_Builder_Page {
 		/**
 		 * BW compatiable for multi-parts form.
 		 *
-		 * @todo Remove in Major EVF version 1.6.0
+		 * @todo Remove in Major MHK version 1.6.0
 		 */
-		if ( defined( 'EVF_MULTI_PART_PLUGIN_FILE' ) ) {
+		if ( defined( 'MHK_MULTI_PART_PLUGIN_FILE' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
-			$plugin_data = get_plugin_data( EVF_MULTI_PART_PLUGIN_FILE, false, false );
+			$plugin_data = get_plugin_data( MHK_MULTI_PART_PLUGIN_FILE, false, false );
 
 			if ( version_compare( $plugin_data['Version'], '1.3.0', '<' ) ) {
 				$settings_defaults = array(
@@ -317,13 +317,13 @@ class EVF_Builder_Fields extends EVF_Builder_Page {
 
 		echo '</div>';
 		echo '<div class="clear mhk-clear"></div>';
-		if ( defined( 'EVF_REPEATER_FIELDS_VERSION' ) ) {
+		if ( defined( 'MHK_REPEATER_FIELDS_VERSION' ) ) {
 			echo '<div class="mhk-repeater-row-wrapper">'; // Repeater Row Wrapper starts.
 		}
 
 		echo '<div class="mhk-add-row" data-total-rows="' . count( $structure ) . '" data-next-row-id="' . (int) max( $row_ids ) . '"><span class="muhiku-plug-btn muhiku-plug-btn-primary dashicons dashicons-plus-alt">' . esc_html__( 'Add Row', 'muhiku-plug' ) . '</span></div>';
 
-		if ( defined( 'EVF_REPEATER_FIELDS_VERSION' ) ) {
+		if ( defined( 'MHK_REPEATER_FIELDS_VERSION' ) ) {
 			echo '<div class="mhk-add-row repeater-row" data-total-rows="' . count( $structure ) . '" data-next-row-id="' . (int) max( $row_ids ) . '"><span class="muhiku-plug-btn muhiku-plug-btn-primary dashicons dashicons-plus-alt">' . esc_html__( 'Add Repeater Row', 'muhiku-plug' ) . '</span></div>';
 			echo '</div>'; // Repeater Row Wrapper ends.
 		}
@@ -363,4 +363,4 @@ class EVF_Builder_Fields extends EVF_Builder_Page {
 	}
 }
 
-return new EVF_Builder_Fields();
+return new MHK_Builder_Fields();

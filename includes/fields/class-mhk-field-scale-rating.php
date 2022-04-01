@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Scale_Rating Class.
+ * MHK_Field_Scale_Rating Class.
  */
-class EVF_Field_Scale_Rating extends EVF_Form_Fields {
+class MHK_Field_Scale_Rating extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

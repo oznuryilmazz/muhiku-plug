@@ -15,7 +15,7 @@ use Elementor\Controls_Manager;
  *
  * @since 1.8.5
  */
-class EVF_Widget extends Widget_Base {
+class MHK_Widget extends Widget_Base {
 
 	/**
 	 * Get widget name.

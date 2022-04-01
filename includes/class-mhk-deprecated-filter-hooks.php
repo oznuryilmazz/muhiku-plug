@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Handles deprecation notices and triggering of legacy filter hooks.
  */
-class EVF_Deprecated_Filter_Hooks extends EVF_Deprecated_Hooks {
+class MHK_Deprecated_Filter_Hooks extends MHK_Deprecated_Hooks {
 
 	/**
 	 * Array of deprecated hooks we need to handle. Format of 'new' => 'old'.

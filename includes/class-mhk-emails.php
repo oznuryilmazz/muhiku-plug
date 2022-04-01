@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Email class.
  */
-class EVF_Emails {
+class MHK_Emails {
 
 	/**
 	 * Holds the from address.
@@ -315,7 +315,7 @@ class EVF_Emails {
 	 */
 	public function send( $to, $subject, $message, $attachments = '', $connection_id = '' ) {
 		if ( ! did_action( 'init' ) && ! did_action( 'admin_init' ) ) {
-			mhk_doing_it_wrong( __FUNCTION__, __( 'You cannot send emails with EVF_Emails until init/admin_init has been reached', 'muhiku-plug' ), null );
+			mhk_doing_it_wrong( __FUNCTION__, __( 'You cannot send emails with MHK_Emails until init/admin_init has been reached', 'muhiku-plug' ), null );
 			return false;
 		}
 

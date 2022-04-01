@@ -34,21 +34,21 @@ final class MuhikuPlug {
 	/**
 	 * Session instance.
 	 *
-	 * @var EVF_Session|EVF_Session_Handler
+	 * @var MHK_Session|MHK_Session_Handler
 	 */
 	public $session = null;
 
 	/**
 	 * The form data handler instance.
 	 *
-	 * @var EVF_Form_Handler
+	 * @var MHK_Form_Handler
 	 */
 	public $form;
 
 	/**
 	 * The entry data handler instance.
 	 *
-	 * @var EVF_Entry_Handler
+	 * @var MHK_Entry_Handler
 	 */
 	public $entry;
 
@@ -57,21 +57,21 @@ final class MuhikuPlug {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @var EVF_Entry_Meta_Handler
+	 * @var MHK_Entry_Meta_Handler
 	 */
 	public $entry_meta;
 
 	/**
 	 * Integrations instance.
 	 *
-	 * @var EVF_Integrations
+	 * @var MHK_Integrations
 	 */
 	public $integrations = null;
 
 	/**
 	 * Array of deprecated hook handlers.
 	 *
-	 * @var array of EVF_Deprecated_Hooks
+	 * @var array of MHK_Deprecated_Hooks
 	 */
 	public $deprecated_hook_handlers = array();
 
@@ -82,7 +82,7 @@ final class MuhikuPlug {
 	 *
 	 * @since  1.0.0
 	 * @static
-	 * @see    EVF()
+	 * @see    MHK()
 	 * @return MuhikuPlug - Main instance.
 	 */
 	public static function instance() {
@@ -141,12 +141,12 @@ final class MuhikuPlug {
 	 * @since 1.0.0
 	 */
 	private function init_hooks() {
-		register_activation_hook( EVF_PLUGIN_FILE, array( 'EVF_Install', 'install' ) );
+		register_activation_hook( MHK_PLUGIN_FILE, array( 'MHK_Install', 'install' ) );
 		register_shutdown_function( array( $this, 'log_errors' ) );
 		add_action( 'after_setup_theme', array( $this, 'include_template_functions' ), 11 );
 		add_action( 'init', array( $this, 'init' ), 0 );
 		add_action( 'init', array( $this, 'form_fields' ), 0 );
-		add_action( 'init', array( 'EVF_Shortcodes', 'init' ), 0 );
+		add_action( 'init', array( 'MHK_Shortcodes', 'init' ), 0 );
 		add_action( 'switch_blog', array( $this, 'wpdb_table_fix' ), 0 );
 	}
 
@@ -170,17 +170,17 @@ final class MuhikuPlug {
 	}
 
 	/**
-	 * Define EVF Constants.
+	 * Define MHK Constants.
 	 */
 	private function define_constants() {
 		$upload_dir = wp_upload_dir( null, false );
 
-		$this->define( 'EVF_ABSPATH', dirname( EVF_PLUGIN_FILE ) . '/' );
-		$this->define( 'EVF_PLUGIN_BASENAME', plugin_basename( EVF_PLUGIN_FILE ) );
-		$this->define( 'EVF_VERSION', $this->version );
-		$this->define( 'EVF_LOG_DIR', $upload_dir['basedir'] . '/mhk-logs/' );
-		$this->define( 'EVF_SESSION_CACHE_GROUP', 'mhk_session_id' );
-		$this->define( 'EVF_TEMPLATE_DEBUG_MODE', false );
+		$this->define( 'MHK_ABSPATH', dirname( MHK_PLUGIN_FILE ) . '/' );
+		$this->define( 'MHK_PLUGIN_BASENAME', plugin_basename( MHK_PLUGIN_FILE ) );
+		$this->define( 'MHK_VERSION', $this->version );
+		$this->define( 'MHK_LOG_DIR', $upload_dir['basedir'] . '/mhk-logs/' );
+		$this->define( 'MHK_SESSION_CACHE_GROUP', 'mhk_session_id' );
+		$this->define( 'MHK_TEMPLATE_DEBUG_MODE', false );
 	}
 
 	/**
@@ -237,49 +237,49 @@ final class MuhikuPlug {
 		/**
 		 * Class autoloader.
 		 */
-		include_once EVF_ABSPATH . 'includes/class-mhk-autoloader.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-autoloader.php';
 
 		/**
 		 * Interfaces.
 		 */
-		include_once EVF_ABSPATH . 'includes/interfaces/class-mhk-logger-interface.php';
-		include_once EVF_ABSPATH . 'includes/interfaces/class-mhk-log-handler-interface.php';
+		include_once MHK_ABSPATH . 'includes/interfaces/class-mhk-logger-interface.php';
+		include_once MHK_ABSPATH . 'includes/interfaces/class-mhk-log-handler-interface.php';
 
 		/**
 		 * Abstract classes.
 		 */
-		include_once EVF_ABSPATH . 'includes/abstracts/class-mhk-settings-api.php';
-		include_once EVF_ABSPATH . 'includes/abstracts/class-mhk-integration.php';
-		include_once EVF_ABSPATH . 'includes/abstracts/class-mhk-log-handler.php';
-		include_once EVF_ABSPATH . 'includes/abstracts/class-mhk-deprecated-hooks.php';
-		include_once EVF_ABSPATH . 'includes/abstracts/class-mhk-session.php';
-		include_once EVF_ABSPATH . 'includes/abstracts/class-mhk-form-fields.php';
+		include_once MHK_ABSPATH . 'includes/abstracts/class-mhk-settings-api.php';
+		include_once MHK_ABSPATH . 'includes/abstracts/class-mhk-integration.php';
+		include_once MHK_ABSPATH . 'includes/abstracts/class-mhk-log-handler.php';
+		include_once MHK_ABSPATH . 'includes/abstracts/class-mhk-deprecated-hooks.php';
+		include_once MHK_ABSPATH . 'includes/abstracts/class-mhk-session.php';
+		include_once MHK_ABSPATH . 'includes/abstracts/class-mhk-form-fields.php';
 
 		/**
 		 * Core classes.
 		 */
-		include_once EVF_ABSPATH . 'includes/mhk-core-functions.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-post-types.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-install.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-ajax.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-emails.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-form-block.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-integrations.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-cache-helper.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-deprecated-action-hooks.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-deprecated-filter-hooks.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-forms-features.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-privacy.php';
+		include_once MHK_ABSPATH . 'includes/mhk-core-functions.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-post-types.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-install.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-ajax.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-emails.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-form-block.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-integrations.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-cache-helper.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-deprecated-action-hooks.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-deprecated-filter-hooks.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-forms-features.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-privacy.php';
 
 		/**
 		 * Elementor classes.
 		 */
 		if ( class_exists( '\Elementor\Plugin' ) ) {
-			include_once EVF_ABSPATH . 'includes/elementor/class-mhk-elementor.php';
+			include_once MHK_ABSPATH . 'includes/elementor/class-mhk-elementor.php';
 		}
 
 		if ( $this->is_request( 'admin' ) ) {
-			include_once EVF_ABSPATH . 'includes/admin/class-mhk-admin.php';
+			include_once MHK_ABSPATH . 'includes/admin/class-mhk-admin.php';
 		}
 
 		if ( $this->is_request( 'frontend' ) ) {
@@ -291,19 +291,19 @@ final class MuhikuPlug {
 	 * Include required frontend files.
 	 */
 	public function frontend_includes() {
-		include_once EVF_ABSPATH . 'includes/mhk-notice-functions.php';
-		include_once EVF_ABSPATH . 'includes/mhk-template-hooks.php';
-		include_once EVF_ABSPATH . 'includes/class-mhk-template-loader.php';  // Template Loader.
-		include_once EVF_ABSPATH . 'includes/class-mhk-frontend-scripts.php'; // Frontend Scripts.
-		include_once EVF_ABSPATH . 'includes/class-mhk-shortcodes.php';       // Shortcodes class.
-		include_once EVF_ABSPATH . 'includes/class-mhk-session-handler.php';  // Session handler class.
+		include_once MHK_ABSPATH . 'includes/mhk-notice-functions.php';
+		include_once MHK_ABSPATH . 'includes/mhk-template-hooks.php';
+		include_once MHK_ABSPATH . 'includes/class-mhk-template-loader.php';  // Template Loader.
+		include_once MHK_ABSPATH . 'includes/class-mhk-frontend-scripts.php'; // Frontend Scripts.
+		include_once MHK_ABSPATH . 'includes/class-mhk-shortcodes.php';       // Shortcodes class.
+		include_once MHK_ABSPATH . 'includes/class-mhk-session-handler.php';  // Session handler class.
 	}
 
 	/**
 	 * Function used to Init MuhikuPlug Template Functions - This makes them pluggable by plugins and themes.
 	 */
 	public function include_template_functions() {
-		include_once EVF_ABSPATH . 'includes/mhk-template-functions.php';
+		include_once MHK_ABSPATH . 'includes/mhk-template-functions.php';
 	}
 
 	/**
@@ -317,14 +317,14 @@ final class MuhikuPlug {
 		$this->load_plugin_textdomain();
 
 		// Load class instances.
-		$this->integrations                        = new EVF_Integrations();
-		$this->deprecated_hook_handlers['actions'] = new EVF_Deprecated_Action_Hooks();
-		$this->deprecated_hook_handlers['filters'] = new EVF_Deprecated_Filter_Hooks();
+		$this->integrations                        = new MHK_Integrations();
+		$this->deprecated_hook_handlers['actions'] = new MHK_Deprecated_Action_Hooks();
+		$this->deprecated_hook_handlers['filters'] = new MHK_Deprecated_Filter_Hooks();
 
 		// Classes/actions loaded for the frontend and for ajax requests.
 		if ( $this->is_request( 'frontend' ) ) {
 			// Session class, handles session data for users - can be overwritten if custom handler is needed.
-			$session_class = apply_filters( 'everest_forms_session_handler', 'EVF_Session_Handler' );
+			$session_class = apply_filters( 'everest_forms_session_handler', 'MHK_Session_Handler' );
 			$this->session = new $session_class();
 			$this->session->init();
 		}
@@ -340,9 +340,9 @@ final class MuhikuPlug {
 	 */
 	public function objects() {
 		// Global objects.
-		$this->form       = new EVF_Form_Handler();
-		$this->task       = new EVF_Form_Task();
-		$this->smart_tags = new EVF_Smart_Tags();
+		$this->form       = new MHK_Form_Handler();
+		$this->task       = new MHK_Form_Task();
+		$this->smart_tags = new MHK_Smart_Tags();
 	}
 
 	/**
@@ -366,7 +366,7 @@ final class MuhikuPlug {
 
 		unload_textdomain( 'muhiku-plug' );
 		load_textdomain( 'muhiku-plug', WP_LANG_DIR . '/muhiku-plug/muhiku-plug-' . $locale . '.mo' );
-		load_plugin_textdomain( 'muhiku-plug', false, plugin_basename( dirname( EVF_PLUGIN_FILE ) ) . '/languages' );
+		load_plugin_textdomain( 'muhiku-plug', false, plugin_basename( dirname( MHK_PLUGIN_FILE ) ) . '/languages' );
 	}
 
 	/**
@@ -377,7 +377,7 @@ final class MuhikuPlug {
 	 * @return string
 	 */
 	public function plugin_url( $path = '/' ) {
-		return untrailingslashit( plugins_url( $path, EVF_PLUGIN_FILE ) );
+		return untrailingslashit( plugins_url( $path, MHK_PLUGIN_FILE ) );
 	}
 
 	/**
@@ -386,7 +386,7 @@ final class MuhikuPlug {
 	 * @return string
 	 */
 	public function plugin_path() {
-		return untrailingslashit( plugin_dir_path( EVF_PLUGIN_FILE ) );
+		return untrailingslashit( plugin_dir_path( MHK_PLUGIN_FILE ) );
 	}
 
 	/**
@@ -417,9 +417,9 @@ final class MuhikuPlug {
 	/**
 	 * Get form fields Class.
 	 *
-	 * @return EVF_Form_Fields
+	 * @return MHK_Form_Fields
 	 */
 	public function form_fields() {
-		return EVF_Fields::instance();
+		return MHK_Fields::instance();
 	}
 }

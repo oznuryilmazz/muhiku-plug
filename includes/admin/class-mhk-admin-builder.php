@@ -8,12 +8,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'EVF_Admin_Builder', false ) ) :
+if ( ! class_exists( 'MHK_Admin_Builder', false ) ) :
 
 	/**
-	 * EVF_Admin_Builder Class.
+	 * MHK_Admin_Builder Class.
 	 */
-	class EVF_Admin_Builder {
+	class MHK_Admin_Builder {
 
 		/**
 		 * Builder pages.

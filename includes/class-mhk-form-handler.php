@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Form Handler class.
  */
-class EVF_Form_Handler {
+class MHK_Form_Handler {
 
 	/**
 	 * Fetches forms

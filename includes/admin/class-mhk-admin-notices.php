@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Admin_Notices Class.
+ * MHK_Admin_Notices Class.
  */
-class EVF_Admin_Notices {
+class MHK_Admin_Notices {
 
 	/**
 	 * Stores notices.
@@ -72,7 +72,7 @@ class EVF_Admin_Notices {
 	}
 
 	/**
-	 * Reset notices for themes when switched or a new version of EVF is installed.
+	 * Reset notices for themes when switched or a new version of MHK is installed.
 	 */
 	public static function reset_admin_notices() {
 		if ( self::is_plugin_active( 'muhiku-plug-stripe/muhiku-plug-stripe.php' ) ) {
@@ -156,7 +156,7 @@ class EVF_Admin_Notices {
 			return;
 		}
 
-		wp_enqueue_style( 'muhiku-plug-activation', plugins_url( '/assets/css/activation.css', EVF_PLUGIN_FILE ), array(), EVF_VERSION );
+		wp_enqueue_style( 'muhiku-plug-activation', plugins_url( '/assets/css/activation.css', MHK_PLUGIN_FILE ), array(), MHK_VERSION );
 
 		// Add RTL support.
 		wp_style_add_data( 'muhiku-plug-activation', 'rtl', 'replace' );
@@ -204,8 +204,8 @@ class EVF_Admin_Notices {
 	 * If we need to update, include a message with the update button.
 	 */
 	public static function update_notice() {
-		if ( EVF_Install::needs_db_update() ) {
-			$updater = new EVF_Background_Updater();
+		if ( MHK_Install::needs_db_update() ) {
+			$updater = new MHK_Background_Updater();
 
 			if ( $updater->is_updating() || ! empty( $_GET['do_update_everest_forms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 				include 'views/html-notice-updating.php';
@@ -213,7 +213,7 @@ class EVF_Admin_Notices {
 				include 'views/html-notice-update.php';
 			}
 		} else {
-			EVF_Install::update_db_version();
+			MHK_Install::update_db_version();
 			include 'views/html-notice-updated.php';
 		}
 	}
@@ -350,4 +350,4 @@ class EVF_Admin_Notices {
 	}
 }
 
-EVF_Admin_Notices::init();
+MHK_Admin_Notices::init();

@@ -8,16 +8,16 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'EVF_Admin_Form_Panel', false ) ) {
-	include_once dirname( EVF_PLUGIN_FILE ) . '/includes/abstracts/legacy/class-mhk-admin-form-panel.php';
+if ( ! class_exists( 'MHK_Admin_Form_Panel', false ) ) {
+	include_once dirname( MHK_PLUGIN_FILE ) . '/includes/abstracts/legacy/class-mhk-admin-form-panel.php';
 }
 
-if ( ! class_exists( 'EVF_Builder_Page', false ) ) :
+if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 
 	/**
-	 * EVF_Builder_Page Class.
+	 * MHK_Builder_Page Class.
 	 */
-	abstract class EVF_Builder_Page extends EVF_Admin_Form_Panel {
+	abstract class MHK_Builder_Page extends MHK_Admin_Form_Panel {
 
 		/**
 		 * Form object.

@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Settings_Email', false ) ) {
-	return new EVF_Settings_Email();
+if ( class_exists( 'MHK_Settings_Email', false ) ) {
+	return new MHK_Settings_Email();
 }
 
 /**
- * EVF_Settings_Email.
+ * MHK_Settings_Email.
  */
-class EVF_Settings_Email extends EVF_Settings_Page {
+class MHK_Settings_Email extends MHK_Settings_Page {
 
 	/**
 	 * Constructor.
@@ -51,11 +51,11 @@ class EVF_Settings_Email extends EVF_Settings_Page {
 					'options' => array(
 						'default' => array(
 							'name'  => esc_html__( 'HTML Template', 'muhiku-plug' ),
-							'image' => plugins_url( 'assets/images/email-template-html.png', EVF_PLUGIN_FILE ),
+							'image' => plugins_url( 'assets/images/email-template-html.png', MHK_PLUGIN_FILE ),
 						),
 						'none'    => array(
 							'name'  => esc_html__( 'Plain text', 'muhiku-plug' ),
-							'image' => plugins_url( 'assets/images/email-template-plain.png', EVF_PLUGIN_FILE ),
+							'image' => plugins_url( 'assets/images/email-template-plain.png', MHK_PLUGIN_FILE ),
 						),
 					),
 				),
@@ -106,8 +106,8 @@ class EVF_Settings_Email extends EVF_Settings_Page {
 	public function save() {
 		$settings = $this->get_settings();
 
-		EVF_Admin_Settings::save_fields( $settings );
+		MHK_Admin_Settings::save_fields( $settings );
 	}
 }
 
-return new EVF_Settings_Email();
+return new MHK_Settings_Email();

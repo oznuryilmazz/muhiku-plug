@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Integrations class.
  */
-class EVF_Integrations {
+class MHK_Integrations {
 
 	/**
 	 * Array of integrations.

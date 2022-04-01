@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Payment_Checkbox Class.
+ * MHK_Field_Payment_Checkbox Class.
  */
-class EVF_Field_Payment_Checkbox extends EVF_Form_Fields {
+class MHK_Field_Payment_Checkbox extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

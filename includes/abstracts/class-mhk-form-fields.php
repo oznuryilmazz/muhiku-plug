@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract EVF_Form_Fields Class
+ * Abstract MHK_Form_Fields Class
  *
  * @version 1.0.0
  * @package EverestFroms/Abstracts
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Form fields class.
  */
-abstract class EVF_Form_Fields {
+abstract class MHK_Form_Fields {
 
 	/**
 	 * Field name.

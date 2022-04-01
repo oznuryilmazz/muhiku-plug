@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Select class.
+ * MHK_Field_Select class.
  */
-class EVF_Field_Select extends EVF_Form_Fields {
+class MHK_Field_Select extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

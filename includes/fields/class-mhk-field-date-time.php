@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Date_Time class.
+ * MHK_Field_Date_Time class.
  */
-class EVF_Field_Date_Time extends EVF_Form_Fields {
+class MHK_Field_Date_Time extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.
@@ -819,7 +819,7 @@ class EVF_Field_Date_Time extends EVF_Form_Fields {
 		}
 
 		if ( wp_script_is( 'flatpickr' ) && 'en' !== $data_i10n ) {
-			wp_enqueue_script( 'flatpickr-localization', 'https://npmcdn.com/flatpickr/dist/l10n/' . $data_i10n . '.js', array(), EVF_VERSION, true );
+			wp_enqueue_script( 'flatpickr-localization', 'https://npmcdn.com/flatpickr/dist/l10n/' . $data_i10n . '.js', array(), MHK_VERSION, true );
 		}
 	}
 }

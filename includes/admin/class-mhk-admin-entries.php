@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Admin_Entries class.
+ * MHK_Admin_Entries class.
  */
-class EVF_Admin_Entries {
+class MHK_Admin_Entries {
 
 	/**
 	 * Initialize the entries admin actions.
@@ -264,12 +264,12 @@ class EVF_Admin_Entries {
 		check_admin_referer( 'bulk-entries' );
 
 		if ( isset( $_REQUEST['form_id'] ) && current_user_can( 'export' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			include_once EVF_ABSPATH . 'includes/export/class-mhk-entry-csv-exporter.php';
+			include_once MHK_ABSPATH . 'includes/export/class-mhk-entry-csv-exporter.php';
 			$form_id   = absint( $_REQUEST['form_id'] ); // phpcs:ignore WordPress.Security.NonceVerification
 			$form_name = strtolower( get_the_title( $form_id ) );
 
 			if ( $form_name ) {
-				$exporter = new EVF_Entry_CSV_Exporter( $form_id );
+				$exporter = new MHK_Entry_CSV_Exporter( $form_id );
 				$exporter->set_filename( mhk_get_csv_file_name( $form_name ) );
 			}
 
@@ -390,4 +390,4 @@ class EVF_Admin_Entries {
 	}
 }
 
-new EVF_Admin_Entries();
+new MHK_Admin_Entries();

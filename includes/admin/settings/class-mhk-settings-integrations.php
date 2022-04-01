@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Settings_Integrations', false ) ) {
-	return new EVF_Settings_Integrations();
+if ( class_exists( 'MHK_Settings_Integrations', false ) ) {
+	return new MHK_Settings_Integrations();
 }
 
 /**
- * EVF_Settings_Integrations.
+ * MHK_Settings_Integrations.
  */
-class EVF_Settings_Integrations extends EVF_Settings_Page {
+class MHK_Settings_Integrations extends MHK_Settings_Page {
 
 	/**
 	 * Constructor.
@@ -88,4 +88,4 @@ class EVF_Settings_Integrations extends EVF_Settings_Page {
 	}
 }
 
-return new EVF_Settings_Integrations();
+return new MHK_Settings_Integrations();

@@ -11,7 +11,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Add body classes for EVF pages.
+ * Add body classes for MHK pages.
  *
  * @param  array $classes Body Classes.
  * @return array
@@ -55,10 +55,10 @@ function mhk_no_js() {
 function mhk_generator_tag( $gen, $type ) {
 	switch ( $type ) {
 		case 'html':
-			$gen .= "\n" . '<meta name="generator" content="Muhiku Plug ' . esc_attr( EVF_VERSION ) . '">';
+			$gen .= "\n" . '<meta name="generator" content="Muhiku Plug ' . esc_attr( MHK_VERSION ) . '">';
 			break;
 		case 'xhtml':
-			$gen .= "\n" . '<meta name="generator" content="Muhiku Plug ' . esc_attr( EVF_VERSION ) . '" />';
+			$gen .= "\n" . '<meta name="generator" content="Muhiku Plug ' . esc_attr( MHK_VERSION ) . '" />';
 			break;
 	}
 

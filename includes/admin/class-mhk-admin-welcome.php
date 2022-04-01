@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Welcome class.
  */
-class EVF_Admin_Welcome {
+class MHK_Admin_Welcome {
 
 	/**
 	 * Hook in methods.
@@ -113,4 +113,4 @@ class EVF_Admin_Welcome {
 	}
 }
 
-EVF_Admin_Welcome::init();
+MHK_Admin_Welcome::init();

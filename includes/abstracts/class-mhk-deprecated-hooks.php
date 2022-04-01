@@ -9,11 +9,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Deprecated_Hooks class maps old actions and filters to new ones. This is the base class for handling those deprecated hooks.
+ * MHK_Deprecated_Hooks class maps old actions and filters to new ones. This is the base class for handling those deprecated hooks.
  *
  * Based on the WCS_Hook_Deprecator class by Prospress.
  */
-abstract class EVF_Deprecated_Hooks {
+abstract class MHK_Deprecated_Hooks {
 
 	/**
 	 * Array of deprecated hooks we need to handle.
@@ -111,7 +111,7 @@ abstract class EVF_Deprecated_Hooks {
 	 * @return string
 	 */
 	protected function get_deprecated_version( $old_hook ) {
-		return ! empty( $this->deprecated_version[ $old_hook ] ) ? $this->deprecated_version[ $old_hook ] : EVF_VERSION;
+		return ! empty( $this->deprecated_version[ $old_hook ] ) ? $this->deprecated_version[ $old_hook ] : MHK_VERSION;
 	}
 
 	/**

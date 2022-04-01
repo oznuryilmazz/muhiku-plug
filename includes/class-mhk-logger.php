@@ -2,7 +2,7 @@
 /**
  * Provides logging capabilities for debugging purposes.
  *
- * @class   EVF_Logger
+ * @class   MHK_Logger
  * @version 1.0.0
  * @package MuhikuPlug/Classes
  */
@@ -10,9 +10,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Logger class
+ * MHK_Logger class
  */
-class EVF_Logger implements EVF_Logger_Interface {
+class MHK_Logger implements MHK_Logger_Interface {
 
 	/**
 	 * Stores registered log handlers.
@@ -32,7 +32,7 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 * Constructor for the logger.
 	 *
 	 * @param array  $handlers Optional. Array of log handlers. If $handlers is not provided, the filter 'everest_forms_register_log_handlers' will be used to define the handlers. If $handlers is provided, the filter will not be applied and the handlers will be used directly.
-	 * @param string $threshold Optional. Define an explicit threshold. May be configured via  EVF_LOG_THRESHOLD. By default, all logs will be processed.
+	 * @param string $threshold Optional. Define an explicit threshold. May be configured via  MHK_LOG_THRESHOLD. By default, all logs will be processed.
 	 */
 	public function __construct( $handlers = null, $threshold = null ) {
 		if ( null === $handlers ) {
@@ -44,16 +44,16 @@ class EVF_Logger implements EVF_Logger_Interface {
 		if ( ! empty( $handlers ) && is_array( $handlers ) ) {
 			foreach ( $handlers as $handler ) {
 				$implements = class_implements( $handler );
-				if ( is_object( $handler ) && is_array( $implements ) && in_array( 'EVF_Log_Handler_Interface', $implements, true ) ) {
+				if ( is_object( $handler ) && is_array( $implements ) && in_array( 'MHK_Log_Handler_Interface', $implements, true ) ) {
 					$register_handlers[] = $handler;
 				} else {
 					mhk_doing_it_wrong(
 						__METHOD__,
 						sprintf(
-							/* translators: 1: class name 2: EVF_Log_Handler_Interface */
+							/* translators: 1: class name 2: MHK_Log_Handler_Interface */
 							__( 'The provided handler %1$s does not implement %2$s.', 'muhiku-plug' ),
 							'<code>' . esc_html( is_object( $handler ) ? get_class( $handler ) : $handler ) . '</code>',
-							'<code>EVF_Log_Handler_Interface</code>'
+							'<code>MHK_Log_Handler_Interface</code>'
 						),
 						'1.0'
 					);
@@ -62,9 +62,9 @@ class EVF_Logger implements EVF_Logger_Interface {
 		}
 
 		if ( null !== $threshold ) {
-			$threshold = EVF_Log_Levels::get_level_severity( $threshold );
-		} elseif ( defined( 'EVF_LOG_THRESHOLD' ) && EVF_Log_Levels::is_valid_level( EVF_LOG_THRESHOLD ) ) {
-			$threshold = EVF_Log_Levels::get_level_severity( EVF_LOG_THRESHOLD );
+			$threshold = MHK_Log_Levels::get_level_severity( $threshold );
+		} elseif ( defined( 'MHK_LOG_THRESHOLD' ) && MHK_Log_Levels::is_valid_level( MHK_LOG_THRESHOLD ) ) {
+			$threshold = MHK_Log_Levels::get_level_severity( MHK_LOG_THRESHOLD );
 		} else {
 			$threshold = null;
 		}
@@ -83,7 +83,7 @@ class EVF_Logger implements EVF_Logger_Interface {
 		if ( null === $this->threshold ) {
 			return true;
 		}
-		return $this->threshold <= EVF_Log_Levels::get_level_severity( $level );
+		return $this->threshold <= MHK_Log_Levels::get_level_severity( $level );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 *
 	 * @return bool
 	 */
-	public function add( $handle, $message, $level = EVF_Log_Levels::NOTICE ) {
+	public function add( $handle, $message, $level = MHK_Log_Levels::NOTICE ) {
 		$message = apply_filters( 'everest_forms_logger_add_message', $message, $handle );
 		$this->log(
 			$level,
@@ -133,9 +133,9 @@ class EVF_Logger implements EVF_Logger_Interface {
 			return false;
 		}
 
-		if ( ! EVF_Log_Levels::is_valid_level( $level ) ) {
-			/* translators: 1: EVF_Logger::log 2: level */
-			mhk_doing_it_wrong( __METHOD__, sprintf( __( '%1$s was called with an invalid level "%2$s".', 'muhiku-plug' ), '<code>EVF_Logger::log</code>', $level ), '1.2' );
+		if ( ! MHK_Log_Levels::is_valid_level( $level ) ) {
+			/* translators: 1: MHK_Logger::log 2: level */
+			mhk_doing_it_wrong( __METHOD__, sprintf( __( '%1$s was called with an invalid level "%2$s".', 'muhiku-plug' ), '<code>MHK_Logger::log</code>', $level ), '1.2' );
 		}
 
 		if ( $this->should_handle( $level ) ) {
@@ -152,13 +152,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 *
 	 * System is unusable.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function emergency( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::EMERGENCY, $message, $context );
+		$this->log( MHK_Log_Levels::EMERGENCY, $message, $context );
 	}
 
 	/**
@@ -167,13 +167,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 * Action must be taken immediately.
 	 * Example: Entire website down, database unavailable, etc.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function alert( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::ALERT, $message, $context );
+		$this->log( MHK_Log_Levels::ALERT, $message, $context );
 	}
 
 	/**
@@ -182,13 +182,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 * Critical conditions.
 	 * Example: Application component unavailable, unexpected exception.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function critical( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::CRITICAL, $message, $context );
+		$this->log( MHK_Log_Levels::CRITICAL, $message, $context );
 	}
 
 	/**
@@ -197,13 +197,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 * Runtime errors that do not require immediate action but should typically be logged
 	 * and monitored.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function error( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::ERROR, $message, $context );
+		$this->log( MHK_Log_Levels::ERROR, $message, $context );
 	}
 
 	/**
@@ -214,13 +214,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 * Example: Use of deprecated APIs, poor use of an API, undesirable things that are not
 	 * necessarily wrong.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function warning( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::WARNING, $message, $context );
+		$this->log( MHK_Log_Levels::WARNING, $message, $context );
 	}
 
 	/**
@@ -228,13 +228,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 *
 	 * Normal but significant events.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function notice( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::NOTICE, $message, $context );
+		$this->log( MHK_Log_Levels::NOTICE, $message, $context );
 	}
 
 	/**
@@ -243,13 +243,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 * Interesting events.
 	 * Example: User logs in, SQL logs.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function info( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::INFO, $message, $context );
+		$this->log( MHK_Log_Levels::INFO, $message, $context );
 	}
 
 	/**
@@ -257,13 +257,13 @@ class EVF_Logger implements EVF_Logger_Interface {
 	 *
 	 * Detailed debug information.
 	 *
-	 * @see EVF_Logger::log
+	 * @see MHK_Logger::log
 	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
 	public function debug( $message, $context = array() ) {
-		$this->log( EVF_Log_Levels::DEBUG, $message, $context );
+		$this->log( MHK_Log_Levels::DEBUG, $message, $context );
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 /**
  * Handle data for the current customers session.
- * Implements the EVF_Session abstract class.
+ * Implements the MHK_Session abstract class.
  *
  * @package MuhikuPlug\Classes
  * @since   1.0.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Session handler class.
  */
-class EVF_Session_Handler extends EVF_Session {
+class MHK_Session_Handler extends MHK_Session {
 
 	/**
 	 * Cookie name used for the session.
@@ -175,7 +175,7 @@ class EVF_Session_Handler extends EVF_Session {
 	 * @return string
 	 */
 	private function get_cache_prefix() {
-		return EVF_Cache_Helper::get_cache_prefix( EVF_SESSION_CACHE_GROUP );
+		return MHK_Cache_Helper::get_cache_prefix( MHK_SESSION_CACHE_GROUP );
 	}
 
 	/**
@@ -196,7 +196,7 @@ class EVF_Session_Handler extends EVF_Session {
 				)
 			);
 
-			wp_cache_set( $this->get_cache_prefix() . $this->_customer_id, $this->_data, EVF_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
+			wp_cache_set( $this->get_cache_prefix() . $this->_customer_id, $this->_data, MHK_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
 			$this->_dirty = false;
 		}
 	}
@@ -232,8 +232,8 @@ class EVF_Session_Handler extends EVF_Session {
 
 		$wpdb->query( $wpdb->prepare( "DELETE FROM $this->_table WHERE session_expiry < %d", time() ) ); // @codingStandardsIgnoreLine.
 
-		if ( class_exists( 'EVF_Cache_Helper' ) ) {
-			EVF_Cache_Helper::incr_cache_prefix( EVF_SESSION_CACHE_GROUP );
+		if ( class_exists( 'MHK_Cache_Helper' ) ) {
+			MHK_Cache_Helper::incr_cache_prefix( MHK_SESSION_CACHE_GROUP );
 		}
 	}
 
@@ -252,7 +252,7 @@ class EVF_Session_Handler extends EVF_Session {
 		}
 
 		// Try to get it from the cache, it will return false if not present or if object cache not in use.
-		$value = wp_cache_get( $this->get_cache_prefix() . $customer_id, EVF_SESSION_CACHE_GROUP );
+		$value = wp_cache_get( $this->get_cache_prefix() . $customer_id, MHK_SESSION_CACHE_GROUP );
 
 		if ( false === $value ) {
 			$value = $wpdb->get_var( $wpdb->prepare( "SELECT session_value FROM $this->_table WHERE session_key = %s", $customer_id ) ); // @codingStandardsIgnoreLine.
@@ -261,7 +261,7 @@ class EVF_Session_Handler extends EVF_Session {
 				$value = $default;
 			}
 
-			wp_cache_add( $this->get_cache_prefix() . $customer_id, $value, EVF_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
+			wp_cache_add( $this->get_cache_prefix() . $customer_id, $value, MHK_SESSION_CACHE_GROUP, $this->_session_expiration - time() );
 		}
 
 		return maybe_unserialize( $value );
@@ -275,7 +275,7 @@ class EVF_Session_Handler extends EVF_Session {
 	public function delete_session( $customer_id ) {
 		global $wpdb;
 
-		wp_cache_delete( $this->get_cache_prefix() . $customer_id, EVF_SESSION_CACHE_GROUP );
+		wp_cache_delete( $this->get_cache_prefix() . $customer_id, MHK_SESSION_CACHE_GROUP );
 
 		$wpdb->delete( // @codingStandardsIgnoreLine.
 			$this->_table,

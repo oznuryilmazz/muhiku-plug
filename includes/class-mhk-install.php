@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Install Class.
+ * MHK_Install Class.
  */
-class EVF_Install {
+class MHK_Install {
 
 	/**
 	 * DB updates and callbacks that need to be run per version.
@@ -88,7 +88,7 @@ class EVF_Install {
 		add_action( 'init', array( __CLASS__, 'init_background_updater' ), 5 );
 		add_action( 'admin_init', array( __CLASS__, 'install_actions' ) );
 		add_filter( 'map_meta_cap', array( __CLASS__, 'filter_map_meta_cap' ), 10, 4 );
-		add_filter( 'plugin_action_links_' . EVF_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
+		add_filter( 'plugin_action_links_' . MHK_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
 		add_filter( 'wpmu_drop_tables', array( __CLASS__, 'wpmu_drop_tables' ) );
 		add_filter( 'cron_schedules', array( __CLASS__, 'cron_schedules' ) );
@@ -99,7 +99,7 @@ class EVF_Install {
 	 */
 	public static function init_background_updater() {
 		include_once dirname( __FILE__ ) . '/class-mhk-background-updater.php';
-		self::$background_updater = new EVF_Background_Updater();
+		self::$background_updater = new MHK_Background_Updater();
 	}
 
 	/**
@@ -123,7 +123,7 @@ class EVF_Install {
 		if ( ! empty( $_GET['do_update_everest_forms'] ) ) {
 			check_admin_referer( 'mhk_db_update', 'mhk_db_update_nonce' );
 			self::update();
-			EVF_Admin_Notices::add_notice( 'update' );
+			MHK_Admin_Notices::add_notice( 'update' );
 		}
 		if ( ! empty( $_GET['force_update_everest_forms'] ) ) {
 			do_action( 'wp_' . get_current_blog_id() . '_mhk_updater_cron' );
@@ -133,7 +133,7 @@ class EVF_Install {
 	}
 
 	/**
-	 * Install EVF.
+	 * Install MHK.
 	 */
 	public static function install() {
 		if ( ! is_blog_installed() ) {
@@ -147,7 +147,7 @@ class EVF_Install {
 
 		// If we made it till here nothing is running yet, lets set the transient now.
 		set_transient( 'mhk_installing', 'yes', MINUTE_IN_SECONDS * 10 );
-		mhk_maybe_define_constant( 'EVF_INSTALLING', true );
+		mhk_maybe_define_constant( 'MHK_INSTALLING', true );
 
 		self::remove_admin_notices();
 		self::create_options();
@@ -173,18 +173,18 @@ class EVF_Install {
 	 */
 	private static function remove_admin_notices() {
 		include_once dirname( __FILE__ ) . '/admin/class-mhk-admin-notices.php';
-		EVF_Admin_Notices::remove_all_notices();
+		MHK_Admin_Notices::remove_all_notices();
 	}
 
 	/**
-	 * Setup EVF environment - post types, taxonomies, endpoints.
+	 * Setup MHK environment - post types, taxonomies, endpoints.
 	 */
 	private static function setup_environment() {
-		EVF_Post_Types::register_post_types();
+		MHK_Post_Types::register_post_types();
 	}
 
 	/**
-	 * Is this a brand new EVF install?
+	 * Is this a brand new MHK install?
 	 *
 	 * @return boolean
 	 */
@@ -224,7 +224,7 @@ class EVF_Install {
 				self::init_background_updater();
 				self::update();
 			} else {
-				EVF_Admin_Notices::add_notice( 'update' );
+				MHK_Admin_Notices::add_notice( 'update' );
 			}
 		} else {
 			self::update_db_version();
@@ -243,7 +243,7 @@ class EVF_Install {
 	}
 
 	/**
-	 * Update EVF version to current.
+	 * Update MHK version to current.
 	 */
 	private static function update_mhk_version() {
 		delete_option( 'everest_forms_version' );
@@ -328,7 +328,7 @@ class EVF_Install {
 		// Include settings so that we can run through defaults.
 		include_once dirname( __FILE__ ) . '/admin/class-mhk-admin-settings.php';
 
-		$settings = EVF_Admin_Settings::get_settings_pages();
+		$settings = MHK_Admin_Settings::get_settings_pages();
 
 		foreach ( $settings as $section ) {
 			if ( ! method_exists( $section, 'get_settings' ) ) {
@@ -386,7 +386,7 @@ class EVF_Install {
 	/**
 	 * Get Table schema.
 	 *
-	 * When adding or removing a table, make sure to update the list of tables in EVF_Install::get_tables().
+	 * When adding or removing a table, make sure to update the list of tables in MHK_Install::get_tables().
 	 *
 	 * @return string
 	 */
@@ -629,12 +629,12 @@ class EVF_Install {
 		// Install files and folders for uploading files and prevent hotlinking.
 		$files = array(
 			array(
-				'base'    => EVF_LOG_DIR,
+				'base'    => MHK_LOG_DIR,
 				'file'    => '.htaccess',
 				'content' => 'deny from all',
 			),
 			array(
-				'base'    => EVF_LOG_DIR,
+				'base'    => MHK_LOG_DIR,
 				'file'    => 'index.html',
 				'content' => '',
 			),
@@ -728,7 +728,7 @@ class EVF_Install {
 	 * @return array
 	 */
 	public static function plugin_row_meta( $plugin_meta, $plugin_file ) {
-		if ( EVF_PLUGIN_BASENAME === $plugin_file ) {
+		if ( MHK_PLUGIN_BASENAME === $plugin_file ) {
 			$new_plugin_meta = array(
 				'docs'    => '<a href="' . esc_url( apply_filters( 'everest_forms_docs_url', 'https://docs.wpeverest.com/documentation/plugins/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'View Muhiku Plug documentation', 'muhiku-plug' ) . '">' . esc_html__( 'Docs', 'muhiku-plug' ) . '</a>',
 				'support' => '<a href="' . esc_url( apply_filters( 'everest_forms_support_url', 'https://wordpress.org/support/plugin/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'Visit free customer support', 'muhiku-plug' ) . '">' . esc_html__( 'Free support', 'muhiku-plug' ) . '</a>',
@@ -741,4 +741,4 @@ class EVF_Install {
 	}
 }
 
-EVF_Install::init();
+MHK_Install::init();

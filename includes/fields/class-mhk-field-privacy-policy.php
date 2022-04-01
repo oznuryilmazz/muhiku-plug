@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Privacy_Policy Class.
+ * MHK_Field_Privacy_Policy Class.
  */
-class EVF_Field_Privacy_Policy extends EVF_Form_Fields {
+class MHK_Field_Privacy_Policy extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

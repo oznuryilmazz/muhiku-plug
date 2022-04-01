@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Form fields class.
  */
-class EVF_Fields {
+class MHK_Fields {
 
 	/**
 	 * Form fields classes.
@@ -25,16 +25,16 @@ class EVF_Fields {
 	/**
 	 * The single instance of the class.
 	 *
-	 * @var EVF_Fields
+	 * @var MHK_Fields
 	 */
 	protected static $instance = null;
 
 	/**
-	 * Main EVF_Fields Instance.
+	 * Main MHK_Fields Instance.
 	 *
-	 * Ensures only one instance of EVF_Fields is loaded or can be loaded.
+	 * Ensures only one instance of MHK_Fields is loaded or can be loaded.
 	 *
-	 * @return EVF_Fields Main instance.
+	 * @return MHK_Fields Main instance.
 	 */
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
@@ -75,17 +75,17 @@ class EVF_Fields {
 		$load_fields = apply_filters(
 			'everest_forms_fields',
 			array(
-				'EVF_Field_First_Name',
-				'EVF_Field_Last_Name',
-				'EVF_Field_Text',
-				'EVF_Field_Textarea',
-				'EVF_Field_Select',
-				'EVF_Field_Radio',
-				'EVF_Field_Checkbox',
-				'EVF_Field_Number',
-				'EVF_Field_Email',
-				'EVF_Field_URL',
-				'EVF_Field_Date_Time',
+				'MHK_Field_First_Name',
+				'MHK_Field_Last_Name',
+				'MHK_Field_Text',
+				'MHK_Field_Textarea',
+				'MHK_Field_Select',
+				'MHK_Field_Radio',
+				'MHK_Field_Checkbox',
+				'MHK_Field_Number',
+				'MHK_Field_Email',
+				'MHK_Field_URL',
+				'MHK_Field_Date_Time',
 			)
 		);
 

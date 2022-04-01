@@ -8,9 +8,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Payment_Quantity Class.
+ * MHK_Field_Payment_Quantity Class.
  */
-class EVF_Field_Payment_Quantity extends EVF_Form_Fields {
+class MHK_Field_Payment_Quantity extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

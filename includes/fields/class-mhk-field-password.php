@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Password Class.
+ * MHK_Field_Password Class.
  */
-class EVF_Field_Password extends EVF_Form_Fields {
+class MHK_Field_Password extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

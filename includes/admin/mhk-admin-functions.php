@@ -125,11 +125,11 @@ function mhk_create_page( $slug, $option = '', $page_title = '', $page_content =
  * @param array[] $options Opens array to output.
  */
 function everest_forms_admin_fields( $options ) {
-	if ( ! class_exists( 'EVF_Admin_Settings', false ) ) {
+	if ( ! class_exists( 'MHK_Admin_Settings', false ) ) {
 		include dirname( __FILE__ ) . '/class-mhk-admin-settings.php';
 	}
 
-	EVF_Admin_Settings::output_fields( $options );
+	MHK_Admin_Settings::output_fields( $options );
 }
 
 /**
@@ -139,11 +139,11 @@ function everest_forms_admin_fields( $options ) {
  * @param array $data    Optional. Data to use for saving. Defaults to $_POST.
  */
 function everest_forms_update_options( $options, $data = null ) {
-	if ( ! class_exists( 'EVF_Admin_Settings', false ) ) {
+	if ( ! class_exists( 'MHK_Admin_Settings', false ) ) {
 		include dirname( __FILE__ ) . '/class-mhk-admin-settings.php';
 	}
 
-	EVF_Admin_Settings::save_fields( $options, $data );
+	MHK_Admin_Settings::save_fields( $options, $data );
 }
 
 /**
@@ -155,11 +155,11 @@ function everest_forms_update_options( $options, $data = null ) {
  * @return string
  */
 function everest_forms_settings_get_option( $option_name, $default = '' ) {
-	if ( ! class_exists( 'EVF_Admin_Settings', false ) ) {
+	if ( ! class_exists( 'MHK_Admin_Settings', false ) ) {
 		include dirname( __FILE__ ) . '/class-mhk-admin-settings.php';
 	}
 
-	return EVF_Admin_Settings::get_option( $option_name, $default );
+	return MHK_Admin_Settings::get_option( $option_name, $default );
 }
 
 /**

@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Handles log entries by writing to a file.
  */
-class EVF_Log_Handler_File extends EVF_Log_Handler {
+class MHK_Log_Handler_File extends MHK_Log_Handler {
 
 	/**
 	 * Stores open file handles.
@@ -76,7 +76,7 @@ class EVF_Log_Handler_File extends EVF_Log_Handler {
 	 *
 	 *     @type string $source Optional. Determines log file to write to. Default 'log'.
 	 *     @type bool $_legacy Optional. Default false. True to use outdated log format
-	 *         originally used in deprecated EVF_Logger::add calls.
+	 *         originally used in deprecated MHK_Logger::add calls.
 	 * }
 	 *
 	 * @return bool False if value was not handled and true if value was handled.
@@ -245,8 +245,8 @@ class EVF_Log_Handler_File extends EVF_Log_Handler {
 		$handle  = sanitize_title( $handle );
 
 		if ( isset( $logs[ $handle ] ) && $logs[ $handle ] ) {
-			$file = realpath( trailingslashit( EVF_LOG_DIR ) . $logs[ $handle ] );
-			if ( 0 === stripos( $file, realpath( trailingslashit( EVF_LOG_DIR ) ) ) && is_file( $file ) && is_writable( $file ) ) { // phpcs:ignore WordPress.VIP.FileSystemWritesDisallow.file_ops_is_writable
+			$file = realpath( trailingslashit( MHK_LOG_DIR ) . $logs[ $handle ] );
+			if ( 0 === stripos( $file, realpath( trailingslashit( MHK_LOG_DIR ) ) ) && is_file( $file ) && is_writable( $file ) ) { // phpcs:ignore WordPress.VIP.FileSystemWritesDisallow.file_ops_is_writable
 				$this->close( $file ); // Close first to be certain no processes keep it alive after it is unlinked.
 				$removed = unlink( $file ); // phpcs:ignore WordPress.VIP.FileSystemWritesDisallow.file_ops_unlink
 			}
@@ -338,7 +338,7 @@ class EVF_Log_Handler_File extends EVF_Log_Handler {
 	 */
 	public static function get_log_file_path( $handle ) {
 		if ( function_exists( 'wp_hash' ) ) {
-			return trailingslashit( EVF_LOG_DIR ) . self::get_log_file_name( $handle );
+			return trailingslashit( MHK_LOG_DIR ) . self::get_log_file_name( $handle );
 		} else {
 			mhk_doing_it_wrong( __METHOD__, __( 'This method should not be called before plugins_loaded.', 'muhiku-plug' ), '1.2' );
 			return false;
@@ -401,10 +401,10 @@ class EVF_Log_Handler_File extends EVF_Log_Handler {
 		$log_files = self::get_log_files();
 
 		foreach ( $log_files as $log_file ) {
-			$last_modified = filemtime( trailingslashit( EVF_LOG_DIR ) . $log_file );
+			$last_modified = filemtime( trailingslashit( MHK_LOG_DIR ) . $log_file );
 
 			if ( $last_modified < $timestamp ) {
-				@unlink( trailingslashit( EVF_LOG_DIR ) . $log_file ); // @codingStandardsIgnoreLine.
+				@unlink( trailingslashit( MHK_LOG_DIR ) . $log_file ); // @codingStandardsIgnoreLine.
 			}
 		}
 	}
@@ -416,7 +416,7 @@ class EVF_Log_Handler_File extends EVF_Log_Handler {
 	 * @return array
 	 */
 	public static function get_log_files() {
-		$files  = @scandir( EVF_LOG_DIR ); // @codingStandardsIgnoreLine.
+		$files  = @scandir( MHK_LOG_DIR ); // @codingStandardsIgnoreLine.
 		$result = array();
 
 		if ( ! empty( $files ) ) {

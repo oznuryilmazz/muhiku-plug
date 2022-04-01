@@ -13,7 +13,7 @@ use Elementor\Plugin as ElementorPlugin;
 /**
  * Elementor class.
  */
-class EVF_Elementor {
+class MHK_Elementor {
 
 	/**
 	 * Initialize.
@@ -47,9 +47,9 @@ class EVF_Elementor {
 	 */
 	public function register_widget() {
 			// Include Widget files.
-			require_once EVF_ABSPATH . 'includes/elementor/class-mhk-widget.php';
+			require_once MHK_ABSPATH . 'includes/elementor/class-mhk-widget.php';
 
-			ElementorPlugin::instance()->widgets_manager->register( new EVF_Widget() );
+			ElementorPlugin::instance()->widgets_manager->register( new MHK_Widget() );
 	}
 
 	/**
@@ -73,9 +73,9 @@ class EVF_Elementor {
 		 * Load assets in the elementor document.
 		 */
 	public function editor_assets() {
-		wp_register_style( 'muhiku-plug-admin', mhk()->plugin_url() . '/assets/css/admin.css', array(), EVF_VERSION );
+		wp_register_style( 'muhiku-plug-admin', mhk()->plugin_url() . '/assets/css/admin.css', array(), MHK_VERSION );
 		wp_enqueue_style( 'muhiku-plug-admin' );
 	}
 }
 
-new EVF_Elementor();
+new MHK_Elementor();

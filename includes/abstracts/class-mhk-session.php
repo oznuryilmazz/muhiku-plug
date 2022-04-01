@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Session class.
+ * MHK_Session class.
  */
-abstract class EVF_Session {
+abstract class MHK_Session {
 
 	/**
 	 * Customer ID.

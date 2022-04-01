@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Autoloader Class.
  */
-class EVF_Autoloader {
+class MHK_Autoloader {
 
 	/**
 	 * Path to the includes directory.
@@ -30,7 +30,7 @@ class EVF_Autoloader {
 
 		spl_autoload_register( array( $this, 'autoload' ) );
 
-		$this->include_path = untrailingslashit( plugin_dir_path( EVF_PLUGIN_FILE ) ) . '/includes/';
+		$this->include_path = untrailingslashit( plugin_dir_path( MHK_PLUGIN_FILE ) ) . '/includes/';
 	}
 
 	/**
@@ -58,7 +58,7 @@ class EVF_Autoloader {
 	}
 
 	/**
-	 * Auto-load EVF classes on demand to reduce memory consumption.
+	 * Auto-load MHK classes on demand to reduce memory consumption.
 	 *
 	 * @param string $class Class name.
 	 */
@@ -88,4 +88,4 @@ class EVF_Autoloader {
 	}
 }
 
-new EVF_Autoloader();
+new MHK_Autoloader();

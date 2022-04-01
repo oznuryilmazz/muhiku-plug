@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Smart Tag Class.
  */
-class EVF_Smart_Tags {
+class MHK_Smart_Tags {
 
 	/**
 	 * Constructor.

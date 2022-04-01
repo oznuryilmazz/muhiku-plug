@@ -11,17 +11,17 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'WP_Async_Request', false ) ) {
-	include_once dirname( EVF_PLUGIN_FILE ) . '/includes/libraries/wp-async-request.php';
+	include_once dirname( MHK_PLUGIN_FILE ) . '/includes/libraries/wp-async-request.php';
 }
 
 if ( ! class_exists( 'WP_Background_Process', false ) ) {
-	include_once dirname( EVF_PLUGIN_FILE ) . '/includes/libraries/wp-background-process.php';
+	include_once dirname( MHK_PLUGIN_FILE ) . '/includes/libraries/wp-background-process.php';
 }
 
 /**
- * EVF_Background_Process class.
+ * MHK_Background_Process class.
  */
-abstract class EVF_Background_Process extends WP_Background_Process {
+abstract class MHK_Background_Process extends WP_Background_Process {
 
 	/**
 	 * Is queue empty.
@@ -178,7 +178,7 @@ abstract class EVF_Background_Process extends WP_Background_Process {
 	/**
 	 * Delete all batches.
 	 *
-	 * @return EVF_Background_Process
+	 * @return MHK_Background_Process
 	 */
 	public function delete_all_batches() {
 		global $wpdb;

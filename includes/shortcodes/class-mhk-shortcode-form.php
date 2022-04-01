@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Form Shortcode class.
  */
-class EVF_Shortcode_Form {
+class MHK_Shortcode_Form {
 
 	/**
 	 * Contains information for multi-part forms.
@@ -33,21 +33,21 @@ class EVF_Shortcode_Form {
 	 * Hooks in tab.
 	 */
 	public static function hooks() {
-		add_filter( 'amp_skip_post', array( 'EVF_Shortcode_Form', 'amp_skip_post' ) );
+		add_filter( 'amp_skip_post', array( 'MHK_Shortcode_Form', 'amp_skip_post' ) );
 		add_action( 'everest_forms_frontend_output_success', 'mhk_print_notices', 10, 2 );
-		add_action( 'everest_forms_frontend_output', array( 'EVF_Shortcode_Form', 'header' ), 5, 4 );
-		add_action( 'everest_forms_frontend_output', array( 'EVF_Shortcode_Form', 'fields' ), 10, 3 );
-		add_action( 'everest_forms_display_field_before', array( 'EVF_Shortcode_Form', 'wrapper_start' ), 5, 2 );
-		add_action( 'everest_forms_display_field_before', array( 'EVF_Shortcode_Form', 'label' ), 15, 2 );
-		add_action( 'everest_forms_display_field_before', array( 'EVF_Shortcode_Form', 'description' ), 20, 2 );
-		add_action( 'everest_forms_display_field_after', array( 'EVF_Shortcode_Form', 'messages' ), 3, 2 );
-		add_action( 'everest_forms_display_field_after', array( 'EVF_Shortcode_Form', 'description' ), 5, 2 );
-		add_action( 'everest_forms_display_field_after', array( 'EVF_Shortcode_Form', 'wrapper_end' ), 15, 2 );
-		add_action( 'everest_forms_frontend_output', array( 'EVF_Shortcode_Form', 'honeypot' ), 15, 3 );
+		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'header' ), 5, 4 );
+		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'fields' ), 10, 3 );
+		add_action( 'everest_forms_display_field_before', array( 'MHK_Shortcode_Form', 'wrapper_start' ), 5, 2 );
+		add_action( 'everest_forms_display_field_before', array( 'MHK_Shortcode_Form', 'label' ), 15, 2 );
+		add_action( 'everest_forms_display_field_before', array( 'MHK_Shortcode_Form', 'description' ), 20, 2 );
+		add_action( 'everest_forms_display_field_after', array( 'MHK_Shortcode_Form', 'messages' ), 3, 2 );
+		add_action( 'everest_forms_display_field_after', array( 'MHK_Shortcode_Form', 'description' ), 5, 2 );
+		add_action( 'everest_forms_display_field_after', array( 'MHK_Shortcode_Form', 'wrapper_end' ), 15, 2 );
+		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'honeypot' ), 15, 3 );
 		if ( ! apply_filters( 'everest_forms_recaptcha_disabled', false ) ) {
-			add_action( 'everest_forms_frontend_output', array( 'EVF_Shortcode_Form', 'recaptcha' ), 20, 3 );
+			add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'recaptcha' ), 20, 3 );
 		}
-		add_action( 'everest_forms_frontend_output', array( 'EVF_Shortcode_Form', 'footer' ), 25, 3 );
+		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'footer' ), 25, 3 );
 
 		// reCaptcha Language.
 		add_filter( 'everest_forms_frontend_recaptcha_url', array( __CLASS__, 'mhk_recaptcha_language' ), 10, 1 );
@@ -373,7 +373,7 @@ class EVF_Shortcode_Form {
 			/**
 			 * Hook: everest_forms_display_repeater_fields.
 			 *
-			 * @hooked EVF_Repeater_Fields->display_repeater_fields() Display Repeater Fields.
+			 * @hooked MHK_Repeater_Fields->display_repeater_fields() Display Repeater Fields.
 			 */
 			$is_repeater = apply_filters( 'everest_forms_display_repeater_fields', false, $row, $form_data, true );
 
@@ -429,7 +429,7 @@ class EVF_Shortcode_Form {
 			/**
 			 * Hook: everest_forms_add_remove_buttons.
 			 *
-			 * @hooked EVF_Repeater_Fields->add_remove_buttons() Show Add and Remove buttons.
+			 * @hooked MHK_Repeater_Fields->add_remove_buttons() Show Add and Remove buttons.
 			 */
 			do_action( 'everest_forms_add_remove_buttons', $row, $form_data, $is_repeater );
 
@@ -532,12 +532,12 @@ class EVF_Shortcode_Form {
 			// Load reCAPTCHA support if form supports it.
 			if ( $site_key && $secret_key ) {
 				if ( 'v2' === $recaptcha_type ) {
-					$recaptcha_api = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?onload=EVFRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
+					$recaptcha_api = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?onload=MHKRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
 
 					if ( 'yes' === $invisible_recaptcha ) {
 						$data['size']     = 'invisible';
-						$recaptcha_inline = 'var EVFRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index, el){var recaptchaID = grecaptcha.render(el,{callback:function(){EVFRecaptchaCallback(el);}},true);   el.closest("form").querySelector("button[type=submit]").recaptchaID = recaptchaID;});};
-						var EVFRecaptchaCallback = function (el) {
+						$recaptcha_inline = 'var MHKRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index, el){var recaptchaID = grecaptcha.render(el,{callback:function(){MHKRecaptchaCallback(el);}},true);   el.closest("form").querySelector("button[type=submit]").recaptchaID = recaptchaID;});};
+						var MHKRecaptchaCallback = function (el) {
 							var $form = el.closest("form");
 							if( typeof jQuery !==  "undefined" ){
 								if( "1" === jQuery( $form ).attr( "data-ajax_submission" ) ) {
@@ -551,17 +551,17 @@ class EVF_Shortcode_Form {
 						};
 						';
 					} else {
-						$recaptcha_inline  = 'var EVFRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index, el){var recaptchaID =  grecaptcha.render(el,{callback:function(){EVFRecaptchaCallback(el);}},true);jQuery(el).attr( "data-recaptcha-id", recaptchaID);});};';
-						$recaptcha_inline .= 'var EVFRecaptchaCallback = function(el){jQuery(el).parent().find(".mhk-recaptcha-hidden").val("1").trigger("change").valid();};';
+						$recaptcha_inline  = 'var MHKRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index, el){var recaptchaID =  grecaptcha.render(el,{callback:function(){MHKRecaptchaCallback(el);}},true);jQuery(el).attr( "data-recaptcha-id", recaptchaID);});};';
+						$recaptcha_inline .= 'var MHKRecaptchaCallback = function(el){jQuery(el).parent().find(".mhk-recaptcha-hidden").val("1").trigger("change").valid();};';
 					}
 				} elseif ( 'v3' === $recaptcha_type ) {
 					$recaptcha_api     = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?render=' . $site_key, $recaptcha_type, $form_id );
-					$recaptcha_inline  = 'var EVFRecaptchaLoad = function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"everest_form"}).then(function(token){var f=document.getElementsByName("everest_forms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});};grecaptcha.ready(EVFRecaptchaLoad);setInterval(EVFRecaptchaLoad, 110000);';
+					$recaptcha_inline  = 'var MHKRecaptchaLoad = function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"everest_form"}).then(function(token){var f=document.getElementsByName("everest_forms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});};grecaptcha.ready(MHKRecaptchaLoad);setInterval(MHKRecaptchaLoad, 110000);';
 					$recaptcha_inline .= 'grecaptcha.ready(function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"everest_form"}).then(function(token){var f=document.getElementsByName("everest_forms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});});';
 				} elseif ( 'hcaptcha' === $recaptcha_type ) {
-					$recaptcha_api     = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://hcaptcha.com/1/api.js??onload=EVFRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
-					$recaptcha_inline  = 'var EVFRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index, el){var recaptchaID =  hcaptcha.render(el,{callback:function(){EVFRecaptchaCallback(el);}},true);jQuery(el).attr( "data-recaptcha-id", recaptchaID);});};';
-					$recaptcha_inline .= 'var EVFRecaptchaCallback = function(el){jQuery(el).parent().find(".mhk-recaptcha-hidden").val("1").trigger("change").valid();};';
+					$recaptcha_api     = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://hcaptcha.com/1/api.js??onload=MHKRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
+					$recaptcha_inline  = 'var MHKRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index, el){var recaptchaID =  hcaptcha.render(el,{callback:function(){MHKRecaptchaCallback(el);}},true);jQuery(el).attr( "data-recaptcha-id", recaptchaID);});};';
+					$recaptcha_inline .= 'var MHKRecaptchaCallback = function(el){jQuery(el).parent().find(".mhk-recaptcha-hidden").val("1").trigger("change").valid();};';
 				}
 
 				// Enqueue reCaptcha scripts.
@@ -959,11 +959,11 @@ class EVF_Shortcode_Form {
 		/**
 		 * BW compatiable for multi-parts form.
 		 *
-		 * @todo Remove in Major EVF version 1.6.0
+		 * @todo Remove in Major MHK version 1.6.0
 		 */
-		if ( defined( 'EVF_MULTI_PART_PLUGIN_FILE' ) ) {
+		if ( defined( 'MHK_MULTI_PART_PLUGIN_FILE' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
-			$plugin_data = get_plugin_data( EVF_MULTI_PART_PLUGIN_FILE, false, false );
+			$plugin_data = get_plugin_data( MHK_MULTI_PART_PLUGIN_FILE, false, false );
 
 			if ( version_compare( $plugin_data['Version'], '1.3.0', '<' ) ) {
 				$settings_defaults = array(

@@ -15,7 +15,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 /**
  * Forms table list class.
  */
-class EVF_Admin_Forms_Table_List extends WP_List_Table {
+class MHK_Admin_Forms_Table_List extends WP_List_Table {
 
 	/**
 	 * Initialize the form table list.

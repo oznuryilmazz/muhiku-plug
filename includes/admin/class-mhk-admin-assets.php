@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Admin_Assets', false ) ) {
-	return new EVF_Admin_Assets();
+if ( class_exists( 'MHK_Admin_Assets', false ) ) {
+	return new MHK_Admin_Assets();
 }
 
 /**
- * EVF_Admin_Assets Class.
+ * MHK_Admin_Assets Class.
  */
-class EVF_Admin_Assets {
+class MHK_Admin_Assets {
 
 	/**
 	 * Hook in tabs.
@@ -33,12 +33,12 @@ class EVF_Admin_Assets {
 		$screen_id = $screen ? $screen->id : '';
 
 		// Register admin styles.
-		wp_register_style( 'muhiku-plug-admin', mhk()->plugin_url() . '/assets/css/admin.css', array(), EVF_VERSION );
-		wp_register_style( 'muhiku-plug-admin-menu', mhk()->plugin_url() . '/assets/css/menu.css', array(), EVF_VERSION );
-		wp_register_style( 'jquery-ui-style', mhk()->plugin_url() . '/assets/css/jquery-ui/jquery-ui.min.css', array(), EVF_VERSION );
+		wp_register_style( 'muhiku-plug-admin', mhk()->plugin_url() . '/assets/css/admin.css', array(), MHK_VERSION );
+		wp_register_style( 'muhiku-plug-admin-menu', mhk()->plugin_url() . '/assets/css/menu.css', array(), MHK_VERSION );
+		wp_register_style( 'jquery-ui-style', mhk()->plugin_url() . '/assets/css/jquery-ui/jquery-ui.min.css', array(), MHK_VERSION );
 		wp_register_style( 'jquery-confirm', mhk()->plugin_url() . '/assets/css/jquery-confirm/jquery-confirm.min.css', array(), '3.3.0' );
 		wp_register_style( 'perfect-scrollbar', mhk()->plugin_url() . '/assets/css/perfect-scrollbar/perfect-scrollbar.css', array(), '1.4.0' );
-		wp_register_style( 'flatpickr', mhk()->plugin_url() . '/assets/css/flatpickr.css', array(), EVF_VERSION );
+		wp_register_style( 'flatpickr', mhk()->plugin_url() . '/assets/css/flatpickr.css', array(), MHK_VERSION );
 
 		// Add RTL support for admin styles.
 		wp_style_add_data( 'muhiku-plug-admin', 'rtl', 'replace' );
@@ -47,7 +47,7 @@ class EVF_Admin_Assets {
 		// Sitewide menu CSS.
 		wp_enqueue_style( 'muhiku-plug-admin-menu' );
 
-		// Admin styles for EVF pages only.
+		// Admin styles for MHK pages only.
 		if ( in_array( $screen_id, mhk_get_screen_ids(), true ) ) {
 			wp_enqueue_style( 'muhiku-plug-admin' );
 			wp_enqueue_style( 'jquery-confirm' );
@@ -72,21 +72,21 @@ class EVF_Admin_Assets {
 		$suffix    = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// Register scripts.
-		wp_register_script( 'muhiku-plug-admin', mhk()->plugin_url() . '/assets/js/admin/admin' . $suffix . '.js', array( 'jquery', 'jquery-blockui', 'jquery-ui-sortable', 'jquery-ui-widget', 'jquery-ui-core', 'tooltipster', 'wp-color-picker', 'perfect-scrollbar' ), EVF_VERSION, true );
-		wp_register_script( 'muhiku-plug-extensions', mhk()->plugin_url() . '/assets/js/admin/extensions' . $suffix . '.js', array( 'jquery', 'updates' ), EVF_VERSION, true );
-		wp_register_script( 'muhiku-plug-email-admin', mhk()->plugin_url() . '/assets/js/admin/mhk-admin-email' . $suffix . '.js', array( 'jquery', 'jquery-blockui', 'jquery-ui-sortable', 'jquery-ui-widget', 'jquery-ui-core', 'tooltipster', 'wp-color-picker', 'perfect-scrollbar' ), EVF_VERSION, true );
-		wp_register_script( 'muhiku-plug-editor', mhk()->plugin_url() . '/assets/js/admin/editor' . $suffix . '.js', array( 'jquery' ), EVF_VERSION, true );
+		wp_register_script( 'muhiku-plug-admin', mhk()->plugin_url() . '/assets/js/admin/admin' . $suffix . '.js', array( 'jquery', 'jquery-blockui', 'jquery-ui-sortable', 'jquery-ui-widget', 'jquery-ui-core', 'tooltipster', 'wp-color-picker', 'perfect-scrollbar' ), MHK_VERSION, true );
+		wp_register_script( 'muhiku-plug-extensions', mhk()->plugin_url() . '/assets/js/admin/extensions' . $suffix . '.js', array( 'jquery', 'updates' ), MHK_VERSION, true );
+		wp_register_script( 'muhiku-plug-email-admin', mhk()->plugin_url() . '/assets/js/admin/mhk-admin-email' . $suffix . '.js', array( 'jquery', 'jquery-blockui', 'jquery-ui-sortable', 'jquery-ui-widget', 'jquery-ui-core', 'tooltipster', 'wp-color-picker', 'perfect-scrollbar' ), MHK_VERSION, true );
+		wp_register_script( 'muhiku-plug-editor', mhk()->plugin_url() . '/assets/js/admin/editor' . $suffix . '.js', array( 'jquery' ), MHK_VERSION, true );
 		wp_register_script( 'jquery-blockui', mhk()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI' . $suffix . '.js', array( 'jquery' ), '2.70', true );
 		wp_register_script( 'jquery-confirm', mhk()->plugin_url() . '/assets/js/jquery-confirm/jquery-confirm' . $suffix . '.js', array( 'jquery' ), '3.3.0', true );
-		wp_register_script( 'jquery-tiptip', mhk()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), EVF_VERSION, true ); // @deprecated
+		wp_register_script( 'jquery-tiptip', mhk()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), MHK_VERSION, true ); // @deprecated
 		wp_register_script( 'tooltipster', mhk()->plugin_url() . '/assets/js/tooltipster/tooltipster.bundle' . $suffix . '.js', array( 'jquery' ), '4.6.2', true );
 		wp_register_script( 'perfect-scrollbar', mhk()->plugin_url() . '/assets/js/perfect-scrollbar/perfect-scrollbar' . $suffix . '.js', array( 'jquery' ), '1.5.0', true );
-		wp_register_script( 'mhk-clipboard', mhk()->plugin_url() . '/assets/js/admin/mhk-clipboard' . $suffix . '.js', array( 'jquery' ), EVF_VERSION, true );
+		wp_register_script( 'mhk-clipboard', mhk()->plugin_url() . '/assets/js/admin/mhk-clipboard' . $suffix . '.js', array( 'jquery' ), MHK_VERSION, true );
 		wp_register_script( 'selectWoo', mhk()->plugin_url() . '/assets/js/selectWoo/selectWoo.full' . $suffix . '.js', array( 'jquery' ), '1.0.8', true );
-		wp_register_script( 'mhk-enhanced-select', mhk()->plugin_url() . '/assets/js/admin/mhk-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), EVF_VERSION, true );
-		wp_register_script( 'mhk-template-controller', mhk()->plugin_url() . '/assets/js/admin/form-template-controller' . $suffix . '.js', array( 'jquery' ), EVF_VERSION, true );
+		wp_register_script( 'mhk-enhanced-select', mhk()->plugin_url() . '/assets/js/admin/mhk-enhanced-select' . $suffix . '.js', array( 'jquery', 'selectWoo' ), MHK_VERSION, true );
+		wp_register_script( 'mhk-template-controller', mhk()->plugin_url() . '/assets/js/admin/form-template-controller' . $suffix . '.js', array( 'jquery' ), MHK_VERSION, true );
 		wp_register_script( 'flatpickr', mhk()->plugin_url() . '/assets/js/flatpickr/flatpickr' . $suffix . '.js', array( 'jquery' ), '4.6.3', true );
-		wp_register_script( 'mhk-file-uploader', mhk()->plugin_url() . '/assets/js/admin/mhk-file-uploader' . $suffix . '.js', array(), EVF_VERSION, true );
+		wp_register_script( 'mhk-file-uploader', mhk()->plugin_url() . '/assets/js/admin/mhk-file-uploader' . $suffix . '.js', array(), MHK_VERSION, true );
 		wp_localize_script(
 			'mhk-file-uploader',
 			'mhk_file_uploader',
@@ -98,7 +98,7 @@ class EVF_Admin_Assets {
 			'mhk-template-controller',
 			'mhk_templates',
 			array(
-				'mhk_template_all' => EVF_Admin_Forms::get_template_data(),
+				'mhk_template_all' => MHK_Admin_Forms::get_template_data(),
 				'i18n_get_started' => esc_html__( 'Get Started', 'muhiku-plug' ),
 				'i18n_get_preview' => esc_html__( 'Preview', 'muhiku-plug' ),
 				'i18n_pro_feature' => esc_html__( 'Pro', 'muhiku-plug' ),
@@ -122,7 +122,7 @@ class EVF_Admin_Assets {
 				'i18n_searching'            => _x( 'Searching&hellip;', 'enhanced select', 'muhiku-plug' ),
 			)
 		);
-		wp_register_script( 'mhk-form-builder', mhk()->plugin_url() . '/assets/js/admin/form-builder' . $suffix . '.js', array( 'jquery', 'jquery-blockui', 'tooltipster', 'jquery-ui-sortable', 'jquery-ui-widget', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-datepicker', 'jquery-confirm', 'mhk-clipboard', 'flatpickr' ), EVF_VERSION, true );
+		wp_register_script( 'mhk-form-builder', mhk()->plugin_url() . '/assets/js/admin/form-builder' . $suffix . '.js', array( 'jquery', 'jquery-blockui', 'tooltipster', 'jquery-ui-sortable', 'jquery-ui-widget', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-datepicker', 'jquery-confirm', 'mhk-clipboard', 'flatpickr' ), MHK_VERSION, true );
 		wp_localize_script(
 			'mhk-form-builder',
 			'mhk_data',
@@ -180,7 +180,7 @@ class EVF_Admin_Assets {
 		);
 
 		// Builder upgrade.
-		wp_register_script( 'mhk-upgrade', mhk()->plugin_url() . '/assets/js/admin/upgrade.js', array( 'jquery', 'jquery-confirm' ), EVF_VERSION, false );
+		wp_register_script( 'mhk-upgrade', mhk()->plugin_url() . '/assets/js/admin/upgrade.js', array( 'jquery', 'jquery-confirm' ), MHK_VERSION, false );
 		wp_localize_script(
 			'mhk-upgrade',
 			'mhk_upgrade',
@@ -244,7 +244,7 @@ class EVF_Admin_Assets {
 
 			// MuhikuPlug builder setup page.
 			if ( isset( $_GET['create-form'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-				wp_register_script( 'mhk-setup', mhk()->plugin_url() . '/assets/js/admin/mhk-setup' . $suffix . '.js', array( 'jquery', 'muhiku-plug-extensions', 'mhk-template-controller' ), EVF_VERSION, true );
+				wp_register_script( 'mhk-setup', mhk()->plugin_url() . '/assets/js/admin/mhk-setup' . $suffix . '.js', array( 'jquery', 'muhiku-plug-extensions', 'mhk-template-controller' ), MHK_VERSION, true );
 				wp_enqueue_script( 'mhk-setup' );
 				wp_localize_script(
 					'mhk-setup',
@@ -269,7 +269,7 @@ class EVF_Admin_Assets {
 
 		// Tools page.
 		if ( 'muhiku-plug_page_mhk-tools' === $screen_id ) {
-			wp_register_script( 'mhk-admin-tools', mhk()->plugin_url() . '/assets/js/admin/tools' . $suffix . '.js', array( 'jquery' ), EVF_VERSION, true );
+			wp_register_script( 'mhk-admin-tools', mhk()->plugin_url() . '/assets/js/admin/tools' . $suffix . '.js', array( 'jquery' ), MHK_VERSION, true );
 			wp_enqueue_script( 'mhk-admin-tools' );
 			wp_localize_script(
 				'mhk-admin-tools',
@@ -282,7 +282,7 @@ class EVF_Admin_Assets {
 
 		// Plugins page.
 		if ( in_array( $screen_id, array( 'plugins' ), true ) ) {
-			wp_register_script( 'mhk-plugins', mhk()->plugin_url() . '/assets/js/admin/plugins' . $suffix . '.js', array( 'jquery' ), EVF_VERSION, true );
+			wp_register_script( 'mhk-plugins', mhk()->plugin_url() . '/assets/js/admin/plugins' . $suffix . '.js', array( 'jquery' ), MHK_VERSION, true );
 			wp_enqueue_script( 'mhk-plugins' );
 			wp_localize_script(
 				'mhk-plugins',
@@ -296,4 +296,4 @@ class EVF_Admin_Assets {
 	}
 }
 
-return new EVF_Admin_Assets();
+return new MHK_Admin_Assets();

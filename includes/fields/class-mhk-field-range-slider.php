@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Range_Slider Class.
+ * MHK_Field_Range_Slider Class.
  */
-class EVF_Field_Range_Slider extends EVF_Form_Fields {
+class MHK_Field_Range_Slider extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

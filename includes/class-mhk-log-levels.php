@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Log levels class.
  */
-abstract class EVF_Log_Levels {
+abstract class MHK_Log_Levels {
 
 	/**
 	 * Log Levels

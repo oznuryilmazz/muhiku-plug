@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_CSV_Exporter Class.
+ * MHK_CSV_Exporter Class.
  */
-abstract class EVF_CSV_Exporter {
+abstract class MHK_CSV_Exporter {
 
 	/**
 	 * Type of export used in filter names.

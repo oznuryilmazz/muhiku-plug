@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Template loader class.
  */
-class EVF_Template_Loader {
+class MHK_Template_Loader {
 
 	/**
 	 * Store the form ID.
@@ -112,7 +112,7 @@ class EVF_Template_Loader {
 			$search_files = self::get_template_loader_files( $default_file );
 			$template     = locate_template( $search_files );
 
-			if ( ! $template || EVF_TEMPLATE_DEBUG_MODE ) {
+			if ( ! $template || MHK_TEMPLATE_DEBUG_MODE ) {
 				$template = mhk()->plugin_path() . '/templates/' . $default_file;
 			}
 		}
@@ -225,4 +225,4 @@ class EVF_Template_Loader {
 	}
 }
 
-add_action( 'init', array( 'EVF_Template_Loader', 'init' ) );
+add_action( 'init', array( 'MHK_Template_Loader', 'init' ) );

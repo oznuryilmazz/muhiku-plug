@@ -11,10 +11,10 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Get entry.
  *
- * @param int|EVF_Entry $id Entry ID or object.
+ * @param int|MHK_Entry $id Entry ID or object.
  * @param bool          $with_fields True if empty data should be present.
  * @param array         $args    Additional arguments.
- * @return EVF_Entry|null
+ * @return MHK_Entry|null
  */
 function mhk_get_entry( $id, $with_fields = false, $args = array() ) {
 	global $wpdb;

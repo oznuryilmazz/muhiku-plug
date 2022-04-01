@@ -2,7 +2,7 @@
 /**
  * Handle frontend scripts
  *
- * @class   EVF_Frontend_Scripts
+ * @class   MHK_Frontend_Scripts
  * @version 1.0.0
  * @package MuhikuPlug/Classes/
  */
@@ -10,26 +10,26 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Frontend_Scripts Class.
+ * MHK_Frontend_Scripts Class.
  */
-class EVF_Frontend_Scripts {
+class MHK_Frontend_Scripts {
 
 	/**
-	 * Contains an array of script handles registered by EVF.
+	 * Contains an array of script handles registered by MHK.
 	 *
 	 * @var array
 	 */
 	private static $scripts = array();
 
 	/**
-	 * Contains an array of script handles registered by EVF.
+	 * Contains an array of script handles registered by MHK.
 	 *
 	 * @var array
 	 */
 	private static $styles = array();
 
 	/**
-	 * Contains an array of script handles localized by EVF.
+	 * Contains an array of script handles localized by MHK.
 	 *
 	 * @var array
 	 */
@@ -56,7 +56,7 @@ class EVF_Frontend_Scripts {
 				'muhiku-plug-general' => array(
 					'src'     => self::get_asset_url( 'assets/css/muhiku-plug.css' ),
 					'deps'    => '',
-					'version' => EVF_VERSION,
+					'version' => MHK_VERSION,
 					'media'   => 'all',
 					'has_rtl' => true,
 				),
@@ -72,7 +72,7 @@ class EVF_Frontend_Scripts {
 	 * @return string
 	 */
 	private static function get_asset_url( $path ) {
-		return apply_filters( 'everest_forms_get_asset_url', plugins_url( $path, EVF_PLUGIN_FILE ), $path );
+		return apply_filters( 'everest_forms_get_asset_url', plugins_url( $path, MHK_PLUGIN_FILE ), $path );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class EVF_Frontend_Scripts {
 	 * @param  string   $version   String specifying script version number, if it has one, which is added to the URL as a query string for cache busting purposes. If version is set to false, a version number is automatically added equal to current installed WordPress version. If set to null, no version is added.
 	 * @param  boolean  $in_footer Whether to enqueue the script before </body> instead of in the <head>. Default 'false'.
 	 */
-	private static function register_script( $handle, $path, $deps = array( 'jquery' ), $version = EVF_VERSION, $in_footer = true ) {
+	private static function register_script( $handle, $path, $deps = array( 'jquery' ), $version = MHK_VERSION, $in_footer = true ) {
 		self::$scripts[] = $handle;
 		wp_register_script( $handle, $path, $deps, $version, $in_footer );
 	}
@@ -100,7 +100,7 @@ class EVF_Frontend_Scripts {
 	 * @param  string   $version   String specifying script version number, if it has one, which is added to the URL as a query string for cache busting purposes. If version is set to false, a version number is automatically added equal to current installed WordPress version. If set to null, no version is added.
 	 * @param  boolean  $in_footer Whether to enqueue the script before </body> instead of in the <head>. Default 'false'.
 	 */
-	private static function enqueue_script( $handle, $path = '', $deps = array( 'jquery' ), $version = EVF_VERSION, $in_footer = true ) {
+	private static function enqueue_script( $handle, $path = '', $deps = array( 'jquery' ), $version = MHK_VERSION, $in_footer = true ) {
 		if ( ! in_array( $handle, self::$scripts, true ) && $path ) {
 			self::register_script( $handle, $path, $deps, $version, $in_footer );
 		}
@@ -118,7 +118,7 @@ class EVF_Frontend_Scripts {
 	 * @param  string   $media   The media for which this stylesheet has been defined. Accepts media types like 'all', 'print' and 'screen', or media queries like '(orientation: portrait)' and '(max-width: 640px)'.
 	 * @param  boolean  $has_rtl If has RTL version to load too.
 	 */
-	private static function register_style( $handle, $path, $deps = array(), $version = EVF_VERSION, $media = 'all', $has_rtl = false ) {
+	private static function register_style( $handle, $path, $deps = array(), $version = MHK_VERSION, $media = 'all', $has_rtl = false ) {
 		self::$styles[] = $handle;
 		wp_register_style( $handle, $path, $deps, $version, $media );
 
@@ -138,7 +138,7 @@ class EVF_Frontend_Scripts {
 	 * @param  string   $media   The media for which this stylesheet has been defined. Accepts media types like 'all', 'print' and 'screen', or media queries like '(orientation: portrait)' and '(max-width: 640px)'.
 	 * @param  boolean  $has_rtl If has RTL version to load too.
 	 */
-	private static function enqueue_style( $handle, $path = '', $deps = array(), $version = EVF_VERSION, $media = 'all', $has_rtl = false ) {
+	private static function enqueue_style( $handle, $path = '', $deps = array(), $version = MHK_VERSION, $media = 'all', $has_rtl = false ) {
 		if ( ! in_array( $handle, self::$styles, true ) && $path ) {
 			self::register_style( $handle, $path, $deps, $version, $media, $has_rtl );
 		}
@@ -146,7 +146,7 @@ class EVF_Frontend_Scripts {
 	}
 
 	/**
-	 * Register all EVF scripts.
+	 * Register all MHK scripts.
 	 */
 	private static function register_scripts() {
 		if ( mhk_is_amp() ) {
@@ -183,17 +183,17 @@ class EVF_Frontend_Scripts {
 			'muhiku-plug'                 => array(
 				'src'     => self::get_asset_url( 'assets/js/frontend/muhiku-plug' . $suffix . '.js' ),
 				'deps'    => array( 'jquery', 'inputmask', 'jquery-validate' ),
-				'version' => EVF_VERSION,
+				'version' => MHK_VERSION,
 			),
 			'muhiku-plug-text-limit'      => array(
 				'src'     => self::get_asset_url( 'assets/js/frontend/text-limit' . $suffix . '.js' ),
 				'deps'    => array(),
-				'version' => EVF_VERSION,
+				'version' => MHK_VERSION,
 			),
 			'muhiku-plug-ajax-submission' => array(
 				'src'     => self::get_asset_url( 'assets/js/frontend/ajax-submission' . $suffix . '.js' ),
 				'deps'    => array( 'jquery', 'inputmask', 'jquery-validate' ),
-				'version' => EVF_VERSION,
+				'version' => MHK_VERSION,
 			),
 		);
 		foreach ( $register_scripts as $name => $props ) {
@@ -202,20 +202,20 @@ class EVF_Frontend_Scripts {
 	}
 
 	/**
-	 * Register all EVF sty;es.
+	 * Register all MHK sty;es.
 	 */
 	private static function register_styles() {
 		$register_styles = array(
 			'mhk_select2'   => array(
 				'src'     => self::get_asset_url( 'assets/css/select2.css' ),
 				'deps'    => array(),
-				'version' => EVF_VERSION,
+				'version' => MHK_VERSION,
 				'has_rtl' => false,
 			),
 			'flatpickr' => array(
 				'src'     => self::get_asset_url( 'assets/css/flatpickr.css' ),
 				'deps'    => array(),
-				'version' => EVF_VERSION,
+				'version' => MHK_VERSION,
 				'has_rtl' => false,
 			),
 		);
@@ -254,7 +254,7 @@ class EVF_Frontend_Scripts {
 	}
 
 	/**
-	 * Localize a EVF script once.
+	 * Localize a MHK script once.
 	 *
 	 * @param string $handle Script handle the data will be attached to.
 	 */
@@ -333,4 +333,4 @@ class EVF_Frontend_Scripts {
 	}
 }
 
-EVF_Frontend_Scripts::init();
+MHK_Frontend_Scripts::init();

@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Signature Class.
+ * MHK_Field_Signature Class.
  */
-class EVF_Field_Signature extends EVF_Form_Fields {
+class MHK_Field_Signature extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

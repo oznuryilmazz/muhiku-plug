@@ -2,7 +2,7 @@
 (function ($, mhk_data) {
   var $builder;
 
-  var EVFPanelBuilder = {
+  var MHKPanelBuilder = {
     /**
      * Start the panel builder.
      */
@@ -82,21 +82,21 @@
         .find(".mhk-copy-shortcode")
         .each(function () {
           $(this)
-            .on("click", EVFPanelBuilder.copyShortcode)
-            .on("aftercopy", EVFPanelBuilder.copySuccess)
-            .on("aftercopyfailure", EVFPanelBuilder.copyFail);
+            .on("click", MHKPanelBuilder.copyShortcode)
+            .on("aftercopy", MHKPanelBuilder.copySuccess)
+            .on("aftercopyfailure", MHKPanelBuilder.copyFail);
         });
 
       // Document ready.
-      $(document).ready(EVFPanelBuilder.ready);
+      $(document).ready(MHKPanelBuilder.ready);
 
       // Page load.
-      $(window).on("load", EVFPanelBuilder.load);
+      $(window).on("load", MHKPanelBuilder.load);
 
       // Initialize builder UI fields.
       $(document.body)
         .on("mhk-init-builder-fields", function () {
-          EVFPanelBuilder.bindFields();
+          MHKPanelBuilder.bindFields();
         })
         .trigger("mhk-init-builder-fields");
 
@@ -185,10 +185,10 @@
       $builder = $("#muhiku-plug-builder");
 
       // Bind all actions.
-      EVFPanelBuilder.bindUIActions();
+      MHKPanelBuilder.bindUIActions();
 
       // Bind edit form actions.
-      EVFPanelBuilder.bindEditActions();
+      MHKPanelBuilder.bindEditActions();
 
       // jquery-confirm defaults.
       jconfirm.defaults = {
@@ -233,7 +233,7 @@
         "change",
         ".muhiku-plug-field-option-row-limit_enabled input",
         function (event) {
-          EVFPanelBuilder.updateTextFieldsLimitControls(
+          MHKPanelBuilder.updateTextFieldsLimitControls(
             $(event.target)
               .parents(".muhiku-plug-field-option-row-limit_enabled")
               .data().fieldId,
@@ -247,7 +247,7 @@
         "change",
         ".muhiku-plug-field-option-select .muhiku-plug-field-option-row-enhanced_select input",
         function (event) {
-          EVFPanelBuilder.enhancedSelectFieldStyle(
+          MHKPanelBuilder.enhancedSelectFieldStyle(
             $(event.target)
               .parents(".muhiku-plug-field-option-row-enhanced_select")
               .data().fieldId,
@@ -267,7 +267,7 @@
           ) {
             $(this).parent().find("span").addClass("is-active");
             $(this).removeClass("is-active");
-            EVFPanelBuilder.updateEnhandedSelectField(
+            MHKPanelBuilder.updateEnhandedSelectField(
               $(event.target)
                 .parents(".muhiku-plug-field-option-row-choices")
                 .data().fieldId,
@@ -276,7 +276,7 @@
           } else {
             $(this).parent().find("span").removeClass("is-active");
             $(this).addClass("is-active");
-            EVFPanelBuilder.updateEnhandedSelectField(
+            MHKPanelBuilder.updateEnhandedSelectField(
               $(event.target)
                 .parents(".muhiku-plug-field-option-row-choices")
                 .data().fieldId,
@@ -464,7 +464,7 @@
       }
 
       // Update a primary field.
-      EVFPanelBuilder.enhancedSelectFieldStyle(fieldId, isMultiple);
+      MHKPanelBuilder.enhancedSelectFieldStyle(fieldId, isMultiple);
     },
 
     /**
@@ -473,34 +473,34 @@
      * @since 1.0.0
      */
     bindUIActions: function () {
-      EVFPanelBuilder.bindDefaultTabs();
-      EVFPanelBuilder.checkEmptyGrid();
-      EVFPanelBuilder.bindFields();
-      EVFPanelBuilder.bindFormPreview();
-      EVFPanelBuilder.bindFormPreviewWithKeyEvent();
-      EVFPanelBuilder.bindFormEntriesWithKeyEvent();
-      EVFPanelBuilder.bindGridSwitcher();
-      EVFPanelBuilder.bindFieldSettings();
-      EVFPanelBuilder.bindFieldDelete();
-      EVFPanelBuilder.bindFieldDeleteWithKeyEvent();
-      EVFPanelBuilder.bindCloneField();
-      EVFPanelBuilder.bindSaveOption();
-      EVFPanelBuilder.bindSaveOptionWithKeyEvent();
-      EVFPanelBuilder.bindAddNewRow();
-      EVFPanelBuilder.bindRemoveRow();
-      EVFPanelBuilder.bindFormSettings();
-      EVFPanelBuilder.bindFormEmail();
-      EVFPanelBuilder.bindFormIntegrations();
-      EVFPanelBuilder.bindFormPayment();
-      EVFPanelBuilder.choicesInit();
-      EVFPanelBuilder.bindToggleHandleActions();
-      EVFPanelBuilder.bindLabelEditInputActions();
-      EVFPanelBuilder.bindSyncedInputActions();
-      EVFPanelBuilder.init_datepickers();
-      EVFPanelBuilder.bindBulkOptionActions();
+      MHKPanelBuilder.bindDefaultTabs();
+      MHKPanelBuilder.checkEmptyGrid();
+      MHKPanelBuilder.bindFields();
+      MHKPanelBuilder.bindFormPreview();
+      MHKPanelBuilder.bindFormPreviewWithKeyEvent();
+      MHKPanelBuilder.bindFormEntriesWithKeyEvent();
+      MHKPanelBuilder.bindGridSwitcher();
+      MHKPanelBuilder.bindFieldSettings();
+      MHKPanelBuilder.bindFieldDelete();
+      MHKPanelBuilder.bindFieldDeleteWithKeyEvent();
+      MHKPanelBuilder.bindCloneField();
+      MHKPanelBuilder.bindSaveOption();
+      MHKPanelBuilder.bindSaveOptionWithKeyEvent();
+      MHKPanelBuilder.bindAddNewRow();
+      MHKPanelBuilder.bindRemoveRow();
+      MHKPanelBuilder.bindFormSettings();
+      MHKPanelBuilder.bindFormEmail();
+      MHKPanelBuilder.bindFormIntegrations();
+      MHKPanelBuilder.bindFormPayment();
+      MHKPanelBuilder.choicesInit();
+      MHKPanelBuilder.bindToggleHandleActions();
+      MHKPanelBuilder.bindLabelEditInputActions();
+      MHKPanelBuilder.bindSyncedInputActions();
+      MHKPanelBuilder.init_datepickers();
+      MHKPanelBuilder.bindBulkOptionActions();
 
       // Fields Panel.
-      EVFPanelBuilder.bindUIActionsFields();
+      MHKPanelBuilder.bindUIActionsFields();
 
       if (mhk_data.tab === "field-options") {
         $(".mhk-panel-field-options-button").trigger("click");
@@ -510,7 +510,7 @@
         "muhiku-plug-field-drop",
         ".mhk-registered-buttons .mhk-registered-item",
         function () {
-          EVFPanelBuilder.fieldDrop($(this).clone());
+          MHKPanelBuilder.fieldDrop($(this).clone());
         }
       );
     },
@@ -549,7 +549,7 @@
           );
           var options_texts = $bulk_options_container.val().split("\n");
 
-          EVFPanelBuilder.addBulkOptions(options_texts, $choices);
+          MHKPanelBuilder.addBulkOptions(options_texts, $choices);
           $bulk_options_container.val("");
         }
       });
@@ -616,7 +616,7 @@
       options_texts.forEach(function (option_text) {
         if ("" !== option_text) {
           var $add_button = $choices_container.find("li").last().find("a.add");
-          EVFPanelBuilder.choiceAdd(null, $add_button, option_text.trim());
+          MHKPanelBuilder.choiceAdd(null, $add_button, option_text.trim());
         }
       });
     },
@@ -667,7 +667,7 @@
       // Triggring Setting Toggler.
       $(".muhiku-plug-field-date-time").each(function () {
         var id = $(this).attr("data-field-id");
-        EVFPanelBuilder.dateSettingToggler(
+        MHKPanelBuilder.dateSettingToggler(
           id,
           $("#muhiku-plug-field-option-" + id + "-datetime_style").val()
         );
@@ -685,7 +685,7 @@
         e.stopPropagation();
 
         if ("" !== $("#mhk-edit-form-name").val().trim()) {
-          EVFPanelBuilder.toggleEditTitle(e);
+          MHKPanelBuilder.toggleEditTitle(e);
         }
       });
 
@@ -697,7 +697,7 @@
           e.stopPropagation();
 
           if (13 === e.which && "" !== $(this).val().trim()) {
-            EVFPanelBuilder.toggleEditTitle(e);
+            MHKPanelBuilder.toggleEditTitle(e);
           }
 
           if ("" !== $this.val().trim()) {
@@ -724,7 +724,7 @@
             field.val() &&
             "" !== field.val().trim()
           ) {
-            EVFPanelBuilder.toggleEditTitle(e);
+            MHKPanelBuilder.toggleEditTitle(e);
           }
         });
     },
@@ -843,7 +843,7 @@
         "click",
         ".muhiku-plug-field-option-row-choices .add",
         function (event) {
-          EVFPanelBuilder.choiceAdd(event, $(this));
+          MHKPanelBuilder.choiceAdd(event, $(this));
         }
       );
 
@@ -852,7 +852,7 @@
         "click",
         ".muhiku-plug-field-option-row-choices .remove",
         function (event) {
-          EVFPanelBuilder.choiceDelete(event, $(this));
+          MHKPanelBuilder.choiceDelete(event, $(this));
         }
       );
 
@@ -891,7 +891,7 @@
             $this.attr("data-checked", "0");
           }
 
-          EVFPanelBuilder.choiceUpdate(
+          MHKPanelBuilder.choiceUpdate(
             list.data("field-type"),
             list.data("field-id")
           );
@@ -904,7 +904,7 @@
         ".muhiku-plug-field-option-row-choices input[type=checkbox]",
         function (e) {
           var list = $(this).parent().parent();
-          EVFPanelBuilder.choiceUpdate(
+          MHKPanelBuilder.choiceUpdate(
             list.data("field-type"),
             list.data("field-id")
           );
@@ -917,7 +917,7 @@
         ".muhiku-plug-field-option-row-choices input.label, .muhiku-plug-field-option-row-choices input.value",
         function (e) {
           var list = $(this).parent().parent().parent();
-          EVFPanelBuilder.choiceUpdate(
+          MHKPanelBuilder.choiceUpdate(
             list.data("field-type"),
             list.data("field-id")
           );
@@ -963,7 +963,7 @@
             $columnOptions.val("").trigger("change");
           }
 
-          EVFPanelBuilder.choiceUpdate(type, field_id);
+          MHKPanelBuilder.choiceUpdate(type, field_id);
         }
       );
 
@@ -1058,7 +1058,7 @@
             type = $el.data("field-type"),
             field_id = $el.data("field-id");
 
-          EVFPanelBuilder.choiceUpdate(type, field_id);
+          MHKPanelBuilder.choiceUpdate(type, field_id);
         }
       );
 
@@ -1089,7 +1089,7 @@
       // Field sidebar tab toggle.
       $builder.on("click", ".muhiku-plug-fields-tab a", function (e) {
         e.preventDefault();
-        EVFPanelBuilder.fieldTabChoice($(this).attr("id"));
+        MHKPanelBuilder.fieldTabChoice($(this).attr("id"));
       });
 
       // Dragged field and hover over tab buttons - multipart.
@@ -1340,7 +1340,7 @@
         "change",
         ".muhiku-plug-field-option-row-datetime_style select",
         function () {
-          EVFPanelBuilder.dateSettingToggler(
+          MHKPanelBuilder.dateSettingToggler(
             $(this).parent().attr("data-field-id"),
             $(this).val()
           );
@@ -1617,7 +1617,7 @@
               .find(".muhiku-plug-field-option-hidden-type")
               .val();
 
-          EVFPanelBuilder.choiceUpdate(type, field_id);
+          MHKPanelBuilder.choiceUpdate(type, field_id);
         },
       });
     },
@@ -1681,7 +1681,7 @@
       nextID++;
       $parent.parent().attr("data-next-id", nextID);
       $builder.trigger("everestFormsChoiceAdd");
-      EVFPanelBuilder.choiceUpdate(type, fieldID);
+      MHKPanelBuilder.choiceUpdate(type, fieldID);
     },
 
     /**
@@ -1712,7 +1712,7 @@
         });
       } else {
         $this.parent().remove();
-        EVFPanelBuilder.choiceUpdate(
+        MHKPanelBuilder.choiceUpdate(
           $list.data("field-type"),
           $list.data("field-id")
         );
@@ -1737,7 +1737,7 @@
         "payment-checkbox" === type
       ) {
         var choices = [],
-          formData = EVFPanelBuilder.formObject($fieldOptions),
+          formData = MHKPanelBuilder.formObject($fieldOptions),
           settings = formData.form_fields[id];
 
         // Order of choices for a specific field.
@@ -1756,7 +1756,7 @@
           type: type,
           order: choices,
           settings: settings,
-          amountFilter: EVFPanelBuilder.amountFilter,
+          amountFilter: MHKPanelBuilder.amountFilter,
         };
 
         $("#muhiku-plug-field-" + id)
@@ -1948,7 +1948,7 @@
                 btnClass: "btn-confirm",
                 keys: ["enter"],
                 action: function () {
-                  EVFPanelBuilder.removeRow(current_row);
+                  MHKPanelBuilder.removeRow(current_row);
                   $(".muhiku-plug-fields-tab").find("a").removeClass("active");
                   $(".muhiku-plug-fields-tab")
                     .find("a")
@@ -2000,8 +2000,8 @@
         wrapper.append(row_clone);
 
         // Initialize fields UI.
-        EVFPanelBuilder.bindFields();
-        EVFPanelBuilder.checkEmptyGrid();
+        MHKPanelBuilder.bindFields();
+        MHKPanelBuilder.checkEmptyGrid();
         // Trigger event after row add.
         $this.trigger("muhiku-plug-after-add-row", row_clone);
       });
@@ -2041,7 +2041,7 @@
                   btnClass: "btn-confirm",
                   keys: ["enter"],
                   action: function () {
-                    EVFPanelBuilder.cloneFieldAction($field);
+                    MHKPanelBuilder.cloneFieldAction($field);
                   },
                 },
                 cancel: {
@@ -2083,7 +2083,7 @@
                 btnClass: "btn-confirm",
                 keys: ["enter"],
                 action: function () {
-                  EVFPanelBuilder.cloneRowAction($row);
+                  MHKPanelBuilder.cloneRowAction($row);
                 },
               },
               cancel: {
@@ -2140,12 +2140,12 @@
               $("#muhiku-plug-field-id").val(field_id);
               field = row_clone.find(".muhiku-plug-field").eq(index);
               var element_field_id = field.attr("data-field-id");
-              EVFPanelBuilder.render_node(field, element_field_id, field_key);
+              MHKPanelBuilder.render_node(field, element_field_id, field_key);
               field.remove();
               $(document.body).trigger("init_field_options_toggle");
             });
             // Binding fields.
-            EVFPanelBuilder.bindFields();
+            MHKPanelBuilder.bindFields();
           }
         },
       });
@@ -2173,7 +2173,7 @@
             var field_id = response.data.field_id;
             var field_key = response.data.field_key;
             $("#muhiku-plug-field-id").val(field_id);
-            EVFPanelBuilder.render_node(field, element_field_id, field_key);
+            MHKPanelBuilder.render_node(field, element_field_id, field_key);
             $(document.body).trigger("init_field_options_toggle");
           }
         },
@@ -2267,7 +2267,7 @@
         .find('[data-field-id="' + old_key + '"]')
         .after(newFieldCloned);
       $(document).trigger("everest-form-cloned", [new_key, field_type]);
-      EVFPanelBuilder.switchToFieldOptionPanel(new_key); //switch to cloned field options
+      MHKPanelBuilder.switchToFieldOptionPanel(new_key); //switch to cloned field options
 
       // Trigger an event indicating completion of render_node action for cloning.
       $(document.body).trigger("mhk_render_node_complete", [
@@ -2323,7 +2323,7 @@
                       ]);
                       $field.remove();
                       option_field.remove();
-                      EVFPanelBuilder.checkEmptyGrid();
+                      MHKPanelBuilder.checkEmptyGrid();
                       $(".muhiku-plug-fields-tab")
                         .find("a")
                         .removeClass("active");
@@ -2332,13 +2332,13 @@
                         .first()
                         .addClass("active");
                       $(".muhiku-plug-add-fields").show();
-                      EVFPanelBuilder.conditionalLogicRemoveField(
+                      MHKPanelBuilder.conditionalLogicRemoveField(
                         removed_el_id
                       );
-                      EVFPanelBuilder.conditionalLogicRemoveFieldIntegration(
+                      MHKPanelBuilder.conditionalLogicRemoveFieldIntegration(
                         removed_el_id
                       );
-                      EVFPanelBuilder.paymentFieldRemoveFromQuantity(
+                      MHKPanelBuilder.paymentFieldRemoveFromQuantity(
                         removed_el_id
                       );
                     });
@@ -2406,7 +2406,7 @@
                       ]);
                       $field.remove();
                       option_field.remove();
-                      EVFPanelBuilder.checkEmptyGrid();
+                      MHKPanelBuilder.checkEmptyGrid();
                       $(".muhiku-plug-fields-tab")
                         .find("a")
                         .removeClass("active");
@@ -2415,13 +2415,13 @@
                         .first()
                         .addClass("active");
                       $(".muhiku-plug-add-fields").show();
-                      EVFPanelBuilder.conditionalLogicRemoveField(
+                      MHKPanelBuilder.conditionalLogicRemoveField(
                         removed_el_id
                       );
-                      EVFPanelBuilder.conditionalLogicRemoveFieldIntegration(
+                      MHKPanelBuilder.conditionalLogicRemoveFieldIntegration(
                         removed_el_id
                       );
-                      EVFPanelBuilder.paymentFieldRemoveFromQuantity(
+                      MHKPanelBuilder.paymentFieldRemoveFromQuantity(
                         removed_el_id
                       );
                     });
@@ -2444,7 +2444,7 @@
       $("body").on("click", ".muhiku-plug-save-button", function () {
         var $this = $(this);
         var $form = $("form#muhiku-plug-builder-form");
-        var structure = EVFPanelBuilder.getStructure();
+        var structure = MHKPanelBuilder.getStructure();
         var form_data = $form.serializeArray();
         var form_title = $("#mhk-edit-form-name").val().trim();
 
@@ -2650,12 +2650,12 @@
           $(this).removeClass("mhk-empty-grid");
         }
       });
-      EVFPanelBuilder.choicesInit();
+      MHKPanelBuilder.choicesInit();
     },
     bindDefaultTabs: function () {
       $(document).on("click", ".mhk-nav-tab-wrapper a", function (e) {
         e.preventDefault();
-        EVFPanelBuilder.switchTab($(this).data("panel"));
+        MHKPanelBuilder.switchTab($(this).data("panel"));
       });
     },
     switchTab: function (panel) {
@@ -2693,9 +2693,9 @@
       history.replaceState(
         {},
         null,
-        EVFPanelBuilder.updateQueryString("tab", panel)
+        MHKPanelBuilder.updateQueryString("tab", panel)
       );
-      EVFPanelBuilder.switchPanel(panel);
+      MHKPanelBuilder.switchPanel(panel);
     },
     updateQueryString: function (key, value, url) {
       if (!url) url = window.location.href;
@@ -2727,7 +2727,7 @@
     },
     switchPanel: function (panel) {
       if (panel === "field-options") {
-        EVFPanelBuilder.switchToFieldOptionPanel();
+        MHKPanelBuilder.switchToFieldOptionPanel();
       }
     },
     switchToFieldOptionPanel: function (field_id) {
@@ -2804,17 +2804,17 @@
             $(".mhk-admin-grid").removeClass("mhk-hover");
             $(event.target).removeClass("mhk-item-hover");
             $(event.target).closest(".mhk-admin-row").removeClass("mhk-hover");
-            EVFPanelBuilder.checkEmptyGrid();
+            MHKPanelBuilder.checkEmptyGrid();
           },
           over: function (event, ui) {
             $(".mhk-admin-grid").addClass("mhk-hover");
             $(event.target).addClass("mhk-item-hover");
             $(event.target).closest(".mhk-admin-row").addClass("mhk-hover");
-            EVFPanelBuilder.checkEmptyGrid();
+            MHKPanelBuilder.checkEmptyGrid();
           },
           receive: function (event, ui) {
             if (ui.sender.is("button")) {
-              EVFPanelBuilder.fieldDrop(ui.helper);
+              MHKPanelBuilder.fieldDrop(ui.helper);
             }
           },
           update: function (event, ui) {
@@ -2825,7 +2825,7 @@
           },
           stop: function (event, ui) {
             ui.item.removeAttr("style");
-            EVFPanelBuilder.checkEmptyGrid();
+            MHKPanelBuilder.checkEmptyGrid();
           },
         })
         .disableSelection();
@@ -2940,7 +2940,7 @@
     bindGridSwitcher: function () {
       $("body").on("click", ".mhk-show-grid", function (e) {
         e.stopPropagation();
-        EVFPanelBuilder.checkEmptyGrid();
+        MHKPanelBuilder.checkEmptyGrid();
         $(this)
           .closest(".mhk-toggle-row")
           .find(".mhk-toggle-row-content")
@@ -2948,7 +2948,7 @@
           .slideToggle(200);
       });
       $(document).on("click", function () {
-        EVFPanelBuilder.checkEmptyGrid();
+        MHKPanelBuilder.checkEmptyGrid();
         $(".mhk-show-grid")
           .closest(".mhk-toggle-row")
           .find(".mhk-toggle-row-content")
@@ -2992,7 +2992,7 @@
         $this_single_row.find(".mhk-admin-grid").eq(0).append(grids.html());
         $this_single_row.find(".mhk-grid-selector").removeClass("active");
         $(this).addClass("active");
-        EVFPanelBuilder.bindFields();
+        MHKPanelBuilder.bindFields();
       });
     },
     fieldDrop: function (field) {
@@ -3106,16 +3106,16 @@
           $(document.body).trigger("mhk_after_field_append", [dragged_el_id]);
 
           // Conditional logic append rules.
-          EVFPanelBuilder.conditionalLogicAppendField(dragged_el_id);
-          EVFPanelBuilder.conditionalLogicAppendFieldIntegration(dragged_el_id);
-          EVFPanelBuilder.paymentFieldAppendToQuantity(dragged_el_id);
-          EVFPanelBuilder.paymentFieldAppendToDropdown(
+          MHKPanelBuilder.conditionalLogicAppendField(dragged_el_id);
+          MHKPanelBuilder.conditionalLogicAppendFieldIntegration(dragged_el_id);
+          MHKPanelBuilder.paymentFieldAppendToQuantity(dragged_el_id);
+          MHKPanelBuilder.paymentFieldAppendToDropdown(
             dragged_field_id,
             field_type
           );
 
           // Initialization Datepickers.
-          EVFPanelBuilder.init_datepickers();
+          MHKPanelBuilder.init_datepickers();
 
           // Hiding time min max options in setting for Datepickers.
           $(
@@ -3152,7 +3152,7 @@
             field_preview,
             field_options,
           ]);
-          EVFPanelBuilder.checkEmptyGrid();
+          MHKPanelBuilder.checkEmptyGrid();
         },
       });
     },
@@ -3431,7 +3431,7 @@
             .closest(".muhiku-plug-field")
             .attr("data-field-id");
           $(".muhiku-plug-tab-content").scrollTop(0);
-          EVFPanelBuilder.switchToFieldOptionPanel(field_id);
+          MHKPanelBuilder.switchToFieldOptionPanel(field_id);
         }
       );
     },
@@ -3451,7 +3451,7 @@
           input = $(this).data("input");
 
         if (!$(input).is(":visible")) {
-          EVFPanelBuilder.toggleLabelEdit(label, input);
+          MHKPanelBuilder.toggleLabelEdit(label, input);
         }
       });
     },
@@ -3461,7 +3461,7 @@
         var label = $(this).data("label"),
           input = this;
 
-        EVFPanelBuilder.toggleLabelEdit(label, input);
+        MHKPanelBuilder.toggleLabelEdit(label, input);
       });
     },
 
@@ -3484,7 +3484,7 @@
     },
   };
 
-  EVFPanelBuilder.init();
+  MHKPanelBuilder.init();
 })(jQuery, window.mhk_data);
 
 jQuery(function () {

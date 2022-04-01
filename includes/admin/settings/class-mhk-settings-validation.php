@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'EVF_Settings_Validation', false ) ) {
-	return new EVF_Settings_Validation();
+if ( class_exists( 'MHK_Settings_Validation', false ) ) {
+	return new MHK_Settings_Validation();
 }
 
 /**
- * EVF_Settings_Validation.
+ * MHK_Settings_Validation.
  */
-class EVF_Settings_Validation extends EVF_Settings_Page {
+class MHK_Settings_Validation extends MHK_Settings_Page {
 
 	/**
 	 * Constructor.
@@ -121,8 +121,8 @@ class EVF_Settings_Validation extends EVF_Settings_Page {
 	public function save() {
 		$settings = $this->get_settings();
 
-		EVF_Admin_Settings::save_fields( $settings );
+		MHK_Admin_Settings::save_fields( $settings );
 	}
 }
 
-return new EVF_Settings_Validation();
+return new MHK_Settings_Validation();

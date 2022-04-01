@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Radio class.
+ * MHK_Field_Radio class.
  */
-class EVF_Field_Radio extends EVF_Form_Fields {
+class MHK_Field_Radio extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Admin_Tools Class.
+ * MHK_Admin_Tools Class.
  */
-class EVF_Admin_Tools {
+class MHK_Admin_Tools {
 
 	/**
 	 * Handles output of the reports page in admin.
@@ -139,7 +139,7 @@ class EVF_Admin_Tools {
 	 * @return array
 	 */
 	public static function scan_log_files() {
-		$files  = @scandir( EVF_LOG_DIR ); // @codingStandardsIgnoreLine
+		$files  = @scandir( MHK_LOG_DIR ); // @codingStandardsIgnoreLine
 		$result = array();
 
 		if ( ! empty( $files ) ) {
@@ -166,7 +166,7 @@ class EVF_Admin_Tools {
 		}
 
 		if ( ! empty( $_REQUEST['handle'] ) ) {
-			$log_handler = new EVF_Log_Handler_File();
+			$log_handler = new MHK_Log_Handler_File();
 			$log_handler->remove( sanitize_text_field( wp_unslash( $_REQUEST['handle'] ) ) );
 		}
 

@@ -8,14 +8,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'EVF_Background_Process', false ) ) {
+if ( ! class_exists( 'MHK_Background_Process', false ) ) {
 	include_once dirname( __FILE__ ) . '/abstracts/class-mhk-background-process.php';
 }
 
 /**
- * EVF_Background_Updater Class.
+ * MHK_Background_Updater Class.
  */
-class EVF_Background_Updater extends EVF_Background_Process {
+class MHK_Background_Updater extends MHK_Background_Process {
 
 	/**
 	 * Initiate new background process.
@@ -96,7 +96,7 @@ class EVF_Background_Updater extends EVF_Background_Process {
 	 * @return string|bool
 	 */
 	protected function task( $callback ) {
-		mhk_maybe_define_constant( 'EVF_UPDATING', true );
+		mhk_maybe_define_constant( 'MHK_UPDATING', true );
 
 		$logger = mhk_get_logger();
 
@@ -129,7 +129,7 @@ class EVF_Background_Updater extends EVF_Background_Process {
 	protected function complete() {
 		$logger = mhk_get_logger();
 		$logger->info( 'Data update complete', array( 'source' => 'mhk_db_updates' ) );
-		EVF_Install::update_db_version();
+		MHK_Install::update_db_version();
 		parent::complete();
 	}
 }

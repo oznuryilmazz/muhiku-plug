@@ -2,7 +2,7 @@
 /**
  * Cache Helper Class
  *
- * @class   EVF_Cache_Helper
+ * @class   MHK_Cache_Helper
  * @version 1.0.0
  * @package MuhikuPlug/Classes
  */
@@ -10,9 +10,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Cache_Helper Class.
+ * MHK_Cache_Helper Class.
  */
-class EVF_Cache_Helper {
+class MHK_Cache_Helper {
 
 	/**
 	 * Hook in methods.
@@ -87,4 +87,4 @@ class EVF_Cache_Helper {
 	}
 }
 
-EVF_Cache_Helper::init();
+MHK_Cache_Helper::init();

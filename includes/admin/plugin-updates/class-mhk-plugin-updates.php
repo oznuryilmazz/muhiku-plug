@@ -9,23 +9,23 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Plugin_Updates Class.
+ * MHK_Plugin_Updates Class.
  */
-class EVF_Plugin_Updates {
+class MHK_Plugin_Updates {
 
 	/**
 	 * This is the header used by extensions to show requirements.
 	 *
 	 * @var string
 	 */
-	const VERSION_REQUIRED_HEADER = 'EVF requires at least';
+	const VERSION_REQUIRED_HEADER = 'MHK requires at least';
 
 	/**
 	 * This is the header used by extensions to show testing.
 	 *
 	 * @var string
 	 */
-	const VERSION_TESTED_HEADER = 'EVF tested up to';
+	const VERSION_TESTED_HEADER = 'MHK tested up to';
 
 	/*
 	|--------------------------------------------------------------------------

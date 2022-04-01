@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Privacy Class.
+ * MHK_Privacy Class.
  */
-class EVF_Privacy {
+class MHK_Privacy {
 
 	/**
 	 * Init - hook into events.
@@ -21,7 +21,7 @@ class EVF_Privacy {
 	}
 
 	/**
-	 * Adds the privacy message on EVF privacy page.
+	 * Adds the privacy message on MHK privacy page.
 	 */
 	public function add_privacy_message() {
 		if ( function_exists( 'wp_add_privacy_policy_content' ) ) {
@@ -91,4 +91,4 @@ class EVF_Privacy {
 	}
 }
 
-new EVF_Privacy();
+new MHK_Privacy();

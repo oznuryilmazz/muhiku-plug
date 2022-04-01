@@ -9,9 +9,9 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * EVF_Field_Textarea class.
+ * MHK_Field_Textarea class.
  */
-class EVF_Field_Textarea extends EVF_Form_Fields {
+class MHK_Field_Textarea extends MHK_Form_Fields {
 
 	/**
 	 * Constructor.

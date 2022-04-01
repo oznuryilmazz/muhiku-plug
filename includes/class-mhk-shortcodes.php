@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * MuhikuPlug Shortcodes class.
  */
-class EVF_Shortcodes {
+class MHK_Shortcodes {
 
 	/**
 	 * Init shortcodes.
@@ -64,13 +64,13 @@ class EVF_Shortcodes {
 	 * @return string
 	 */
 	public static function form( $atts ) {
-		return self::shortcode_wrapper( array( 'EVF_Shortcode_Form', 'output' ), $atts );
+		return self::shortcode_wrapper( array( 'MHK_Shortcode_Form', 'output' ), $atts );
 	}
 
 	/**
 	 * Initialize shortcode.
 	 */
 	public static function init_shortcode_hooks() {
-		self::shortcode_wrapper( array( 'EVF_Shortcode_Form', 'hooks' ) );
+		self::shortcode_wrapper( array( 'MHK_Shortcode_Form', 'hooks' ) );
 	}
 }
