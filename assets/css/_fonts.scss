@@ -1,0 +1,43 @@
+/**
+ * _fonts.scss
+ * Custom MuhikuPlug fonts.
+ */
+@font-face {
+	font-family: 'MuhikuPlug';
+	src: url('../fonts/MuhikuPlug.eot?q9mcqj');
+	src: url('../fonts/MuhikuPlug.eot?q9mcqj#iefix')
+		format('embedded-opentype'),
+		url('../fonts/MuhikuPlug.ttf?q9mcqj') format('truetype'),
+		url('../fonts/MuhikuPlug.woff?q9mcqj') format('woff'),
+		url('../fonts/MuhikuPlug.svg?q9mcqj#MuhikuPlug') format('svg');
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+}
+
+/**
+ * Icons
+ * Icon size should be 24dp.
+ **/
+.mhk-icon {
+	padding: 8px;
+	border-radius: 4px;
+
+	* {
+		display: block;
+	}
+}
+/**
+ * Headings
+ **/
+.mhk-h2 {
+	font-size: 28px;
+	font-weight: 600;
+}
+
+/**
+ * Text
+ **/
+.mhk-text-center {
+	text-align: center;
+}

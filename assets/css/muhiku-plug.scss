@@ -1,0 +1,917 @@
+/**
+ * muhiku-plug.scss
+ * Governs the general look and feel of MuhikuPlug sections of sites using themes that do not
+ * integrate with MuhikuPlug specifically.
+ */
+
+/**
+ * Imports
+ */
+@import 'mixins/mixins';
+@import 'variables/variables';
+@import 'animation';
+@import 'fonts';
+@import 'clearings';
+
+/**
+ * Global styles
+ */
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	height: 1px;
+	overflow: hidden;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+/**
+ * Utility classes
+ */
+.clear {
+	clear: both;
+}
+
+/**
+ * Main MuhikuPlug styles
+ */
+.muhiku-plug {
+	*,
+	*::before,
+	*::after {
+		outline: none;
+		box-sizing: border-box;
+	}
+
+	ul {
+		margin-left: 0;
+	}
+
+	.blockUI.blockOverlay {
+		position: relative;
+		@include loader();
+	}
+
+	.clear {
+		height: auto;
+		width: auto;
+		visibility: visible;
+	}
+
+	.loader {
+		@include loader();
+	}
+
+	.mhk-container {
+		margin-bottom: 30px;
+	}
+
+	.muhiku-plug-progress-bar {
+		background: $color_gray-lighten;
+		border-radius: 2px;
+
+		.muhiku-plug-progress-bar-indicator {
+			height: 4px;
+			background: $green;
+			border-radius: 2px;
+		}
+	}
+
+	label {
+		display: block;
+		line-height: 1.7;
+		margin: 0 0 10px 0;
+		color: $color_gray-base;
+		font-size: $font_size-label;
+
+		.required {
+			color: $red;
+			font-weight: 700;
+			border: 0 !important;
+			text-decoration: none;
+		}
+
+		&.mhk-field-label {
+			font-weight: 600;
+		}
+
+		&.mhk-error {
+			color: $red;
+			font-weight: 400;
+		}
+
+		&.muhiku-plug-field-sublabel {
+			font-size: 12px;
+			font-weight: 400;
+			line-height: 1.5;
+			margin: 0 0 10px 0;
+		}
+
+		&.mhk-privacy-policy-consent-message {
+			display: inline;
+			margin-bottom: 0;
+		}
+	}
+
+	input[type='text'],
+	input[type='date'],
+	input[type='date'],
+	input[type='datetime-local'],
+	input[type='email'],
+	input[type='file'],
+	input[type='image'],
+	input[type='month'],
+	input[type='number'],
+	input[type='password'],
+	input[type='range'],
+	input[type='search'],
+	input[type='tel'],
+	input[type='time'],
+	input[type='url'],
+	input[type='week'],
+	select,
+	textarea,
+	.StripeElement,
+	canvas.mhk-signature-canvas {
+		width: 100%;
+		height: auto;
+		font-size: 14px;
+		outline: none;
+		box-shadow: none;
+		margin-bottom: 10px;
+		padding: 6px 12px;
+		color: $color_gray-base;
+		border: 1px solid $color_gray-light;
+		margin-left: 0;
+		margin-right: 0;
+	}
+	input[type='checkbox'],
+	input[type='radio'] {
+		&::after,
+		&::before {
+			display: none;
+		}
+		&:checked::before {
+			display: none;
+		}
+	}
+	select {
+		background-image: none;
+	}
+	.select2-container {
+		margin-bottom: 10px;
+
+		.select2-selection {
+			&.select2-selection--single {
+				height: auto;
+			}
+
+			&.select2-selection--multiple {
+				.select2-selection__rendered {
+					display: block;
+
+					li {
+						margin: 4px 0;
+
+						.select2-search__field {
+							padding-left: 4px;
+						}
+					}
+
+					.select2-selection__choice {
+						margin-right: 4px;
+					}
+				}
+			}
+		}
+	}
+
+	input,
+	textarea {
+		&:focus {
+			outline: none;
+			border: 1px solid $blue;
+		}
+	}
+
+	.everest-form {
+		&::after {
+			content: '';
+			clear: both;
+			display: table;
+		}
+	}
+
+	.muhiku-plug-field-row {
+		&::before,
+		&::after {
+			content: '';
+			clear: both;
+			display: table;
+		}
+
+		&:last-child {
+			.muhiku-plug-field-sublabel {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.mhk-title-container {
+		.muhiku-plug--title {
+			font-size: 26px;
+			margin: 0 0 10px 0;
+		}
+
+		.muhiku-plug--description {
+			margin: 0 0 10px 0;
+		}
+	}
+	.mhk-field-container,
+	.mhk-honeypot-container,
+	.mhk-submit-container {
+		padding-left: 15px;
+		padding-right: 15px;
+
+	}
+	.mhk-field-container {
+		.mhk-frontend-row {
+			// Prevents style conflict on entries list-table.
+			&:not(.wp-list-table) {
+				display: flex;
+				flex-wrap: wrap;
+				margin-left: -15px;
+				margin-right: -15px;
+
+				select {
+					appearance: menulist;
+				}
+			}
+
+			.muhiku-plug-one-half {
+				width: 48%;
+				float: left;
+				margin-left: 4%;
+
+				&:first-child {
+					margin-left: 0;
+				}
+			}
+
+			.muhiku-plug-first {
+				margin-left: 0;
+			}
+
+			.mhk-frontend-grid {
+				width: 100%;
+				padding-left: 15px;
+				padding-right: 15px;
+
+				.mhk-field {
+					display: block;
+					margin-bottom: 10px;
+
+					&.mhk-field-hidden {
+						display: none;
+					}
+
+					.mhk-label-hide,
+					.muhiku-plug-sublabel-hide {
+						display: none;
+					}
+
+					.validate-required {
+						canvas {
+							&.mhk-signature-canvas {
+								border-color: $red;
+							}
+						}
+					}
+
+					ul:not(.select2-selection__rendered) {
+						margin-bottom: 10px;
+						padding: 0;
+						list-style: none;
+
+						li {
+							margin: 0;
+							display: block;
+
+							label,
+							input {
+								margin: 0;
+							}
+
+							input[type='checkbox'],
+							input[type='radio'] {
+								padding: 0;
+								margin-top: 4px;
+								margin-right: 8px;
+								width: 20px;
+							}
+						}
+					}
+
+					&.mhk-field-title {
+						h3 {
+							margin: 25px 0;
+							font-size: 16px;
+							line-height: 1.5;
+						}
+					}
+
+					&.muhiku-plug-invalid {
+						> label {
+							color: $red;
+						}
+
+						.select2-container,
+						input.mhk-error,
+						select.mhk-error,
+						textarea,
+						.mhk-signature-canvas {
+							border-color: $red;
+						}
+
+						input {
+							&.mhk-error {
+								border-color: $red;
+								~ .muhiku-plug-field-sublabel {
+									color: $red;
+								}
+							}
+						}
+					}
+
+					&.muhiku-plug-validated {
+						select,
+						textarea,
+						input.input-text,
+						.select2-container,
+						.mhk-signature-canvas {
+							border-color: $green;
+						}
+					}
+
+					::-webkit-input-placeholder {
+						line-height: normal;
+					}
+
+					:-moz-placeholder {
+						line-height: normal;
+					}
+
+					:-ms-input-placeholder {
+						line-height: normal;
+					}
+
+					&.mhk-field-radio,
+					&.mhk-field-checkbox,
+					&.mhk-field-payment-multiple,
+					&.mhk-field-payment-checkbox {
+						ul {
+							li {
+								display: flex;
+								margin-bottom: 5px;
+								flex-wrap: wrap;
+
+								&.muhiku-plug-image-choices-item {
+									input {
+										margin-top: 0;
+									}
+								}
+								.muhiku-plug-field-label-inline {
+									width: calc(100% - 28px);
+								}
+								&.muhiku-plug-image-choices-item .muhiku-plug-field-label-inline {
+									width: 100%;
+									display: flex;
+									flex-wrap: wrap;
+								}
+								.muhiku-plug-image-choices-image {
+									margin-right: 10px;
+								}
+							}
+
+							&.muhiku-plug-image-choices label {
+								cursor: pointer;
+							}
+						}
+
+						&.muhiku-plug-list-inline ul li {
+							vertical-align: top;
+							display: inline-flex;
+							margin-right: 20px;
+						}
+
+						&.muhiku-plug-list-2-columns,
+						&.muhiku-plug-list-3-columns {
+							ul {
+								display: flex;
+								flex-wrap: wrap;
+								margin-left: -15px;
+								margin-right: -15px;
+
+								li {
+									width: 100%;
+									padding-left: 15px;
+									padding-right: 15px;
+
+									.muhiku-plug-image-choices-image {
+										margin-bottom: 10px;
+									}
+								}
+							}
+						}
+
+						&.muhiku-plug-list-2-columns {
+							@media (min-width: 768px) {
+								li {
+									flex: 0 0 50%;
+									max-width: 50%;
+
+									&:nth-child(1n + 3) {
+										margin-top: 10px;
+
+										@media screen and (max-width: 768px) {
+											margin-top: 0;
+										}
+									}
+								}
+							}
+						}
+
+						&.muhiku-plug-list-3-columns {
+							@media (min-width: 768px) {
+								li {
+									flex: 0 0 33.33333%;
+									max-width: 33.33333%;
+
+									&:nth-child(1n + 4) {
+										margin-top: 10px;
+									}
+								}
+							}
+						}
+					}
+
+					&.mhk-field-captcha {
+						.muhiku-plug-captcha-equation {
+							font-size: 16px;
+						}
+
+						.muhiku-plug-captcha-question {
+							margin: 0 0 4px 0;
+						}
+
+						.muhiku-plug-captcha-math input {
+							width: 70px;
+							margin: 0 0 0 5px;
+							display: inline-block;
+							vertical-align: inherit;
+						}
+					}
+
+					.iti {
+						&.iti--allow-dropdown {
+							& + .mhk-error {
+								margin-top: 10px;
+							}
+						}
+					}
+				}
+			}
+
+			.mhk-grid-1 {
+				width: 100%;
+			}
+
+			.mhk-grid-2 {
+				width: 50%;
+			}
+
+			.mhk-grid-3 {
+				width: 33.33%;
+			}
+
+			.mhk-grid-4 {
+				width: 25%;
+			}
+
+			input {
+				&[type='checkbox'],
+				&[type='radio'] {
+					box-shadow: none;
+				}
+
+				&[type='checkbox'] {
+					appearance: checkbox;
+				}
+
+				&[type='radio'] {
+					appearance: radio;
+				}
+
+				&[type='checkbox']:checked {
+					background-color: $blue;
+
+					&::before {
+						color: $color-white;
+						background-color: transparent;
+					}
+				}
+
+				&[type='radio']:checked {
+					&::before {
+						background-color: $blue;
+					}
+				}
+
+				&::placeholder {
+					color: $color_gray-light;
+				}
+			}
+
+			textarea {
+				width: 100%;
+				max-width: 100%;
+				min-width: 100%;
+				height: 120px;
+
+				&::placeholder {
+					color: $color_gray-light;
+				}
+			}
+
+			.mhk-field-description,
+			.muhiku-plug-field-limit-text {
+				line-height: 1.7;
+				margin-bottom: 10px;
+				font-size: $font_size-label;
+			}
+		}
+	}
+
+	input[type='submit'],
+	button[type='submit'],
+	a.button:not(.button-large),
+	button.button:not(.button-large),
+	.muhiku-plug-part-button {
+		color: #555;
+		height: auto;
+		cursor: pointer;
+		background: none;
+		box-shadow: none;
+		font-size: inherit;
+		font-weight: 400;
+		line-height: 1.5;
+		padding: 10px 15px;
+		border-radius: 3px;
+		border: 1px solid #ccc;
+		background-color: #f7f7f7;
+
+		&:hover,
+		&:active {
+			outline: none;
+			color: #23282d;
+			background-color: #eee;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+
+			&:hover {
+				color: #555;
+				background-color: #f7f7f7;
+			}
+		}
+	}
+
+	.layout-two {
+		label {
+			margin-bottom: 0;
+		}
+
+		.mhk-field-checkbox,
+		.mhk-field-radio {
+			label {
+				margin-bottom: 20px;
+			}
+		}
+
+		input,
+		select,
+		textarea,
+		canvas.mhk-signature-canvas {
+			border-radius: 0;
+			border-top: none transparent;
+			border-right: none transparent;
+			border-left: none transparent;
+			border-bottom: 1px solid $color_gray-light;
+			padding: 10px 0;
+
+			&:focus {
+				outline: none;
+				border-top: none transparent;
+				border-right: none transparent;
+				border-left: none transparent;
+			}
+		}
+
+		textarea {
+			height: 100px;
+		}
+	}
+
+	/**
+	 * Notices.
+	 */
+	.muhiku-plug-notice {
+		padding: 1em 3em;
+		margin: 0 0 2em;
+		position: relative;
+		background-color: $blue;
+		color: $color-white;
+		border-radius: 5px;
+		@include clearfix();
+
+		&::before {
+			font-family: dashicons;
+			content: '\f348';
+			position: absolute;
+			top: 1em;
+			left: 1.5em;
+			color: inherit;
+		}
+
+		.button {
+			float: right;
+		}
+
+		p {
+			margin-bottom: 0;
+		}
+
+		a {
+			color: $color-white;
+		}
+
+		li {
+			list-style: none outside !important; // Required for default theme compatibility
+			padding-left: 0 !important; // Required for default theme compatibility
+			margin-left: 0 !important; // Required for default theme compatibility
+		}
+
+		&.everst-forms-form-disable-notice {
+			color: $color_gray-base;
+			background: lighten($orange, 47%);
+			border: 1px solid adjust-color($orange, $saturation: -15%, $lightness: +20%);
+		}
+	}
+
+	.muhiku-plug-notice--info {
+		padding: 1em 1.6em;
+		color: $color_gray-base;
+		background: lighten($blue, 47%);
+		border: 1px solid adjust-color($blue, $saturation: -15%, $lightness: +20%);
+
+		&::before {
+			visibility: hidden;
+		}
+
+		.muhiku-plug-notice--actions {
+			margin-top: 10px;
+
+			a.button {
+				float: left;
+				line-height: 1;
+				cursor: pointer;
+				margin-right: 7px;
+				padding: 0.618em 1em;
+				box-shadow: none;
+				text-shadow: none;
+				text-decoration: none;
+				background-image: none;
+				color: $color_gray-base;
+				background-color: $color_gray-light-skin;
+
+				&:focus {
+					outline: none;
+				}
+			}
+		}
+	}
+
+	.muhiku-plug-notice--success {
+		background-color: $green;
+
+		&::before {
+			content: '\f147';
+		}
+	}
+
+	.muhiku-plug-notice--warning {
+		background-color: $orange;
+	}
+
+	.muhiku-plug-notice--error {
+		background-color: $red;
+
+		&::before {
+			content: '\f534';
+			color: inherit;
+		}
+
+		.muhiku-plug-notice-list {
+			margin: 0;
+			list-style: none outside;
+
+			.muhiku-plug-notice-list__item {
+				margin-bottom: 0.5em;
+			}
+			.muhiku-plug-notice-list__item:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+/**
+ * Gutenberg Block
+ */
+
+.edit-post-visual-editor {
+	.everest-form-gutenberg-form-selector-wrap {
+		align-items: center;
+
+		.components-placeholder__label {
+			margin-bottom: 0;
+
+			svg {
+				width: 75px;
+				height: 75px;
+				color: #7e3bd0;
+			}
+		}
+
+		.components-placeholder__instructions {
+			color: #23282d;
+			font-size: 1.3em;
+			font-weight: 600;
+		}
+
+		.components-placeholder__fieldset {
+			.components-base-control {
+				width: 100%;
+				text-align: center;
+			}
+		}
+	}
+}
+
+div.mhk-gutenberg-form-selector .mhk-frontend-row input:disabled,
+div.mhk-gutenberg-form-selector .mhk-frontend-row textarea:disabled,
+div.mhk-gutenberg-form-selector .mhk-frontend-row select:disabled,
+div.mhk-gutenberg-form-selector .mhk-frontend-row button[type='submit']:disabled {
+	cursor: not-allowed;
+}
+
+/**
+ * Anti-spam Honeypot and reCAPTCHA Area
+ */
+.mhk-honeypot-container {
+	display: none !important;
+	position: absolute !important;
+	left: -9000px !important;
+}
+
+.mhk-recaptcha-container {
+	clear: both;
+	margin-bottom: 30px;
+
+	.mhk-error {
+		margin-top: 15px;
+		margin-bottom: 0;
+		font-weight: 300;
+		line-height: 1.7;
+		padding: 7px 10px;
+		border-radius: 3px;
+		display: inline-block;
+		color: darken($red, 10%);
+		border: 1px solid $red;
+		background-color: lighten($red, 35%);
+	}
+
+	&.recaptcha-hidden {
+		margin: 0;
+	}
+}
+
+/**
+  * Date time design
+  */
+.mhk-field-date-time {
+	.date-time-container {
+		display: -webkit-box;
+		display: -moz-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 -5px;
+		input.date-dropdown-field {
+			width: 100%;
+			margin: 0 5px;
+		}
+		.date-time-space-filler {
+			width: 20px;
+			@media (max-width: 767px) {
+				width: 100%;
+			}
+		}
+		select {
+			width: calc(20% - 14px);
+			padding: 10px;
+			margin: 10px 5px 0 5px;
+			@media (max-width: 767px) {
+				width: calc(33.33% - 10px);
+			}
+		}
+	}
+}
+/* Small devices */
+@media only screen and (max-width: 600px) {
+	.mhk-container {
+		.mhk-field {
+			> * {
+				max-width: 100%;
+			}
+
+			&:not(.mhk-field-phone) {
+				overflow-x: hidden;
+			}
+
+			&.mhk-field,
+			&.mhk-field-likert {
+				overflow: auto;
+			}
+		}
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.muhiku-plug {
+		.mhk-field-container {
+			.mhk-frontend-row {
+				.mhk-frontend-grid {
+					&.mhk-grid-2 {
+						flex: 0 0 50%;
+						max-width: 50%;
+					}
+				}
+			}
+		}
+	}
+}
+@media screen and (max-width: 768px) {
+	.muhiku-plug {
+		.mhk-field-container {
+			.mhk-frontend-row {
+				flex-direction: column;
+				margin: 0;
+
+				.mhk-frontend-grid {
+					padding: 0;
+
+					&:last-child {
+						margin-bottom: 0;
+					}
+
+					&.mhk-grid-2,
+					&.mhk-grid-3,
+					&.mhk-grid-4 {
+						width: 100%;
+						max-width: 100%;
+					}
+				}
+			}
+		}
+		.mhk-recaptcha-container {
+			margin: 25px 0;
+		}
+	}
+}
+.wp-admin {
+	.mhk-field-repeater-fields {
+		display: block !important;
+	}
+}
+/*
+ * Hide the form fields upon successful submission.
+ * Perhaps more robust: .muhiku-plug.amp-form-submit-success > *:not([submit-success]) { display:none }
+ */
+ .amp-form-submit-success .mhk-field-container,
+ .amp-form-submit-success .mhk-submit-container {
+   display: none;
+ }

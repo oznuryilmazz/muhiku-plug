@@ -1,0 +1,35 @@
+//
+// Border utilities
+//
+
+.mhk-border {
+	border: $border-width solid $border-color !important;
+}
+.mhk-border-top {
+	border-top: $border-width solid $border-color !important;
+}
+.mhk-border-right {
+	border-right: $border-width solid $border-color !important;
+}
+.mhk-border-bottom {
+	border-bottom: $border-width solid $border-color !important;
+}
+.mhk-border-left {
+	border-left: $border-width solid $border-color !important;
+}
+
+.mhk-border-0 {
+	border: 0 !important;
+}
+.mhk-border-top-0 {
+	border-top: 0 !important;
+}
+.mhk-border-right-0 {
+	border-right: 0 !important;
+}
+.mhk-border-bottom-0 {
+	border-bottom: 0 !important;
+}
+.mhk-border-left-0 {
+	border-left: 0 !important;
+}

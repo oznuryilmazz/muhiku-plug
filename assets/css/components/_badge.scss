@@ -1,0 +1,67 @@
+.muhiku-plug-badge {
+	display: inline-block;
+	font-size: 1em;
+	line-height: 1.15;
+	padding: 4px 8px;
+	border-radius: 4px;
+
+	&.muhiku-plug-badge--primary {
+		background: $everestforms;
+		color: $color-white;
+	}
+
+	&.muhiku-plug-badge--primary-subtle {
+		background: lighten($everestforms, +35);
+		color: $everestforms;
+	}
+
+	&.muhiku-plug-badge--secondary {
+		background: $color_gray-lighten;
+		color: $color-white;
+	}
+
+	&.muhiku-plug-badge--secondary-subtle {
+		background: $color_gray-lighten;
+		color: darken($color_gray-lighten, +35);
+	}
+
+	&.muhiku-plug-badge--success {
+		background: $green;
+		color: $color-white;
+	}
+
+	&.muhiku-plug-badge--success-subtle {
+		background: lighten($green, +35);
+		color: darken($green, 10%);
+	}
+
+	&.muhiku-plug-badge--danger {
+		background: $red;
+		color: $color-white;
+	}
+
+	&.muhiku-plug-badge--danger-subtle {
+		background: lighten($red, +30);
+		color: $red;
+	}
+
+	&.muhiku-plug-badge--warning {
+		background: $orange;
+		color: $color-white;
+	}
+
+	&.muhiku-plug-badge--warning-subtle {
+		background: lighten($orange, +35);
+		color: darken($orange, 15%);
+	}
+
+	&.muhiku-plug-badge--info {
+		background: $blue;
+		color: $color-white;
+	}
+
+	&.muhiku-plug-badge--info-subtle {
+		background: lighten($blue, +35);
+		color: darken($blue, 5%);
+	}
+}
