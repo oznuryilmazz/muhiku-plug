@@ -72,7 +72,7 @@ abstract class MHK_CSV_Exporter {
 	 * @return string
 	 */
 	public function get_delimiter() {
-		return apply_filters( "everest_forms_{$this->export_type}_export_delimiter", $this->delimiter );
+		return apply_filters( "muhiku_forms_{$this->export_type}_export_delimiter", $this->delimiter );
 	}
 
 	/**
@@ -81,7 +81,7 @@ abstract class MHK_CSV_Exporter {
 	 * @return array
 	 */
 	public function get_column_names() {
-		return apply_filters( "everest_forms_{$this->export_type}_export_column_names", $this->column_names, $this );
+		return apply_filters( "muhiku_forms_{$this->export_type}_export_column_names", $this->column_names, $this );
 	}
 
 	/**
@@ -205,7 +205,7 @@ abstract class MHK_CSV_Exporter {
 	 * @return string
 	 */
 	public function get_filename() {
-		return sanitize_file_name( apply_filters( "everest_forms_{$this->export_type}_export_get_filename", $this->filename ) );
+		return sanitize_file_name( apply_filters( "muhiku_forms_{$this->export_type}_export_get_filename", $this->filename ) );
 	}
 
 	/**
@@ -271,7 +271,7 @@ abstract class MHK_CSV_Exporter {
 
 		array_walk( $data, array( $this, 'export_row' ), $buffer );
 
-		return apply_filters( "everest_forms_{$this->export_type}_export_rows", ob_get_clean(), $this );
+		return apply_filters( "muhiku_forms_{$this->export_type}_export_rows", ob_get_clean(), $this );
 	}
 
 	/**

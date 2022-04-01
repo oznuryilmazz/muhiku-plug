@@ -96,17 +96,17 @@ class MHK_Admin {
 		}
 
 		// Setup wizard redirect.
-		if ( get_transient( '_mhk_activation_redirect' ) && apply_filters( 'everest_forms_show_welcome_page', true ) ) {
+		if ( get_transient( '_mhk_activation_redirect' ) && apply_filters( 'muhiku_forms_show_welcome_page', true ) ) {
 			$do_redirect  = true;
 			$current_page = isset( $_GET['page'] ) ? mhk_clean( sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification
 
 			// On these pages, or during these events, postpone the redirect.
-			if ( wp_doing_ajax() || is_network_admin() || ! current_user_can( 'manage_everest_forms' ) ) {
+			if ( wp_doing_ajax() || is_network_admin() || ! current_user_can( 'manage_muhiku_forms' ) ) {
 				$do_redirect = false;
 			}
 
 			// On these pages, or during these events, disable the redirect.
-			if ( 'mhk-welcome' === $current_page || MHK_Admin_Notices::has_notice( 'install' ) || apply_filters( 'everest_forms_prevent_automatic_wizard_redirect', false ) || isset( $_GET['activate-multi'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( 'mhk-welcome' === $current_page || MHK_Admin_Notices::has_notice( 'install' ) || apply_filters( 'muhiku_forms_prevent_automatic_wizard_redirect', false ) || isset( $_GET['activate-multi'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 				delete_transient( '_mhk_activation_redirect' );
 				$do_redirect = false;
 			}
@@ -127,16 +127,16 @@ class MHK_Admin {
 	 * @return string
 	 */
 	public function admin_footer_text( $footer_text ) {
-		if ( ! current_user_can( 'manage_everest_forms' ) || ! function_exists( 'mhk_get_screen_ids' ) ) {
+		if ( ! current_user_can( 'manage_muhiku_forms' ) || ! function_exists( 'mhk_get_screen_ids' ) ) {
 			return $footer_text;
 		}
 		$current_screen = get_current_screen();
 		$mhk_pages      = mhk_get_screen_ids();
 
 		// Check to make sure we're on a MuhikuPlug admin page.
-		if ( isset( $current_screen->id ) && apply_filters( 'everest_forms_display_admin_footer_text', in_array( $current_screen->id, $mhk_pages, true ) ) ) {
+		if ( isset( $current_screen->id ) && apply_filters( 'muhiku_forms_display_admin_footer_text', in_array( $current_screen->id, $mhk_pages, true ) ) ) {
 			// Change the footer text.
-			if ( ! get_option( 'everest_forms_admin_footer_text_rated' ) ) {
+			if ( ! get_option( 'muhiku_forms_admin_footer_text_rated' ) ) {
 				$footer_text = sprintf(
 					/* translators: 1: MuhikuPlug 2:: five stars */
 					esc_html__( 'If you like %1$s please leave us a %2$s rating. A huge thanks in advance!', 'muhiku-plug' ),
@@ -146,7 +146,7 @@ class MHK_Admin {
 				mhk_enqueue_js(
 					"
 					jQuery( 'a.mhk-rating-link' ).on( 'click', function() {
-						jQuery.post( '" . mhk()->ajax_url() . "', { action: 'everest_forms_rated' } );
+						jQuery.post( '" . mhk()->ajax_url() . "', { action: 'muhiku_forms_rated' } );
 						jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
 					});
 					"
@@ -160,7 +160,7 @@ class MHK_Admin {
 	}
 
 	/**
-	 * Add body classes for Everest builder.
+	 * Add body classes for Muhiku builder.
 	 *
 	 * @param  array $classes Admin body classes.
 	 * @return array

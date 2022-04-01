@@ -34,7 +34,7 @@ class MHK_Settings_General extends MHK_Settings_Page {
 	 */
 	public function get_settings() {
 		$settings = apply_filters(
-			'everest_forms_general_settings',
+			'muhiku_forms_general_settings',
 			array(
 				array(
 					'title' => esc_html__( 'General Options', 'muhiku-plug' ),
@@ -45,14 +45,14 @@ class MHK_Settings_General extends MHK_Settings_Page {
 				array(
 					'title'   => esc_html__( 'Disable User Details', 'muhiku-plug' ),
 					'desc'    => esc_html__( 'Disable storing the IP address and User Agent on all forms.', 'muhiku-plug' ),
-					'id'      => 'everest_forms_disable_user_details',
+					'id'      => 'muhiku_forms_disable_user_details',
 					'default' => 'no',
 					'type'    => 'checkbox',
 				),
 				array(
 					'title'   => esc_html__( 'Enable Log', 'muhiku-plug' ),
 					'desc'    => esc_html__( 'Enable storing the logs.', 'muhiku-plug' ),
-					'id'      => 'everest_forms_enable_log',
+					'id'      => 'muhiku_forms_enable_log',
 					'default' => 'no',
 					'type'    => 'checkbox',
 				),
@@ -63,7 +63,7 @@ class MHK_Settings_General extends MHK_Settings_Page {
 			)
 		);
 
-		return apply_filters( 'everest_forms_get_settings_' . $this->id, $settings );
+		return apply_filters( 'muhiku_forms_get_settings_' . $this->id, $settings );
 	}
 
 	/**

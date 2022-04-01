@@ -87,7 +87,7 @@ class MHK_Privacy {
 				'<p>' . __( 'Please see the <a href="https://mailchimp.com/legal/privacy/">MailChimp Privacy Policy</a> for more details.', 'muhiku-plug' ) . '</p>' .
 				'</div>';
 
-		return apply_filters( 'everest_forms_privacy_policy_content', $content );
+		return apply_filters( 'muhiku_forms_privacy_policy_content', $content );
 	}
 }
 

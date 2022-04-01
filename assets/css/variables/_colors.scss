@@ -2,8 +2,8 @@
  * MuhikuPlug CSS Variables
  */
 /*=====  Primary Color  ======*/
-$everestforms:					#7e3bd0;
-$everestforms-soft:				lighten($everestforms, 40%);
+$muhikuforms:					#7e3bd0;
+$muhikuforms-soft:				lighten($muhikuforms, 40%);
 
 /*=====  Semantic Color  ======*/
 // Colors for notifications
@@ -35,7 +35,7 @@ $border-color: 					$color_gray-lighten;
 
 // Input variables
 $input-border-color:            $border-color;
-$input-border-focus-color:      $everestforms;
+$input-border-focus-color:      $muhikuforms;
 
 /**
  * Font Size Variables

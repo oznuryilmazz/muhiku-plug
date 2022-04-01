@@ -2,7 +2,7 @@
 /**
  * Muhiku Plug for Elementor.
  *
- * @package EverstForms\Class
+ * @package muhkuForms\Class
  * @version 1.8.5
  */
 
@@ -53,7 +53,7 @@ class MHK_Widget extends Widget_Base {
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'everest-icon';
+		return 'muhiku-icon';
 	}
 
 
@@ -87,7 +87,7 @@ class MHK_Widget extends Widget_Base {
 	 * @return array Widget keywords.
 	 */
 	public function get_keywords() {
-		return array( 'form', 'forms', 'muhiku-plug', 'contact form', 'everest', 'everestforms' );
+		return array( 'form', 'forms', 'muhiku-plug', 'contact form', 'muhiku', 'muhikuforms' );
 	}
 
 	/**
@@ -105,7 +105,7 @@ class MHK_Widget extends Widget_Base {
 		);
 		$forms = $this->get_forms();
 		$this->add_control(
-			'everest_form',
+			'muhiku_form',
 			array(
 				'label'   => esc_html__( 'Select Form', 'muhiku-plug' ),
 				'type'    => Controls_Manager::SELECT,
@@ -114,7 +114,7 @@ class MHK_Widget extends Widget_Base {
 		);
 		$this->end_controls_section();
 
-		do_action( 'everest_form_elemntor_style', $this );
+		do_action( 'muhiku_form_elemntor_style', $this );
 
 	}
 
@@ -126,18 +126,18 @@ class MHK_Widget extends Widget_Base {
 	private function get_shortcode() {
 
 		$settings = $this->get_settings_for_display();
-		if ( ! $settings['everest_form'] ) {
+		if ( ! $settings['muhiku_form'] ) {
 			return '<p>' . __( 'Please select a Muhiku Plug.', 'muhiku-plug' ) . '</p>';
 		}
 
 		$attributes = array(
-			'id' => $settings['everest_form'],
+			'id' => $settings['muhiku_form'],
 		);
 
 		$this->add_render_attribute( 'shortcode', $attributes );
 
 		$shortcode   = array();
-		$shortcode[] = sprintf( '[everest_form %s]', $this->get_render_attribute_string( 'shortcode' ) );
+		$shortcode[] = sprintf( '[muhiku_form %s]', $this->get_render_attribute_string( 'shortcode' ) );
 
 		return implode( '', $shortcode );
 	}
@@ -161,20 +161,20 @@ class MHK_Widget extends Widget_Base {
 	 */
 	public function get_forms() {
 
-		$everest_forms = array();
+		$muhiku_forms = array();
 
-		if ( empty( $everest_forms ) ) {
+		if ( empty( $muhiku_forms ) ) {
 
 			$mhk_forms = mhk()->form->get();
 			if ( ! empty( $mhk_forms ) ) {
 				foreach ( $mhk_forms as $mhk_form ) {
-					$everest_forms[ $mhk_form->ID ] = $mhk_form->post_title;
+					$muhiku_forms[ $mhk_form->ID ] = $mhk_form->post_title;
 				}
 			} else {
-				$everest_forms[0] = esc_html__( 'Yo have not created a form, Please Create a form first', 'muhiku-plug' );
+				$muhiku_forms[0] = esc_html__( 'Yo have not created a form, Please Create a form first', 'muhiku-plug' );
 			}
 
-			return $everest_forms;
+			return $muhiku_forms;
 		}
 	}
 }

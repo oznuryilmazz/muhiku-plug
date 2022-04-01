@@ -27,9 +27,9 @@ class MHK_Integrations {
 	 */
 	public function __construct() {
 
-		do_action( 'everest_forms_integrations_init' );
+		do_action( 'muhiku_forms_integrations_init' );
 
-		$load_integrations = apply_filters( 'everest_forms_integrations', array() );
+		$load_integrations = apply_filters( 'muhiku_forms_integrations', array() );
 
 		// Load integration classes.
 		foreach ( $load_integrations as $integration ) {

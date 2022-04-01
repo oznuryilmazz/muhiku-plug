@@ -78,9 +78,9 @@ function mhk_update_116_delete_options() {
 		'mhk_from_address',
 		'mhk_email_subject',
 		'mhk_email_message',
-		'everest_forms_disable_form_entries',
-		'everest_forms_form_submit_button_label',
-		'everest_forms_successful_form_submission_message',
+		'muhiku_forms_disable_form_entries',
+		'muhiku_forms_form_submit_button_label',
+		'muhiku_forms_successful_form_submission_message',
 	);
 
 	foreach ( $delete_options as $delete_option ) {
@@ -100,15 +100,15 @@ function mhk_update_116_db_version() {
  */
 function mhk_update_120_db_rename_options() {
 	$rename_options = array(
-		'mhk_email_template'        => 'everest_forms_email_template',
-		'mhk_recaptcha_site_key'    => 'everest_forms_recaptcha_site_key',
-		'mhk_recaptcha_site_secret' => 'everest_forms_recaptcha_site_secret',
-		'mhk_required_validation'   => 'everest_forms_required_validation',
-		'mhk_url_validation'        => 'everest_forms_url_validation',
-		'mhk_email_validation'      => 'everest_forms_email_validation',
-		'mhk_number_validation'     => 'everest_forms_number_validation',
-		'mhk_recaptcha_validation'  => 'everest_forms_recaptcha_validation',
-		'mhk_default_form_page_id'  => 'everest_forms_default_form_page_id',
+		'mhk_email_template'        => 'muhiku_forms_email_template',
+		'mhk_recaptcha_site_key'    => 'muhiku_forms_recaptcha_site_key',
+		'mhk_recaptcha_site_secret' => 'muhiku_forms_recaptcha_site_secret',
+		'mhk_required_validation'   => 'muhiku_forms_required_validation',
+		'mhk_url_validation'        => 'muhiku_forms_url_validation',
+		'mhk_email_validation'      => 'muhiku_forms_email_validation',
+		'mhk_number_validation'     => 'muhiku_forms_number_validation',
+		'mhk_recaptcha_validation'  => 'muhiku_forms_recaptcha_validation',
+		'mhk_default_form_page_id'  => 'muhiku_forms_default_form_page_id',
 	);
 
 	foreach ( $rename_options as $old_option => $new_option ) {
@@ -205,7 +205,7 @@ function mhk_update_140_db_version() {
  * Delete global reCAPTCHA related options.
  */
 function mhk_update_144_delete_options() {
-	delete_option( 'everest_forms_recaptcha_validation' );
+	delete_option( 'muhiku_forms_recaptcha_validation' );
 }
 
 /**
@@ -220,8 +220,8 @@ function mhk_update_144_db_version() {
  */
 function mhk_update_149_db_rename_options() {
 	$rename_options = array(
-		'everest_forms_recaptcha_site_key'    => 'everest_forms_recaptcha_v2_site_key',
-		'everest_forms_recaptcha_site_secret' => 'everest_forms_recaptcha_v2_secret_key',
+		'muhiku_forms_recaptcha_site_key'    => 'muhiku_forms_recaptcha_v2_site_key',
+		'muhiku_forms_recaptcha_site_secret' => 'muhiku_forms_recaptcha_v2_secret_key',
 	);
 
 	foreach ( $rename_options as $old_option => $new_option ) {
@@ -317,7 +317,7 @@ function mhk_update_175_remove_capabilities() {
 		$wp_roles = new WP_Roles(); // @codingStandardsIgnoreLine
 	}
 
-	$capability_types = array( 'everest_form' );
+	$capability_types = array( 'muhiku_form' );
 
 	foreach ( $capability_types as $capability_type ) {
 		$capabilities[ $capability_type ] = array(
@@ -358,7 +358,7 @@ function mhk_update_175_remove_capabilities() {
 function mhk_update_175_restore_draft_forms() {
 	$form_ids = get_posts(
 		array(
-			'post_type'   => 'everest_form',
+			'post_type'   => 'muhiku_form',
 			'post_status' => 'draft',
 			'fields'      => 'ids',
 			'numberposts' => - 1,

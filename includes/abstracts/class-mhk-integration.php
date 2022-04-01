@@ -50,7 +50,7 @@ abstract class MHK_Integration extends MHK_Settings_API {
 	 * @return array Integration stored data.
 	 */
 	public function get_integration() {
-		$integrations = get_option( 'everest_forms_integrations', array() );
+		$integrations = get_option( 'muhiku_forms_integrations', array() );
 
 		return in_array( $this->id, array_keys( $integrations ), true ) ? $integrations[ $this->id ] : array();
 	}
@@ -61,7 +61,7 @@ abstract class MHK_Integration extends MHK_Settings_API {
 	 * @return string
 	 */
 	public function get_method_title() {
-		return apply_filters( 'everest_forms_integration_title', $this->method_title, $this );
+		return apply_filters( 'muhiku_forms_integration_title', $this->method_title, $this );
 	}
 
 	/**
@@ -70,7 +70,7 @@ abstract class MHK_Integration extends MHK_Settings_API {
 	 * @return string
 	 */
 	public function get_method_description() {
-		return apply_filters( 'everest_forms_integration_description', $this->method_description, $this );
+		return apply_filters( 'muhiku_forms_integration_description', $this->method_description, $this );
 	}
 
 	/**

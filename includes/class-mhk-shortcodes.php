@@ -20,7 +20,7 @@ class MHK_Shortcodes {
 		self::init_shortcode_hooks();
 
 		$shortcodes = array(
-			'everest_form' => __CLASS__ . '::form',
+			'muhiku_form' => __CLASS__ . '::form',
 		);
 
 		foreach ( $shortcodes as $shortcode => $function ) {

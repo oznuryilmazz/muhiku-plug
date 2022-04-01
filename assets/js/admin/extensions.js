@@ -52,7 +52,7 @@
 
     $document.trigger("wp-extension-installing", args);
 
-    return wp.updates.ajax("everest_forms_install_extension", args);
+    return wp.updates.ajax("muhiku_forms_install_extension", args);
   };
 
   /**
@@ -213,7 +213,7 @@
       if (
         wp.updates.maybeHandleCredentialError(
           response,
-          "everest_forms_install_extension"
+          "muhiku_forms_install_extension"
         )
       ) {
         return;
@@ -277,7 +277,7 @@
 
     // Handle a queue job.
     switch (job.action) {
-      case "everest_forms_install_extension":
+      case "muhiku_forms_install_extension":
         wp.updates.installExtension(job.data);
         break;
 

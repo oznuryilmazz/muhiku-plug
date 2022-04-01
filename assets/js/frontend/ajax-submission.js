@@ -1,4 +1,4 @@
-/* global everest_forms_ajax_submission_params */
+/* global muhiku_forms_ajax_submission_params */
 jQuery(function ($) {
   "use strict";
   var mhk_ajax_submission_init = function () {
@@ -70,15 +70,15 @@ jQuery(function ($) {
           // Add action intend for ajax_form_submission endpoint.
           data.push({
             name: "action",
-            value: "everest_forms_ajax_form_submission",
+            value: "muhiku_forms_ajax_form_submission",
           });
           data.push({
             name: "security",
-            value: everest_forms_ajax_submission_params.mhk_ajax_submission,
+            value: muhiku_forms_ajax_submission_params.mhk_ajax_submission,
           });
           // Fire the ajax request.
           $.ajax({
-            url: everest_forms_ajax_submission_params.ajax_url,
+            url: muhiku_forms_ajax_submission_params.ajax_url,
             type: "POST",
             data: data,
           })
@@ -150,7 +150,7 @@ jQuery(function ($) {
                 if ("undefined" !== typeof err.data[form_id]) {
                   var error = err.data[form_id].header;
                 } else {
-                  var error = everest_forms_ajax_submission_params.error;
+                  var error = muhiku_forms_ajax_submission_params.error;
                 }
                 var fields = err.data.error;
 
@@ -192,7 +192,7 @@ jQuery(function ($) {
                     $("#" + fld_container_id).hasClass("mhk-field-likert")
                   ) {
                     //When field type is likert
-                    fid = "everest_forms-" + form_id + "-field_" + fld_id + "_";
+                    fid = "muhiku_forms-" + form_id + "-field_" + fld_id + "_";
                     err_field = $('[id^="' + fid + '"]');
                     lbl = false;
 
@@ -201,7 +201,7 @@ jQuery(function ($) {
                           .closest("tr.mhk-" + form_id + "-field_" + fld_id)
                           .find("th"),
                         id =
-                          "everest_forms[form_fields][" +
+                          "muhiku_forms[form_fields][" +
                           fld_id +
                           "][" +
                           (parseInt(tbl_header.closest("tr").index()) + 1) +
@@ -214,7 +214,7 @@ jQuery(function ($) {
                             '" for="' +
                             id +
                             '" class="mhk-error">' +
-                            everest_forms_ajax_submission_params.required +
+                            muhiku_forms_ajax_submission_params.required +
                             "</label>"
                         );
                       } else {
@@ -274,13 +274,13 @@ jQuery(function ($) {
 
                 btn
                   .attr("disabled", false)
-                  .html(everest_forms_ajax_submission_params.submit);
+                  .html(muhiku_forms_ajax_submission_params.submit);
               }
             })
             .fail(function () {
               btn
                 .attr("disabled", false)
-                .html(everest_forms_ajax_submission_params.submit);
+                .html(muhiku_forms_ajax_submission_params.submit);
               formTuple.trigger("focusout").trigger("change");
               formTuple
                 .closest(".muhiku-plug")
@@ -290,7 +290,7 @@ jQuery(function ($) {
                 .closest(".muhiku-plug")
                 .prepend(
                   '<div class="muhiku-plug-notice muhiku-plug-notice--error" role="alert">' +
-                    everest_forms_ajax_submission_params.error +
+                    muhiku_forms_ajax_submission_params.error +
                     "</div>"
                 )
                 .focus();

@@ -30,7 +30,7 @@ class MHK_Admin_Editor {
 	 * @param string $editor_id Unique editor identifier, e.g. 'content'.
 	 */
 	public function media_button( $editor_id ) {
-		if ( ! apply_filters( 'everest_forms_show_media_button', is_admin(), $editor_id ) ) {
+		if ( ! apply_filters( 'muhiku_forms_show_media_button', is_admin(), $editor_id ) ) {
 			return;
 		}
 
@@ -38,7 +38,7 @@ class MHK_Admin_Editor {
 		printf(
 			'<a href="#" class="button mhk-insert-form-button" data-editor="%s" title="%s"><span class="wp-media-buttons-icon">%s</span> %s</a>',
 			esc_attr( $editor_id ),
-			esc_attr__( 'Add Everest Form', 'muhiku-plug' ),
+			esc_attr__( 'Add Muhiku Form', 'muhiku-plug' ),
 			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path fill="#82878c" d="M18.1 4h-3.8l1.2 2h3.9zM20.6 8h-3.9l1.2 2h3.9zM20.6 18H5.8L12 7.9l2.5 4.1H12l-1.2 2h7.3L12 4.1 2.2 20h19.6z"/></g></svg>',
 			esc_html__( 'Add Form', 'muhiku-plug' )
 		);
@@ -77,7 +77,7 @@ class MHK_Admin_Editor {
 							echo '<p>';
 							printf(
 								wp_kses(
-									/* translators: %s - Everest Builder page. */
+									/* translators: %s - Muhiku Builder page. */
 									__( 'Whoops, you haven\'t created a form yet. Want to <a href="%s">give it a go</a>?', 'muhiku-plug' ),
 									array(
 										'a' => array(

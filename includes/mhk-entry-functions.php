@@ -20,7 +20,7 @@ function mhk_get_entry( $id, $with_fields = false, $args = array() ) {
 	global $wpdb;
 
 	if ( ! isset( $args['cap'] ) && ( is_admin() && ! wp_doing_ajax() ) ) {
-		$args['cap'] = 'everest_forms_view_entry';
+		$args['cap'] = 'muhiku_forms_view_entry';
 	}
 
 	if ( ! empty( $args['cap'] ) && ! current_user_can( $args['cap'], $id ) ) {
@@ -59,7 +59,7 @@ function mhk_get_entry( $id, $with_fields = false, $args = array() ) {
 				$entry->meta[ $field['meta_key'] ] = maybe_serialize( $field['value'] );
 			}
 		}
-	} elseif ( apply_filters( 'everest_forms_get_entry_metadata', true ) ) {
+	} elseif ( apply_filters( 'muhiku_forms_get_entry_metadata', true ) ) {
 		$results = wp_cache_get( $id, 'mhk-entrymeta' );
 
 		if ( false === $results ) {
@@ -100,7 +100,7 @@ function mhk_get_entries_ids( $form_id ) {
  */
 function mhk_get_entry_statuses( $form_data = array() ) {
 	return apply_filters(
-		'everest_forms_entry_statuses',
+		'muhiku_forms_entry_statuses',
 		array(
 			'publish' => esc_html__( 'Published', 'muhiku-plug' ),
 			'trash'   => esc_html__( 'Trash', 'muhiku-plug' ),
@@ -130,7 +130,7 @@ function mhk_search_entries( $args ) {
 	);
 
 	if ( ! isset( $args['cap'] ) ) {
-		$args['cap'] = 'everest_forms_view_form_entries';
+		$args['cap'] = 'muhiku_forms_view_form_entries';
 	}
 
 	// Check if form ID is valid for entries.
@@ -170,7 +170,7 @@ function mhk_search_entries( $args ) {
 	}
 
 	// Give developers an ability to modify WHERE (unset clauses, add new, etc).
-	$where     = (array) apply_filters( 'everest_forms_search_entries_where', $where, $args );
+	$where     = (array) apply_filters( 'muhiku_forms_search_entries_where', $where, $args );
 	$where_sql = implode( ' AND ', $where );
 
 	// Query object.

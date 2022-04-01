@@ -25,14 +25,14 @@ class MHK_Form_Handler {
 	 */
 	public function get( $id = '', $args = array() ) {
 		$forms = array();
-		$args  = apply_filters( 'everest_forms_get_form_args', $args );
+		$args  = apply_filters( 'muhiku_forms_get_form_args', $args );
 
 		if ( false === $id ) {
 			return false;
 		}
 
 		if ( ! isset( $args['cap'] ) && ( is_admin() && ! wp_doing_ajax() ) ) {
-			$args['cap'] = 'everest_forms_view_form';
+			$args['cap'] = 'muhiku_forms_view_form';
 		}
 
 		if ( ! empty( $id ) ) {
@@ -42,7 +42,7 @@ class MHK_Form_Handler {
 
 			$the_post = get_post( absint( $id ) );
 
-			if ( $the_post && 'everest_form' === $the_post->post_type ) {
+			if ( $the_post && 'muhiku_form' === $the_post->post_type ) {
 				$forms = empty( $args['content_only'] ) ? $the_post : mhk_decode( $the_post->post_content );
 			}
 		} else {
@@ -77,7 +77,7 @@ class MHK_Form_Handler {
 	public function get_multiple( $args = array(), $content_only = false ) {
 		$forms   = array();
 		$user_id = get_current_user_id();
-		$args    = apply_filters( 'everest_forms_get_multiple_forms_args', $args, $content_only );
+		$args    = apply_filters( 'muhiku_forms_get_multiple_forms_args', $args, $content_only );
 
 		// No ID provided, get multiple forms.
 		$defaults = array(
@@ -92,18 +92,18 @@ class MHK_Form_Handler {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$args['post_type'] = 'everest_form';
+		$args['post_type'] = 'muhiku_form';
 
 		// Can user interact, lets check the view capabilities?
-		if ( current_user_can( 'everest_forms_view_forms' ) && ! current_user_can( 'everest_forms_view_others_forms' ) ) {
+		if ( current_user_can( 'muhiku_forms_view_forms' ) && ! current_user_can( 'muhiku_forms_view_others_forms' ) ) {
 			$args['author'] = $user_id;
 		}
 
-		if ( ! current_user_can( 'everest_forms_view_forms' ) && current_user_can( 'everest_forms_view_others_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_view_forms' ) && current_user_can( 'muhiku_forms_view_others_forms' ) ) {
 			$args['author__not_in'] = $user_id;
 		}
 
-		if ( ! current_user_can( 'everest_forms_view_forms' ) && ! current_user_can( 'everest_forms_view_others_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_view_forms' ) && ! current_user_can( 'muhiku_forms_view_others_forms' ) ) {
 			$args['post__in'] = array( 0 );
 		}
 
@@ -146,7 +146,7 @@ class MHK_Form_Handler {
 		foreach ( $ids as $id ) {
 
 			// Check for permissions.
-			if ( ! current_user_can( 'everest_forms_delete', $id ) ) {
+			if ( ! current_user_can( 'muhiku_forms_delete', $id ) ) {
 				return false;
 			}
 
@@ -157,7 +157,7 @@ class MHK_Form_Handler {
 			}
 		}
 
-		do_action( 'everest_forms_delete_form', $ids );
+		do_action( 'muhiku_forms_delete_form', $ids );
 
 		return true;
 	}
@@ -173,11 +173,11 @@ class MHK_Form_Handler {
 	 * @return int|bool Form ID on successful creation else false.
 	 */
 	public function create( $title = '', $template = 'blank', $args = array(), $data = array() ) {
-		if ( empty( $title ) || ! current_user_can( 'everest_forms_create_forms' ) ) {
+		if ( empty( $title ) || ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 			return false;
 		}
 
-		$args         = apply_filters( 'everest_forms_create_form_args', $args, $data );
+		$args         = apply_filters( 'muhiku_forms_create_form_args', $args, $data );
 		$form_style   = array();
 		$style_needed = false;
 		$form_content = array(
@@ -203,7 +203,7 @@ class MHK_Form_Handler {
 			array(
 				'post_title'   => esc_html( $title ),
 				'post_status'  => 'publish',
-				'post_type'    => 'everest_form',
+				'post_type'    => 'muhiku_form',
 				'post_content' => '{}',
 			)
 		);
@@ -239,7 +239,7 @@ class MHK_Form_Handler {
 			wp_update_post( $form_data );
 
 			if ( ! empty( $form_style ) ) {
-				update_option( 'everest_forms_styles', $form_style );
+				update_option( 'muhiku_forms_styles', $form_style );
 			}
 		}
 
@@ -251,7 +251,7 @@ class MHK_Form_Handler {
 			wp_init_targeted_link_rel_filters();
 		}
 
-		do_action( 'everest_forms_create_form', $form_id, $form_data, $data, $style_needed );
+		do_action( 'muhiku_forms_create_form', $form_id, $form_data, $data, $style_needed );
 
 		return $form_id;
 	}
@@ -278,7 +278,7 @@ class MHK_Form_Handler {
 		}
 
 		if ( ! isset( $args['cap'] ) ) {
-			$args['cap'] = 'everest_forms_edit_form';
+			$args['cap'] = 'muhiku_forms_edit_form';
 		}
 
 		// Check for permissions.
@@ -326,18 +326,18 @@ class MHK_Form_Handler {
 			'post_excerpt' => $desc,
 			'post_content' => mhk_encode( $data ),
 		);
-		$form    = apply_filters( 'everest_forms_save_form_args', $form, $data, $args );
+		$form    = apply_filters( 'muhiku_forms_save_form_args', $form, $data, $args );
 		$form_id = wp_update_post( $form );
 
 		// Import form styles if present.
 		$style_needed = false;
 		if ( ! empty( $data['form_styles'] ) ) {
 			$style_needed            = true;
-			$form_styles             = get_option( 'everest_forms_styles', array() );
+			$form_styles             = get_option( 'muhiku_forms_styles', array() );
 			$form_styles[ $form_id ] = mhk_decode( $data['form_styles'] );
 
 			// Update forms styles.
-			update_option( 'everest_forms_styles', $form_styles );
+			update_option( 'muhiku_forms_styles', $form_styles );
 		}
 
 		// Restore removed content filters.
@@ -348,7 +348,7 @@ class MHK_Form_Handler {
 			wp_init_targeted_link_rel_filters();
 		}
 
-		do_action( 'everest_forms_save_form', $form_id, $form, array(), $style_needed );
+		do_action( 'muhiku_forms_save_form', $form_id, $form, array(), $style_needed );
 
 		return $form_id;
 	}
@@ -364,7 +364,7 @@ class MHK_Form_Handler {
 	 */
 	public function duplicate( $ids = array() ) {
 		// Check for permissions.
-		if ( ! current_user_can( 'everest_forms_create_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 			return false;
 		}
 
@@ -379,7 +379,7 @@ class MHK_Form_Handler {
 			// Get original entry.
 			$form = get_post( $id );
 
-			if ( ! current_user_can( 'everest_forms_view_form', $id ) ) {
+			if ( ! current_user_can( 'muhiku_forms_view_form', $id ) ) {
 				return false;
 			}
 
@@ -392,7 +392,7 @@ class MHK_Form_Handler {
 			$new_form_data = mhk_decode( $form->post_content );
 
 			// Get the form styles.
-			$form_styles = get_option( 'everest_forms_styles', array() );
+			$form_styles = get_option( 'muhiku_forms_styles', array() );
 			if ( ! empty( $form_styles[ $id ] ) ) {
 				$new_form_data['form_styles'] = wp_json_encode( $form_styles[ $id ] );
 			}
@@ -480,7 +480,7 @@ class MHK_Form_Handler {
 	 * @return mixed int or false
 	 */
 	public function field_unique_key( $form_id ) {
-		if ( ! current_user_can( 'everest_forms_edit_form', $form_id ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_form', $form_id ) ) {
 			return false;
 		}
 

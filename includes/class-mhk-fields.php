@@ -73,7 +73,7 @@ class MHK_Fields {
 	 */
 	public function init() {
 		$load_fields = apply_filters(
-			'everest_forms_fields',
+			'muhiku_forms_fields',
 			array(
 				'MHK_Field_First_Name',
 				'MHK_Field_Last_Name',

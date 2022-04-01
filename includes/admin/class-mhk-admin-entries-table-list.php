@@ -54,7 +54,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 
 		// Check that the user has created at least one form.
 		if ( ! empty( $this->forms ) ) {
-			$this->form_id   = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : apply_filters( 'everest_forms_entry_list_default_form_id', key( $this->forms ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			$this->form_id   = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : apply_filters( 'muhiku_forms_entry_list_default_form_id', key( $this->forms ) ); // phpcs:ignore WordPress.Security.NonceVerification
 			$this->form      = mhk()->form->get( $this->form_id );
 			$this->form_data = ! empty( $this->form->post_content ) ? mhk_decode( $this->form->post_content ) : '';
 		}
@@ -102,14 +102,14 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	public function get_columns() {
 		$columns            = array();
 		$columns['cb']      = '<input type="checkbox" />';
-		$columns            = apply_filters( 'everest_forms_entries_table_form_fields_columns', $this->get_columns_form_fields( $columns ), $this->form_id, $this->form_data );
+		$columns            = apply_filters( 'muhiku_forms_entries_table_form_fields_columns', $this->get_columns_form_fields( $columns ), $this->form_id, $this->form_data );
 		$columns['date']    = esc_html__( 'Date Created', 'muhiku-plug' );
 		$columns['actions'] = esc_html__( 'Actions', 'muhiku-plug' );
 		// Columns Adjustment Settings.
 		if ( defined( 'EFP_VERSION' ) ) {
 			$columns['more'] = '<a href="#" class="muhiku-plug-entries-setting" title="' . esc_attr__( 'More Options', 'muhiku-plug' ) . '" data-mhk-form_id="' . $this->form_id . '"><i class="dashicons dashicons-admin-generic"></i></a>';
 		}
-		return apply_filters( 'everest_forms_entries_table_columns', $columns, $this->form_data );
+		return apply_filters( 'muhiku_forms_entries_table_columns', $columns, $this->form_data );
 	}
 
 	/**
@@ -157,7 +157,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	 * @return array
 	 */
 	public static function get_columns_form_disallowed_fields() {
-		return (array) apply_filters( 'everest_forms_entries_table_fields_disallow', array( 'html', 'title', 'captcha', 'repeater-fields' ) );
+		return (array) apply_filters( 'muhiku_forms_entries_table_fields_disallow', array( 'html', 'title', 'captcha', 'repeater-fields' ) );
 	}
 
 	/**
@@ -251,7 +251,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 
 				$value = nl2br( wp_strip_all_tags( trim( $value ) ) );
 			}
-			return apply_filters( 'everest_forms_html_field_value', $value, $entry->meta[ $meta_key ], $entry, 'entry-table' );
+			return apply_filters( 'muhiku_forms_html_field_value', $value, $entry->meta[ $meta_key ], $entry, 'entry-table' );
 		} else {
 			return '<span class="na">&mdash;</span>';
 		}
@@ -283,7 +283,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 				break;
 		}
 
-		return apply_filters( 'everest_forms_entry_table_column_value', $value, $entry, $column_name );
+		return apply_filters( 'muhiku_forms_entry_table_column_value', $value, $entry, $column_name );
 	}
 
 	/**
@@ -296,11 +296,11 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 		$actions = array();
 
 		if ( 'trash' !== $entry->status ) {
-			if ( current_user_can( 'everest_forms_view_entry', $entry->entry_id ) ) {
+			if ( current_user_can( 'muhiku_forms_view_entry', $entry->entry_id ) ) {
 				$actions['view'] = '<a href="' . esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $entry->form_id . '&amp;view-entry=' . $entry->entry_id ) ) . '">' . esc_html__( 'View', 'muhiku-plug' ) . '</a>';
 			}
 
-			if ( current_user_can( 'everest_forms_delete_entry', $entry->entry_id ) ) {
+			if ( current_user_can( 'muhiku_forms_delete_entry', $entry->entry_id ) ) {
 				/* translators: %s: entry name */
 				$actions['trash'] = '<a class="submitdelete" aria-label="' . esc_attr__( 'Trash form entry', 'muhiku-plug' ) . '" href="' . esc_url(
 					wp_nonce_url(
@@ -316,7 +316,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 				) . '">' . esc_html__( 'Trash', 'muhiku-plug' ) . '</a>';
 			}
 		} else {
-			if ( current_user_can( 'everest_forms_edit_entry', $entry->entry_id ) ) {
+			if ( current_user_can( 'muhiku_forms_edit_entry', $entry->entry_id ) ) {
 				$actions['untrash'] = '<a aria-label="' . esc_attr__( 'Restore form entry from trash', 'muhiku-plug' ) . '" href="' . esc_url(
 					wp_nonce_url(
 						add_query_arg(
@@ -331,7 +331,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 				) . '">' . esc_html__( 'Restore', 'muhiku-plug' ) . '</a>';
 			}
 
-			if ( current_user_can( 'everest_forms_delete_entry', $entry->entry_id ) ) {
+			if ( current_user_can( 'muhiku_forms_delete_entry', $entry->entry_id ) ) {
 				/* translators: %s: entry name */
 				$actions['delete'] = '<a class="submitdelete" aria-label="' . esc_attr__( 'Delete form entry permanently', 'muhiku-plug' ) . '" href="' . esc_url(
 					wp_nonce_url(
@@ -348,7 +348,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			}
 		}
 
-		return implode( ' <span class="sep">|</span> ', apply_filters( 'everest_forms_entry_table_actions', $actions, $entry ) );
+		return implode( ' <span class="sep">|</span> ', apply_filters( 'muhiku_forms_entry_table_actions', $actions, $entry ) );
 	}
 
 	/**
@@ -386,7 +386,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	protected function get_views() {
 		$status_links  = array();
 		$num_entries   = mhk_get_count_entries_by_status( $this->form_id );
-		$total_entries = apply_filters( 'everest_forms_total_entries_count', (int) $num_entries['publish'], $num_entries, $this->form_id );
+		$total_entries = apply_filters( 'muhiku_forms_total_entries_count', (int) $num_entries['publish'], $num_entries, $this->form_id );
 		$statuses      = array_keys( mhk_get_entry_statuses( $this->form_data ) );
 		$class         = empty( $_REQUEST['status'] ) ? ' class="current"' : ''; // phpcs:ignore WordPress.Security.NonceVerification
 
@@ -409,7 +409,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			$status_links[ $status_name ] = "<a href='admin.php?page=mhk-entries&amp;form_id=$this->form_id&amp;status=$status_name'$class>" . sprintf( translate_nooped_plural( $label, $num_entries[ $status_name ] ), number_format_i18n( $num_entries[ $status_name ] ) ) . '</a>';
 		}
 
-		return apply_filters( 'everest_forms_entries_table_views', $status_links, $num_entries, $this->form_data );
+		return apply_filters( 'muhiku_forms_entries_table_views', $status_links, $num_entries, $this->form_data );
 	}
 
 	/**
@@ -429,7 +429,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			);
 		}
 
-		return apply_filters( 'everest_forms_entry_bulk_actions', $actions );
+		return apply_filters( 'muhiku_forms_entry_bulk_actions', $actions );
 	}
 
 	/**
@@ -563,12 +563,12 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			submit_button( __( 'Filter', 'muhiku-plug' ), '', 'filter_action', false, array( 'id' => 'post-query-submit' ) );
 
 			// Export CSV submit button.
-			if ( apply_filters( 'everest_forms_enable_csv_export', $show_export ) && current_user_can( 'export' ) ) {
+			if ( apply_filters( 'muhiku_forms_enable_csv_export', $show_export ) && current_user_can( 'export' ) ) {
 				submit_button( __( 'Export CSV', 'muhiku-plug' ), '', 'export_action', false, array( 'id' => 'export-csv-submit' ) );
 			}
 		}
 
-		if ( $num_entries['trash'] && isset( $_GET['status'] ) && 'trash' === $_GET['status'] && current_user_can( 'manage_everest_forms' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( $num_entries['trash'] && isset( $_GET['status'] ) && 'trash' === $_GET['status'] && current_user_can( 'manage_muhiku_forms' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			submit_button( __( 'Empty Trash', 'muhiku-plug' ), 'apply', 'delete_all', false );
 		}
 		?>

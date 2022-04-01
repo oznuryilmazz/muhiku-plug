@@ -81,12 +81,12 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 		$columns['date_created_gmt'] = esc_html__( 'Date Created GMT', 'muhiku-plug' );
 
 		// If user details are disabled globally discard the IP and UA.
-		if ( 'yes' !== get_option( 'everest_forms_disable_user_details' ) ) {
+		if ( 'yes' !== get_option( 'muhiku_forms_disable_user_details' ) ) {
 			$columns['user_device']     = esc_html__( 'User Device', 'muhiku-plug' );
 			$columns['user_ip_address'] = esc_html__( 'User IP Address', 'muhiku-plug' );
 		}
 
-		return apply_filters( "everest_forms_export_{$this->export_type}_default_columns", $columns );
+		return apply_filters( "muhiku_forms_export_{$this->export_type}_default_columns", $columns );
 	}
 
 	/**
@@ -268,7 +268,7 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 					$value = $this->implode_values( maybe_unserialize( $value ) );
 				}
 
-				$value = apply_filters( 'everest_forms_html_field_value', $value, $entry->meta[ $column_id ], $entry, 'export-csv', $column_id );
+				$value = apply_filters( 'muhiku_forms_html_field_value', $value, $entry->meta[ $column_id ], $entry, 'export-csv', $column_id );
 
 			} elseif ( is_callable( array( $this, "get_column_value_{$column_id}" ) ) ) {
 				// Handle special columns which don't map 1:1 to entry data.
@@ -276,10 +276,10 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 				$raw_value = $value;
 			}
 			$column_type       = $this->get_entry_type( $column_id, $entry );
-			$row[ $column_id ] = apply_filters( 'everest_forms_format_csv_field_data', preg_match( '/textarea/', $column_type ) ? sanitize_textarea_field( $value ) : sanitize_text_field( $value ), $raw_value, $column_id, $column_name, $columns, $entry );
+			$row[ $column_id ] = apply_filters( 'muhiku_forms_format_csv_field_data', preg_match( '/textarea/', $column_type ) ? sanitize_textarea_field( $value ) : sanitize_text_field( $value ), $raw_value, $column_id, $column_name, $columns, $entry );
 		}
 
-		return apply_filters( 'everest_forms_entry_export_row_data', $row, $entry );
+		return apply_filters( 'muhiku_forms_entry_export_row_data', $row, $entry );
 	}
 
 	/**

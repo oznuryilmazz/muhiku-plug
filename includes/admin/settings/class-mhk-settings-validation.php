@@ -34,7 +34,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 	 */
 	public function get_settings() {
 		$settings = apply_filters(
-			'everest_forms_validation_settings',
+			'muhiku_forms_validation_settings',
 			array(
 				array(
 					'title' => esc_html__( 'Validation Messages', 'muhiku-plug' ),
@@ -45,7 +45,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 				array(
 					'title'    => esc_html__( 'Required', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enter the message for the required form field', 'muhiku-plug' ),
-					'id'       => 'everest_forms_required_validation',
+					'id'       => 'muhiku_forms_required_validation',
 					'type'     => 'text',
 					'desc_tip' => true,
 					'css'      => 'min-width: 350px;',
@@ -54,7 +54,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 				array(
 					'title'    => esc_html__( 'Website URL', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enter the message for the valid website url', 'muhiku-plug' ),
-					'id'       => 'everest_forms_url_validation',
+					'id'       => 'muhiku_forms_url_validation',
 					'type'     => 'text',
 					'desc_tip' => true,
 					'css'      => 'min-width: 350px;',
@@ -63,7 +63,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 				array(
 					'title'    => esc_html__( 'Email', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enter the message for the valid email', 'muhiku-plug' ),
-					'id'       => 'everest_forms_email_validation',
+					'id'       => 'muhiku_forms_email_validation',
 					'type'     => 'text',
 					'desc_tip' => true,
 					'css'      => 'min-width: 350px;',
@@ -72,7 +72,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 				array(
 					'title'    => esc_html__( 'Email Suggestion', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enter the message for the valid email suggestion', 'muhiku-plug' ),
-					'id'       => 'everest_forms_email_suggestion',
+					'id'       => 'muhiku_forms_email_suggestion',
 					'type'     => 'text',
 					'desc_tip' => true,
 					'css'      => 'min-width: 350px;',
@@ -81,7 +81,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 				array(
 					'title'    => esc_html__( 'Confirm Value', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enter the message for confirm field value.', 'muhiku-plug' ),
-					'id'       => 'everest_forms_confirm_validation',
+					'id'       => 'muhiku_forms_confirm_validation',
 					'type'     => 'text',
 					'desc_tip' => true,
 					'css'      => 'min-width: 350px;',
@@ -90,7 +90,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 				array(
 					'title'    => esc_html__( 'Checkbox Selection Limit', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enter the message for the checkbox selection limit.', 'muhiku-plug' ),
-					'id'       => 'everest_forms_check_limit_validation',
+					'id'       => 'muhiku_forms_check_limit_validation',
 					'type'     => 'text',
 					'desc_tip' => true,
 					'css'      => 'min-width: 350px;',
@@ -99,7 +99,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 				array(
 					'title'    => esc_html__( 'Number', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enter the message for the valid number', 'muhiku-plug' ),
-					'id'       => 'everest_forms_number_validation',
+					'id'       => 'muhiku_forms_number_validation',
 					'type'     => 'text',
 					'desc_tip' => true,
 					'css'      => 'min-width: 350px;',
@@ -112,7 +112,7 @@ class MHK_Settings_Validation extends MHK_Settings_Page {
 			)
 		);
 
-		return apply_filters( 'everest_forms_get_settings_' . $this->id, $settings );
+		return apply_filters( 'muhiku_forms_get_settings_' . $this->id, $settings );
 	}
 
 	/**

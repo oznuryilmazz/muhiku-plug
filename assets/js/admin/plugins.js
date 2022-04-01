@@ -16,7 +16,7 @@ jQuery(function ($) {
       $(this).addClass("hasNotice");
 
       var data = {
-        action: "everest_forms_deactivation_notice",
+        action: "muhiku_forms_deactivation_notice",
         security: mhk_plugins_params.deactivation_nonce,
       };
 

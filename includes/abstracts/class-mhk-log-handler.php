@@ -40,7 +40,7 @@ abstract class MHK_Log_Handler implements MHK_Log_Handler_Interface {
 		$entry        = "{$time_string} {$level_string} {$message}";
 
 		return apply_filters(
-			'everest_forms_format_log_entry',
+			'muhiku_forms_format_log_entry',
 			$entry,
 			array(
 				'timestamp' => $timestamp,

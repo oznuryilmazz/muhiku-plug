@@ -34,23 +34,23 @@ class MHK_Shortcode_Form {
 	 */
 	public static function hooks() {
 		add_filter( 'amp_skip_post', array( 'MHK_Shortcode_Form', 'amp_skip_post' ) );
-		add_action( 'everest_forms_frontend_output_success', 'mhk_print_notices', 10, 2 );
-		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'header' ), 5, 4 );
-		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'fields' ), 10, 3 );
-		add_action( 'everest_forms_display_field_before', array( 'MHK_Shortcode_Form', 'wrapper_start' ), 5, 2 );
-		add_action( 'everest_forms_display_field_before', array( 'MHK_Shortcode_Form', 'label' ), 15, 2 );
-		add_action( 'everest_forms_display_field_before', array( 'MHK_Shortcode_Form', 'description' ), 20, 2 );
-		add_action( 'everest_forms_display_field_after', array( 'MHK_Shortcode_Form', 'messages' ), 3, 2 );
-		add_action( 'everest_forms_display_field_after', array( 'MHK_Shortcode_Form', 'description' ), 5, 2 );
-		add_action( 'everest_forms_display_field_after', array( 'MHK_Shortcode_Form', 'wrapper_end' ), 15, 2 );
-		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'honeypot' ), 15, 3 );
-		if ( ! apply_filters( 'everest_forms_recaptcha_disabled', false ) ) {
-			add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'recaptcha' ), 20, 3 );
+		add_action( 'muhiku_forms_frontend_output_success', 'mhk_print_notices', 10, 2 );
+		add_action( 'muhiku_forms_frontend_output', array( 'MHK_Shortcode_Form', 'header' ), 5, 4 );
+		add_action( 'muhiku_forms_frontend_output', array( 'MHK_Shortcode_Form', 'fields' ), 10, 3 );
+		add_action( 'muhiku_forms_display_field_before', array( 'MHK_Shortcode_Form', 'wrapper_start' ), 5, 2 );
+		add_action( 'muhiku_forms_display_field_before', array( 'MHK_Shortcode_Form', 'label' ), 15, 2 );
+		add_action( 'muhiku_forms_display_field_before', array( 'MHK_Shortcode_Form', 'description' ), 20, 2 );
+		add_action( 'muhiku_forms_display_field_after', array( 'MHK_Shortcode_Form', 'messages' ), 3, 2 );
+		add_action( 'muhiku_forms_display_field_after', array( 'MHK_Shortcode_Form', 'description' ), 5, 2 );
+		add_action( 'muhiku_forms_display_field_after', array( 'MHK_Shortcode_Form', 'wrapper_end' ), 15, 2 );
+		add_action( 'muhiku_forms_frontend_output', array( 'MHK_Shortcode_Form', 'honeypot' ), 15, 3 );
+		if ( ! apply_filters( 'muhiku_forms_recaptcha_disabled', false ) ) {
+			add_action( 'muhiku_forms_frontend_output', array( 'MHK_Shortcode_Form', 'recaptcha' ), 20, 3 );
 		}
-		add_action( 'everest_forms_frontend_output', array( 'MHK_Shortcode_Form', 'footer' ), 25, 3 );
+		add_action( 'muhiku_forms_frontend_output', array( 'MHK_Shortcode_Form', 'footer' ), 25, 3 );
 
 		// reCaptcha Language.
-		add_filter( 'everest_forms_frontend_recaptcha_url', array( __CLASS__, 'mhk_recaptcha_language' ), 10, 1 );
+		add_filter( 'muhiku_forms_frontend_recaptcha_url', array( __CLASS__, 'mhk_recaptcha_language' ), 10, 1 );
 	}
 
 	/**
@@ -91,7 +91,7 @@ class MHK_Shortcode_Form {
 	public static function footer( $form_data, $title, $description ) {
 		$form_id         = absint( $form_data['id'] );
 		$settings        = isset( $form_data['settings'] ) ? $form_data['settings'] : array();
-		$submit          = apply_filters( 'everest_forms_field_submit', isset( $settings['submit_button_text'] ) ? $settings['submit_button_text'] : __( 'Submit', 'muhiku-plug' ), $form_data );
+		$submit          = apply_filters( 'muhiku_forms_field_submit', isset( $settings['submit_button_text'] ) ? $settings['submit_button_text'] : __( 'Submit', 'muhiku-plug' ), $form_data );
 		$submit_btn      = mhk_string_translation( $form_data['id'], 'submit_button', $submit );
 		$process         = '';
 		$classes         = isset( $form_data['settings']['submit_button_class'] ) ? mhk_sanitize_classes( $form_data['settings']['submit_button_class'] ) : '';
@@ -102,7 +102,7 @@ class MHK_Shortcode_Form {
 		$mhk_amp_classes = array();
 
 		// Visibility class.
-		$visibility_class = apply_filters( 'everest_forms_field_submit_visibility_class', array(), $parts, $form_data );
+		$visibility_class = apply_filters( 'muhiku_forms_field_submit_visibility_class', array(), $parts, $form_data );
 
 		// Check for submit button processing-text.
 		if ( ! isset( $settings['submit_button_processing_text'] ) ) {
@@ -135,18 +135,18 @@ class MHK_Shortcode_Form {
 
 		echo '<div class="mhk-submit-container ' . esc_attr( implode( ' ', $visibility_class ) ) . '" >';
 
-		echo '<input type="hidden" name="everest_forms[id]" value="' . absint( $form_id ) . '">';
+		echo '<input type="hidden" name="muhiku_forms[id]" value="' . absint( $form_id ) . '">';
 
-		echo '<input type="hidden" name="everest_forms[author]" value="' . absint( get_the_author_meta( 'ID' ) ) . '">';
+		echo '<input type="hidden" name="muhiku_forms[author]" value="' . absint( get_the_author_meta( 'ID' ) ) . '">';
 
 		if ( is_singular() ) {
-			echo '<input type="hidden" name="everest_forms[post_id]" value="' . absint( get_the_ID() ) . '">';
+			echo '<input type="hidden" name="muhiku_forms[post_id]" value="' . absint( get_the_ID() ) . '">';
 		}
 
-		do_action( 'everest_forms_display_submit_before', $form_data );
+		do_action( 'muhiku_forms_display_submit_before', $form_data );
 
 		printf(
-			"<button type='submit' name='everest_forms[submit]' class='muhiku-plug-submit-button button mhk-submit %s' id='mhk-submit-%d' value='mhk-submit' %s conditional_rules='%s' conditional_id='%s' %s %s>%s</button>",
+			"<button type='submit' name='muhiku_forms[submit]' class='muhiku-plug-submit-button button mhk-submit %s' id='mhk-submit-%d' value='mhk-submit' %s conditional_rules='%s' conditional_id='%s' %s %s>%s</button>",
 			esc_attr( $classes ),
 			esc_attr( $form_id ),
 			! isset( $settings['submit_button_processing_text'] ) ? 'data-process-text="' . esc_attr__( 'Processing&hellip;', 'muhiku-plug' ) . '"' : ( ! empty( $settings['submit_button_processing_text'] ) ? 'data-process-text="' . esc_attr( mhk_string_translation( $form_data['id'], 'processing_text', $settings['submit_button_processing_text'] ) ) . '"' : '' ),
@@ -162,7 +162,7 @@ class MHK_Shortcode_Form {
 			esc_html( $submit_btn )
 		);
 
-		do_action( 'everest_forms_display_submit_after', $form_data );
+		do_action( 'muhiku_forms_display_submit_after', $form_data );
 
 		echo '</div>';
 
@@ -209,10 +209,10 @@ class MHK_Shortcode_Form {
 		}
 
 		// Determine positioning.
-		if ( 'everest_forms_display_field_before' === $action && 'before' !== $description['position'] ) {
+		if ( 'muhiku_forms_display_field_before' === $action && 'before' !== $description['position'] ) {
 			return;
 		}
-		if ( 'everest_forms_display_field_after' === $action && 'after' !== $description['position'] ) {
+		if ( 'muhiku_forms_display_field_after' === $action && 'after' !== $description['position'] ) {
 			return;
 		}
 
@@ -241,8 +241,8 @@ class MHK_Shortcode_Form {
 			return;
 		}
 
-		$required    = $label['required'] ? apply_filters( 'everest_forms_field_required_label', '<abbr class="required" title="' . esc_attr__( 'Required', 'muhiku-plug' ) . '">' . apply_filters( 'everest_form_get_required_type', '*', $field, $form_data ) . '</abbr>' ) : '';
-		$custom_tags = apply_filters( 'everest_forms_field_custom_tags', false, $field, $form_data );
+		$required    = $label['required'] ? apply_filters( 'muhiku_forms_field_required_label', '<abbr class="required" title="' . esc_attr__( 'Required', 'muhiku-plug' ) . '">' . apply_filters( 'muhiku_form_get_required_type', '*', $field, $form_data ) . '</abbr>' ) : '';
+		$custom_tags = apply_filters( 'muhiku_forms_field_custom_tags', false, $field, $form_data );
 
 		printf(
 			'<label %s><span class="mhk-label">%s</span> %s</label>',
@@ -363,24 +363,24 @@ class MHK_Shortcode_Form {
 		wp_nonce_field( 'muhiku-plug_process_submit', '_wpnonce' . $form_data['id'] );
 
 		/**
-		 * Hook: everest_forms_display_fields_before.
+		 * Hook: muhiku_forms_display_fields_before.
 		 *
 		 * @hooked MuhikuPlug_MultiPart::display_fields_before() Multi-Part markup open.
 		 */
-		do_action( 'everest_forms_display_fields_before', $form_data );
+		do_action( 'muhiku_forms_display_fields_before', $form_data );
 
 		foreach ( $structure as $row_key => $row ) {
 			/**
-			 * Hook: everest_forms_display_repeater_fields.
+			 * Hook: muhiku_forms_display_repeater_fields.
 			 *
 			 * @hooked MHK_Repeater_Fields->display_repeater_fields() Display Repeater Fields.
 			 */
-			$is_repeater = apply_filters( 'everest_forms_display_repeater_fields', false, $row, $form_data, true );
+			$is_repeater = apply_filters( 'muhiku_forms_display_repeater_fields', false, $row, $form_data, true );
 
 			/**
-			 * Hook: everest_forms_display_row_before.
+			 * Hook: muhiku_forms_display_row_before.
 			 */
-			do_action( 'everest_forms_display_row_before', $row_key, $form_data );
+			do_action( 'muhiku_forms_display_row_before', $row_key, $form_data );
 
 			echo '<div class="mhk-frontend-row" data-row="' . esc_attr( $row_key ) . '"' . esc_attr( $is_repeater ) . '>'; // @codingStandardsIgnoreLine
 
@@ -395,13 +395,13 @@ class MHK_Shortcode_Form {
 
 				foreach ( $grid as $field_key ) {
 					$field = isset( $form_data['form_fields'][ $field_key ] ) ? $form_data['form_fields'][ $field_key ] : array();
-					$field = apply_filters( 'everest_forms_field_data', $field, $form_data );
+					$field = apply_filters( 'muhiku_forms_field_data', $field, $form_data );
 
 					if ( empty( $field ) || in_array( $field['type'], mhk()->form_fields->get_pro_form_field_types(), true ) ) {
 						continue;
 					}
 
-					$should_display_field = apply_filters( "everest_forms_should_display_field_{$field['type']}", true, $field, $form_data );
+					$should_display_field = apply_filters( "muhiku_forms_should_display_field_{$field['type']}", true, $field, $form_data );
 
 					if ( true !== $should_display_field ) {
 						continue;
@@ -416,39 +416,39 @@ class MHK_Shortcode_Form {
 					// Add properties to the field so it's available everywhere.
 					$field['properties'] = $properties;
 
-					do_action( 'everest_forms_display_field_before', $field, $form_data );
+					do_action( 'muhiku_forms_display_field_before', $field, $form_data );
 
-					do_action( "everest_forms_display_field_{$field['type']}", $field, $attributes, $form_data );
+					do_action( "muhiku_forms_display_field_{$field['type']}", $field, $attributes, $form_data );
 
-					do_action( 'everest_forms_display_field_after', $field, $form_data );
+					do_action( 'muhiku_forms_display_field_after', $field, $form_data );
 				}
 
 				echo '</div>';
 			}
 
 			/**
-			 * Hook: everest_forms_add_remove_buttons.
+			 * Hook: muhiku_forms_add_remove_buttons.
 			 *
 			 * @hooked MHK_Repeater_Fields->add_remove_buttons() Show Add and Remove buttons.
 			 */
-			do_action( 'everest_forms_add_remove_buttons', $row, $form_data, $is_repeater );
+			do_action( 'muhiku_forms_add_remove_buttons', $row, $form_data, $is_repeater );
 
 			echo '</div>';
 
 			/**
-			 * Hook: everest_forms_display_row_after.
+			 * Hook: muhiku_forms_display_row_after.
 			 *
 			 * @hooked MuhikuPlug_MultiPart::display_row_after() Multi-Part markup (close previous part, open next).
 			 */
-			do_action( 'everest_forms_display_row_after', $row_key, $form_data );
+			do_action( 'muhiku_forms_display_row_after', $row_key, $form_data );
 		}
 
 		/**
-		 * Hook: everest_forms_display_fields_after.
+		 * Hook: muhiku_forms_display_fields_after.
 		 *
 		 * @hooked MuhikuPlug_MultiPart::display_fields_after() Multi-Part markup open.
 		 */
-		do_action( 'everest_forms_display_fields_after', $form_data );
+		do_action( 'muhiku_forms_display_fields_after', $form_data );
 
 		echo '</div>';
 	}
@@ -468,7 +468,7 @@ class MHK_Shortcode_Form {
 
 			echo '<label for="mhk-' . esc_attr( $form_data['id'] ) . '-field-hp" class="mhk-field-label">' . esc_attr( $names[ array_rand( $names ) ] ) . '</label>';
 
-			echo '<input type="text" name="everest_forms[hp]" id="mhk-' . esc_attr( $form_data['id'] ) . '-field-hp" class="input-text">';
+			echo '<input type="text" name="muhiku_forms[hp]" id="mhk-' . esc_attr( $form_data['id'] ) . '-field-hp" class="input-text">';
 
 			echo '</div>';
 		}
@@ -480,21 +480,21 @@ class MHK_Shortcode_Form {
 	 * @param array $form_data Form data and settings.
 	 */
 	public static function recaptcha( $form_data ) {
-		$recaptcha_type      = get_option( 'everest_forms_recaptcha_type', 'v2' );
-		$invisible_recaptcha = get_option( 'everest_forms_recaptcha_v2_invisible', 'no' );
+		$recaptcha_type      = get_option( 'muhiku_forms_recaptcha_type', 'v2' );
+		$invisible_recaptcha = get_option( 'muhiku_forms_recaptcha_v2_invisible', 'no' );
 
 		if ( 'v2' === $recaptcha_type && 'no' === $invisible_recaptcha ) {
-			$site_key   = get_option( 'everest_forms_recaptcha_v2_site_key' );
-			$secret_key = get_option( 'everest_forms_recaptcha_v2_secret_key' );
+			$site_key   = get_option( 'muhiku_forms_recaptcha_v2_site_key' );
+			$secret_key = get_option( 'muhiku_forms_recaptcha_v2_secret_key' );
 		} elseif ( 'v2' === $recaptcha_type && 'yes' === $invisible_recaptcha ) {
-			$site_key   = get_option( 'everest_forms_recaptcha_v2_invisible_site_key' );
-			$secret_key = get_option( 'everest_forms_recaptcha_v2_invisible_secret_key' );
+			$site_key   = get_option( 'muhiku_forms_recaptcha_v2_invisible_site_key' );
+			$secret_key = get_option( 'muhiku_forms_recaptcha_v2_invisible_secret_key' );
 		} elseif ( 'v3' === $recaptcha_type ) {
-			$site_key   = get_option( 'everest_forms_recaptcha_v3_site_key' );
-			$secret_key = get_option( 'everest_forms_recaptcha_v3_secret_key' );
+			$site_key   = get_option( 'muhiku_forms_recaptcha_v3_site_key' );
+			$secret_key = get_option( 'muhiku_forms_recaptcha_v3_secret_key' );
 		} elseif ( 'hcaptcha' === $recaptcha_type ) {
-			$site_key   = get_option( 'everest_forms_recaptcha_hcaptcha_site_key' );
-			$secret_key = get_option( 'everest_forms_recaptcha_hcaptcha_secret_key' );
+			$site_key   = get_option( 'muhiku_forms_recaptcha_hcaptcha_site_key' );
+			$secret_key = get_option( 'muhiku_forms_recaptcha_hcaptcha_secret_key' );
 		}
 
 		if ( ! $site_key || ! $secret_key ) {
@@ -510,7 +510,7 @@ class MHK_Shortcode_Form {
 		if ( mhk_is_amp() ) {
 			if ( 'v3' === $recaptcha_type ) {
 				printf(
-					'<amp-recaptcha-input name="everest_forms[recaptcha]" data-sitekey="%s" data-action="%s" layout="nodisplay"></amp-recaptcha-input>',
+					'<amp-recaptcha-input name="muhiku_forms[recaptcha]" data-sitekey="%s" data-action="%s" layout="nodisplay"></amp-recaptcha-input>',
 					esc_attr( $site_key ),
 					esc_attr( 'mhk_' . $form_data['id'] )
 				);
@@ -522,7 +522,7 @@ class MHK_Shortcode_Form {
 			$form_id = isset( $form_data['id'] ) ? absint( $form_data['id'] ) : 0;
 			$visible = ! empty( self::$parts[ $form_id ] ) ? 'style="display:none;"' : '';
 			$data    = apply_filters(
-				'everest_forms_frontend_recaptcha',
+				'muhiku_forms_frontend_recaptcha',
 				array(
 					'sitekey' => trim( sanitize_text_field( $site_key ) ),
 				),
@@ -532,7 +532,7 @@ class MHK_Shortcode_Form {
 			// Load reCAPTCHA support if form supports it.
 			if ( $site_key && $secret_key ) {
 				if ( 'v2' === $recaptcha_type ) {
-					$recaptcha_api = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?onload=MHKRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
+					$recaptcha_api = apply_filters( 'muhiku_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?onload=MHKRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
 
 					if ( 'yes' === $invisible_recaptcha ) {
 						$data['size']     = 'invisible';
@@ -555,11 +555,11 @@ class MHK_Shortcode_Form {
 						$recaptcha_inline .= 'var MHKRecaptchaCallback = function(el){jQuery(el).parent().find(".mhk-recaptcha-hidden").val("1").trigger("change").valid();};';
 					}
 				} elseif ( 'v3' === $recaptcha_type ) {
-					$recaptcha_api     = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?render=' . $site_key, $recaptcha_type, $form_id );
-					$recaptcha_inline  = 'var MHKRecaptchaLoad = function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"everest_form"}).then(function(token){var f=document.getElementsByName("everest_forms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});};grecaptcha.ready(MHKRecaptchaLoad);setInterval(MHKRecaptchaLoad, 110000);';
-					$recaptcha_inline .= 'grecaptcha.ready(function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"everest_form"}).then(function(token){var f=document.getElementsByName("everest_forms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});});';
+					$recaptcha_api     = apply_filters( 'muhiku_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?render=' . $site_key, $recaptcha_type, $form_id );
+					$recaptcha_inline  = 'var MHKRecaptchaLoad = function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"muhiku_form"}).then(function(token){var f=document.getElementsByName("muhiku_forms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});};grecaptcha.ready(MHKRecaptchaLoad);setInterval(MHKRecaptchaLoad, 110000);';
+					$recaptcha_inline .= 'grecaptcha.ready(function(){grecaptcha.execute("' . esc_html( $site_key ) . '",{action:"muhiku_form"}).then(function(token){var f=document.getElementsByName("muhiku_forms[recaptcha]");for(var i=0;i<f.length;i++){f[i].value = token;}});});';
 				} elseif ( 'hcaptcha' === $recaptcha_type ) {
-					$recaptcha_api     = apply_filters( 'everest_forms_frontend_recaptcha_url', 'https://hcaptcha.com/1/api.js??onload=MHKRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
+					$recaptcha_api     = apply_filters( 'muhiku_forms_frontend_recaptcha_url', 'https://hcaptcha.com/1/api.js??onload=MHKRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
 					$recaptcha_inline  = 'var MHKRecaptchaLoad = function(){jQuery(".g-recaptcha").each(function(index, el){var recaptchaID =  hcaptcha.render(el,{callback:function(){MHKRecaptchaCallback(el);}},true);jQuery(el).attr( "data-recaptcha-id", recaptchaID);});};';
 					$recaptcha_inline .= 'var MHKRecaptchaCallback = function(el){jQuery(el).parent().find(".mhk-recaptcha-hidden").val("1").trigger("change").valid();};';
 				}
@@ -591,7 +591,7 @@ class MHK_Shortcode_Form {
 						echo '<input type="text" name="g-recaptcha-hidden" class="mhk-recaptcha-hidden" style="position:absolute!important;clip:rect(0,0,0,0)!important;height:1px!important;width:1px!important;border:0!important;overflow:hidden!important;padding:0!important;margin:0!important;" required>';
 					}
 				} else {
-					echo '<input type="hidden" name="everest_forms[recaptcha]" value="">';
+					echo '<input type="hidden" name="muhiku_forms[recaptcha]" value="">';
 				}
 
 				echo '</div>';
@@ -691,7 +691,7 @@ class MHK_Shortcode_Form {
 		// This filter is for backwards compatibility purposes.
 		$types = array( 'text', 'textarea', 'number', 'email', 'hidden', 'url', 'html', 'title', 'password', 'phone', 'address', 'checkbox', 'radio', 'select' );
 		if ( in_array( $field['type'], $types, true ) ) {
-			$field = apply_filters( "everest_forms_{$field['type']}_field_display", $field, $attributes, $form_data );
+			$field = apply_filters( "muhiku_forms_{$field['type']}_field_display", $field, $attributes, $form_data );
 		}
 
 		$form_id  = absint( $form_data['id'] );
@@ -705,9 +705,9 @@ class MHK_Shortcode_Form {
 			$has_sub_fields     = false;
 			$sub_field_messages = array();
 
-			$required_validation = get_option( 'everest_forms_required_validation' );
+			$required_validation = get_option( 'muhiku_forms_required_validation' );
 			if ( in_array( $field['type'], array( 'number', 'email', 'url', 'phone' ), true ) ) {
-				$required_validation = get_option( 'everest_forms_' . $field['type'] . '_validation' );
+				$required_validation = get_option( 'muhiku_forms_' . $field['type'] . '_validation' );
 			}
 
 			if ( 'likert' === $field['type'] ) {
@@ -740,9 +740,9 @@ class MHK_Shortcode_Form {
 			}
 		}
 		$errors     = isset( mhk()->task->errors[ $form_id ][ $field_id ] ) ? mhk()->task->errors[ $form_id ][ $field_id ] : '';
-		$defaults   = isset( $_POST['everest_forms']['form_fields'][ $field_id ] ) && ( ! is_array( $_POST['everest_forms']['form_fields'][ $field_id ] ) && ! empty( $_POST['everest_forms']['form_fields'][ $field_id ] ) ) ? $_POST['everest_forms']['form_fields'][ $field_id ] : ''; // @codingStandardsIgnoreLine
+		$defaults   = isset( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ( ! is_array( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) ) ? $_POST['muhiku_forms']['form_fields'][ $field_id ] : ''; // @codingStandardsIgnoreLine
 		$properties = apply_filters(
-			'everest_forms_field_properties_' . $field['type'],
+			'muhiku_forms_field_properties_' . $field['type'],
 			array(
 				'container'   => array(
 					'attr'  => array(
@@ -767,8 +767,8 @@ class MHK_Shortcode_Form {
 				'inputs'      => array(
 					'primary' => array(
 						'attr'     => array(
-							'name'        => "everest_forms[form_fields][{$field_id}]",
-							'value'       => isset( $field['default_value'] ) ? apply_filters( 'everest_forms_process_smart_tags', $field['default_value'], $form_data ) : $defaults,
+							'name'        => "muhiku_forms[form_fields][{$field_id}]",
+							'value'       => isset( $field['default_value'] ) ? apply_filters( 'muhiku_forms_process_smart_tags', $field['default_value'], $form_data ) : $defaults,
 							'placeholder' => isset( $field['placeholder'] ) ? mhk_string_translation( $form_data['id'], $field['id'], $field['placeholder'], '-placeholder' ) : '',
 						),
 						'class'    => $attributes['input_class'],
@@ -799,7 +799,7 @@ class MHK_Shortcode_Form {
 			$form_data
 		);
 
-		return apply_filters( 'everest_forms_field_properties', $properties, $field, $form_data );
+		return apply_filters( 'muhiku_forms_field_properties', $properties, $field, $form_data );
 	}
 
 	/**
@@ -817,7 +817,7 @@ class MHK_Shortcode_Form {
 		}
 
 		// Load jQuery mailcheck library - https://github.com/mailcheck/mailcheck.
-		if ( mhk_is_field_exists( $atts['id'], 'email' ) && (bool) apply_filters( 'everest_forms_mailcheck_enabled', true ) ) {
+		if ( mhk_is_field_exists( $atts['id'], 'email' ) && (bool) apply_filters( 'muhiku_forms_mailcheck_enabled', true ) ) {
 			wp_enqueue_script( 'mailcheck' );
 		}
 
@@ -835,7 +835,7 @@ class MHK_Shortcode_Form {
 		);
 
 		// Scripts load action.
-		do_action( 'everest_forms_shortcode_scripts', $atts );
+		do_action( 'muhiku_forms_shortcode_scripts', $atts );
 
 		ob_start();
 		self::view( $atts );
@@ -865,7 +865,7 @@ class MHK_Shortcode_Form {
 		}
 
 		// Basic form information.
-		$form_data            = apply_filters( 'everest_forms_frontend_form_data', mhk_decode( $form->post_content ) );
+		$form_data            = apply_filters( 'muhiku_forms_frontend_form_data', mhk_decode( $form->post_content ) );
 		$form_id              = absint( $form->ID );
 		$settings             = $form_data['settings'];
 		$action               = esc_url_raw( remove_query_arg( 'mhk-forms' ) );
@@ -886,7 +886,7 @@ class MHK_Shortcode_Form {
 			return;
 		} elseif ( 1 !== $form_enabled ) {
 			if ( ! empty( $disable_message ) ) {
-				printf( '<p class="everst-forms-form-disable-notice muhiku-plug-notice muhiku-plug-notice--info">%s</p>', esc_textarea( $disable_message ) );
+				printf( '<p class="muhku-forms-form-disable-notice muhiku-plug-notice muhiku-plug-notice--info">%s</p>', esc_textarea( $disable_message ) );
 			}
 			return;
 		}
@@ -927,11 +927,11 @@ class MHK_Shortcode_Form {
 		}
 
 		// Before output hook.
-		do_action( 'everest_forms_frontend_output_before', $form_data, $form );
+		do_action( 'muhiku_forms_frontend_output_before', $form_data, $form );
 
 		// Check for return hash.
 		if (
-		! empty( $_GET['everest_forms_return'] ) // phpcs:ignore WordPress.Security.NonceVerification
+		! empty( $_GET['muhiku_forms_return'] ) // phpcs:ignore WordPress.Security.NonceVerification
 		&& mhk()->task->is_valid_hash
 		&& absint( mhk()->task->form_data['id'] ) === $form_id
 		) {
@@ -940,19 +940,19 @@ class MHK_Shortcode_Form {
 				mhk_add_notice( isset( $form_data['settings']['successful_form_submission_message'] ) ? $form_data['settings']['successful_form_submission_message'] : esc_html__( 'Thanks for contacting us! We will be in touch with you shortly.', 'muhiku-plug' ), 'success' );
 			}
 
-			do_action( 'everest_forms_frontend_output_success', mhk()->task->form_data, mhk()->task->form_fields, mhk()->task->entry_id );
+			do_action( 'muhiku_forms_frontend_output_success', mhk()->task->form_data, mhk()->task->form_fields, mhk()->task->entry_id );
 			return;
 		}
 
-		$success = apply_filters( 'everest_forms_success', false, $form_id );
+		$success = apply_filters( 'muhiku_forms_success', false, $form_id );
 		if ( $success && ! empty( $form_data ) ) {
-			do_action( 'everest_forms_frontend_output_success', $form_data );
+			do_action( 'muhiku_forms_frontend_output_success', $form_data );
 			return;
 		}
 
 		// Allow filter to return early if some condition is not meet.
-		if ( ! apply_filters( 'everest_forms_frontend_load', true, $form_data ) ) {
-			do_action( 'everest_forms_frontend_not_loaded', $form_data, $form );
+		if ( ! apply_filters( 'muhiku_forms_frontend_load', true, $form_data ) ) {
+			do_action( 'muhiku_forms_frontend_not_loaded', $form_data, $form );
 			return;
 		}
 
@@ -996,13 +996,13 @@ class MHK_Shortcode_Form {
 
 		// Allow Multi-Part to be customized.
 		$parts                   = ! empty( self::$parts[ $form_id ] ) ? self::$parts[ $form_id ] : array();
-		self::$parts[ $form_id ] = apply_filters( 'everest_forms_parts_data', $parts, $form_data, $form_id );
+		self::$parts[ $form_id ] = apply_filters( 'muhiku_forms_parts_data', $parts, $form_data, $form_id );
 
 		// Allow final action to be customized.
-		$action = apply_filters( 'everest_forms_frontend_form_action', $action, $form_data );
+		$action = apply_filters( 'muhiku_forms_frontend_form_action', $action, $form_data );
 
 		// Allow form container classes to be filtered and user defined classes.
-		$classes = apply_filters( 'everest_forms_frontend_container_class', array(), $form_data );
+		$classes = apply_filters( 'muhiku_forms_frontend_container_class', array(), $form_data );
 		if ( ! empty( $settings['form_class'] ) ) {
 			$classes = array_merge( $classes, explode( ' ', $settings['form_class'] ) );
 		}
@@ -1013,7 +1013,7 @@ class MHK_Shortcode_Form {
 
 		$form_atts = array(
 			'id'    => sprintf( 'mhk-form-%d', absint( $form_id ) ),
-			'class' => array( 'everest-form' ),
+			'class' => array( 'muhiku-form' ),
 			'data'  => array(
 				'formid'          => absint( $form_id ),
 				'ajax_submission' => $ajax_form_submission,
@@ -1060,21 +1060,21 @@ class MHK_Shortcode_Form {
 			}
 		}
 
-		$form_atts = apply_filters( 'everest_forms_frontend_form_atts', $form_atts, $form_data );
+		$form_atts = apply_filters( 'muhiku_forms_frontend_form_atts', $form_atts, $form_data );
 		// Begin to build the output.
-		do_action( 'everest_forms_frontend_output_container_before', $form_data, $form );
+		do_action( 'muhiku_forms_frontend_output_container_before', $form_data, $form );
 
 		printf( '<div class="mhk-container %s" id="mhk-%d">', esc_attr( $classes ), absint( $form_id ) );
 
-		do_action( 'everest_forms_frontend_output_form_before', $form_data, $form, $errors );
+		do_action( 'muhiku_forms_frontend_output_form_before', $form_data, $form, $errors );
 		if ( isset( $atts['type'] ) && 'popup-button' === $popup_type ) {
 			printf( "<button class='muhiku-plug-modal-link muhiku-plug-modal-link-%s'>%s</button>", esc_attr( $atts['id'] ), esc_html( $popup_text ) );
-			do_action( 'everest_form_popup', $atts );
+			do_action( 'muhiku_form_popup', $atts );
 		} elseif ( isset( $atts['type'] ) && 'popup-link' === $popup_type ) {
 			printf( "<a href='javascript:void(0);' class='muhiku-plug-modal-link muhiku-plug-modal-link-%s'>%s</a>", esc_attr( $atts['id'] ), esc_html( $popup_text ) );
-			do_action( 'everest_form_popup', $atts );
+			do_action( 'muhiku_form_popup', $atts );
 		} elseif ( isset( $atts['type'] ) && 'popup' === $popup_type ) {
-			do_action( 'everest_form_popup', $atts );
+			do_action( 'muhiku_form_popup', $atts );
 		} else {
 			echo '<form ' . mhk_html_attributes( $form_atts['id'], $form_atts['class'], $form_atts['data'], $form_atts['atts'] ) . '>';
 			if ( mhk_is_amp() ) {
@@ -1087,17 +1087,17 @@ class MHK_Shortcode_Form {
 					wp_json_encode( $state )
 				);
 			}
-			do_action( 'everest_forms_frontend_output', $form_data, $title, $description, $errors );
+			do_action( 'muhiku_forms_frontend_output', $form_data, $title, $description, $errors );
 
 			echo '</form>';
 		}
 
-		do_action( 'everest_forms_frontend_output_form_after', $form_data, $form );
+		do_action( 'muhiku_forms_frontend_output_form_after', $form_data, $form );
 
 		echo '</div><!-- .mhk-container -->';
 
 		// After output hook.
-		do_action( 'everest_forms_frontend_output_after', $form_data, $form );
+		do_action( 'muhiku_forms_frontend_output_after', $form_data, $form );
 
 		// Debug information.
 		if ( is_super_admin() ) {
@@ -1114,7 +1114,7 @@ class MHK_Shortcode_Form {
 	 */
 	public static function mhk_recaptcha_language( $url ) {
 
-		return esc_url_raw( add_query_arg( array( 'hl' => get_option( 'everest_forms_recaptcha_recaptcha_language', 'en-GB' ) ), $url ) );
+		return esc_url_raw( add_query_arg( array( 'hl' => get_option( 'muhiku_forms_recaptcha_recaptcha_language', 'en-GB' ) ), $url ) );
 
 	}
 }

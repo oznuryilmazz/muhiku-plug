@@ -34,7 +34,7 @@ class MHK_Settings_Email extends MHK_Settings_Page {
 	 */
 	public function get_settings() {
 		$settings = apply_filters(
-			'everest_forms_email_settings',
+			'muhiku_forms_email_settings',
 			array(
 				array(
 					'title' => esc_html__( 'Template Settings', 'muhiku-plug' ),
@@ -45,7 +45,7 @@ class MHK_Settings_Email extends MHK_Settings_Page {
 				array(
 					'title'   => esc_html__( 'Template', 'muhiku-plug' ),
 					'type'    => 'radio-image',
-					'id'      => 'everest_forms_email_template',
+					'id'      => 'muhiku_forms_email_template',
 					'desc'    => esc_html__( 'Determine which format of email to send. HTML Template is default.', 'muhiku-plug' ),
 					'default' => 'default',
 					'options' => array(
@@ -63,14 +63,14 @@ class MHK_Settings_Email extends MHK_Settings_Page {
 					'title'    => esc_html__( 'Enable copies', 'muhiku-plug' ),
 					'desc'     => esc_html__( 'Enable the use of Cc and Bcc email addresses', 'muhiku-plug' ),
 					'desc_tip' => esc_html__( 'Email addresses for Cc and Bcc can be applied from the form notification settings.', 'muhiku-plug' ),
-					'id'       => 'everest_forms_enable_email_copies',
+					'id'       => 'muhiku_forms_enable_email_copies',
 					'default'  => 'no',
 					'type'     => 'checkbox',
 				),
 				array(
 					'title'       => esc_html__( 'Send Test Email To', 'muhiku-plug' ),
 					'desc'        => esc_html__( 'Enter email address where test email will be sent.', 'muhiku-plug' ),
-					'id'          => 'everest_forms_email_send_to',
+					'id'          => 'muhiku_forms_email_send_to',
 					'type'        => 'email',
 					'placeholder' => 'eg. testemail@gmail.com',
 					'value'       => esc_attr( get_bloginfo( 'admin_email' ) ),
@@ -79,13 +79,13 @@ class MHK_Settings_Email extends MHK_Settings_Page {
 				array(
 					'title'    => __( 'Send Test Email', 'muhiku-plug' ),
 					'desc'     => __( 'Click to send test email.', 'muhiku-plug' ),
-					'id'       => 'everest_forms_email_test',
+					'id'       => 'muhiku_forms_email_test',
 					'type'     => 'link',
 					'buttons'  => array(
 						array(
 							'title' => __( 'Send Test Email', 'muhiku-plug' ),
 							'href'  => 'javascript:;',
-							'class' => 'everest_forms_send_email_test',
+							'class' => 'muhiku_forms_send_email_test',
 						),
 					),
 					'desc_tip' => true,
@@ -97,7 +97,7 @@ class MHK_Settings_Email extends MHK_Settings_Page {
 			)
 		);
 
-		return apply_filters( 'everest_forms_get_settings_' . $this->id, $settings );
+		return apply_filters( 'muhiku_forms_get_settings_' . $this->id, $settings );
 	}
 
 	/**

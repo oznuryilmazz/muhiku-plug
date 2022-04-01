@@ -127,15 +127,15 @@ class MHK_Admin_Assets {
 			'mhk-form-builder',
 			'mhk_data',
 			apply_filters(
-				'everest_forms_builder_strings',
+				'muhiku_forms_builder_strings',
 				array(
 					'post_id'                      => isset( $post->ID ) ? $post->ID : '',
 					'ajax_url'                     => admin_url( 'admin-ajax.php' ),
 					'tab'                          => isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.
-					'mhk_field_drop_nonce'         => wp_create_nonce( 'everest_forms_field_drop' ),
-					'mhk_save_form'                => wp_create_nonce( 'everest_forms_save_form' ),
-					'mhk_get_next_id'              => wp_create_nonce( 'everest_forms_get_next_id' ),
-					'mhk_enabled_form'             => wp_create_nonce( 'everest_forms_enabled_form' ),
+					'mhk_field_drop_nonce'         => wp_create_nonce( 'muhiku_forms_field_drop' ),
+					'mhk_save_form'                => wp_create_nonce( 'muhiku_forms_save_form' ),
+					'mhk_get_next_id'              => wp_create_nonce( 'muhiku_forms_get_next_id' ),
+					'mhk_enabled_form'             => wp_create_nonce( 'muhiku_forms_enabled_form' ),
 					'form_id'                      => isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0, // phpcs:ignore WordPress.Security.NonceVerification
 					'field'                        => esc_html__( 'field', 'muhiku-plug' ),
 					'i18n_ok'                      => esc_html__( 'OK', 'muhiku-plug' ),
@@ -188,7 +188,7 @@ class MHK_Admin_Assets {
 				'upgrade_title'         => esc_html__( 'is a PRO Feature', 'muhiku-plug' ),
 				'upgrade_message'       => esc_html__( 'We\'re sorry, the %name% is not available on your plan.<br>Please upgrade to the PRO plan to unlock all these awesome features.', 'muhiku-plug' ),
 				'upgrade_button'        => esc_html__( 'Upgrade to PRO', 'muhiku-plug' ),
-				'upgrade_url'           => apply_filters( 'everest_forms_upgrade_url', 'https://wpeverest.com/wordpress-plugins/muhiku-plug/pricing/?utm_source=premium-fields&utm_medium=modal-button&utm_campaign=mhk-upgrade-to-pro' ),
+				'upgrade_url'           => apply_filters( 'muhiku_forms_upgrade_url', 'https://wpmuhiku.com/wordpress-plugins/muhiku-plug/pricing/?utm_source=premium-fields&utm_medium=modal-button&utm_campaign=mhk-upgrade-to-pro' ),
 				'enable_stripe_title'   => esc_html__( 'Please enable Stripe', 'muhiku-plug' ),
 				'enable_stripe_message' => esc_html__( 'Enable Stripe Payment gateway in payments section to use this field.', 'muhiku-plug' ),
 			)
@@ -221,7 +221,7 @@ class MHK_Admin_Assets {
 
 			wp_localize_script(
 				'muhiku-plug-admin',
-				'everest_forms_admin',
+				'muhiku_forms_admin',
 				array(
 					'ajax_import_nonce'             => wp_create_nonce( 'process-import-ajax-nonce' ),
 					'ajax_url'                      => admin_url( 'admin-ajax.php', 'relative' ),
@@ -251,11 +251,11 @@ class MHK_Admin_Assets {
 					'mhk_setup_params',
 					array(
 						'ajax_url'                     => admin_url( 'admin-ajax.php' ),
-						'create_form_nonce'            => wp_create_nonce( 'everest_forms_create_form' ),
-						'template_licence_check_nonce' => wp_create_nonce( 'everest_forms_template_licence_check' ),
+						'create_form_nonce'            => wp_create_nonce( 'muhiku_forms_create_form' ),
+						'template_licence_check_nonce' => wp_create_nonce( 'muhiku_forms_template_licence_check' ),
 						'i18n_form_name'               => esc_html__( 'Give it a name.', 'muhiku-plug' ),
 						'i18n_form_error_name'         => esc_html__( 'You must provide a Form name', 'muhiku-plug' ),
-						'upgrade_url'                  => apply_filters( 'everest_forms_upgrade_url', 'https://wpeverest.com/wordpress-plugins/muhiku-plug/pricing/?utm_source=form-template&utm_medium=button&utm_campaign=mhk-upgrade-to-pro' ),
+						'upgrade_url'                  => apply_filters( 'muhiku_forms_upgrade_url', 'https://wpmuhiku.com/wordpress-plugins/muhiku-plug/pricing/?utm_source=form-template&utm_medium=button&utm_campaign=mhk-upgrade-to-pro' ),
 						'upgrade_button'               => esc_html__( 'Upgrade Plan', 'muhiku-plug' ),
 						'upgrade_message'              => esc_html__( 'This template requires premium addons. Please upgrade to the Premium plan to unlock all these awesome Templates.', 'muhiku-plug' ),
 						'upgrade_title'                => esc_html__( 'is a Premium Template', 'muhiku-plug' ),
@@ -273,7 +273,7 @@ class MHK_Admin_Assets {
 			wp_enqueue_script( 'mhk-admin-tools' );
 			wp_localize_script(
 				'mhk-admin-tools',
-				'everest_forms_admin_tools',
+				'muhiku_forms_admin_tools',
 				array(
 					'delete_log_confirmation' => esc_js( esc_html__( 'Are you sure you want to delete this log?', 'muhiku-plug' ) ),
 				)

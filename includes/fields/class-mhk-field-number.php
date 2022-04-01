@@ -52,7 +52,7 @@ class MHK_Field_Number extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_filter( 'everest_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
+		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
 	}
 
 	/**
@@ -287,7 +287,7 @@ class MHK_Field_Number extends MHK_Form_Fields {
 
 		// Check if value is numeric.
 		if ( ! empty( $field_submit ) && ! is_numeric( $field_submit ) ) {
-			mhk()->task->errors[ $form_id ][ $field_id ] = apply_filters( 'everest_forms_valid_number_label', esc_html__( 'Please enter a valid number.', 'muhiku-plug' ) );
+			mhk()->task->errors[ $form_id ][ $field_id ] = apply_filters( 'muhiku_forms_valid_number_label', esc_html__( 'Please enter a valid number.', 'muhiku-plug' ) );
 			update_option( 'mhk_validation_error', 'yes' );
 		}
 

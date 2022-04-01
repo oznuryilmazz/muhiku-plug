@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $update_url = wp_nonce_url(
-	add_query_arg( 'do_update_everest_forms', 'true', admin_url( 'admin.php?page=mhk-settings' ) ),
+	add_query_arg( 'do_update_muhiku_forms', 'true', admin_url( 'admin.php?page=mhk-settings' ) ),
 	'mhk_db_update',
 	'mhk_db_update_nonce'
 );

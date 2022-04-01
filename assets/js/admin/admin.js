@@ -1,4 +1,4 @@
-/* global everest_forms_admin, PerfectScrollbar */
+/* global muhiku_forms_admin, PerfectScrollbar */
 (function ($, params) {
   // Colorpicker.
   $(document).on(
@@ -363,7 +363,7 @@
 
       event.preventDefault();
 
-      $(this).find(".everest-froms-welcome-thumb").remove();
+      $(this).find(".muhiku-froms-welcome-thumb").remove();
       $(this).append(video);
     }
   );
@@ -388,21 +388,21 @@
         .closest(".muhiku-plug-export-form")
         .find("h3")
         .after(
-          '<div id="message" class="error inline everest-froms-import_notice"><p><strong>' +
-            everest_forms_admin.i18n_form_export_action_error +
+          '<div id="message" class="error inline muhiku-froms-import_notice"><p><strong>' +
+            muhiku_forms_admin.i18n_form_export_action_error +
             "</strong></p></div>"
         );
       return false;
     }
   });
 
-  $(".everest_forms_import_action").on("click", function () {
+  $(".muhiku_forms_import_action").on("click", function () {
     var file_data = $("#muhiku-plug-import").prop("files")[0],
       form_data = new FormData();
 
     form_data.append("jsonfile", file_data);
-    form_data.append("action", "everest_forms_import_form_action");
-    form_data.append("security", everest_forms_admin.ajax_import_nonce);
+    form_data.append("action", "muhiku_forms_import_form_action");
+    form_data.append("security", muhiku_forms_admin.ajax_import_nonce);
 
     $.ajax({
       url: mhk_email_params.ajax_url,
@@ -414,28 +414,28 @@
       type: "POST",
       beforeSend: function () {
         var spinner = '<i class="mhk-loading mhk-loading-active"></i>';
-        $(".everest_forms_import_action")
-          .closest(".everest_forms_import_action")
+        $(".muhiku_forms_import_action")
+          .closest(".muhiku_forms_import_action")
           .append(spinner);
-        $(".everest-froms-import_notice").remove();
+        $(".muhiku-froms-import_notice").remove();
       },
       complete: function (response) {
         var message_string = "";
 
-        $(".everest_forms_import_action")
-          .closest(".everest_forms_import_action")
+        $(".muhiku_forms_import_action")
+          .closest(".muhiku_forms_import_action")
           .find(".mhk-loading")
           .remove();
-        $(".everest-froms-import_notice").remove();
+        $(".muhiku-froms-import_notice").remove();
 
         if (true === response.responseJSON.success) {
           message_string =
-            '<div id="message" class="updated inline everest-froms-import_notice"><p><strong>' +
+            '<div id="message" class="updated inline muhiku-froms-import_notice"><p><strong>' +
             response.responseJSON.data.message +
             "</strong></p></div>";
         } else {
           message_string =
-            '<div id="message" class="error inline everest-froms-import_notice"><p><strong>' +
+            '<div id="message" class="error inline muhiku-froms-import_notice"><p><strong>' +
             response.responseJSON.data.message +
             "</strong></p></div>";
         }
@@ -451,4 +451,4 @@
     $(this).siblings().removeClass("is-active");
     $(this).addClass("is-active");
   });
-})(jQuery, everest_forms_admin);
+})(jQuery, muhiku_forms_admin);

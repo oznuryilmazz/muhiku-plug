@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.wpeverest.com/docs/muhiku-plug/template-structure/
+ * @see     https://docs.wpmuhiku.com/docs/muhiku-plug/template-structure/
  * @package MuhikuPlug/Templates
  * @version 1.2.0
  */

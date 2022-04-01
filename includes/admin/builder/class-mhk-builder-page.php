@@ -66,9 +66,9 @@ if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 			$this->init_hooks();
 
 			// Hooks.
-			add_filter( 'everest_forms_builder_tabs_array', array( $this, 'add_builder_page' ), 20 );
-			add_action( 'everest_forms_builder_sidebar_' . $this->id, array( $this, 'output_sidebar' ) );
-			add_action( 'everest_forms_builder_content_' . $this->id, array( $this, 'output_content' ) );
+			add_filter( 'muhiku_forms_builder_tabs_array', array( $this, 'add_builder_page' ), 20 );
+			add_action( 'muhiku_forms_builder_sidebar_' . $this->id, array( $this, 'output_sidebar' ) );
+			add_action( 'muhiku_forms_builder_content_' . $this->id, array( $this, 'output_content' ) );
 		}
 
 		/**

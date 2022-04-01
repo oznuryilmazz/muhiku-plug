@@ -6,13 +6,13 @@
 	border-radius: 4px;
 
 	&.muhiku-plug-badge--primary {
-		background: $everestforms;
+		background: $muhikuforms;
 		color: $color-white;
 	}
 
 	&.muhiku-plug-badge--primary-subtle {
-		background: lighten($everestforms, +35);
-		color: $everestforms;
+		background: lighten($muhikuforms, +35);
+		color: $muhikuforms;
 	}
 
 	&.muhiku-plug-badge--secondary {

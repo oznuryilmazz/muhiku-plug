@@ -194,7 +194,7 @@
 		}
 	}
 
-	.everest-form {
+	.muhiku-form {
 		&::after {
 			content: '';
 			clear: both;
@@ -663,7 +663,7 @@
 			margin-left: 0 !important; // Required for default theme compatibility
 		}
 
-		&.everst-forms-form-disable-notice {
+		&.muhku-forms-form-disable-notice {
 			color: $color_gray-base;
 			background: lighten($orange, 47%);
 			border: 1px solid adjust-color($orange, $saturation: -15%, $lightness: +20%);
@@ -742,7 +742,7 @@
  */
 
 .edit-post-visual-editor {
-	.everest-form-gutenberg-form-selector-wrap {
+	.muhiku-form-gutenberg-form-selector-wrap {
 		align-items: center;
 
 		.components-placeholder__label {

@@ -138,7 +138,7 @@ class MHK_Template_Loader {
 	 * @return string[]
 	 */
 	private static function get_template_loader_files( $default_file ) {
-		$search_files   = apply_filters( 'everest_forms_template_loader_files', array(), $default_file );
+		$search_files   = apply_filters( 'muhiku_forms_template_loader_files', array(), $default_file );
 		$search_files[] = 'muhiku-plug.php';
 
 		if ( is_page_template() ) {
@@ -215,8 +215,8 @@ class MHK_Template_Loader {
 		// Remove the filter we're in to avoid nested calls.
 		remove_filter( 'the_content', array( __CLASS__, 'form_preview_content_filter' ) );
 
-		if ( current_user_can( 'everest_forms_view_forms', self::$form_id ) ) {
-			$content = apply_shortcodes( '[everest_form id="' . absint( self::$form_id ) . '"]' );
+		if ( current_user_can( 'muhiku_forms_view_forms', self::$form_id ) ) {
+			$content = apply_shortcodes( '[muhiku_form id="' . absint( self::$form_id ) . '"]' );
 		}
 
 		self::$in_content_filter = false;

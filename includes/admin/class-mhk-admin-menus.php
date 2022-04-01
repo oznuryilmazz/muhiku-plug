@@ -55,32 +55,32 @@ class MHK_Admin_Menus {
 	 * Add menu items.
 	 */
 	public function admin_menu() {
-		add_menu_page( esc_html__( 'Muhiku Plug', 'muhiku-plug' ), esc_html__( 'Muhiku Plug', 'muhiku-plug' ), 'manage_everest_forms', 'muhiku-plug', null, self::get_icon_svg(), '55.5' );
+		add_menu_page( esc_html__( 'Muhiku Plug', 'muhiku-plug' ), esc_html__( 'Muhiku Plug', 'muhiku-plug' ), 'manage_muhiku_forms', 'muhiku-plug', null, self::get_icon_svg(), '55.5' );
 	}
 
 	/**
 	 * Add menu items.
 	 */
 	public function builder_menu() {
-		$builder_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Builder', 'muhiku-plug' ), esc_html__( 'All Forms', 'muhiku-plug' ), current_user_can( 'everest_forms_create_forms' ) ? 'everest_forms_create_forms' : 'everest_forms_view_forms', 'mhk-builder', array( $this, 'builder_page' ) );
+		$builder_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Builder', 'muhiku-plug' ), esc_html__( 'All Forms', 'muhiku-plug' ), current_user_can( 'muhiku_forms_create_forms' ) ? 'muhiku_forms_create_forms' : 'muhiku_forms_view_forms', 'mhk-builder', array( $this, 'builder_page' ) );
 
-		add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Setup', 'muhiku-plug' ), esc_html__( 'Add New', 'muhiku-plug' ), current_user_can( 'everest_forms_create_forms' ) ? 'everest_forms_create_forms' : 'everest_forms_edit_forms', 'mhk-builder&create-form=1', array( $this, 'builder_page' ) );
+		add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Setup', 'muhiku-plug' ), esc_html__( 'Add New', 'muhiku-plug' ), current_user_can( 'muhiku_forms_create_forms' ) ? 'muhiku_forms_create_forms' : 'muhiku_forms_edit_forms', 'mhk-builder&create-form=1', array( $this, 'builder_page' ) );
 
 		add_action( 'load-' . $builder_page, array( $this, 'builder_page_init' ) );
 
 		/*
 		 * Page redirects based on user's capability as 'All Forms' and 'Add New' both have same handle.
 		 *
-		 * - If only `everest_forms_create_forms` roles - dont show view all forms list table.
-		 * - If only `everest_forms_view_forms` roles - dont show create new template selection.
+		 * - If only `muhiku_forms_create_forms` roles - dont show view all forms list table.
+		 * - If only `muhiku_forms_view_forms` roles - dont show create new template selection.
 		 */
-		if ( ! current_user_can( 'manage_everest_forms' ) ) {
-			if ( ! current_user_can( 'everest_forms_create_forms' ) ) {
+		if ( ! current_user_can( 'manage_muhiku_forms' ) ) {
+			if ( ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 				if ( isset( $_GET['page'], $_GET['create-form'] ) && 'mhk-builder' === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 					wp_safe_redirect( admin_url( 'admin.php?page=mhk-builder' ) );
 					exit;
 				}
-			} elseif ( ! current_user_can( 'everest_forms_view_forms' ) ) {
+			} elseif ( ! current_user_can( 'muhiku_forms_view_forms' ) ) {
 				if ( ! isset( $_GET['create-form'] ) && ( ! empty( $_GET['page'] ) && 'mhk-builder' === $_GET['page'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 					wp_safe_redirect( admin_url( 'admin.php?page=mhk-builder&create-form=1' ) );
 					exit;
@@ -116,14 +116,14 @@ class MHK_Admin_Menus {
 			);
 		}
 
-		do_action( 'everest_forms_builder_page_init' );
+		do_action( 'muhiku_forms_builder_page_init' );
 	}
 
 	/**
 	 * Add menu item.
 	 */
 	public function entries_menu() {
-		$entries_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Entries', 'muhiku-plug' ), esc_html__( 'Entries', 'muhiku-plug' ), current_user_can( 'everest_forms_view_entries' ) ? 'everest_forms_view_entries' : 'everest_forms_view_others_entries', 'mhk-entries', array( $this, 'entries_page' ) );
+		$entries_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Entries', 'muhiku-plug' ), esc_html__( 'Entries', 'muhiku-plug' ), current_user_can( 'muhiku_forms_view_entries' ) ? 'muhiku_forms_view_entries' : 'muhiku_forms_view_others_entries', 'mhk-entries', array( $this, 'entries_page' ) );
 		add_action( 'load-' . $entries_page, array( $this, 'entries_page_init' ) );
 	}
 
@@ -146,14 +146,14 @@ class MHK_Admin_Menus {
 			);
 		}
 
-		do_action( 'everest_forms_entries_page_init' );
+		do_action( 'muhiku_forms_entries_page_init' );
 	}
 
 	/**
 	 * Add menu item.
 	 */
 	public function settings_menu() {
-		$settings_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug settings', 'muhiku-plug' ), esc_html__( 'Settings', 'muhiku-plug' ), 'manage_everest_forms', 'mhk-settings', array( $this, 'settings_page' ) );
+		$settings_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug settings', 'muhiku-plug' ), esc_html__( 'Settings', 'muhiku-plug' ), 'manage_muhiku_forms', 'mhk-settings', array( $this, 'settings_page' ) );
 
 		add_action( 'load-' . $settings_page, array( $this, 'settings_page_init' ) );
 	}
@@ -172,7 +172,7 @@ class MHK_Admin_Menus {
 		$current_section = empty( $_REQUEST['section'] ) ? '' : sanitize_title( wp_unslash( $_REQUEST['section'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
 
 		// Save settings if data has been posted.
-		if ( apply_filters( '' !== $current_section ? "everest_forms_save_settings_{$current_tab}_{$current_section}" : "everest_forms_save_settings_{$current_tab}", ! empty( $_POST ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( apply_filters( '' !== $current_section ? "muhiku_forms_save_settings_{$current_tab}_{$current_section}" : "muhiku_forms_save_settings_{$current_tab}", ! empty( $_POST ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			MHK_Admin_Settings::save();
 		}
 
@@ -185,14 +185,14 @@ class MHK_Admin_Menus {
 			MHK_Admin_Settings::add_message( wp_kses_post( wp_unslash( $_GET['mhk_message'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 
-		do_action( 'everest_forms_settings_page_init' );
+		do_action( 'muhiku_forms_settings_page_init' );
 	}
 
 	/**
 	 * Add menu item.
 	 */
 	public function tools_menu() {
-		add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug tools', 'muhiku-plug' ), esc_html__( 'Tools', 'muhiku-plug' ), 'manage_everest_forms', 'mhk-tools', array( $this, 'tools_page' ) );
+		add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug tools', 'muhiku-plug' ), esc_html__( 'Tools', 'muhiku-plug' ), 'manage_muhiku_forms', 'mhk-tools', array( $this, 'tools_page' ) );
 	}
 
 
@@ -220,8 +220,8 @@ class MHK_Admin_Menus {
 
 		// Add count if user has access.
 		if ( isset( $submenu['muhiku-plug'] ) ) {
-			if ( apply_filters( 'everest_forms_include_count_in_menu', true ) && current_user_can( 'manage_everest_forms' ) ) {
-				do_action( 'everest_forms_custom_menu_count' );
+			if ( apply_filters( 'muhiku_forms_include_count_in_menu', true ) && current_user_can( 'manage_muhiku_forms' ) ) {
+				do_action( 'muhiku_forms_custom_menu_count' );
 			}
 		}
 	}
@@ -247,7 +247,7 @@ class MHK_Admin_Menus {
 		}
 
 		// Remove 'All Forms' sub menu item if a user can't read forms.
-		if ( ! current_user_can( 'everest_forms_view_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_view_forms' ) ) {
 			foreach ( $submenu['muhiku-plug'] as $key => $item ) {
 				if ( isset( $item[2] ) && 'mhk-builder' === $item[2] ) {
 					unset( $submenu['muhiku-plug'][ $key ] );
@@ -257,7 +257,7 @@ class MHK_Admin_Menus {
 		}
 
 		// Remove 'Add New' sub menu item if a user can't create forms.
-		if ( ! current_user_can( 'everest_forms_create_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 			foreach ( $submenu['muhiku-plug'] as $key => $item ) {
 				if ( isset( $item[2] ) && 'mhk-builder&create-form=1' === $item[2] ) {
 					unset( $submenu['muhiku-plug'][ $key ] );
@@ -274,7 +274,7 @@ class MHK_Admin_Menus {
 	 * @return bool
 	 */
 	public function custom_menu_order( $enabled ) {
-		return $enabled || current_user_can( 'manage_everest_forms' );
+		return $enabled || current_user_can( 'manage_muhiku_forms' );
 	}
 
 	/**

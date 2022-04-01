@@ -25,7 +25,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 		$this->label   = esc_html__( 'Settings', 'muhiku-plug' );
 		$this->sidebar = true;
 
-		add_action( 'everest_forms_settings_connections_email', array( $this, 'output_connections_list' ) );
+		add_action( 'muhiku_forms_settings_connections_email', array( $this, 'output_connections_list' ) );
 
 		parent::__construct();
 	}
@@ -35,7 +35,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 	 */
 	public function output_sidebar() {
 		$sections = apply_filters(
-			'everest_forms_builder_settings_section',
+			'muhiku_forms_builder_settings_section',
 			array(
 				'general' => esc_html__( 'General', 'muhiku-plug' ),
 				'email'   => esc_html__( 'Email', 'muhiku-plug' ),
@@ -46,7 +46,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 		if ( ! empty( $sections ) ) {
 			foreach ( $sections as $slug => $section ) {
 				$this->add_sidebar_tab( $section, $slug );
-				do_action( 'everest_forms_settings_connections_' . $slug, $section );
+				do_action( 'muhiku_forms_settings_connections_' . $slug, $section );
 			}
 		}
 	}
@@ -124,7 +124,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 		echo '<div class="mhk-content-section-title">';
 		esc_html_e( 'General', 'muhiku-plug' );
 		echo '</div>';
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'text',
 			'settings',
 			'form_title',
@@ -135,7 +135,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'tooltip' => esc_html__( 'Give a name to this form', 'muhiku-plug' ),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'textarea',
 			'settings',
 			'form_description',
@@ -147,7 +147,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'tooltip'     => sprintf( esc_html__( 'Give the description to this form', 'muhiku-plug' ) ),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'textarea',
 			'settings',
 			'form_disable_message',
@@ -159,7 +159,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'tooltip'     => sprintf( esc_html__( 'Message that shows up if the form is disabled.', 'muhiku-plug' ) ),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'textarea',
 			'settings',
 			'successful_form_submission_message',
@@ -169,10 +169,10 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'input_class' => 'short',
 				'default'     => isset( $this->form->successful_form_submission_message ) ? $this->form->successful_form_submission_message : __( 'Thanks for contacting us! We will be in touch with you shortly', 'muhiku-plug' ),
 				/* translators: %1$s - general settings docs url */
-				'tooltip'     => sprintf( esc_html__( 'Success message that shows up after submitting form. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/general-settings/#successful-form-submission-message' ) ),
+				'tooltip'     => sprintf( esc_html__( 'Success message that shows up after submitting form. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/general-settings/#successful-form-submission-message' ) ),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'checkbox',
 			'settings',
 			'submission_message_scroll',
@@ -185,7 +185,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 
 		echo '<div class="muhiku-plug-border-container"><h4 class="muhiku-plug-border-container-title">' . esc_html__( 'Submission Redirection', 'muhiku-plug' ) . '</h4>';
 
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'select',
 			'settings',
 			'redirect_to',
@@ -194,7 +194,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 			array(
 				'default' => 'same',
 				/* translators: %1$s - general settings docs url */
-				'tooltip' => sprintf( esc_html__( 'Choose where to redirect after form submission. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/general-settings/#redirect-to' ) ),
+				'tooltip' => sprintf( esc_html__( 'Choose where to redirect after form submission. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/general-settings/#redirect-to' ) ),
 				'options' => array(
 					'same'         => esc_html__( 'Same Page', 'muhiku-plug' ),
 					'custom_page'  => esc_html__( 'Custom Page', 'muhiku-plug' ),
@@ -203,7 +203,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 			)
 		);
 
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'select',
 			'settings',
 			'custom_page',
@@ -215,7 +215,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 			)
 		);
 
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'text',
 			'settings',
 			'external_url',
@@ -226,11 +226,11 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 			)
 		);
 
-		do_action( 'everest_forms_submission_redirection_settings', $this, 'submission_redirection' );
+		do_action( 'muhiku_forms_submission_redirection_settings', $this, 'submission_redirection' );
 
 		echo '</div>';
 
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'select',
 			'settings',
 			'layout_class',
@@ -245,7 +245,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'text',
 			'settings',
 			'form_class',
@@ -254,14 +254,14 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 			array(
 				'default' => isset( $this->form->form_class ) ? $this->form->form_class : '',
 				/* translators: %1$s - general settings docs url */
-				'tooltip' => sprintf( esc_html__( 'Enter CSS class names for the form wrapper. Multiple class names should be separated with spaces. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/general-settings/#form-class' ) ),
+				'tooltip' => sprintf( esc_html__( 'Enter CSS class names for the form wrapper. Multiple class names should be separated with spaces. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/general-settings/#form-class' ) ),
 			)
 		);
 
-		do_action( 'everest_forms_field_required_indicators', $this->form_data, $settings );
+		do_action( 'muhiku_forms_field_required_indicators', $this->form_data, $settings );
 
 		echo '<div class="muhiku-plug-border-container"><h4 class="muhiku-plug-border-container-title">' . esc_html__( 'Submit Button', 'muhiku-plug' ) . '</h4>';
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'text',
 			'settings',
 			'submit_button_text',
@@ -272,7 +272,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'tooltip' => esc_html__( 'Enter desired text for submit button.', 'muhiku-plug' ),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'text',
 			'settings',
 			'submit_button_processing_text',
@@ -283,7 +283,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'tooltip' => esc_html__( 'Enter the submit button text that you would like the button to display while the form submission is processing.', 'muhiku-plug' ),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'text',
 			'settings',
 			'submit_button_class',
@@ -294,10 +294,10 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'tooltip' => esc_html__( 'Enter CSS class names for submit button. Multiple class names should be separated with spaces.', 'muhiku-plug' ),
 			)
 		);
-		do_action( 'everest_forms_inline_submit_settings', $this, 'submit', 'connection_1' );
+		do_action( 'muhiku_forms_inline_submit_settings', $this, 'submit', 'connection_1' );
 		echo '</div>';
-		do_action( 'everest_forms_inline_integrations_settings', $this->form_data, $settings );
-		everest_forms_panel_field(
+		do_action( 'muhiku_forms_inline_integrations_settings', $this->form_data, $settings );
+		muhiku_forms_panel_field(
 			'checkbox',
 			'settings',
 			'honeypot',
@@ -307,9 +307,9 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'default' => '1',
 			)
 		);
-		$recaptcha_type   = get_option( 'everest_forms_recaptcha_type', 'v2' );
-		$recaptcha_key    = get_option( 'everest_forms_recaptcha_' . $recaptcha_type . '_site_key' );
-		$recaptcha_secret = get_option( 'everest_forms_recaptcha_' . $recaptcha_type . '_secret_key' );
+		$recaptcha_type   = get_option( 'muhiku_forms_recaptcha_type', 'v2' );
+		$recaptcha_key    = get_option( 'muhiku_forms_recaptcha_' . $recaptcha_type . '_site_key' );
+		$recaptcha_secret = get_option( 'muhiku_forms_recaptcha_' . $recaptcha_type . '_secret_key' );
 		switch ( $recaptcha_type ) {
 			case 'v2':
 				$recaptcha_label = esc_html__( 'Enable Google Invisible reCAPTCHA v2', 'muhiku-plug' );
@@ -323,10 +323,10 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				$recaptcha_label = esc_html__( 'Enable hCaptcha', 'muhiku-plug' );
 				break;
 		}
-		$recaptcha_label = 'yes' === get_option( 'everest_forms_recaptcha_v2_invisible' ) && 'v2' === $recaptcha_type ? esc_html__( 'Enable Google Invisible reCAPTCHA v2', 'muhiku-plug' ) : $recaptcha_label;
+		$recaptcha_label = 'yes' === get_option( 'muhiku_forms_recaptcha_v2_invisible' ) && 'v2' === $recaptcha_type ? esc_html__( 'Enable Google Invisible reCAPTCHA v2', 'muhiku-plug' ) : $recaptcha_label;
 
 		if ( ! empty( $recaptcha_key ) && ! empty( $recaptcha_secret ) ) {
-			everest_forms_panel_field(
+			muhiku_forms_panel_field(
 				'checkbox',
 				'settings',
 				'recaptcha_support',
@@ -335,11 +335,11 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				array(
 					'default' => '0',
 					/* translators: %1$s - general settings docs url */
-					'tooltip' => sprintf( esc_html__( 'Enable reCaptcha. Make sure the site key and secret key is set in settings page. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/general-settings/#enable-recaptcha-support' ) ),
+					'tooltip' => sprintf( esc_html__( 'Enable reCaptcha. Make sure the site key and secret key is set in settings page. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/general-settings/#enable-recaptcha-support' ) ),
 				)
 			);
 		}
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'checkbox',
 			'settings',
 			'ajax_form_submission',
@@ -350,7 +350,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 				'tooltip' => esc_html__( 'Enables form submission without reloading the page.', 'muhiku-plug' ),
 			)
 		);
-		everest_forms_panel_field(
+		muhiku_forms_panel_field(
 			'checkbox',
 			'settings',
 			'disabled_entries',
@@ -359,11 +359,11 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 			array(
 				'default' => isset( $settings['disabled_entries'] ) ? $settings['disabled_entries'] : 0,
 				/* translators: %1$s - general settings docs url */
-				'tooltip' => sprintf( esc_html__( 'Disable storing form entries. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/general-settings/#disable-storing-entry-information' ) ),
+				'tooltip' => sprintf( esc_html__( 'Disable storing form entries. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/general-settings/#disable-storing-entry-information' ) ),
 			)
 		);
 
-		do_action( 'everest_forms_inline_general_settings', $this );
+		do_action( 'muhiku_forms_inline_general_settings', $this );
 
 		echo '</div>';
 
@@ -425,7 +425,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 
 				echo '<div class="mhk-content-email-settings-inner ' . esc_attr( $hidden_class ) . '" data-connection_id=' . esc_attr( $connection_id ) . '>';
 
-				everest_forms_panel_field(
+				muhiku_forms_panel_field(
 					'text',
 					'email',
 					'connection_name',
@@ -439,7 +439,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 					)
 				);
 
-				everest_forms_panel_field(
+				muhiku_forms_panel_field(
 					'text',
 					'email',
 					'mhk_to_email',
@@ -448,7 +448,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 					array(
 						'default'    => isset( $settings['email'][ $connection_id ]['mhk_to_email'] ) ? $settings['email'][ $connection_id ]['mhk_to_email'] : '{admin_email}',
 						/* translators: %1$s - general settings docs url */
-						'tooltip'    => sprintf( esc_html__( 'Enter the recipient\'s email address (comma separated) to receive form entry notifications. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/email-settings/#to-address' ) ),
+						'tooltip'    => sprintf( esc_html__( 'Enter the recipient\'s email address (comma separated) to receive form entry notifications. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/email-settings/#to-address' ) ),
 						'smarttags'  => array(
 							'type'        => 'fields',
 							'form_fields' => 'email',
@@ -457,8 +457,8 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 						'subsection' => $connection_id,
 					)
 				);
-				if ( 'yes' === get_option( 'everest_forms_enable_email_copies' ) ) {
-					everest_forms_panel_field(
+				if ( 'yes' === get_option( 'muhiku_forms_enable_email_copies' ) ) {
+					muhiku_forms_panel_field(
 						'text',
 						'email',
 						'mhk_carboncopy',
@@ -475,7 +475,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 							'subsection' => $connection_id,
 						)
 					);
-					everest_forms_panel_field(
+					muhiku_forms_panel_field(
 						'text',
 						'email',
 						'mhk_blindcarboncopy',
@@ -493,7 +493,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 						)
 					);
 				}
-				everest_forms_panel_field(
+				muhiku_forms_panel_field(
 					'text',
 					'email',
 					'mhk_from_name',
@@ -502,7 +502,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 					array(
 						'default'    => isset( $settings['email'][ $connection_id ]['mhk_from_name'] ) ? $settings['email'][ $connection_id ]['mhk_from_name'] : get_bloginfo( 'name', 'display' ),
 						/* translators: %1$s - general settings docs url */
-						'tooltip'    => sprintf( esc_html__( 'Enter the From Name to be displayed in Email. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/email-settings/#from-name' ) ),
+						'tooltip'    => sprintf( esc_html__( 'Enter the From Name to be displayed in Email. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/email-settings/#from-name' ) ),
 						'smarttags'  => array(
 							'type'        => 'all',
 							'form_fields' => 'all',
@@ -511,7 +511,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 						'subsection' => $connection_id,
 					)
 				);
-				everest_forms_panel_field(
+				muhiku_forms_panel_field(
 					'text',
 					'email',
 					'mhk_from_email',
@@ -520,7 +520,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 					array(
 						'default'    => isset( $settings['email'][ $connection_id ]['mhk_from_email'] ) ? $settings['email'][ $connection_id ]['mhk_from_email'] : '{admin_email}',
 						/* translators: %1$s - general settings docs url */
-						'tooltip'    => sprintf( esc_html__( 'Enter the Email address from which you want to send Email. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/email-settings/#from-address' ) ),
+						'tooltip'    => sprintf( esc_html__( 'Enter the Email address from which you want to send Email. <a href="%s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/email-settings/#from-address' ) ),
 						'smarttags'  => array(
 							'type'        => 'fields',
 							'form_fields' => 'email',
@@ -529,7 +529,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 						'subsection' => $connection_id,
 					)
 				);
-				everest_forms_panel_field(
+				muhiku_forms_panel_field(
 					'text',
 					'email',
 					'mhk_reply_to',
@@ -538,7 +538,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 					array(
 						'default'    => isset( $settings['email'][ $connection_id ]['mhk_reply_to'] ) ? $settings['email'][ $connection_id ]['mhk_reply_to'] : '',
 						/* translators: %1$s - general settings docs url */
-						'tooltip'    => sprintf( esc_html__( 'Enter the reply to email address where you want the email to be received when this email is replied. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/email-settings/#reply-to' ) ),
+						'tooltip'    => sprintf( esc_html__( 'Enter the reply to email address where you want the email to be received when this email is replied. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/email-settings/#reply-to' ) ),
 						'smarttags'  => array(
 							'type'        => 'fields',
 							'form_fields' => 'email',
@@ -547,7 +547,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 						'subsection' => $connection_id,
 					)
 				);
-				everest_forms_panel_field(
+				muhiku_forms_panel_field(
 					'text',
 					'email',
 					'mhk_email_subject',
@@ -557,7 +557,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 						/* translators: %s: Form Name */
 						'default'    => isset( $settings['email'][ $connection_id ]['mhk_email_subject'] ) ? $settings['email'][ $connection_id ]['mhk_email_subject'] : sprintf( esc_html__( 'New Form Entry %s', 'muhiku-plug' ), $form_name ),
 						/* translators: %1$s - General Settings docs url */
-						'tooltip'    => sprintf( esc_html__( 'Enter the subject of the email. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/email-settings/#email-subject' ) ),
+						'tooltip'    => sprintf( esc_html__( 'Enter the subject of the email. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/email-settings/#email-subject' ) ),
 						'smarttags'  => array(
 							'type'        => 'all',
 							'form_fields' => 'all',
@@ -566,7 +566,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 						'subsection' => $connection_id,
 					)
 				);
-				everest_forms_panel_field(
+				muhiku_forms_panel_field(
 					'tinymce',
 					'email',
 					'mhk_email_message',
@@ -575,7 +575,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 					array(
 						'default'    => isset( $settings['email'][ $connection_id ]['mhk_email_message'] ) ? $settings['email'][ $connection_id ]['mhk_email_message'] : __( '{all_fields}', 'muhiku-plug' ),
 						/* translators: %1$s - general settings docs url */
-						'tooltip'    => sprintf( esc_html__( 'Enter the message of the email. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpeverest.com/docs/muhiku-plug/individual-form-settings/email-settings/#email-message' ) ),
+						'tooltip'    => sprintf( esc_html__( 'Enter the message of the email. <a href="%1$s" target="_blank">Learn More</a>', 'muhiku-plug' ), esc_url( 'https://docs.wpmuhiku.com/docs/muhiku-plug/individual-form-settings/email-settings/#email-message' ) ),
 						'smarttags'  => array(
 							'type'        => 'all',
 							'form_fields' => 'all',
@@ -587,7 +587,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 					)
 				);
 
-				do_action( 'everest_forms_inline_email_settings', $this, $connection_id );
+				do_action( 'muhiku_forms_inline_email_settings', $this, $connection_id );
 
 				echo '</div></div>';
 			}
@@ -595,7 +595,7 @@ class MHK_Builder_Settings extends MHK_Builder_Page {
 		endforeach;
 
 		echo '</div>';
-		do_action( 'everest_forms_settings_panel_content', $this );
+		do_action( 'muhiku_forms_settings_panel_content', $this );
 	}
 
 	/**

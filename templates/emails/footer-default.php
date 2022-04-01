@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.wpeverest.com/docs/muhiku-plug/template-structure/
+ * @see     https://docs.wpmuhiku.com/docs/muhiku-plug/template-structure/
  * @package MuhikuPlug/Templates
  * @version 1.2.0
  */
@@ -43,7 +43,7 @@ $background_color = '#e9eaec';
 																<?php
 																/* translators: %s - link to a site. */
 																$footer = sprintf( esc_html__( 'Sent from %s', 'muhiku-plug' ), '<a href="' . esc_url( home_url() ) . '" style="color:#bbbbbb;">' . wp_specialchars_decode( get_bloginfo( 'name' ) ) . '</a>' );
-																echo wp_kses_post( apply_filters( 'everest_forms_email_footer_text', $footer ) );
+																echo wp_kses_post( apply_filters( 'muhiku_forms_email_footer_text', $footer ) );
 																?>
 															</td>
 														</tr>

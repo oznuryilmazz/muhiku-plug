@@ -72,8 +72,8 @@ class MHK_Field_Radio extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_filter( 'everest_forms_html_field_value', array( $this, 'html_field_value' ), 10, 4 );
-		add_filter( 'everest_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
+		add_filter( 'muhiku_forms_html_field_value', array( $this, 'html_field_value' ), 10, 4 );
+		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class MHK_Field_Radio extends MHK_Form_Fields {
 					'entry-table' !== $context
 					&& ! empty( $field_value['label'] )
 					&& ! empty( $field_value['image'] )
-					&& apply_filters( 'everest_forms_checkbox_field_html_value_images', true, $context )
+					&& apply_filters( 'muhiku_forms_checkbox_field_html_value_images', true, $context )
 				) {
 					return sprintf(
 						'<span style="max-width:200px;display:block;margin:0 0 5px 0;"><img src="%s" style="max-width:100%%;display:block;margin:0;"></span>%s',
@@ -162,7 +162,7 @@ class MHK_Field_Radio extends MHK_Form_Fields {
 					'text'  => mhk_string_translation( $form_id, $field_id, $choice['label'], '-choice-' . $key ),
 				),
 				'attr'      => array(
-					'name'  => "everest_forms[form_fields][{$field_id}]",
+					'name'  => "muhiku_forms[form_fields][{$field_id}]",
 					'value' => isset( $field['show_values'] ) ? $choice['value'] : $choice['label'],
 				),
 				'class'     => array( 'input-text' ),
@@ -229,7 +229,7 @@ class MHK_Field_Radio extends MHK_Form_Fields {
 	 */
 	public function show_values( $field ) {
 		// Show Values toggle option. This option will only show if already used or if manually enabled by a filter.
-		if ( ! empty( $field['show_values'] ) || apply_filters( 'everest_forms_fields_show_options_setting', false ) ) {
+		if ( ! empty( $field['show_values'] ) || apply_filters( 'muhiku_forms_fields_show_options_setting', false ) ) {
 			$args = array(
 				'slug'    => 'show_values',
 				'content' => $this->field_element(

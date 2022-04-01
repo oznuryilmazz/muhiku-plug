@@ -3,7 +3,7 @@
  * Abstract MHK_Form_Fields Class
  *
  * @version 1.0.0
- * @package EverestFroms/Abstracts
+ * @package MuhikuFroms/Abstracts
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -94,15 +94,15 @@ abstract class MHK_Form_Fields {
 		$this->init_hooks();
 
 		// Hooks.
-		add_action( 'everest_forms_builder_fields_options_' . $this->type, array( $this, 'field_options' ) );
-		add_action( 'everest_forms_builder_fields_preview_' . $this->type, array( $this, 'field_preview' ) );
-		add_action( 'wp_ajax_everest_forms_new_field_' . $this->type, array( $this, 'field_new' ) );
-		add_action( 'everest_forms_display_field_' . $this->type, array( $this, 'field_display' ), 10, 3 );
-		add_action( 'everest_forms_display_edit_form_field_' . $this->type, array( $this, 'edit_form_field_display' ), 10, 3 );
-		add_action( 'everest_forms_process_validate_' . $this->type, array( $this, 'validate' ), 10, 3 );
-		add_action( 'everest_forms_process_format_' . $this->type, array( $this, 'format' ), 10, 4 );
-		add_filter( 'everest_forms_field_properties', array( $this, 'field_prefill_value_property' ), 10, 3 );
-		add_filter( 'everest_forms_field_exporter_' . $this->type, array( $this, 'field_exporter' ) );
+		add_action( 'muhiku_forms_builder_fields_options_' . $this->type, array( $this, 'field_options' ) );
+		add_action( 'muhiku_forms_builder_fields_preview_' . $this->type, array( $this, 'field_preview' ) );
+		add_action( 'wp_ajax_muhiku_forms_new_field_' . $this->type, array( $this, 'field_new' ) );
+		add_action( 'muhiku_forms_display_field_' . $this->type, array( $this, 'field_display' ), 10, 3 );
+		add_action( 'muhiku_forms_display_edit_form_field_' . $this->type, array( $this, 'edit_form_field_display' ), 10, 3 );
+		add_action( 'muhiku_forms_process_validate_' . $this->type, array( $this, 'validate' ), 10, 3 );
+		add_action( 'muhiku_forms_process_format_' . $this->type, array( $this, 'format' ), 10, 4 );
+		add_filter( 'muhiku_forms_field_properties', array( $this, 'field_prefill_value_property' ), 10, 3 );
+		add_filter( 'muhiku_forms_field_exporter_' . $this->type, array( $this, 'field_exporter' ) );
 	}
 
 	/**
@@ -140,7 +140,7 @@ abstract class MHK_Form_Fields {
 	 * @return array of options
 	 */
 	public function get_field_settings() {
-		return apply_filters( 'everest_forms_get_field_settings_' . $this->type, $this->settings );
+		return apply_filters( 'muhiku_forms_get_field_settings_' . $this->type, $this->settings );
 	}
 
 	/**
@@ -378,9 +378,9 @@ abstract class MHK_Form_Fields {
 		$class  = ! empty( $args['class'] ) ? esc_html( $args['class'] ) : '';
 
 		if ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'open' === $markup ) {
-			do_action( "everest_forms_field_options_before_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_before_{$option}", $field, $this );
 		} elseif ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'close' === $markup ) {
-			do_action( "everest_forms_field_options_bottom_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_bottom_{$option}", $field, $this );
 		}
 
 		switch ( $option ) {
@@ -555,9 +555,9 @@ abstract class MHK_Form_Fields {
 				$has_sub_fields = false;
 				$sub_fields     = array();
 
-				$required_validation = get_option( 'everest_forms_required_validation' );
+				$required_validation = get_option( 'muhiku_forms_required_validation' );
 				if ( in_array( $field['type'], array( 'number', 'email', 'url', 'phone' ), true ) ) {
-					$required_validation = get_option( 'everest_forms_' . $field['type'] . '_validation' );
+					$required_validation = get_option( 'muhiku_forms_' . $field['type'] . '_validation' );
 				}
 
 				if ( 'likert' === $field['type'] ) {
@@ -1281,10 +1281,10 @@ abstract class MHK_Form_Fields {
 				$markup = ! empty( $args['markup'] ) ? $args['markup'] : 'open';
 
 				if ( 'open' === $markup ) {
-					$override = apply_filters( 'everest_forms_advanced_options_override', false );
+					$override = apply_filters( 'muhiku_forms_advanced_options_override', false );
 					$override = ! empty( $override ) ? 'style="display:' . $override . ';"' : '';
 					if ( $echo ) {
-						echo sprintf( '<div class="muhiku-plug-field-option-group muhiku-plug-field-option-group-advanced muhiku-plug-hide closed" id="muhiku-plug-field-option-advanced-%s" %s>', esc_attr( $field['id'] ), ( ! empty( $override ) ? 'style="display:' . esc_attr( apply_filters( 'everest_forms_advanced_options_override', false ) ) . ';"' : '' ) );
+						echo sprintf( '<div class="muhiku-plug-field-option-group muhiku-plug-field-option-group-advanced muhiku-plug-hide closed" id="muhiku-plug-field-option-advanced-%s" %s>', esc_attr( $field['id'] ), ( ! empty( $override ) ? 'style="display:' . esc_attr( apply_filters( 'muhiku_forms_advanced_options_override', false ) ) . ';"' : '' ) );
 						echo sprintf( '<a href="#" class="muhiku-plug-field-option-group-toggle">%s<i class="handlediv"></i></a>', esc_html__( 'Advanced Options', 'muhiku-plug' ) );
 						echo '<div class="muhiku-plug-field-option-group-inner">';
 					} else {
@@ -1643,15 +1643,15 @@ abstract class MHK_Form_Fields {
 				if ( is_callable( array( $this, $option ) ) ) {
 					$this->{$option}( $field );
 				}
-				do_action( 'everest_forms_field_options_' . $option, $this, $field, $args );
+				do_action( 'muhiku_forms_field_options_' . $option, $this, $field, $args );
 				break;
 
 		}
 
 		if ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'open' === $markup ) {
-			do_action( "everest_forms_field_options_top_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_top_{$option}", $field, $this );
 		} elseif ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'close' === $markup ) {
-			do_action( "everest_forms_field_options_after_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_after_{$option}", $field, $this );
 		}
 
 		if ( ! $echo ) {
@@ -1680,18 +1680,18 @@ abstract class MHK_Form_Fields {
 		$markup    = '';
 
 		if ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'open' === $markup ) {
-			do_action( "everest_forms_field_options_before_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_before_{$option}", $field, $this );
 		} elseif ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'close' === $markup ) {
-			do_action( "everest_forms_field_options_bottom_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_bottom_{$option}", $field, $this );
 		}
 
 		switch ( $option ) {
 			case 'label':
 				$label = isset( $field['label'] ) && ! empty( $field['label'] ) ? $field['label'] : '';
 				if ( $echo ) {
-					echo sprintf( '<label class="label-title %s"><span class="text">%s</span><span class="required">%s</span></label>', esc_attr( $class ), esc_html( $label ), esc_html( apply_filters( 'everest_form_get_required_type', '*', $field, $form_data ) ) );
+					echo sprintf( '<label class="label-title %s"><span class="text">%s</span><span class="required">%s</span></label>', esc_attr( $class ), esc_html( $label ), esc_html( apply_filters( 'muhiku_form_get_required_type', '*', $field, $form_data ) ) );
 				} else {
-					$output = sprintf( '<label class="label-title %s"><span class="text">%s</span><span class="required">%s</span></label>', $class, $label, apply_filters( 'everest_form_get_required_type', '*', $field, $form_data ) );
+					$output = sprintf( '<label class="label-title %s"><span class="text">%s</span><span class="required">%s</span></label>', $class, $label, apply_filters( 'muhiku_form_get_required_type', '*', $field, $form_data ) );
 				}
 				break;
 
@@ -1898,9 +1898,9 @@ abstract class MHK_Form_Fields {
 		}
 
 		if ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'open' === $markup ) {
-			do_action( "everest_forms_field_options_top_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_top_{$option}", $field, $this );
 		} elseif ( $echo && in_array( $option, array( 'basic-options', 'advanced-options' ), true ) && 'close' === $markup ) {
-			do_action( "everest_forms_field_options_after_{$option}", $field, $this );
+			do_action( "muhiku_forms_field_options_after_{$option}", $field, $this );
 		}
 
 		if ( ! $echo ) {
@@ -1915,7 +1915,7 @@ abstract class MHK_Form_Fields {
 	 */
 	public function field_new() {
 		// Run a security check.
-		check_ajax_referer( 'everest_forms_field_drop', 'security' );
+		check_ajax_referer( 'muhiku_forms_field_drop', 'security' );
 
 		// Check for form ID.
 		if ( ! isset( $_POST['form_id'] ) || empty( $_POST['form_id'] ) ) {
@@ -1923,7 +1923,7 @@ abstract class MHK_Form_Fields {
 		}
 
 		// Check for permissions.
-		if ( ! current_user_can( 'everest_forms_edit_form', (int) $_POST['form_id'] ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_form', (int) $_POST['form_id'] ) ) {
 			die( esc_html__( 'You do no have permission.', 'muhiku-plug' ) );
 		}
 
@@ -1943,9 +1943,9 @@ abstract class MHK_Form_Fields {
 			'description' => '',
 		);
 		$field          = wp_parse_args( $field_args, $field );
-		$field          = apply_filters( 'everest_forms_field_new_default', $field );
-		$field_required = apply_filters( 'everest_forms_field_new_required', '', $field );
-		$field_class    = apply_filters( 'everest_forms_field_new_class', '', $field );
+		$field          = apply_filters( 'muhiku_forms_field_new_default', $field );
+		$field_required = apply_filters( 'muhiku_forms_field_new_required', '', $field );
+		$field_class    = apply_filters( 'muhiku_forms_field_new_class', '', $field );
 
 		// Field types that default to required.
 		if ( ! empty( $field_required ) ) {
@@ -2206,7 +2206,7 @@ abstract class MHK_Form_Fields {
 		// Type validations.
 		switch ( $field_type ) {
 			case 'url':
-				if ( ! empty( $_POST['everest_forms']['form_fields'][ $field_id ] ) && filter_var( $field_submit, FILTER_VALIDATE_URL ) === false ) { // phpcs:ignore WordPress.Security.NonceVerification
+				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && filter_var( $field_submit, FILTER_VALIDATE_URL ) === false ) { // phpcs:ignore WordPress.Security.NonceVerification
 					$validation_text = get_option( 'mhk_' . $field_type . '_validation', esc_html__( 'Please enter a valid url', 'muhiku-plug' ) );
 				}
 				break;
@@ -2216,19 +2216,19 @@ abstract class MHK_Form_Fields {
 				} else {
 					$value = ! empty( $field_submit ) ? $field_submit : '';
 				}
-				if ( ! empty( $_POST['everest_forms']['form_fields'][ $field_id ] ) && ! is_email( $value ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! is_email( $value ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 					$validation_text = get_option( 'mhk_' . $field_type . '_validation', esc_html__( 'Please enter a valid email address', 'muhiku-plug' ) );
 				}
 				break;
 			case 'number':
-				if ( ! empty( $_POST['everest_forms']['form_fields'][ $field_id ] ) && ! is_numeric( $field_submit ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! is_numeric( $field_submit ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 					$validation_text = get_option( 'mhk_' . $field_type . '_validation', esc_html__( 'Please enter a valid number', 'muhiku-plug' ) );
 				}
 				break;
 		}
 
 		if ( isset( $validation_text ) ) {
-			mhk()->task->errors[ $form_data['id'] ][ $field_id ] = apply_filters( 'everest_forms_type_validation', $validation_text );
+			mhk()->task->errors[ $form_data['id'] ][ $field_id ] = apply_filters( 'muhiku_forms_type_validation', $validation_text );
 			update_option( 'mhk_validation_error', 'yes' );
 		}
 	}

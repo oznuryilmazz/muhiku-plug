@@ -11,7 +11,7 @@ $form_data['form_field_id'] = isset( $form_data['form_field_id'] ) ? $form_data[
 $form_data['form_enabled']  = isset( $form_data['form_enabled'] ) ? $form_data['form_enabled'] : 1;
 
 // Get tabs for the builder panel.
-$tabs = apply_filters( 'everest_forms_builder_tabs_array', array() ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+$tabs = apply_filters( 'muhiku_forms_builder_tabs_array', array() ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 
 // Get preview link.
 $preview_link = add_query_arg(
@@ -42,12 +42,12 @@ $preview_link = add_query_arg(
 					echo '<a href="#" class="mhk-panel-' . esc_attr( $slug ) . '-button nav-tab ' . ( $current_tab === $slug ? 'nav-tab-active' : '' ) . '" data-panel="' . esc_attr( $slug ) . '"><span class="mhk-nav-icon ' . esc_attr( $slug ) . '"></span>' . esc_html( $tab['label'] ) . '</a>';
 				}
 
-				do_action( 'everest_forms_builder_tabs' );
+				do_action( 'muhiku_forms_builder_tabs' );
 				?>
 			</nav>
 			<div class="mhk-forms-nav-right">
 				<div class="mhk-shortcode-field">
-					<input type="text" class="large-text code" onfocus="this.select();" value="<?php printf( esc_html( '[everest_form id="%s"]' ), isset( $_GET['form_id'] ) ? absint( sanitize_text_field( wp_unslash( $_GET['form_id'] ) ) ) : 0 ); // phpcs:ignore WordPress.Security.NonceVerification ?>" id="mhk-form-shortcode" readonly="readonly" />
+					<input type="text" class="large-text code" onfocus="this.select();" value="<?php printf( esc_html( '[muhiku_form id="%s"]' ), isset( $_GET['form_id'] ) ? absint( sanitize_text_field( wp_unslash( $_GET['form_id'] ) ) ) : 0 ); // phpcs:ignore WordPress.Security.NonceVerification ?>" id="mhk-form-shortcode" readonly="readonly" />
 					<button id="copy-shortcode" class="muhiku-plug-btn help_tip dashicons copy-shortcode" href="#" data-tip="<?php esc_attr_e( 'Copy Shortcode!', 'muhiku-plug' ); ?>" data-copied="<?php esc_attr_e( 'Copied!', 'muhiku-plug' ); ?>">
 						<span class="screen-reader-text"><?php esc_html_e( 'Copy shortcode', 'muhiku-plug' ); ?></span>
 					</button>
@@ -62,19 +62,19 @@ $preview_link = add_query_arg(
 					<div class="muhiku-plug-panel-<?php echo $tab['sidebar'] ? 'sidebar-content' : 'full-content'; ?>">
 						<?php if ( $tab['sidebar'] ) : ?>
 							<div class="muhiku-plug-panel-sidebar">
-								<?php do_action( 'everest_forms_builder_sidebar_' . $slug ); ?>
+								<?php do_action( 'muhiku_forms_builder_sidebar_' . $slug ); ?>
 							</div>
 						<?php endif; ?>
 						<div class="panel-wrap muhiku-plug-panel-content-wrap">
 							<div class="muhiku-plug-panel-content">
-								<?php do_action( 'everest_forms_builder_content_' . $slug ); ?>
+								<?php do_action( 'muhiku_forms_builder_content_' . $slug ); ?>
 							</div>
-							<?php do_action( 'everest_forms_builder_after_content_' . $slug ); ?>
+							<?php do_action( 'muhiku_forms_builder_after_content_' . $slug ); ?>
 						</div>
 					</div>
 				</div>
 			<?php endforeach; ?>
-			<?php do_action( 'everest_forms_builder_output' ); ?>
+			<?php do_action( 'muhiku_forms_builder_output' ); ?>
 		</div>
 	</form>
 </div>

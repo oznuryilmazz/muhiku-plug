@@ -68,8 +68,8 @@ class MHK_Field_Select extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_action( 'everest_forms_shortcode_scripts', array( $this, 'load_assets' ) );
-		add_filter( 'everest_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
+		add_action( 'muhiku_forms_shortcode_scripts', array( $this, 'load_assets' ) );
+		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			'data'  => array(),
 			'id'    => "mhk-{$form_id}-field_{$field_id}",
 			'attr'  => array(
-				'name' => "everest_forms[form_fields][{$field_id}]",
+				'name' => "muhiku_forms[form_fields][{$field_id}]",
 			),
 		);
 
@@ -123,7 +123,7 @@ class MHK_Field_Select extends MHK_Form_Fields {
 					'text'  => mhk_string_translation( $form_id, $field_id, $choice['label'], '-choice-' . $key ),
 				),
 				'attr'      => array(
-					'name'  => "everest_forms[form_fields][{$field_id}][]",
+					'name'  => "muhiku_forms[form_fields][{$field_id}][]",
 					'value' => isset( $field['show_values'] ) ? $choice['value'] : $choice['label'],
 				),
 				'class'     => array(),
@@ -243,7 +243,7 @@ class MHK_Field_Select extends MHK_Form_Fields {
 		// Define data.
 		$container         = $field['properties']['input_container'];
 		$choices           = $field['properties']['inputs'];
-		$field             = apply_filters( 'everest_forms_select_field_display', $field, $field_atts, $form_data );
+		$field             = apply_filters( 'muhiku_forms_select_field_display', $field, $field_atts, $form_data );
 		$field_placeholder = ! empty( $field['placeholder'] ) ? mhk_string_translation( $form_data['id'], $field['id'], $field['placeholder'], '-placeholder' ) : '';
 		$plan              = mhk_get_license_plan();
 		$has_default       = false;

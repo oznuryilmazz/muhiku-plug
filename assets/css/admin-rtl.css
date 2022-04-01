@@ -6791,34 +6791,34 @@ body.muhiku-plug-builder.muhiku-plug_page_mhk-builder #wpfooter {
   font-size: 1.25em;
   color: #494d50;
 }
-#muhiku-plug-welcome .evmuhiku-plug-welcome-header {
+#muhiku-plug-welcome .muhiku-plug-welcome-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1em;
   border-bottom: 1px solid #cdd0d8;
 }
-#muhiku-plug-welcome .evmuhiku-plug-welcome-header__logo-wrap {
+#muhiku-plug-welcome .muhiku-plug-welcome-header__logo-wrap {
   display: flex;
   align-items: center;
 }
 #muhiku-plug-welcome
-  .evmuhiku-plug-welcome-header__logo-wrap
-  .evmuhiku-plug-welcome-header__logo-icon {
+  .muhiku-plug-welcome-header__logo-wrap
+  .muhiku-plug-welcome-header__logo-icon {
   margin-left: 16px;
   padding-left: 16px;
   border-left: 1px solid #cdd0d8;
 }
 #muhiku-plug-welcome
-  .evmuhiku-plug-welcome-header__logo-wrap
-  .evmuhiku-plug-welcome-header__logo-icon
+  .muhiku-plug-welcome-header__logo-wrap
+  .muhiku-plug-welcome-header__logo-icon
   svg {
   display: block;
   fill: #7e3bd0;
   width: 24px;
   height: 24px;
 }
-#muhiku-plug-welcome .evmuhiku-plug-welcome-header__logo-wrap span {
+#muhiku-plug-welcome .muhiku-plug-welcome-header__logo-wrap span {
   font-size: 14px;
   font-weight: 600;
 }
@@ -13732,7 +13732,7 @@ p.search-box {
   .muhiku-plug-panel-content-wrap
   .muhiku-plug-panel-content
   .muhiku-plug-title-desc
-  .muhiku-plug-name-input.everst-forms-name-editing {
+  .muhiku-plug-name-input.muhku-forms-name-editing {
   pointer-events: all;
 }
 .muhiku-plug_page_mhk-builder
@@ -13740,7 +13740,7 @@ p.search-box {
   .muhiku-plug-panel-content-wrap
   .muhiku-plug-panel-content
   .muhiku-plug-title-desc
-  .muhiku-plug-name-input.everst-forms-name-editing
+  .muhiku-plug-name-input.muhku-forms-name-editing
   + .mhk-icon {
   background: #7e3bd0;
   color: #fff;
@@ -13751,7 +13751,7 @@ p.search-box {
   .muhiku-plug-panel-content-wrap
   .muhiku-plug-panel-content
   .muhiku-plug-title-desc
-  .muhiku-plug-name-input.everst-forms-name-editing
+  .muhiku-plug-name-input.muhku-forms-name-editing
   + .mhk-icon::after {
   top: 0;
   left: 0;
@@ -17203,8 +17203,8 @@ img.ui-datepicker-trigger {
 .mhk-repeater-fields div.mhk-admin-grid.mhk-repeatable-grid {
   padding: 0 10px 10px !important;
 }
-#elementor-editor-wrapper .everest-icon:before,
-.elementor-edit-area .everest-icon:before {
+#elementor-editor-wrapper .muhiku-icon:before,
+.elementor-edit-area .muhiku-icon:before {
   content: "\e902";
   font-family: MuhikuPlug;
   font-weight: 400;

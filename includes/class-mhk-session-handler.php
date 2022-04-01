@@ -53,7 +53,7 @@ class MHK_Session_Handler extends MHK_Session {
 	 * Constructor for the session class.
 	 */
 	public function __construct() {
-		$this->_cookie = apply_filters( 'everest_forms_cookie', 'wp_everest_forms_session_' . COOKIEHASH );
+		$this->_cookie = apply_filters( 'muhiku_forms_cookie', 'wp_muhiku_forms_session_' . COOKIEHASH );
 		$this->_table  = $GLOBALS['wpdb']->prefix . 'mhk_sessions';
 	}
 

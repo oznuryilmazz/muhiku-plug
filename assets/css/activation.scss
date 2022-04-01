@@ -14,7 +14,7 @@
 div.muhiku-plug-message {
 	overflow: hidden;
 	position: relative;
-	border-left-color: $everestforms !important;
+	border-left-color: $muhikuforms !important;
 
 	&.mhk-review-notice {
 		padding: 16px;
@@ -30,7 +30,7 @@ div.muhiku-plug-message {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: $everestforms;
+			background: $muhikuforms;
 
 			svg {
 				height: 80px;
@@ -81,7 +81,7 @@ div.muhiku-plug-message {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: $everestforms;
+			background: $muhikuforms;
 
 			svg {
 				height: 80px;

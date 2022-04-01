@@ -51,8 +51,8 @@ class MHK_Field_Date_Time extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_action( 'everest_forms_shortcode_scripts', array( $this, 'load_assets' ) );
-		add_filter( 'everest_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
+		add_action( 'muhiku_forms_shortcode_scripts', array( $this, 'load_assets' ) );
+		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
 	}
 
 	/**

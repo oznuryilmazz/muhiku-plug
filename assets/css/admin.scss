@@ -24,7 +24,7 @@
 //Utilities
 @import 'utility/display', 'utility/spacing', 'utility/border';
 
-//Everest-forms icon
+//Muhiku-forms icon
 @font-face {
 	font-family: 'MuhikuPlug';
 	src:  url('fonts/MuhikuPlug.eot?5c6kq4');
@@ -460,7 +460,7 @@ body.muhiku-plug-builder {
 		color: $color_gray-base;
 	}
 
-	.evmuhiku-plug-welcome-header {
+	.muhiku-plug-welcome-header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -468,18 +468,18 @@ body.muhiku-plug-builder {
 		border-bottom: 1px solid $color_gray-lighten;
 	}
 
-	.evmuhiku-plug-welcome-header__logo-wrap {
+	.muhiku-plug-welcome-header__logo-wrap {
 		display: flex;
 		align-items: center;
 
-		.evmuhiku-plug-welcome-header__logo-icon {
+		.muhiku-plug-welcome-header__logo-icon {
 			margin-right: 16px;
 			padding-right: 16px;
 			border-right: 1px solid $color_gray-lighten;
 
 			svg {
 				display: block;
-				fill: $everestforms;
+				fill: $muhikuforms;
 				width: 24px;
 				height: 24px;
 			}
@@ -891,7 +891,7 @@ body.muhiku-plug-builder {
 			margin: 0 0 1.5em;
 			position: relative;
 			border-bottom: none;
-			background-color: $everestforms;
+			background-color: $muhikuforms;
 
 			a.nav-tab {
 				color: $color-white;
@@ -987,7 +987,7 @@ body.muhiku-plug-builder {
 
 				&.nav-tab-active {
 					margin-bottom: 0;
-					background-color: adjust-color($everestforms, $saturation: +20%, $lightness: +6%);
+					background-color: adjust-color($muhikuforms, $saturation: +20%, $lightness: +6%);
 
 					&:focus {
 						box-shadow: none;
@@ -999,7 +999,7 @@ body.muhiku-plug-builder {
 				}
 
 				&:hover:not(.nav-tab-active) {
-					background-color: adjust-color($everestforms, $saturation: -4%, $lightness: -4%);
+					background-color: adjust-color($muhikuforms, $saturation: -4%, $lightness: -4%);
 				}
 			}
 		}
@@ -1083,8 +1083,8 @@ body.muhiku-plug-builder {
 
 			&.active {
 				.muhiku-plug-tab-nav-link {
-					color: $everestforms;
-					border-color: $everestforms;
+					color: $muhikuforms;
+					border-color: $muhikuforms;
 				}
 			}
 		}
@@ -1289,7 +1289,7 @@ body.muhiku-plug-builder {
 					text-decoration: none;
 
 					&:hover {
-						color: $everestforms;
+						color: $muhikuforms;
 					}
 				}
 			}
@@ -1819,7 +1819,7 @@ p.search-box {
 		}
 
 		.muhiku-plug-nav-wrapper {
-			background-color: $everestforms;
+			background-color: $muhikuforms;
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
@@ -1834,7 +1834,7 @@ p.search-box {
 			.muhiku-plug-btn {
 				&:focus {
 					box-shadow: 0 0 0 3px
-						adjust-color($everestforms, $saturation: 39%, $lightness: +18%);
+						adjust-color($muhikuforms, $saturation: 39%, $lightness: +18%);
 				}
 			}
 
@@ -1860,7 +1860,7 @@ p.search-box {
 						height: 36px;
 						margin-left: -4px;
 						border-radius: 0 3px 3px 0;
-						background-color: lighten($everestforms, 7%);
+						background-color: lighten($muhikuforms, 7%);
 
 						&.copy-shortcode {
 							font-size: 16px;
@@ -1901,7 +1901,7 @@ p.search-box {
 
 						&:focus {
 							box-shadow: 0 0 0 2px
-								adjust-color($everestforms, $saturation: 39%, $lightness: +18%);
+								adjust-color($muhikuforms, $saturation: 39%, $lightness: +18%);
 						}
 					}
 
@@ -2088,8 +2088,8 @@ p.search-box {
 						}
 
 						&:focus-within {
-							border: 1px solid $everestforms;
-							box-shadow: 0 0 0 1px $everestforms;
+							border: 1px solid $muhikuforms;
+							box-shadow: 0 0 0 1px $muhikuforms;
 						}
 					}
 
@@ -2361,7 +2361,7 @@ p.search-box {
 
 						&.active {
 							position: relative;
-							color: $everestforms;
+							color: $muhikuforms;
 							background-color: $color-white;
 						}
 					}
@@ -2423,14 +2423,14 @@ p.search-box {
 									background: $color-white;
 
 									.user-nickname {
-										color: $everestforms;
+										color: $muhikuforms;
 										transition: all 0.25s ease 0s;
 									}
 								}
 
 								&:hover {
 									.user-nickname {
-										color: $everestforms;
+										color: $muhikuforms;
 									}
 								}
 
@@ -3892,18 +3892,18 @@ p.search-box {
 						background: none;
 						z-index: 1;
 
-						&.everst-forms-name-editing {
+						&.muhku-forms-name-editing {
 							pointer-events: all;
 
 							& + .mhk-icon {
-								background: $everestforms;
+								background: $muhikuforms;
 								color: $color-white;
 								border-radius: 4px 0 0 4px;
 
 								&::after {
 									top: 0;
 									right: 0;
-									border: 1px solid $everestforms;
+									border: 1px solid $muhikuforms;
 								}
 							}
 						}
@@ -4408,7 +4408,7 @@ p.search-box {
 							display: inline-block;
 
 							&:hover h3 {
-								color: $everestforms;
+								color: $muhikuforms;
 							}
 
 							&:focus {
@@ -4466,7 +4466,7 @@ p.search-box {
 						}
 
 						&.active {
-							background-color: $everestforms;
+							background-color: $muhikuforms;
 
 							&::before {
 								right: 2px;
@@ -4499,8 +4499,8 @@ p.search-box {
 					}
 
 					&:hover {
-						color: $everestforms;
-						border-color: $everestforms;
+						color: $muhikuforms;
+						border-color: $muhikuforms;
 					}
 				}
 			}
@@ -5961,8 +5961,8 @@ img.ui-datepicker-trigger {
 	}
 }
 
-#elementor-editor-wrapper .everest-icon:before,
-.elementor-edit-area .everest-icon:before {
+#elementor-editor-wrapper .muhiku-icon:before,
+.elementor-edit-area .muhiku-icon:before {
 	content: '\e902';
 	font-family: "MuhikuPlug";
 	font-weight: normal;

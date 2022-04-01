@@ -51,6 +51,6 @@ class MHK_Plugin_Updates {
 			}
 		}
 
-		return apply_filters( 'everest_forms_get_plugins_with_header', $matches, $header, $plugins );
+		return apply_filters( 'muhiku_forms_get_plugins_with_header', $matches, $header, $plugins );
 	}
 }

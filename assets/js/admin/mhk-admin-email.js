@@ -106,7 +106,7 @@
 
                 // Fire AJAX
                 var data = {
-                  action: "everest_forms_new_email_add",
+                  action: "muhiku_forms_new_email_add",
                   source: source,
                   name: name,
                   id: s.form.data("id"),
@@ -146,7 +146,7 @@
       $(".mhk-content-email-settings-inner").removeClass("active-connection");
       cloned_email
         .find(
-          'input:not(#qt_everest_forms_panel_field_email_connection_1_mhk_email_message_toolbar input[type="button"], .mhk_conditional_logic_container input)'
+          'input:not(#qt_muhiku_forms_panel_field_email_connection_1_mhk_email_message_toolbar input[type="button"], .mhk_conditional_logic_container input)'
         )
         .val("");
 
@@ -286,7 +286,7 @@
         .find("#muhiku-plug-panel-field-email-connection_1-mhk_email_subject")
         .val(mhk_email_params.email_subject);
       cloned_email
-        .find("#everest_forms_panel_field_email_connection_1_mhk_email_message")
+        .find("#muhiku_forms_panel_field_email_connection_1_mhk_email_message")
         .attr(
           "name",
           "settings[email][" +
@@ -294,7 +294,7 @@
             "][mhk_email_message]"
         );
       cloned_email
-        .find("#everest_forms_panel_field_email_connection_1_mhk_email_message")
+        .find("#muhiku_forms_panel_field_email_connection_1_mhk_email_message")
         .val("{all_fields}");
 
       cloned_email

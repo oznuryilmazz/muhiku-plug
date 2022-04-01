@@ -51,8 +51,8 @@ class MHK_Field_Text extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_action( 'everest_forms_shortcode_scripts', array( $this, 'load_assets' ) );
-		add_filter( 'everest_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
+		add_action( 'muhiku_forms_shortcode_scripts', array( $this, 'load_assets' ) );
+		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
 	}
 
 	/**
@@ -132,7 +132,7 @@ class MHK_Field_Text extends MHK_Form_Fields {
 				'slug'          => 'input_mask',
 				'value'         => esc_html__( 'Input Mask', 'muhiku-plug' ),
 				'tooltip'       => esc_html__( 'Enter your custom input mask.', 'muhiku-plug' ),
-				'after_tooltip' => '<a href="https://docs.wpeverest.com/docs/muhiku-plug/how-to-use-custom-input-mask/" class="after-label-description" target="_blank" rel="noopener noreferrer">' . esc_html__( 'See Examples & Docs', 'muhiku-plug' ) . '</a>',
+				'after_tooltip' => '<a href="https://docs.wpmuhiku.com/docs/muhiku-plug/how-to-use-custom-input-mask/" class="after-label-description" target="_blank" rel="noopener noreferrer">' . esc_html__( 'See Examples & Docs', 'muhiku-plug' ) . '</a>',
 			),
 			false
 		);

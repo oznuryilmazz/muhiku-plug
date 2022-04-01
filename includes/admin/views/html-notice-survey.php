@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 		</p>
 		</p>
 		<p class="muhiku-plug-message__action submit">
-			<a href="https://survey.wpeverest.com/muhiku-plug/" class="button button-primary mhk-dismiss-review-notice mhk-survey-received" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-external"></span><?php esc_html_e( 'Start Survey', 'muhiku-plug' ); ?></a>
+			<a href="https://survey.wpmuhiku.com/muhiku-plug/" class="button button-primary mhk-dismiss-review-notice mhk-survey-received" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-external"></span><?php esc_html_e( 'Start Survey', 'muhiku-plug' ); ?></a>
 			<a href="#" class="button button-secondary mhk-dismiss-survey-notice" target="_blank" rel="noopener noreferrer"><span  class="dashicons dashicons-smiley"></span><?php esc_html_e( 'I already did', 'muhiku-plug' ); ?></a>
 		</p>
 	</div>
@@ -48,7 +48,7 @@ defined( 'ABSPATH' ) || exit;
 				event.preventDefault();
 			}
 			$.post( ajaxurl, {
-				action: 'everest_forms_survey_dismiss'
+				action: 'muhiku_forms_survey_dismiss'
 			} );
 			$( '.mhk-survey-notice' ).remove();
 		} );

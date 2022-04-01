@@ -88,7 +88,7 @@ function mhk_caught_exception( $exception_object, $function = '', $args = array(
 	$message  = $exception_object->getMessage();
 	$message .= '. Args: ' . print_r( $args, true ) . '.';
 
-	do_action( 'everest_forms_caught_exception', $exception_object, $function, $args );
+	do_action( 'muhiku_forms_caught_exception', $exception_object, $function, $args );
 	error_log( "Exception caught in {$function}. {$message}." );
 	// @codingStandardsIgnoreEnd
 }
@@ -165,8 +165,8 @@ function mhk_query_string_form_fields( $values = null, $exclude = array(), $curr
 /**
  * @deprecated 1.2.0
  */
-function everest_forms_sanitize_textarea_field( $string ) {
-	mhk_deprecated_function( 'everest_forms_sanitize_textarea_field', '1.2.0', 'mhk_sanitize_textarea_field' );
+function muhiku_forms_sanitize_textarea_field( $string ) {
+	mhk_deprecated_function( 'muhiku_forms_sanitize_textarea_field', '1.2.0', 'mhk_sanitize_textarea_field' );
 	return mhk_sanitize_textarea_field( $string );
 }
 

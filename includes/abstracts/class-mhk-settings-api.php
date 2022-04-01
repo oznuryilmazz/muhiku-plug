@@ -20,7 +20,7 @@ abstract class MHK_Settings_API {
 	 *
 	 * @var string
 	 */
-	public $plugin_id = 'everest_forms_';
+	public $plugin_id = 'muhiku_forms_';
 
 	/**
 	 * ID of the class extending the settings API. Used in option names.
@@ -63,7 +63,7 @@ abstract class MHK_Settings_API {
 	 * @return array of options
 	 */
 	public function get_form_fields() {
-		return apply_filters( 'everest_forms_settings_api_form_fields_' . $this->id, array_map( array( $this, 'set_defaults' ), $this->form_fields ) );
+		return apply_filters( 'muhiku_forms_settings_api_form_fields_' . $this->id, array_map( array( $this, 'set_defaults' ), $this->form_fields ) );
 	}
 
 	/**
@@ -187,7 +187,7 @@ abstract class MHK_Settings_API {
 
 		$this->settings[ $key ] = $value;
 
-		return update_option( $this->get_option_key(), apply_filters( 'everest_forms_settings_api_sanitized_fields_' . $this->id, $this->settings ), 'yes' );
+		return update_option( $this->get_option_key(), apply_filters( 'muhiku_forms_settings_api_sanitized_fields_' . $this->id, $this->settings ), 'yes' );
 	}
 
 	/**
@@ -211,7 +211,7 @@ abstract class MHK_Settings_API {
 			}
 		}
 
-		return update_option( $this->get_option_key(), apply_filters( 'everest_forms_settings_api_sanitized_fields_' . $this->id, $this->settings ), 'yes' );
+		return update_option( $this->get_option_key(), apply_filters( 'muhiku_forms_settings_api_sanitized_fields_' . $this->id, $this->settings ), 'yes' );
 	}
 
 	/**
@@ -235,7 +235,7 @@ abstract class MHK_Settings_API {
 	 */
 	public function display_errors() {
 		if ( $this->get_errors() ) {
-			echo '<div id="everest_forms_errors" class="error notice is-dismissible">';
+			echo '<div id="muhiku_forms_errors" class="error notice is-dismissible">';
 			foreach ( $this->get_errors() as $error ) {
 				echo '<p>' . wp_kses_post( $error ) . '</p>';
 			}

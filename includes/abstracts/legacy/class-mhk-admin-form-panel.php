@@ -85,8 +85,8 @@ abstract class MHK_Admin_Form_Panel {
 
 		// Hooks.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueues' ), 15 );
-		add_action( 'everest_forms_builder_tabs', array( $this, 'button' ), $this->order );
-		add_action( 'everest_forms_builder_output', array( $this, 'panel_output' ), $this->order );
+		add_action( 'muhiku_forms_builder_tabs', array( $this, 'button' ), $this->order );
+		add_action( 'muhiku_forms_builder_output', array( $this, 'panel_output' ), $this->order );
 	}
 
 	/**
@@ -133,11 +133,11 @@ abstract class MHK_Admin_Form_Panel {
 
 			echo '<div class="muhiku-plug-panel-sidebar">';
 
-			do_action( 'everest_forms_builder_before_panel_sidebar', $this->form, $this->slug );
+			do_action( 'muhiku_forms_builder_before_panel_sidebar', $this->form, $this->slug );
 
 			$this->panel_sidebar();
 
-			do_action( 'everest_forms_builder_after_panel_sidebar', $this->form, $this->slug );
+			do_action( 'muhiku_forms_builder_after_panel_sidebar', $this->form, $this->slug );
 
 			echo '</div>';
 		}
@@ -145,11 +145,11 @@ abstract class MHK_Admin_Form_Panel {
 		echo '<div class="muhiku-plug-panel-content-wrap">';
 		echo '<div class="muhiku-plug-panel-content">';
 
-		do_action( 'everest_forms_builder_before_panel_content', $this->form, $this->slug );
+		do_action( 'muhiku_forms_builder_before_panel_content', $this->form, $this->slug );
 
 		$this->panel_content();
 
-		do_action( 'everest_forms_builder_after_panel_content', $this->form, $this->slug );
+		do_action( 'muhiku_forms_builder_after_panel_content', $this->form, $this->slug );
 
 		echo '</div></div></div></div>';
 	}

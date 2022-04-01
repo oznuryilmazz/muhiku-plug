@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 				<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 24 24"><path fill="#7e3bd0" d="M21.23,10H17.79L16.62,8h3.46ZM17.77,4l1.15,2H15.48L14.31,4Zm-15,16L12,4l5.77,10H10.85L12,12h2.31L12,8,6.23,18H20.08l1.16,2Z"/></svg>
 			</div>
 			<h4><?php esc_html_e( 'Add New Form', 'muhiku-plug' ); ?></h4>
-			<?php if ( apply_filters( 'everest_forms_refresh_templates', true ) ) : ?>
+			<?php if ( apply_filters( 'muhiku_forms_refresh_templates', true ) ) : ?>
 				<a href="<?php echo esc_url( $refresh_url ); ?>" class="muhiku-plug-btn page-title-action"><?php esc_html_e( 'Refresh Templates', 'muhiku-plug' ); ?></a>
 			<?php endif; ?>
 			<nav class="muhiku-plug-tab">
@@ -119,7 +119,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.6.0
  */
-function everest_forms_print_admin_notice_templates() {
+function muhiku_forms_print_admin_notice_templates() {
 	?>
 	<script id="tmpl-wp-installs-admin-notice" type="text/html">
 		<div <# if ( data.id ) { #>id="{{ data.id }}"<# } #> class="notice {{ data.className }}"><p>{{{ data.message }}}</p></div>
@@ -173,4 +173,4 @@ function everest_forms_print_admin_notice_templates() {
 	</script>
 	<?php
 }
-everest_forms_print_admin_notice_templates();
+muhiku_forms_print_admin_notice_templates();

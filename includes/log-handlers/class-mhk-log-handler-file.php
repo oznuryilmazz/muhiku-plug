@@ -47,7 +47,7 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 			$log_size_limit = 5 * 1024 * 1024;
 		}
 
-		$this->log_size_limit = apply_filters( 'everest_forms_log_file_size_limit', $log_size_limit );
+		$this->log_size_limit = apply_filters( 'muhiku_forms_log_file_size_limit', $log_size_limit );
 
 		add_action( 'plugins_loaded', array( $this, 'write_cached_logs' ) );
 	}
@@ -110,7 +110,7 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 			} else {
 				$handle = 'log';
 			}
-			$message = apply_filters( 'everest_forms_logger_add_message', $message, $handle );
+			$message = apply_filters( 'muhiku_forms_logger_add_message', $message, $handle );
 			$time    = date_i18n( 'm-d-Y @ H:i:s' );
 			$entry   = "{$time} - {$message}";
 		} else {
@@ -227,7 +227,7 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 			$result = true;
 		}
 
-		do_action( 'everest_forms_log_clear', $handle );
+		do_action( 'muhiku_forms_log_clear', $handle );
 
 		return $result;
 	}
@@ -250,7 +250,7 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 				$this->close( $file ); // Close first to be certain no processes keep it alive after it is unlinked.
 				$removed = unlink( $file ); // phpcs:ignore WordPress.VIP.FileSystemWritesDisallow.file_ops_unlink
 			}
-			do_action( 'everest_forms_log_remove', $handle, $removed );
+			do_action( 'muhiku_forms_log_remove', $handle, $removed );
 		}
 		return $removed;
 	}

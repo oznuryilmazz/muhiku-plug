@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 $tabs        = apply_filters(
-	'everest_forms_admin_status_tabs',
+	'muhiku_forms_admin_status_tabs',
 	array(
 		'import' => __( 'Import', 'muhiku-plug' ),
 		'export' => __( 'Export', 'muhiku-plug' ),
@@ -17,7 +17,7 @@ $tabs        = apply_filters(
 );
 $current_tab = ! empty( $_REQUEST['tab'] ) ? sanitize_title( wp_unslash( $_REQUEST['tab'] ) ) : 'import'; // phpcs:ignore WordPress.Security.NonceVerification
 
-if ( 'yes' === get_option( 'everest_forms_enable_log', 'no' ) ) {
+if ( 'yes' === get_option( 'muhiku_forms_enable_log', 'no' ) ) {
 	$tabs['logs'] = __( 'Logs', 'muhiku-plug' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 }
 
@@ -44,8 +44,8 @@ if ( 'yes' === get_option( 'everest_forms_enable_log', 'no' ) ) {
 				MHK_Admin_Tools::export();
 				break;
 			default:
-				if ( array_key_exists( $current_tab, $tabs ) && has_action( 'everest_forms_admin_status_content_' . $current_tab ) ) {
-					do_action( 'everest_forms_admin_status_content_' . $current_tab );
+				if ( array_key_exists( $current_tab, $tabs ) && has_action( 'muhiku_forms_admin_status_content_' . $current_tab ) ) {
+					do_action( 'muhiku_forms_admin_status_content_' . $current_tab );
 				} else {
 					MHK_Admin_Tools::import();
 				}

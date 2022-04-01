@@ -51,7 +51,7 @@ class MHK_Frontend_Scripts {
 	 */
 	public static function get_styles() {
 		return apply_filters(
-			'everest_forms_enqueue_styles',
+			'muhiku_forms_enqueue_styles',
 			array(
 				'muhiku-plug-general' => array(
 					'src'     => self::get_asset_url( 'assets/css/muhiku-plug.css' ),
@@ -72,7 +72,7 @@ class MHK_Frontend_Scripts {
 	 * @return string
 	 */
 	private static function get_asset_url( $path ) {
-		return apply_filters( 'everest_forms_get_asset_url', plugins_url( $path, MHK_PLUGIN_FILE ), $path );
+		return apply_filters( 'muhiku_forms_get_asset_url', plugins_url( $path, MHK_PLUGIN_FILE ), $path );
 	}
 
 	/**
@@ -230,7 +230,7 @@ class MHK_Frontend_Scripts {
 	public static function load_scripts() {
 		global $post;
 
-		if ( ! did_action( 'before_everest_forms_init' ) ) {
+		if ( ! did_action( 'before_muhiku_forms_init' ) ) {
 			return;
 		}
 
@@ -284,20 +284,20 @@ class MHK_Frontend_Scripts {
 				$params = array(
 					'ajax_url'                             => mhk()->ajax_url(),
 					'submit'                               => esc_html__( 'Submit', 'muhiku-plug' ),
-					'disable_user_details'                 => get_option( 'everest_forms_disable_user_details' ),
-					'everest_forms_data_save'              => wp_create_nonce( 'everest_forms_data_save_nonce' ),
-					'i18n_messages_required'               => get_option( 'everest_forms_required_validation' ),
-					'i18n_messages_url'                    => get_option( 'everest_forms_url_validation' ),
-					'i18n_messages_email'                  => get_option( 'everest_forms_email_validation' ),
-					'i18n_messages_email_suggestion'       => get_option( 'everest_forms_email_suggestion', esc_html__( 'Did you mean {suggestion}?', 'muhiku-plug' ) ),
+					'disable_user_details'                 => get_option( 'muhiku_forms_disable_user_details' ),
+					'muhiku_forms_data_save'              => wp_create_nonce( 'muhiku_forms_data_save_nonce' ),
+					'i18n_messages_required'               => get_option( 'muhiku_forms_required_validation' ),
+					'i18n_messages_url'                    => get_option( 'muhiku_forms_url_validation' ),
+					'i18n_messages_email'                  => get_option( 'muhiku_forms_email_validation' ),
+					'i18n_messages_email_suggestion'       => get_option( 'muhiku_forms_email_suggestion', esc_html__( 'Did you mean {suggestion}?', 'muhiku-plug' ) ),
 					'i18n_messages_email_suggestion_title' => esc_attr__( 'Click to accept this suggestion.', 'muhiku-plug' ),
-					'i18n_messages_confirm'                => get_option( 'everest_forms_confirm_validation', __( 'Field values do not match.', 'muhiku-plug' ) ),
-					'i18n_messages_check_limit'            => get_option( 'everest_forms_check_limit_validation', esc_html__( 'You have exceeded number of allowed selections: {#}.', 'muhiku-plug' ) ),
-					'i18n_messages_number'                 => get_option( 'everest_forms_number_validation' ),
+					'i18n_messages_confirm'                => get_option( 'muhiku_forms_confirm_validation', __( 'Field values do not match.', 'muhiku-plug' ) ),
+					'i18n_messages_check_limit'            => get_option( 'muhiku_forms_check_limit_validation', esc_html__( 'You have exceeded number of allowed selections: {#}.', 'muhiku-plug' ) ),
+					'i18n_messages_number'                 => get_option( 'muhiku_forms_number_validation' ),
 					'i18n_no_matches'                      => _x( 'No matches found', 'enhanced select', 'muhiku-plug' ),
-					'mailcheck_enabled'                    => (bool) apply_filters( 'everest_forms_mailcheck_enabled', true ),
-					'mailcheck_domains'                    => array_map( 'sanitize_text_field', (array) apply_filters( 'everest_forms_mailcheck_domains', array() ) ),
-					'mailcheck_toplevel_domains'           => array_map( 'sanitize_text_field', (array) apply_filters( 'everest_forms_mailcheck_toplevel_domains', array( 'dev' ) ) ),
+					'mailcheck_enabled'                    => (bool) apply_filters( 'muhiku_forms_mailcheck_enabled', true ),
+					'mailcheck_domains'                    => array_map( 'sanitize_text_field', (array) apply_filters( 'muhiku_forms_mailcheck_domains', array() ) ),
+					'mailcheck_toplevel_domains'           => array_map( 'sanitize_text_field', (array) apply_filters( 'muhiku_forms_mailcheck_toplevel_domains', array( 'dev' ) ) ),
 				);
 				break;
 			case 'muhiku-plug-text-limit':
@@ -309,7 +309,7 @@ class MHK_Frontend_Scripts {
 			case 'muhiku-plug-ajax-submission':
 				$params = array(
 					'ajax_url'            => admin_url( 'admin-ajax.php' ),
-					'mhk_ajax_submission' => wp_create_nonce( 'everest_forms_ajax_form_submission' ),
+					'mhk_ajax_submission' => wp_create_nonce( 'muhiku_forms_ajax_form_submission' ),
 					'submit'              => esc_html__( 'Submit', 'muhiku-plug' ),
 					'error'               => esc_html__( 'Something went wrong while making an AJAX submission', 'muhiku-plug' ),
 					'required'            => esc_html__( 'This field is required.', 'muhiku-plug' ),
@@ -320,7 +320,7 @@ class MHK_Frontend_Scripts {
 				$params = false;
 		}
 
-		return apply_filters( 'everest_forms_get_script_data', $params, $handle );
+		return apply_filters( 'muhiku_forms_get_script_data', $params, $handle );
 	}
 
 	/**

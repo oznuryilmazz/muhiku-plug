@@ -46,9 +46,9 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 	 */
 	public function init_hooks() {
 		if ( is_object( $this->form ) ) {
-			add_action( 'everest_forms_builder_fields', array( $this, 'output_fields' ) );
-			add_action( 'everest_forms_builder_fields_options', array( $this, 'output_fields_options' ) );
-			add_action( 'everest_forms_builder_fields_preview', array( $this, 'output_fields_preview' ) );
+			add_action( 'muhiku_forms_builder_fields', array( $this, 'output_fields' ) );
+			add_action( 'muhiku_forms_builder_fields_options', array( $this, 'output_fields_options' ) );
+			add_action( 'muhiku_forms_builder_fields_preview', array( $this, 'output_fields_preview' ) );
 		}
 	}
 
@@ -60,7 +60,7 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		<div class="muhiku-plug-fields-tab">
 			<a href="#" id="add-fields" class="fields active"><?php esc_html_e( 'Add Fields', 'muhiku-plug' ); ?></a>
 			<a href="#" id="field-options" class="options"><?php esc_html_e( 'Field Options', 'muhiku-plug' ); ?></a>
-			<?php do_action( 'everest_forms_builder_fields_tab', $this->form ); ?>
+			<?php do_action( 'muhiku_forms_builder_fields_tab', $this->form ); ?>
 		</div>
 		<div class="muhiku-plug-tab-content">
 			<div class="muhiku-plug-add-fields">
@@ -77,12 +77,12 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 					<h3 class="muhiku-plug-fields-not-found__title"><?php esc_html_e( 'Oops!', 'muhiku-plug' ); ?></h3>
 					<span><?php esc_html_e( 'There is not such field that you are searching for.', 'muhiku-plug' ); ?></span>
 				</div>
-				<?php do_action( 'everest_forms_builder_fields', $this->form ); ?>
+				<?php do_action( 'muhiku_forms_builder_fields', $this->form ); ?>
 			</div>
 			<div class="muhiku-plug-field-options">
-				<?php do_action( 'everest_forms_builder_fields_options', $this->form ); ?>
+				<?php do_action( 'muhiku_forms_builder_fields_options', $this->form ); ?>
 			</div>
-			<?php do_action( 'everest_forms_builder_fields_tab_content', $this->form ); ?>
+			<?php do_action( 'muhiku_forms_builder_fields_tab_content', $this->form ); ?>
 		</div>
 		<?php
 	}
@@ -99,7 +99,7 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 					<span id="edit-form-name" class = "mhk-icon dashicons dashicons-edit"></span>
 				</div>
 				<div class="muhiku-plug-field-wrap">
-					<?php do_action( 'everest_forms_builder_fields_preview', $this->form ); ?>
+					<?php do_action( 'muhiku_forms_builder_fields_preview', $this->form ); ?>
 				</div>
 				<?php mhk_debug_data( $this->form_data ); ?>
 			</div>
@@ -147,7 +147,7 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 				}
 
 				$field_option_class = apply_filters(
-					'everest_forms_builder_field_option_class',
+					'muhiku_forms_builder_field_option_class',
 					array(
 						'muhiku-plug-field-option',
 						'muhiku-plug-field-option-' . esc_attr( $field['type'] ),
@@ -159,7 +159,7 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 				<div class="<?php echo esc_attr( implode( ' ', $field_option_class ) ); ?>" id="muhiku-plug-field-option-<?php echo esc_attr( $field['id'] ); ?>" data-field-id="<?php echo esc_attr( $field['id'] ); ?>" >
 					<input type="hidden" name="form_fields[<?php echo esc_attr( $field['id'] ); ?>][id]" value="<?php echo esc_attr( $field['id'] ); ?>" class="muhiku-plug-field-option-hidden-id" />
 					<input type="hidden" name="form_fields[<?php echo esc_attr( $field['id'] ); ?>][type]" value="<?php echo esc_attr( $field['type'] ); ?>" class="muhiku-plug-field-option-hidden-type" />
-					<?php do_action( 'everest_forms_builder_fields_options_' . $field['type'], $field ); ?>
+					<?php do_action( 'muhiku_forms_builder_fields_options_' . $field['type'], $field ); ?>
 				</div>
 				<?php
 			}
@@ -222,33 +222,33 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		}
 
 		// Allow Multi-Part to be customized.
-		self::$parts[ $form_id ] = apply_filters( 'everest_forms_parts_data', self::$parts, $form_data, $form_id );
+		self::$parts[ $form_id ] = apply_filters( 'muhiku_forms_parts_data', self::$parts, $form_data, $form_id );
 
 		// Output the fields preview.
 		echo '<div class="mhk-admin-field-container">';
 		echo '<div class="mhk-admin-field-wrapper">';
 
 		/**
-		 * Hook: everest_forms_display_builder_fields_before.
+		 * Hook: muhiku_forms_display_builder_fields_before.
 		 *
 		 * @hooked MuhikuPlug_MultiPart::display_builder_fields_before() Multi-Part markup open.
 		 */
-		do_action( 'everest_forms_display_builder_fields_before', $form_data, $form_id );
+		do_action( 'muhiku_forms_display_builder_fields_before', $form_data, $form_id );
 
 		foreach ( $structure as $row_id => $row_data ) {
 			$row         = str_replace( 'row_', '', $row_id );
 			$row_grid    = isset( $form_data['structure'][ 'row_' . $row ] ) ? $form_data['structure'][ 'row_' . $row ] : array();
-			$form_grid   = apply_filters( 'everest_forms_default_form_grid', 4 );
+			$form_grid   = apply_filters( 'muhiku_forms_default_form_grid', 4 );
 			$total_grid  = $form_grid;
 			$active_grid = count( $row_grid ) > 0 ? count( $row_grid ) : 2;
 			$active_grid = $active_grid > $total_grid ? $total_grid : $active_grid;
 
 			/**
-			 * Hook: everest_forms_display_row_before.
+			 * Hook: muhiku_forms_display_row_before.
 			 */
-			do_action( 'everest_forms_display_builder_row_before', $row_id, $form_data, $form_id );
+			do_action( 'muhiku_forms_display_builder_row_before', $row_id, $form_data, $form_id );
 
-			$repeater_field = apply_filters( 'everest_forms_display_repeater_fields', false, $row_grid, $fields );
+			$repeater_field = apply_filters( 'muhiku_forms_display_repeater_fields', false, $row_grid, $fields );
 
 			echo '<div class="mhk-admin-row" data-row-id="' . absint( $row ) . '"' . ( ! empty( $repeater_field ) ? esc_attr( $repeater_field ) : '' ) . '>';
 			echo '<div class="mhk-toggle-row">';
@@ -301,19 +301,19 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 			echo '</div >';
 
 			/**
-			 * Hook: everest_forms_display_builder_row_after.
+			 * Hook: muhiku_forms_display_builder_row_after.
 			 *
 			 * @hooked MuhikuPlug_MultiPart::display_builder_row_after() Multi-Part markup (close previous part, open next).
 			 */
-			do_action( 'everest_forms_display_builder_row_after', $row_id, $form_data, $form_id );
+			do_action( 'muhiku_forms_display_builder_row_after', $row_id, $form_data, $form_id );
 		}
 
 		/**
-		 * Hook: everest_forms_display_builder_fields_after.
+		 * Hook: muhiku_forms_display_builder_fields_after.
 		 *
 		 * @hooked MuhikuPlug_MultiPart::display_builder_fields_after() Multi-Part markup open.
 		 */
-		do_action( 'everest_forms_display_builder_fields_after', $form_data, $form_id );
+		do_action( 'muhiku_forms_display_builder_fields_after', $form_data, $form_id );
 
 		echo '</div>';
 		echo '<div class="clear mhk-clear"></div>';
@@ -343,7 +343,7 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		$css .= ! empty( $field['input_columns'] ) && '2' === $field['input_columns'] ? ' muhiku-plug-list-2-columns' : '';
 		$css .= ! empty( $field['input_columns'] ) && '3' === $field['input_columns'] ? ' muhiku-plug-list-3-columns' : '';
 		$css .= ! empty( $field['input_columns'] ) && 'inline' === $field['input_columns'] ? ' muhiku-plug-list-inline' : '';
-		$css  = apply_filters( 'everest_forms_field_preview_class', $css, $field );
+		$css  = apply_filters( 'muhiku_forms_field_preview_class', $css, $field );
 
 		printf( '<div class="muhiku-plug-field muhiku-plug-field-%1$s %2$s" id="muhiku-plug-field-%3$s" data-field-id="%3$s" data-field-type="%4$s">', esc_attr( $field['type'] ), esc_attr( $css ), esc_attr( $field['id'] ), esc_attr( $field['type'] ) );
 		printf( '<div class="mhk-field-action">' );
@@ -357,7 +357,7 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		}
 		printf( '</div>' );
 
-		do_action( 'everest_forms_builder_fields_preview_' . $field['type'], $field );
+		do_action( 'muhiku_forms_builder_fields_preview_' . $field['type'], $field );
 
 		echo '</div>';
 	}

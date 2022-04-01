@@ -30,7 +30,7 @@ class MHK_Admin_Import_Export {
 		}
 
 		// Nonce check.
-		if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['muhiku-plug-export-nonce'] ) ), 'everest_forms_export_nonce' ) ) {
+		if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['muhiku-plug-export-nonce'] ) ), 'muhiku_forms_export_nonce' ) ) {
 			wp_die( esc_html__( 'Action failed. Please refresh the page and retry.', 'muhiku-plug' ) );
 		}
 
@@ -55,7 +55,7 @@ class MHK_Admin_Import_Export {
 		$file_name   = html_entity_decode( $form_name, ENT_QUOTES, 'UTF-8' ) . '-' . current_time( 'Y-m-d_H:i:s' ) . '.json';
 
 		// Export form styles if found.
-		$form_styles = get_option( 'everest_forms_styles', array() );
+		$form_styles = get_option( 'muhiku_forms_styles', array() );
 		if ( ! empty( $form_styles[ $form_id ] ) ) {
 			$export_data['form_styles'] = wp_json_encode( $form_styles[ $form_id ] );
 		}
@@ -90,7 +90,7 @@ class MHK_Admin_Import_Export {
 				if ( ! empty( $form_data ) ) {
 					// Check for non-empty post data array.
 					if ( ! empty( $form_data->form_post ) ) {
-						$args  = array( 'post_type' => 'everest_form' );
+						$args  = array( 'post_type' => 'muhiku_form' );
 						$forms = get_posts( $args );
 
 						foreach ( $forms as $key => $form_obj ) {
@@ -123,14 +123,14 @@ class MHK_Admin_Import_Export {
 						$style_needed = false;
 						if ( ! empty( $form_data->form_styles ) ) {
 							$style_needed            = true;
-							$form_styles             = get_option( 'everest_forms_styles', array() );
+							$form_styles             = get_option( 'muhiku_forms_styles', array() );
 							$form_styles[ $post_id ] = mhk_decode( $form_data->form_styles );
 
 							// Update forms styles.
-							update_option( 'everest_forms_styles', $form_styles );
+							update_option( 'muhiku_forms_styles', $form_styles );
 						}
 
-						do_action( 'everest_forms_import_form', $post_id, $form, array(), $style_needed );
+						do_action( 'muhiku_forms_import_form', $post_id, $form, array(), $style_needed );
 
 						// Check for any error while inserting.
 						if ( is_wp_error( $post_id ) ) {

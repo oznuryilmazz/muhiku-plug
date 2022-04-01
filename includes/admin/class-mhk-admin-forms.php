@@ -90,7 +90,7 @@ class MHK_Admin_Forms {
 			}
 		}
 
-		return apply_filters( 'everest_forms_template_sections', $template_sections );
+		return apply_filters( 'muhiku_forms_template_sections', $template_sections );
 	}
 
 	/**
@@ -132,7 +132,7 @@ class MHK_Admin_Forms {
 		}
 
 		if ( ! empty( $template_data->templates ) ) {
-			return apply_filters( 'everest_forms_template_section_data', $template_data->templates );
+			return apply_filters( 'muhiku_forms_template_section_data', $template_data->templates );
 		}
 	}
 
@@ -147,7 +147,7 @@ class MHK_Admin_Forms {
 		?>
 		<div class="wrap">
 			<h1 class="wp-heading-inline"><?php esc_html_e( 'All Forms', 'muhiku-plug' ); ?></h1>
-			<?php if ( current_user_can( 'everest_forms_create_forms' ) ) : ?>
+			<?php if ( current_user_can( 'muhiku_forms_create_forms' ) ) : ?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=mhk-builder&create-form=1' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'muhiku-plug' ); ?></a>
 			<?php endif; ?>
 			<hr class="wp-header-end">
@@ -194,7 +194,7 @@ class MHK_Admin_Forms {
 		$count    = 0;
 		$form_ids = get_posts(
 			array(
-				'post_type'           => 'everest_form',
+				'post_type'           => 'muhiku_form',
 				'ignore_sticky_posts' => true,
 				'nopaging'            => true,
 				'post_status'         => 'trash',
@@ -267,7 +267,7 @@ class MHK_Admin_Forms {
 	 * @return string
 	 */
 	public function untrash_form_status( $new_status, $post_id ) {
-		return current_user_can( 'everest_forms_edit_forms', $post_id ) ? 'publish' : $new_status;
+		return current_user_can( 'muhiku_forms_edit_forms', $post_id ) ? 'publish' : $new_status;
 	}
 }
 

@@ -16,7 +16,7 @@ class MHK_Smart_Tags {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_filter( 'everest_forms_process_smart_tags', array( $this, 'process' ), 10, 4 );
+		add_filter( 'muhiku_forms_process_smart_tags', array( $this, 'process' ), 10, 4 );
 	}
 
 	/**
@@ -26,7 +26,7 @@ class MHK_Smart_Tags {
 	 */
 	public function other_smart_tags() {
 		$smart_tags = apply_filters(
-			'everest_forms_smart_tags',
+			'muhiku_forms_smart_tags',
 			array(
 				'admin_email'     => esc_html__( 'Site Admin Email', 'muhiku-plug' ),
 				'site_name'       => esc_html__( 'Site Name', 'muhiku-plug' ),

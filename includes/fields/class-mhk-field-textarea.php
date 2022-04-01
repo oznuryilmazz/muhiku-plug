@@ -52,7 +52,7 @@ class MHK_Field_Textarea extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_action( 'everest_forms_shortcode_scripts', array( $this, 'load_assets' ) );
+		add_action( 'muhiku_forms_shortcode_scripts', array( $this, 'load_assets' ) );
 	}
 
 	/**

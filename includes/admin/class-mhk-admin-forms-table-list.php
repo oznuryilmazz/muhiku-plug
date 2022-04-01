@@ -58,12 +58,12 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		}
 
 		// Only show entries column if the user can view entries.
-		if ( current_user_can( 'everest_forms_view_entries' ) || current_user_can( 'everest_forms_view_others_entries' ) ) {
+		if ( current_user_can( 'muhiku_forms_view_entries' ) || current_user_can( 'muhiku_forms_view_others_entries' ) ) {
 			$forms_columns['entries'] = esc_html__( 'Entries', 'muhiku-plug' );
 		}
 
 		// Only "Move to trash" bulk action exist, lets hide cb if the user cannot delete forms.
-		if ( isset( $_GET['status'] ) && 'trash' !== $_GET['status'] && ! current_user_can( 'everest_forms_delete_forms' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_GET['status'] ) && 'trash' !== $_GET['status'] && ! current_user_can( 'muhiku_forms_delete_forms' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			unset( $forms_columns['cb'] );
 		}
 
@@ -90,8 +90,8 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 	 * @return string
 	 */
 	public function column_cb( $form ) {
-		$show   = current_user_can( 'everest_forms_edit_form', $form->ID );
-		$delete = current_user_can( 'everest_forms_delete_form', $form->ID );
+		$show   = current_user_can( 'muhiku_forms_edit_form', $form->ID );
+		$delete = current_user_can( 'muhiku_forms_delete_form', $form->ID );
 
 		/**
 		 * Filters whether to show the bulk edit checkbox for a form in its list table.
@@ -103,7 +103,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		 * @param bool    $show Whether to show the checkbox.
 		 * @param WP_Post $post The current WP_Post object.
 		 */
-		if ( apply_filters( 'everest_forms_list_table_show_form_checkbox', $show, $form ) || apply_filters( 'everest_forms_list_table_delete_form_checkbox', $delete, $form ) ) {
+		if ( apply_filters( 'muhiku_forms_list_table_show_form_checkbox', $show, $form ) || apply_filters( 'muhiku_forms_list_table_delete_form_checkbox', $delete, $form ) ) {
 			return sprintf( '<input type="checkbox" name="form_id[]" value="%1$s" />', esc_attr( $form->ID ) );
 		}
 	}
@@ -118,7 +118,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		$form_data    = mhk()->form->get( absint( $posts->ID ), array( 'content_only' => true ) );
 		$form_enabled = isset( $form_data['form_enabled'] ) ? $form_data['form_enabled'] : 1;
 
-		if ( current_user_can( 'everest_forms_edit_form', $posts->ID ) ) {
+		if ( current_user_can( 'muhiku_forms_edit_form', $posts->ID ) ) {
 			return '<label class="muhiku-plug-toggle-form form-enabled"><input type="checkbox" data-form_id="' . absint( $posts->ID ) . '" value="1" ' . checked( 1, $form_enabled, false ) . '/><span class="slider round"></span></label>';
 		}
 	}
@@ -139,7 +139,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 			home_url()
 		);
 		$title            = _draft_or_post_title( $posts->ID );
-		$post_type_object = get_post_type_object( 'everest_form' );
+		$post_type_object = get_post_type_object( 'muhiku_form' );
 		$post_status      = $posts->post_status;
 
 		// Title.
@@ -149,15 +149,15 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		} else {
 			$name = esc_html( $title );
 
-			if ( current_user_can( 'everest_forms_view_form', $posts->ID ) ) {
+			if ( current_user_can( 'muhiku_forms_view_form', $posts->ID ) ) {
 				$name = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_html__( 'View Preview', 'muhiku-plug' ) . '" class="row-title" target="_blank" rel="noopener noreferrer">' . esc_html( $title ) . '</a>';
 			}
 
-			if ( current_user_can( 'everest_forms_view_form_entries', $posts->ID ) ) {
+			if ( current_user_can( 'muhiku_forms_view_form_entries', $posts->ID ) ) {
 				$name = '<a href="' . esc_url( esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $posts->ID ) ) ) . '" title="' . esc_html__( 'View Entries', 'muhiku-plug' ) . '" class="row-title">' . esc_html( $title ) . '</a>';
 			}
 
-			if ( current_user_can( 'everest_forms_edit_form', $posts->ID ) ) {
+			if ( current_user_can( 'muhiku_forms_edit_form', $posts->ID ) ) {
 				$name = '<a href="' . esc_url( $edit_link ) . '" title="' . esc_html__( 'Edit this Form', 'muhiku-plug' ) . '" class="row-title">' . esc_html( $title ) . '</a>';
 			}
 
@@ -168,15 +168,15 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		// Get actions.
 		$actions = array();
 
-		if ( current_user_can( 'everest_forms_edit_form', $posts->ID ) && 'trash' !== $post_status ) {
+		if ( current_user_can( 'muhiku_forms_edit_form', $posts->ID ) && 'trash' !== $post_status ) {
 			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '" title="' . esc_html__( 'Edit this Form', 'muhiku-plug' ) . '">' . __( 'Edit', 'muhiku-plug' ) . '</a>';
 		}
 
-		if ( current_user_can( 'everest_forms_view_form_entries', $posts->ID ) && 'trash' !== $post_status ) {
+		if ( current_user_can( 'muhiku_forms_view_form_entries', $posts->ID ) && 'trash' !== $post_status ) {
 			$actions['entries'] = '<a href="' . esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $posts->ID ) ) . '" title="' . esc_html__( 'View Entries', 'muhiku-plug' ) . '">' . __( 'Entries', 'muhiku-plug' ) . '</a>';
 		}
 
-		if ( current_user_can( 'everest_forms_delete_form', $posts->ID ) ) {
+		if ( current_user_can( 'muhiku_forms_delete_form', $posts->ID ) ) {
 			if ( 'trash' === $post_status ) {
 				$actions['untrash'] = '<a aria-label="' . esc_attr__( 'Restore this item from the Trash', 'muhiku-plug' ) . '" href="' . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $posts->ID ) ), 'untrash-post_' . $posts->ID ) . '">' . esc_html__( 'Restore', 'muhiku-plug' ) . '</a>';
 			} elseif ( EMPTY_TRASH_DAYS ) {
@@ -187,7 +187,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 			}
 		}
 
-		if ( current_user_can( 'everest_forms_view_form', $posts->ID ) ) {
+		if ( current_user_can( 'muhiku_forms_view_form', $posts->ID ) ) {
 			$preview_link   = add_query_arg(
 				array(
 					'form_id'     => absint( $posts->ID ),
@@ -201,7 +201,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 				$actions['view'] = '<a href="' . esc_url( $preview_link ) . '" rel="bookmark" target="_blank">' . __( 'Preview', 'muhiku-plug' ) . '</a>';
 			}
 
-			if ( 'publish' === $post_status && current_user_can( 'everest_forms_create_forms' ) ) {
+			if ( 'publish' === $post_status && current_user_can( 'muhiku_forms_create_forms' ) ) {
 				$actions['duplicate'] = '<a href="' . esc_url( $duplicate_link ) . '">' . __( 'Duplicate', 'muhiku-plug' ) . '</a>';
 			}
 		}
@@ -225,7 +225,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 	public function column_shortcode( $posts ) {
 		?>
 		<span class="shortcode mhk-shortcode-field">
-			<input type="text" onfocus="this.select();" readonly="readonly" value="<?php echo esc_attr( '[everest_form id="' . absint( $posts->ID ) . '"]' ); ?> " class="large-text code">
+			<input type="text" onfocus="this.select();" readonly="readonly" value="<?php echo esc_attr( '[muhiku_form id="' . absint( $posts->ID ) . '"]' ); ?> " class="large-text code">
 			<button class="button mhk-copy-shortcode help_tip" type="button" href="#" data-tip="<?php esc_attr_e( 'Copy Shortcode!', 'muhiku-plug' ); ?>" data-copied="<?php esc_attr_e( 'Copied!', 'muhiku-plug' ); ?>">
 				<span class="dashicons dashicons-admin-page"></span>
 			</button>
@@ -307,7 +307,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 	public function column_entries( $posts ) {
 		global $wpdb;
 
-		if ( ! current_user_can( 'everest_forms_view_form_entries', $posts->ID ) ) {
+		if ( ! current_user_can( 'muhiku_forms_view_form_entries', $posts->ID ) ) {
 			return '-';
 		}
 
@@ -424,14 +424,14 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		$actions = array();
 
 		if ( isset( $_GET['status'] ) && 'trash' === $_GET['status'] ) { // phpcs:ignore WordPress.Security.NonceVerification
-			if ( current_user_can( 'everest_forms_edit_forms' ) ) {
+			if ( current_user_can( 'muhiku_forms_edit_forms' ) ) {
 				$actions['untrash'] = esc_html__( 'Restore', 'muhiku-plug' );
 			}
 
-			if ( current_user_can( 'everest_forms_delete_forms' ) ) {
+			if ( current_user_can( 'muhiku_forms_delete_forms' ) ) {
 				$actions['delete'] = esc_html__( 'Delete permanently', 'muhiku-plug' );
 			}
-		} elseif ( current_user_can( 'everest_forms_delete_forms' ) ) {
+		} elseif ( current_user_can( 'muhiku_forms_delete_forms' ) ) {
 			$actions = array(
 				'trash' => esc_html__( 'Move to trash', 'muhiku-plug' ),
 			);
@@ -509,9 +509,9 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 	 * @param string $which The location of the extra table nav markup.
 	 */
 	protected function extra_tablenav( $which ) {
-		$num_posts = wp_count_posts( 'everest_form', 'readable' );
+		$num_posts = wp_count_posts( 'muhiku_form', 'readable' );
 
-		if ( $num_posts->trash && isset( $_GET['status'] ) && 'trash' === $_GET['status'] && current_user_can( 'everest_forms_delete_forms' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( $num_posts->trash && isset( $_GET['status'] ) && 'trash' === $_GET['status'] && current_user_can( 'muhiku_forms_delete_forms' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			echo '<div class="alignleft actions">';
 				submit_button( __( 'Empty Trash', 'muhiku-plug' ), 'apply', 'delete_all', false );
 			echo '</div>';
@@ -528,7 +528,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 
 		// Query args.
 		$args = array(
-			'post_type'           => 'everest_form',
+			'post_type'           => 'muhiku_form',
 			'posts_per_page'      => $per_page,
 			'paged'               => $current_page,
 			'no_found_rows'       => false,
@@ -549,15 +549,15 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		$args['order']   = isset( $_REQUEST['order'] ) && 'ASC' === strtoupper( sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ) ) ? 'ASC' : 'DESC'; // phpcs:ignore WordPress.Security.NonceVerification
 
 		// Can user interact, lets check the view capabilities?
-		if ( current_user_can( 'everest_forms_view_forms' ) && ! current_user_can( 'everest_forms_view_others_forms' ) ) {
+		if ( current_user_can( 'muhiku_forms_view_forms' ) && ! current_user_can( 'muhiku_forms_view_others_forms' ) ) {
 			$args['author'] = $user_id;
 		}
 
-		if ( ! current_user_can( 'everest_forms_view_forms' ) && current_user_can( 'everest_forms_view_others_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_view_forms' ) && current_user_can( 'muhiku_forms_view_others_forms' ) ) {
 			$args['author__not_in'] = $user_id;
 		}
 
-		if ( ! current_user_can( 'everest_forms_view_forms' ) && ! current_user_can( 'everest_forms_view_others_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_view_forms' ) && ! current_user_can( 'muhiku_forms_view_others_forms' ) ) {
 			$args['post__in'] = array( 0 );
 		}
 

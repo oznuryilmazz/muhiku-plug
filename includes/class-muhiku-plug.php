@@ -132,7 +132,7 @@ final class MuhikuPlug {
 		$this->init_hooks();
 		add_action( 'plugins_loaded', array( $this, 'objects' ), 1 );
 
-		do_action( 'everest_forms_loaded' );
+		do_action( 'muhiku_forms_loaded' );
 	}
 
 	/**
@@ -311,7 +311,7 @@ final class MuhikuPlug {
 	 */
 	public function init() {
 		// Before init action.
-		do_action( 'before_everest_forms_init' );
+		do_action( 'before_muhiku_forms_init' );
 
 		// Set up localisation.
 		$this->load_plugin_textdomain();
@@ -324,13 +324,13 @@ final class MuhikuPlug {
 		// Classes/actions loaded for the frontend and for ajax requests.
 		if ( $this->is_request( 'frontend' ) ) {
 			// Session class, handles session data for users - can be overwritten if custom handler is needed.
-			$session_class = apply_filters( 'everest_forms_session_handler', 'MHK_Session_Handler' );
+			$session_class = apply_filters( 'muhiku_forms_session_handler', 'MHK_Session_Handler' );
 			$this->session = new $session_class();
 			$this->session->init();
 		}
 
 		// Init action.
-		do_action( 'everest_forms_init' );
+		do_action( 'muhiku_forms_init' );
 	}
 
 	/**
@@ -362,7 +362,7 @@ final class MuhikuPlug {
 			$locale = is_admin() ? get_user_locale() : get_locale();
 		}
 
-		$locale = apply_filters( 'plugin_locale', $locale, 'everest_forms' );
+		$locale = apply_filters( 'plugin_locale', $locale, 'muhiku_forms' );
 
 		unload_textdomain( 'muhiku-plug' );
 		load_textdomain( 'muhiku-plug', WP_LANG_DIR . '/muhiku-plug/muhiku-plug-' . $locale . '.mo' );
@@ -395,7 +395,7 @@ final class MuhikuPlug {
 	 * @return string
 	 */
 	public function template_path() {
-		return apply_filters( 'everest_forms_template_path', 'muhiku-plug/' );
+		return apply_filters( 'muhiku_forms_template_path', 'muhiku-plug/' );
 	}
 
 	/**

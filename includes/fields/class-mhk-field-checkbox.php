@@ -74,8 +74,8 @@ class MHK_Field_Checkbox extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_filter( 'everest_forms_html_field_value', array( $this, 'html_field_value' ), 10, 4 );
-		add_filter( 'everest_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
+		add_filter( 'muhiku_forms_html_field_value', array( $this, 'html_field_value' ), 10, 4 );
+		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class MHK_Field_Checkbox extends MHK_Form_Fields {
 					'entry-table' !== $context
 					&& ! empty( $field_value['label'] )
 					&& ! empty( $field_value['images'] )
-					&& apply_filters( 'everest_forms_checkbox_field_html_value_images', true, $context )
+					&& apply_filters( 'muhiku_forms_checkbox_field_html_value_images', true, $context )
 				) {
 					$items = array();
 
@@ -192,7 +192,7 @@ class MHK_Field_Checkbox extends MHK_Form_Fields {
 					'text'  => mhk_string_translation( $form_id, $field_id, $choice['label'], '-choice-' . $key ),
 				),
 				'attr'      => array(
-					'name'  => "everest_forms[form_fields][{$field_id}][]",
+					'name'  => "muhiku_forms[form_fields][{$field_id}][]",
 					'value' => $value,
 				),
 				'class'     => array( 'input-text' ),
@@ -299,7 +299,7 @@ class MHK_Field_Checkbox extends MHK_Form_Fields {
 	 */
 	public function show_values( $field ) {
 		// Show Values toggle option. This option will only show if already used or if manually enabled by a filter.
-		if ( ! empty( $field['show_values'] ) || apply_filters( 'everest_forms_fields_show_options_setting', false ) ) {
+		if ( ! empty( $field['show_values'] ) || apply_filters( 'muhiku_forms_fields_show_options_setting', false ) ) {
 			$args = array(
 				'slug'    => 'show_values',
 				'content' => $this->field_element(
@@ -473,7 +473,7 @@ class MHK_Field_Checkbox extends MHK_Form_Fields {
 
 		// Generating the error.
 		if ( $choice_limit > 0 && $choice_limit < count( $field_submit ) ) {
-			$error = get_option( 'everest_forms_check_limit_validation', esc_html__( 'You have exceeded number of allowed selections: {#}.', 'muhiku-plug' ) );
+			$error = get_option( 'muhiku_forms_check_limit_validation', esc_html__( 'You have exceeded number of allowed selections: {#}.', 'muhiku-plug' ) );
 			$error = str_replace( '{#}', $choice_limit, $error );
 		}
 

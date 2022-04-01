@@ -11,7 +11,7 @@ $form_id    = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0; // php
 $entry_id   = isset( $_GET['view-entry'] ) ? absint( $_GET['view-entry'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
 $entry      = mhk_get_entry( $entry_id, true );
 $form_data  = mhk()->form->get( $form_id, array( 'content_only' => true ) );
-$hide_empty = isset( $_COOKIE['everest_forms_entry_hide_empty'] ) && 'true' === $_COOKIE['everest_forms_entry_hide_empty'];
+$hide_empty = isset( $_COOKIE['muhiku_forms_entry_hide_empty'] ) && 'true' === $_COOKIE['muhiku_forms_entry_hide_empty'];
 $trash_link = wp_nonce_url(
 	add_query_arg(
 		array(
@@ -27,7 +27,7 @@ $trash_link = wp_nonce_url(
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'View Entry', 'muhiku-plug' ); ?></h1>
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $form_id ) ); ?>" class="page-title-action"><?php esc_html_e( 'Back to All Entries', 'muhiku-plug' ); ?></a>
 	<hr class="wp-header-end">
-	<?php do_action( 'everest_forms_view_entries_notices' ); ?>
+	<?php do_action( 'muhiku_forms_view_entries_notices' ); ?>
 	<div class="muhiku-plug-entry">
 		<div id="poststuff">
 			<div id="post-body" class="metabox-holder columns-2">
@@ -35,14 +35,14 @@ $trash_link = wp_nonce_url(
 				<div id="post-body-content" style="position: relative;">
 					<div id="muhiku-plug-entry-fields" class="stuffbox">
 						<h2 class="hndle">
-							<?php do_action( 'everest_forms_before_entry_details_hndle', $entry ); ?>
+							<?php do_action( 'muhiku_forms_before_entry_details_hndle', $entry ); ?>
 							<span>
 							<?php
 							/* translators: %s: Entry ID */
 							printf( esc_html__( '%1$s: Entry #%2$s', 'muhiku-plug' ), esc_html( _draft_or_post_title( $form_id ) ), absint( $entry_id ) );
 							?>
 							</span>
-							<?php do_action( 'everest_forms_after_entry_details_hndle', $entry ); ?>
+							<?php do_action( 'muhiku_forms_after_entry_details_hndle', $entry ); ?>
 							<a href="#" class="muhiku-plug-empty-field-toggle">
 								<?php $hide_empty ? esc_html_e( 'Show Empty Fields', 'muhiku-plug' ) : esc_html_e( 'Hide Empty Fields', 'muhiku-plug' ); ?>
 							</a>
@@ -51,7 +51,7 @@ $trash_link = wp_nonce_url(
 							<table class="wp-list-table widefat fixed striped posts">
 								<tbody>
 								<?php
-								$entry_meta = apply_filters( 'everest_forms_entry_single_data', $entry->meta, $entry, $form_data );
+								$entry_meta = apply_filters( 'muhiku_forms_entry_single_data', $entry->meta, $entry, $form_data );
 
 								if ( empty( $entry_meta ) ) {
 									// Whoops, no fields! This shouldn't happen under normal use cases.
@@ -60,7 +60,7 @@ $trash_link = wp_nonce_url(
 									// Display the fields and their values.
 									foreach ( $entry_meta as $meta_key => $meta_value ) {
 										// Check if hidden fields exists.
-										if ( in_array( $meta_key, apply_filters( 'everest_forms_hidden_entry_fields', array() ), true ) ) {
+										if ( in_array( $meta_key, apply_filters( 'muhiku_forms_hidden_entry_fields', array() ), true ) ) {
 											continue;
 										}
 
@@ -81,7 +81,7 @@ $trash_link = wp_nonce_url(
 											$meta_value = $meta_value['value'];
 										}
 
-										$field_value     = apply_filters( 'everest_forms_html_field_value', $meta_value, $entry_meta[ $meta_key ], $entry_meta, 'entry-single' );
+										$field_value     = apply_filters( 'muhiku_forms_html_field_value', $meta_value, $entry_meta[ $meta_key ], $entry_meta, 'entry-single' );
 										$field_class     = is_string( $field_value ) && ( '(empty)' === wp_strip_all_tags( $field_value ) || '' === $field_value ) ? ' empty' : '';
 										$field_style     = $hide_empty && empty( $field_value ) ? 'display:none;' : '';
 										$correct_answers = false;
@@ -92,8 +92,8 @@ $trash_link = wp_nonce_url(
 										$value = mhk_get_form_data_by_meta_key( $form_id, $meta_key, json_decode( $entry->fields ) );
 
 										if ( $value ) {
-											if ( apply_filters( 'everest_forms_html_field_label', false ) ) {
-												$correct_answers = apply_filters( 'everest_forms_single_entry_label', $value, $meta_key, $field_value );
+											if ( apply_filters( 'muhiku_forms_html_field_label', false ) ) {
+												$correct_answers = apply_filters( 'muhiku_forms_single_entry_label', $value, $meta_key, $field_value );
 											} else {
 												echo '<strong>' . esc_html( make_clickable( $value ) ) . '</strong>';
 											}
@@ -151,7 +151,7 @@ $trash_link = wp_nonce_url(
 						</div>
 					</div>
 
-					<?php do_action( 'everest_forms_entry_details_content', $entry, $form_id ); ?>
+					<?php do_action( 'muhiku_forms_entry_details_content', $entry, $form_id ); ?>
 				</div>
 				<!-- Entry Details metabox -->
 				<div id="postbox-container-1" class="postbox-container">
@@ -215,7 +215,7 @@ $trash_link = wp_nonce_url(
 										</p>
 									<?php endif; ?>
 
-									<?php if ( apply_filters( 'everest_forms_entry_details_sidebar_details_status', false, $entry, $form_data ) ) : ?>
+									<?php if ( apply_filters( 'muhiku_forms_entry_details_sidebar_details_status', false, $entry, $form_data ) ) : ?>
 										<p class="muhiku-plug-entry-status">
 											<span class="dashicons dashicons-category"></span>
 											<?php esc_html_e( 'Status:', 'muhiku-plug' ); ?>
@@ -223,13 +223,13 @@ $trash_link = wp_nonce_url(
 										</p>
 									<?php endif; ?>
 
-									<?php do_action( 'everest_forms_entry_details_sidebar_details', $entry, $entry_meta, $form_data ); ?>
+									<?php do_action( 'muhiku_forms_entry_details_sidebar_details', $entry, $entry_meta, $form_data ); ?>
 								</div>
 
-								<?php if ( current_user_can( 'everest_forms_edit_entry', $entry->entry_id ) || current_user_can( 'everest_forms_delete_entry', $entry->entry_id ) ) : ?>
+								<?php if ( current_user_can( 'muhiku_forms_edit_entry', $entry->entry_id ) || current_user_can( 'muhiku_forms_delete_entry', $entry->entry_id ) ) : ?>
 									<div id="major-publishing-actions">
-										<?php do_action( 'everest_forms_entry_details_sidebar_action', $entry, $form_data ); ?>
-										<?php if ( current_user_can( 'everest_forms_delete_entry', $entry->entry_id ) ) : ?>
+										<?php do_action( 'muhiku_forms_entry_details_sidebar_action', $entry, $form_data ); ?>
+										<?php if ( current_user_can( 'muhiku_forms_delete_entry', $entry->entry_id ) ) : ?>
 											<div id="delete-action">
 												<a class="submitdelete" aria-label="<?php echo esc_attr__( 'Move to trash', 'muhiku-plug' ); ?>" href="<?php echo esc_url( $trash_link ); ?>"><?php esc_html_e( 'Move to trash', 'muhiku-plug' ); ?></a>
 											</div>
@@ -240,7 +240,7 @@ $trash_link = wp_nonce_url(
 							</div>
 						</div>
 					</div>
-					<?php do_action( 'everest_forms_after_entry_details', $entry, $entry_meta, $form_data ); ?>
+					<?php do_action( 'muhiku_forms_after_entry_details', $entry, $entry_meta, $form_data ); ?>
 				</div>
 			</div>
 		</div>
@@ -252,15 +252,15 @@ $trash_link = wp_nonce_url(
 		event.preventDefault();
 
 		// Handle cookie.
-		if ( wpCookies.get( 'everest_forms_entry_hide_empty' ) === 'true' ) {
+		if ( wpCookies.get( 'muhiku_forms_entry_hide_empty' ) === 'true' ) {
 
 			// User was hiding empty fields, so now display them.
-			wpCookies.remove( 'everest_forms_entry_hide_empty' );
+			wpCookies.remove( 'muhiku_forms_entry_hide_empty' );
 			jQuery( this ).text( 'Hide Empty Fields' );
 		} else {
 
 			// User was seeing empty fields, so now hide them.
-			wpCookies.set( 'everest_forms_entry_hide_empty', 'true', 2592000 ); // 1month.
+			wpCookies.set( 'muhiku_forms_entry_hide_empty', 'true', 2592000 ); // 1month.
 			jQuery( this ).text( 'Show Empty Fields' );
 		}
 

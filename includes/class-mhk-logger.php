@@ -31,12 +31,12 @@ class MHK_Logger implements MHK_Logger_Interface {
 	/**
 	 * Constructor for the logger.
 	 *
-	 * @param array  $handlers Optional. Array of log handlers. If $handlers is not provided, the filter 'everest_forms_register_log_handlers' will be used to define the handlers. If $handlers is provided, the filter will not be applied and the handlers will be used directly.
+	 * @param array  $handlers Optional. Array of log handlers. If $handlers is not provided, the filter 'muhiku_forms_register_log_handlers' will be used to define the handlers. If $handlers is provided, the filter will not be applied and the handlers will be used directly.
 	 * @param string $threshold Optional. Define an explicit threshold. May be configured via  MHK_LOG_THRESHOLD. By default, all logs will be processed.
 	 */
 	public function __construct( $handlers = null, $threshold = null ) {
 		if ( null === $handlers ) {
-			$handlers = apply_filters( 'everest_forms_register_log_handlers', array() );
+			$handlers = apply_filters( 'muhiku_forms_register_log_handlers', array() );
 		}
 
 		$register_handlers = array();
@@ -99,7 +99,7 @@ class MHK_Logger implements MHK_Logger_Interface {
 	 * @return bool
 	 */
 	public function add( $handle, $message, $level = MHK_Log_Levels::NOTICE ) {
-		$message = apply_filters( 'everest_forms_logger_add_message', $message, $handle );
+		$message = apply_filters( 'muhiku_forms_logger_add_message', $message, $handle );
 		$this->log(
 			$level,
 			$message,
@@ -108,7 +108,7 @@ class MHK_Logger implements MHK_Logger_Interface {
 				'_legacy' => true,
 			)
 		);
-		mhk_do_deprecated_action( 'everest_forms_log_add', array( $handle, $message ), '1.2', 'This action has been deprecated with no alternative.' );
+		mhk_do_deprecated_action( 'muhiku_forms_log_add', array( $handle, $message ), '1.2', 'This action has been deprecated with no alternative.' );
 		return true;
 	}
 
@@ -129,7 +129,7 @@ class MHK_Logger implements MHK_Logger_Interface {
 	 */
 	public function log( $level, $message, $context = array() ) {
 		// Check Log is disabled.
-		if ( 'no' === get_option( 'everest_forms_enable_log', 'no' ) ) {
+		if ( 'no' === get_option( 'muhiku_forms_enable_log', 'no' ) ) {
 			return false;
 		}
 
@@ -139,7 +139,7 @@ class MHK_Logger implements MHK_Logger_Interface {
 		}
 
 		if ( $this->should_handle( $level ) ) {
-			$message = apply_filters( 'everest_forms_logger_log_message', $message, $level, $context );
+			$message = apply_filters( 'muhiku_forms_logger_log_message', $message, $level, $context );
 
 			foreach ( $this->handlers as $handler ) {
 				$handler->handle( time(), $level, $message, $context );
@@ -290,7 +290,7 @@ class MHK_Logger implements MHK_Logger_Interface {
 	 * @since 1.6.2
 	 */
 	public function clear_expired_logs() {
-		$days      = absint( apply_filters( 'everest_forms_logger_days_to_retain_logs', 30 ) );
+		$days      = absint( apply_filters( 'muhiku_forms_logger_days_to_retain_logs', 30 ) );
 		$timestamp = strtotime( "-{$days} days" );
 
 		foreach ( $this->handlers as $handler ) {

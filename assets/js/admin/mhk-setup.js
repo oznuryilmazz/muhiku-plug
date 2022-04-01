@@ -77,7 +77,7 @@ jQuery(function ($) {
 
         // Add it to the queue.
         wp.updates.queue.push({
-          action: "everest_forms_install_extension",
+          action: "muhiku_forms_install_extension",
           data: {
             page: pagenow,
             name: $itemRow.data("name"),
@@ -236,7 +236,7 @@ jQuery(function ($) {
               .length
           ) {
             var data = {
-              action: "everest_forms_template_licence_check",
+              action: "muhiku_forms_template_licence_check",
               plan: $this.attr("data-licence-plan").replace("-lifetime", ""),
               slug: $this.attr("data-template"),
               security: mhk_setup_params.template_licence_check_nonce,
@@ -297,7 +297,7 @@ jQuery(function ($) {
 
               var data = {
                 title: formName,
-                action: "everest_forms_create_form",
+                action: "muhiku_forms_create_form",
                 template: template,
                 security: mhk_setup_params.create_form_nonce,
               };

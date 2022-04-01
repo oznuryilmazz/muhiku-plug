@@ -34,8 +34,8 @@ class MHK_Admin_Entries {
 	 * Page output.
 	 */
 	public static function page_output() {
-		if ( apply_filters( 'everest_forms_entries_list_actions', false ) ) {
-			do_action( 'everest_forms_entries_list_actions_execute' );
+		if ( apply_filters( 'muhiku_forms_entries_list_actions', false ) ) {
+			do_action( 'muhiku_forms_entries_list_actions_execute' );
 		} elseif ( isset( $_GET['view-entry'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			include 'views/html-admin-page-entries-view.php';
 		} else {
@@ -60,7 +60,7 @@ class MHK_Admin_Entries {
 			<hr class="wp-header-end">
 
 			<?php settings_errors(); ?>
-			<?php do_action( 'everest_forms_before_entry_list', $entries_table_list ); ?>
+			<?php do_action( 'muhiku_forms_before_entry_list', $entries_table_list ); ?>
 
 			<?php if ( 0 < count( $entry_ids ) ) : ?>
 				<?php $entries_table_list->views(); ?>
@@ -90,7 +90,7 @@ class MHK_Admin_Entries {
 							?>
 						</form>
 					<?php else : ?>
-						<a class="muhiku-plug-BlankState-cta button-primary button" target="_blank" href="https://docs.wpeverest.com/docs/muhiku-plug/entry-management/?utm_source=blankslate&utm_medium=entry&utm_content=entriesdoc&utm_campaign=everestformplugin"><?php esc_html_e( 'Learn more about entries', 'muhiku-plug' ); ?></a>
+						<a class="muhiku-plug-BlankState-cta button-primary button" target="_blank" href="https://docs.wpmuhiku.com/docs/muhiku-plug/entry-management/?utm_source=blankslate&utm_medium=entry&utm_content=entriesdoc&utm_campaign=muhikuformplugin"><?php esc_html_e( 'Learn more about entries', 'muhiku-plug' ); ?></a>
 						<a class="muhiku-plug-BlankState-cta button" href="<?php echo esc_url( admin_url( 'admin.php?page=mhk-builder&create-form=1' ) ); ?>"><?php esc_html_e( 'Create your first form!', 'muhiku-plug' ); ?></a>
 					<?php endif; ?>
 					<style type="text/css">#posts-filter .wp-list-table, #posts-filter .tablenav.top, .tablenav.bottom .actions, .wrap .subsubsub { display: none; }</style>
@@ -286,11 +286,11 @@ class MHK_Admin_Entries {
 	public static function remove_entry( $entry_id ) {
 		global $wpdb;
 
-		do_action( 'everest_forms_before_delete_entries', $entry_id );
+		do_action( 'muhiku_forms_before_delete_entries', $entry_id );
 
 		$delete = $wpdb->delete( $wpdb->prefix . 'mhk_entries', array( 'entry_id' => $entry_id ), array( '%d' ) );
 
-		if ( apply_filters( 'everest_forms_delete_entrymeta', true ) ) {
+		if ( apply_filters( 'muhiku_forms_delete_entrymeta', true ) ) {
 			$wpdb->delete( $wpdb->prefix . 'mhk_entrymeta', array( 'entry_id' => $entry_id ), array( '%d' ) );
 		}
 

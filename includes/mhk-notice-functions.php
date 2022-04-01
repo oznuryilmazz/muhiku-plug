@@ -19,8 +19,8 @@ defined( 'ABSPATH' ) || exit;
  * @return int
  */
 function mhk_notice_count( $notice_type = '' ) {
-	if ( ! did_action( 'everest_forms_init' ) ) {
-		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before everest_forms_init.', 'muhiku-plug' ), '1.0' );
+	if ( ! did_action( 'muhiku_forms_init' ) ) {
+		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
 		return;
 	}
 
@@ -50,8 +50,8 @@ function mhk_notice_count( $notice_type = '' ) {
  * @return bool
  */
 function mhk_has_notice( $message, $notice_type = 'success' ) {
-	if ( ! did_action( 'everest_forms_init' ) ) {
-		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before everest_forms_init.', 'muhiku-plug' ), '1.0' );
+	if ( ! did_action( 'muhiku_forms_init' ) ) {
+		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
 		return false;
 	}
 
@@ -69,8 +69,8 @@ function mhk_has_notice( $message, $notice_type = 'success' ) {
  * @param string $notice_type Optional. The name of the notice type - either error, success or notice.
  */
 function mhk_add_notice( $message, $notice_type = 'success' ) {
-	if ( ! did_action( 'everest_forms_init' ) ) {
-		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before everest_forms_init.', 'muhiku-plug' ), '1.0' );
+	if ( ! did_action( 'muhiku_forms_init' ) ) {
+		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
 		return;
 	}
 	if ( mhk_is_amp() ) {
@@ -81,10 +81,10 @@ function mhk_add_notice( $message, $notice_type = 'success' ) {
 
 	// Backward compatibility.
 	if ( 'success' === $notice_type ) {
-		$message = apply_filters( 'everest_forms_add_message', $message );
+		$message = apply_filters( 'muhiku_forms_add_message', $message );
 	}
 
-	$notices[ $notice_type ][] = apply_filters( 'everest_forms_add_' . $notice_type, $message );
+	$notices[ $notice_type ][] = apply_filters( 'muhiku_forms_add_' . $notice_type, $message );
 
 	mhk()->session->set( 'mhk_notices', $notices );
 }
@@ -96,8 +96,8 @@ function mhk_add_notice( $message, $notice_type = 'success' ) {
  * @param mixed $notices Array of notices.
  */
 function mhk_set_notices( $notices ) {
-	if ( ! did_action( 'everest_forms_init' ) ) {
-		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before everest_forms_init.', 'muhiku-plug' ), '1.0' );
+	if ( ! did_action( 'muhiku_forms_init' ) ) {
+		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
 		return;
 	}
 	mhk()->session->set( 'mhk_notices', $notices );
@@ -109,8 +109,8 @@ function mhk_set_notices( $notices ) {
  * @since 1.0.0
  */
 function mhk_clear_notices() {
-	if ( ! did_action( 'everest_forms_init' ) ) {
-		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before everest_forms_init.', 'muhiku-plug' ), '1.0' );
+	if ( ! did_action( 'muhiku_forms_init' ) ) {
+		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
 		return;
 	}
 	mhk()->session->set( 'mhk_notices', null );
@@ -124,17 +124,17 @@ function mhk_clear_notices() {
  * @param array $form_data Prepared form settings.
  */
 function mhk_print_notices( $form_data = array() ) {
-	if ( ! did_action( 'everest_forms_init' ) ) {
-		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before everest_forms_init.', 'muhiku-plug' ), '1.0' );
+	if ( ! did_action( 'muhiku_forms_init' ) ) {
+		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
 		return;
 	}
 
 	$form_id      = isset( $form_data['id'] ) ? absint( $form_data['id'] ) : 0;
 	$all_notices  = mhk()->session->get( 'mhk_notices', array() );
-	$notice_types = apply_filters( 'everest_forms_notice_types', array( 'error', 'success', 'notice' ) );
+	$notice_types = apply_filters( 'muhiku_forms_notice_types', array( 'error', 'success', 'notice' ) );
 
 	// Skips notice print if it isn't the right form.
-	if ( isset( $_REQUEST['everest_forms']['id'] ) && ( (int) $form_id !== (int) $_REQUEST['everest_forms']['id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+	if ( isset( $_REQUEST['muhiku_forms']['id'] ) && ( (int) $form_id !== (int) $_REQUEST['muhiku_forms']['id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 		return;
 	}
 
@@ -154,7 +154,7 @@ function mhk_print_notices( $form_data = array() ) {
 
 	mhk_clear_notices();
 }
-add_action( 'everest_forms_display_fields_before', 'mhk_print_notices', 10 );
+add_action( 'muhiku_forms_display_fields_before', 'mhk_print_notices', 10 );
 
 /**
  * Print a single notice immediately.
@@ -165,13 +165,13 @@ add_action( 'everest_forms_display_fields_before', 'mhk_print_notices', 10 );
  */
 function mhk_print_notice( $message, $notice_type = 'success' ) {
 	if ( 'success' === $notice_type ) {
-		$message = apply_filters( 'everest_forms_add_message', $message );
+		$message = apply_filters( 'muhiku_forms_add_message', $message );
 	}
 
 	mhk_get_template(
 		"notices/{$notice_type}.php",
 		array(
-			'messages' => array( apply_filters( 'everest_forms_add_' . $notice_type, $message ) ),
+			'messages' => array( apply_filters( 'muhiku_forms_add_' . $notice_type, $message ) ),
 		)
 	);
 }
@@ -184,8 +184,8 @@ function mhk_print_notice( $message, $notice_type = 'success' ) {
  * @return array|mixed
  */
 function mhk_get_notices( $notice_type = '' ) {
-	if ( ! did_action( 'everest_forms_init' ) ) {
-		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before everest_forms_init.', 'muhiku-plug' ), '1.0' );
+	if ( ! did_action( 'muhiku_forms_init' ) ) {
+		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
 		return;
 	}
 

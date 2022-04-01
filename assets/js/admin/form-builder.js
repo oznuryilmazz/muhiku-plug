@@ -376,7 +376,7 @@
       });
 
       // Action available for each binding.
-      $(document).trigger("everest_forms_ready");
+      $(document).trigger("muhiku_forms_ready");
     },
 
     /**
@@ -741,11 +741,11 @@
         return !val;
       });
 
-      if (!$input_title.hasClass("everst-forms-name-editing")) {
+      if (!$input_title.hasClass("muhku-forms-name-editing")) {
         $input_title.focus();
       }
 
-      $input_title.toggleClass("everst-forms-name-editing");
+      $input_title.toggleClass("muhku-forms-name-editing");
     },
 
     //--------------------------------------------------------------------//
@@ -985,7 +985,7 @@
           }
 
           // Create the media frame.
-          file_frame = wp.media.frames.everestforms_media_frame = wp.media({
+          file_frame = wp.media.frames.muhikuforms_media_frame = wp.media({
             title: mhk_data.i18n_upload_image_title,
             className: "media-frame muhiku-plug-media-frame",
             frame: "select",
@@ -1022,7 +1022,7 @@
               );
             $wrapper.find(".actions").show();
 
-            $builder.trigger("everestFormsImageUploadAdd", [$el, $wrapper]);
+            $builder.trigger("muhikuFormsImageUploadAdd", [$el, $wrapper]);
           });
 
           // Finally, open the modal.
@@ -1043,7 +1043,7 @@
           $container.parent().find(".source").val("");
           $container.parent().find(".button-add-media").show();
 
-          $builder.trigger("everestFormsImageUploadRemove", [
+          $builder.trigger("muhikuFormsImageUploadRemove", [
             $(this),
             $container,
           ]);
@@ -1052,7 +1052,7 @@
 
       // Field choices image upload add/remove image.
       $builder.on(
-        "everestFormsImageUploadAdd everestFormsImageUploadRemove",
+        "muhikuFormsImageUploadAdd muhikuFormsImageUploadRemove",
         function (event, $this, $container) {
           var $el = $container.closest(".mhk-choices-list"),
             type = $el.data("field-type"),
@@ -1680,7 +1680,7 @@
 
       nextID++;
       $parent.parent().attr("data-next-id", nextID);
-      $builder.trigger("everestFormsChoiceAdd");
+      $builder.trigger("muhikuFormsChoiceAdd");
       MHKPanelBuilder.choiceUpdate(type, fieldID);
     },
 
@@ -1716,7 +1716,7 @@
           $list.data("field-type"),
           $list.data("field-id")
         );
-        $builder.trigger("everestFormsChoiceDelete");
+        $builder.trigger("muhikuFormsChoiceDelete");
       }
     },
 
@@ -2113,7 +2113,7 @@
       $(".mhk-add-row").attr("data-next-row-id", max_row_id);
 
       var data = {
-        action: "everest_forms_get_next_id",
+        action: "muhiku_forms_get_next_id",
         security: mhk_data.mhk_get_next_id,
         form_id: mhk_data.form_id,
         fields: row_clone.find(".muhiku-plug-field").length,
@@ -2154,7 +2154,7 @@
       var element_field_id = field.attr("data-field-id");
       var form_id = mhk_data.form_id;
       var data = {
-        action: "everest_forms_get_next_id",
+        action: "muhiku_forms_get_next_id",
         security: mhk_data.mhk_get_next_id,
         form_id: form_id,
       };
@@ -2266,7 +2266,7 @@
         .closest(".mhk-admin-grid")
         .find('[data-field-id="' + old_key + '"]')
         .after(newFieldCloned);
-      $(document).trigger("everest-form-cloned", [new_key, field_type]);
+      $(document).trigger("muhiku-form-cloned", [new_key, field_type]);
       MHKPanelBuilder.switchToFieldOptionPanel(new_key); //switch to cloned field options
 
       // Trigger an event indicating completion of render_node action for cloning.
@@ -2494,12 +2494,12 @@
 
         // Trigger a handler to let addon manipulate the form data if needed.
         if (
-          $form.triggerHandler("everest_forms_process_ajax_data", [
+          $form.triggerHandler("muhiku_forms_process_ajax_data", [
             $this,
             form_data,
           ])
         ) {
-          form_data = $form.triggerHandler("everest_forms_process_ajax_data", [
+          form_data = $form.triggerHandler("muhiku_forms_process_ajax_data", [
             $this,
             form_data,
           ]);
@@ -2541,7 +2541,7 @@
 
         var new_form_data = form_data.concat(structure);
         var data = {
-          action: "everest_forms_save_form",
+          action: "muhiku_forms_save_form",
           security: mhk_data.mhk_save_form,
           form_data: JSON.stringify(new_form_data),
         };
@@ -3037,7 +3037,7 @@
         url: mhk_data.ajax_url,
         type: "POST",
         data: {
-          action: "everest_forms_new_field_" + field_type,
+          action: "muhiku_forms_new_field_" + field_type,
           security: mhk_data.mhk_field_drop_nonce,
           field_type: field_type,
           form_id: mhk_data.form_id,
@@ -3093,7 +3093,7 @@
             ).prop("checked", true);
             $("#muhiku-plug-field-option-" + dragged_field_id + "-quiz_status")
               .closest(".muhiku-plug-field-option-row-quiz_status")
-              .siblings(".everst-forms-field-quiz-settings")
+              .siblings(".muhku-forms-field-quiz-settings")
               .removeClass("muhiku-plug-hidden")
               .addClass("muhiku-plug-show");
           }
@@ -3748,7 +3748,7 @@ jQuery(function ($) {
     function (e) {
       e.stopPropagation();
       $.post(mhk_data.ajax_url, {
-        action: "everest_forms_enabled_form",
+        action: "muhiku_forms_enabled_form",
         security: mhk_data.mhk_enabled_form,
         form_id: $(this).data("form_id"),
         enabled: $(this).prop("checked") ? 1 : 0,

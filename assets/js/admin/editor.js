@@ -33,8 +33,7 @@
     $(document).on("click", "#mhk-modal-submit", function (event) {
       event.preventDefault();
       var shortcode;
-      shortcode =
-        '[everest_form id="' + $("#mhk-modal-select-form").val() + '"';
+      shortcode = '[muhiku_form id="' + $("#mhk-modal-select-form").val() + '"';
       if ($("#mhk-modal-checkbox-title").is(":checked")) {
         shortcode = shortcode + ' title="true"';
       }

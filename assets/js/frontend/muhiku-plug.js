@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
-/* global everest_forms_params */
+/* global muhiku_forms_params */
 jQuery(function ($) {
   "use strict";
 
-  // everest_forms_params is required to continue, ensure the object exists.
-  if (typeof everest_forms_params === "undefined") {
+  // muhiku_forms_params is required to continue, ensure the object exists.
+  if (typeof muhiku_forms_params === "undefined") {
     return false;
   }
 
@@ -12,14 +12,14 @@ jQuery(function ($) {
     return {
       language: {
         noResults: function () {
-          return everest_forms_params.i18n_no_matches;
+          return muhiku_forms_params.i18n_no_matches;
         },
       },
     };
   };
 
-  var everest_forms = {
-    $everest_form: $("form.everest-form"),
+  var muhiku_forms = {
+    $muhiku_form: $("form.muhiku-form"),
     init: function () {
       this.init_inputMask();
       this.init_mailcheck();
@@ -32,14 +32,14 @@ jQuery(function ($) {
       this.checkUncheckAllcheckbox();
 
       // Inline validation.
-      this.$everest_form.on(
+      this.$muhiku_form.on(
         "input validate change",
         ".input-text, select, input:checkbox, input:radio",
         this.validate_field
       );
 
       // Notify plugins that the core was loaded.
-      $(document.body).trigger("everest_forms_loaded");
+      $(document.body).trigger("muhiku_forms_loaded");
     },
     init_inputMask: function () {
       // Only load if jQuery inputMask library exists.
@@ -51,23 +51,23 @@ jQuery(function ($) {
       // Only load if Mailcheck library exists and enabled.
       if (
         typeof $.fn.mailcheck === "undefined" ||
-        !everest_forms_params.mailcheck_enabled
+        !muhiku_forms_params.mailcheck_enabled
       ) {
         return;
       }
 
       // Setup default domains for Mailcheck.
-      if (everest_forms_params.mailcheck_domains.length > 0) {
+      if (muhiku_forms_params.mailcheck_domains.length > 0) {
         Mailcheck.defaultDomains = Mailcheck.defaultDomains.concat(
-          everest_forms_params.mailcheck_domains
+          muhiku_forms_params.mailcheck_domains
         );
       }
 
       // Setup default top level domains for Mailcheck.
-      if (everest_forms_params.mailcheck_toplevel_domains.length > 0) {
+      if (muhiku_forms_params.mailcheck_toplevel_domains.length > 0) {
         Mailcheck.defaultTopLevelDomains =
           Mailcheck.defaultTopLevelDomains.concat(
-            everest_forms_params.mailcheck_toplevel_domains
+            muhiku_forms_params.mailcheck_toplevel_domains
           );
       }
 
@@ -80,12 +80,12 @@ jQuery(function ($) {
           suggested: function (el, suggestion) {
             $("#" + id + "_suggestion").remove();
             var suggestion_msg =
-              everest_forms_params.i18n_messages_email_suggestion.replace(
+              muhiku_forms_params.i18n_messages_email_suggestion.replace(
                 "{suggestion}",
                 '<a href="#" class="mailcheck-suggestion" data-id="' +
                   id +
                   '" title="' +
-                  everest_forms_params.i18n_messages_email_suggestion_title +
+                  muhiku_forms_params.i18n_messages_email_suggestion_title +
                   '">' +
                   suggestion.full +
                   "</a>"
@@ -186,7 +186,7 @@ jQuery(function ($) {
       $(".date-dropdown-field").each(function () {
         var $this = $(this);
         $this.hide();
-        everest_forms.change_minutes($this);
+        muhiku_forms.change_minutes($this);
       });
 
       $("body").on(
@@ -194,13 +194,13 @@ jQuery(function ($) {
         ".date-time-container [id*=hour-select]",
         function () {
           var $this = $(this).siblings("input.date-dropdown-field");
-          everest_forms.change_minutes($this);
+          muhiku_forms.change_minutes($this);
         }
       );
 
       $("body").on("change", ".date-time-container [id*=-select]", function () {
         var $this = $(this).siblings("input.date-dropdown-field");
-        $this.val(everest_forms.format_dropdown_date($this));
+        $this.val(muhiku_forms.format_dropdown_date($this));
       });
     },
     change_minutes: function ($this) {
@@ -256,7 +256,7 @@ jQuery(function ($) {
             .val()
         );
       }
-      $this.val(everest_forms.format_dropdown_date($this));
+      $this.val(muhiku_forms.format_dropdown_date($this));
     },
     format_dropdown_date: function ($this) {
       var id = $this.attr("id");
@@ -382,10 +382,10 @@ jQuery(function ($) {
 
       // Validator messages.
       $.extend($.validator.messages, {
-        required: everest_forms_params.i18n_messages_required,
-        url: everest_forms_params.i18n_messages_url,
-        email: everest_forms_params.i18n_messages_email,
-        number: everest_forms_params.i18n_messages_number,
+        required: muhiku_forms_params.i18n_messages_required,
+        url: muhiku_forms_params.i18n_messages_url,
+        email: muhiku_forms_params.i18n_messages_email,
+        number: muhiku_forms_params.i18n_messages_number,
       });
 
       // Validate email addresses.
@@ -403,7 +403,7 @@ jQuery(function ($) {
         function (value, element, param) {
           return $.validator.methods.equalTo.call(this, value, element, param);
         },
-        everest_forms_params.i18n_messages_confirm
+        muhiku_forms_params.i18n_messages_confirm
       );
 
       // Validate checkbox choice limit.
@@ -425,14 +425,14 @@ jQuery(function ($) {
             $(element).closest("ul").attr("data-choice-limit") || 0,
             10
           );
-          return everest_forms_params.i18n_messages_check_limit.replace(
+          return muhiku_forms_params.i18n_messages_check_limit.replace(
             "{#}",
             choiceLimit
           );
         }
       );
 
-      this.$everest_form.each(function () {
+      this.$muhiku_form.each(function () {
         var $this = $(this);
 
         // List messages to show for required fields. Use name of the field as key.
@@ -441,7 +441,7 @@ jQuery(function ($) {
           var form_id = $(this).closest("form").data("formid");
           var field_id = $(this).data("field-id");
           var error_message = $(this).data("required-field-message");
-          var key = "everest_forms[form_fields][" + field_id + "]"; // Name of the input field is used as a key.
+          var key = "muhiku_forms[form_fields][" + field_id + "]"; // Name of the input field is used as a key.
 
           if ($(this).is(".mhk-field-payment-single")) {
             if (
@@ -458,7 +458,7 @@ jQuery(function ($) {
             key = "mhk_" + form_id + "_" + field_id;
           } else if ($(this).is(".mhk-field-signature")) {
             key =
-              "everest_forms[form_fields][" + field_id + "][signature_image]";
+              "muhiku_forms[form_fields][" + field_id + "][signature_image]";
           } else if ($(this).is(".mhk-field-phone")) {
             key = key + "[phone_field]";
           } else if (
@@ -466,17 +466,17 @@ jQuery(function ($) {
             $(this).is(".mhk-field-password")
           ) {
             // For when the confirm is disabled.
-            key = "everest_forms[form_fields][" + field_id + "]";
+            key = "muhiku_forms[form_fields][" + field_id + "]";
             error_messages[key] = {
               required: error_message, // Set message using 'required' key to avoid conflicts with other validations.
             };
 
             // For when the confirm is enabled.
-            key = "everest_forms[form_fields][" + field_id + "][primary]";
+            key = "muhiku_forms[form_fields][" + field_id + "][primary]";
             error_messages[key] = {
               required: error_message, // Set message using 'required' key to avoid conflicts with other validations.
             };
-            key = "everest_forms[form_fields][" + field_id + "][secondary]";
+            key = "muhiku_forms[form_fields][" + field_id + "][secondary]";
             error_messages[key] = {
               required: error_message, // Set message using 'required' key to avoid conflicts with other validations.
             };
@@ -496,7 +496,7 @@ jQuery(function ($) {
                 error_message = sub_field_error_messages[sub_field_types[i]];
 
               key =
-                "everest_forms[form_fields][" +
+                "muhiku_forms[form_fields][" +
                 field_id +
                 "][" +
                 sub_field_type +
@@ -520,7 +520,7 @@ jQuery(function ($) {
               for (var i = 0; i < row_keys.length; i++) {
                 error_message = sub_field_error_messages[row_keys[i]];
                 key =
-                  "everest_forms[form_fields][" +
+                  "muhiku_forms[form_fields][" +
                   field_id +
                   "][" +
                   row_keys[i] +
@@ -532,7 +532,7 @@ jQuery(function ($) {
             }
             error_message = null;
           } else if ($(this).is(".mhk-field-file-upload")) {
-            key = "everest_forms_" + form_id + "_" + field_id;
+            key = "muhiku_forms_" + form_id + "_" + field_id;
           }
 
           /**
@@ -889,7 +889,7 @@ jQuery(function ($) {
     },
     checkUncheckAllcheckbox: function () {
       // To check and uncheck all the option in checkbox.
-      var all_select_all_chk = $("form.everest-form")
+      var all_select_all_chk = $("form.muhiku-form")
         .find(".mhk-field, .mhk-field-checkbox, .form-row")
         .find("ul")
         .find("li.mhk-select-all-checkbox-li")
@@ -949,5 +949,5 @@ jQuery(function ($) {
     },
   };
 
-  everest_forms.init();
+  muhiku_forms.init();
 });

@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 		?>
 	</p>
 	<div class="publishing-action">
-		<button type="submit" class="muhiku-plug-btn muhiku-plug-btn-primary everest_forms_import_action" name="muhiku-plug-import-form"><?php esc_html_e( 'Import Form', 'muhiku-plug' ); ?></button>
-		<?php wp_nonce_field( 'everest_forms_import_nonce', 'muhiku-plug-import-nonce' ); ?>
+		<button type="submit" class="muhiku-plug-btn muhiku-plug-btn-primary muhiku_forms_import_action" name="muhiku-plug-import-form"><?php esc_html_e( 'Import Form', 'muhiku-plug' ); ?></button>
+		<?php wp_nonce_field( 'muhiku_forms_import_nonce', 'muhiku-plug-import-nonce' ); ?>
 	</div>
 </div>

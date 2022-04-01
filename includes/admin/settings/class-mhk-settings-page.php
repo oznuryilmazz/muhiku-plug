@@ -33,10 +33,10 @@ if ( ! class_exists( 'MHK_Settings_Page', false ) ) :
 		 * Constructor.
 		 */
 		public function __construct() {
-			add_filter( 'everest_forms_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-			add_action( 'everest_forms_sections_' . $this->id, array( $this, 'output_sections' ) );
-			add_action( 'everest_forms_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'everest_forms_settings_save_' . $this->id, array( $this, 'save' ) );
+			add_filter( 'muhiku_forms_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
+			add_action( 'muhiku_forms_sections_' . $this->id, array( $this, 'output_sections' ) );
+			add_action( 'muhiku_forms_settings_' . $this->id, array( $this, 'output' ) );
+			add_action( 'muhiku_forms_settings_save_' . $this->id, array( $this, 'save' ) );
 		}
 
 		/**
@@ -77,7 +77,7 @@ if ( ! class_exists( 'MHK_Settings_Page', false ) ) :
 		 * @return array
 		 */
 		public function get_settings() {
-			return apply_filters( 'everest_forms_get_settings_' . $this->id, array() );
+			return apply_filters( 'muhiku_forms_get_settings_' . $this->id, array() );
 		}
 
 		/**
@@ -86,7 +86,7 @@ if ( ! class_exists( 'MHK_Settings_Page', false ) ) :
 		 * @return array
 		 */
 		public function get_sections() {
-			return apply_filters( 'everest_forms_get_sections_' . $this->id, array() );
+			return apply_filters( 'muhiku_forms_get_sections_' . $this->id, array() );
 		}
 
 		/**
@@ -130,7 +130,7 @@ if ( ! class_exists( 'MHK_Settings_Page', false ) ) :
 			MHK_Admin_Settings::save_fields( $settings );
 
 			if ( $current_section ) {
-				do_action( 'everest_forms_update_options_' . $this->id . '_' . $current_section );
+				do_action( 'muhiku_forms_update_options_' . $this->id . '_' . $current_section );
 			}
 		}
 	}

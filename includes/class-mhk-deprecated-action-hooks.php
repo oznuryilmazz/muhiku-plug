@@ -19,29 +19,29 @@ class MHK_Deprecated_Action_Hooks extends MHK_Deprecated_Hooks {
 	 * @var array
 	 */
 	protected $deprecated_hooks = array(
-		'everest_forms_builder_page_init'          => array(
-			'everest_forms_page_init',
-			'everest_forms_builder_init',
+		'muhiku_forms_builder_page_init'          => array(
+			'muhiku_forms_page_init',
+			'muhiku_forms_builder_init',
 		),
 		'admin_enqueue_scripts'                    => array(
-			'everest_forms_page_init',
-			'everest_forms_builder_scripts',
-			'everest_forms_builder_enqueues_before',
+			'muhiku_forms_page_init',
+			'muhiku_forms_builder_scripts',
+			'muhiku_forms_builder_enqueues_before',
 		),
-		'everest_forms_builder_tabs'               => 'everest_forms_builder_panel_buttons',
-		'everest_forms_builder_output'             => 'everest_forms_builder_panels',
-		'everest_forms_builder_fields_preview'     => 'everest_forms_builder_preview',
-		'everest_forms_display_field_before'       => 'mhk_display_field_before',
-		'everest_forms_display_field_after'        => 'mhk_display_field_after',
-		'everest_forms_display_fields_before'      => 'mhk_display_fields_before',
-		'everest_forms_display_fields_after'       => 'mhk_display_fields_after',
-		'everest_forms_display_field_{field_type}' => 'mhk_display_field_{field_type}',
-		'everest_forms_frontend_output_before'     => 'mhk_frontend_output_before',
-		'everest_forms_frontend_output_success'    => 'mhk_frontend_output_success',
-		'everest_forms_frontend_output'            => 'mhk_frontend_output',
-		'everest_forms_frontend_output_after'      => 'mhk_frontend_output_after',
-		'everest_forms_display_submit_before'      => 'mhk_display_submit_before',
-		'everest_forms_display_submit_after'       => 'mhk_display_submit_after',
+		'muhiku_forms_builder_tabs'               => 'muhiku_forms_builder_panel_buttons',
+		'muhiku_forms_builder_output'             => 'muhiku_forms_builder_panels',
+		'muhiku_forms_builder_fields_preview'     => 'muhiku_forms_builder_preview',
+		'muhiku_forms_display_field_before'       => 'mhk_display_field_before',
+		'muhiku_forms_display_field_after'        => 'mhk_display_field_after',
+		'muhiku_forms_display_fields_before'      => 'mhk_display_fields_before',
+		'muhiku_forms_display_fields_after'       => 'mhk_display_fields_after',
+		'muhiku_forms_display_field_{field_type}' => 'mhk_display_field_{field_type}',
+		'muhiku_forms_frontend_output_before'     => 'mhk_frontend_output_before',
+		'muhiku_forms_frontend_output_success'    => 'mhk_frontend_output_success',
+		'muhiku_forms_frontend_output'            => 'mhk_frontend_output',
+		'muhiku_forms_frontend_output_after'      => 'mhk_frontend_output_after',
+		'muhiku_forms_display_submit_before'      => 'mhk_display_submit_before',
+		'muhiku_forms_display_submit_after'       => 'mhk_display_submit_after',
 	);
 
 	/**
@@ -50,13 +50,13 @@ class MHK_Deprecated_Action_Hooks extends MHK_Deprecated_Hooks {
 	 * @var array
 	 */
 	protected $deprecated_version = array(
-		'everest_forms_page_init'               => '1.2.0',
-		'everest_forms_builder_init'            => '1.2.0',
-		'everest_forms_builder_scripts'         => '1.2.0',
-		'everest_forms_builder_enqueues_before' => '1.2.0',
-		'everest_forms_builder_panel_buttons'   => '1.2.0',
-		'everest_forms_builder_panels'          => '1.2.0',
-		'everest_forms_builder_preview'         => '1.2.0',
+		'muhiku_forms_page_init'               => '1.2.0',
+		'muhiku_forms_builder_init'            => '1.2.0',
+		'muhiku_forms_builder_scripts'         => '1.2.0',
+		'muhiku_forms_builder_enqueues_before' => '1.2.0',
+		'muhiku_forms_builder_panel_buttons'   => '1.2.0',
+		'muhiku_forms_builder_panels'          => '1.2.0',
+		'muhiku_forms_builder_preview'         => '1.2.0',
 		'mhk_display_field_before'              => '1.2.0',
 		'mhk_display_field_after'               => '1.2.0',
 		'mhk_display_fields_before'             => '1.3.0',

@@ -1,8 +1,8 @@
 <?php
 /**
- * EverestForm Gutenberg blocks
+ * MuhikuForm Gutenberg blocks
  *
- * @package EverstForms\Class
+ * @package muhkuForms\Class
  * @version 1.3.4
  */
 
@@ -147,7 +147,7 @@ class MHK_Form_Block {
 		// Disable form fields if called from the Gutenberg editor.
 		if ( $is_gb_editor ) {
 			add_filter(
-				'everest_forms_frontend_container_class',
+				'muhiku_forms_frontend_container_class',
 				function ( $classes ) {
 					$classes[] = 'mhk-gutenberg-form-selector';
 					$classes[] = 'mhk-container-full';
@@ -155,14 +155,14 @@ class MHK_Form_Block {
 				}
 			);
 			add_action(
-				'everest_forms_frontend_output',
+				'muhiku_forms_frontend_output',
 				function () {
 					echo '<fieldset disabled>';
 				},
 				3
 			);
 			add_action(
-				'everest_forms_frontend_output',
+				'muhiku_forms_frontend_output',
 				function () {
 					echo '</fieldset>';
 				},

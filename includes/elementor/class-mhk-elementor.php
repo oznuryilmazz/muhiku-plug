@@ -1,8 +1,8 @@
 <?php
 /**
- * EverestForm Elementor
+ * MuhikuForm Elementor
  *
- * @package EverstForms\Class
+ * @package muhkuForms\Class
  * @version 1.8.5
  */
 
@@ -41,7 +41,7 @@ class MHK_Elementor {
 	}
 
 	/**
-	 * Register Everest forms Widget.
+	 * Register Muhiku forms Widget.
 	 *
 	 * @since 1.8.5
 	 */

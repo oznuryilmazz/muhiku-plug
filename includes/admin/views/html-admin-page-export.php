@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
 		}
 		?>
 		<div class="publishing-action">
-			<?php wp_nonce_field( 'everest_forms_export_nonce', 'muhiku-plug-export-nonce' ); ?>
+			<?php wp_nonce_field( 'muhiku_forms_export_nonce', 'muhiku-plug-export-nonce' ); ?>
 			<button type="submit" class="muhiku-plug-btn muhiku-plug-btn-primary muhiku-plug-export-form-action" name="muhiku-plug-export-form"><?php esc_html_e( 'Export', 'muhiku-plug' ); ?></button>
 		</div>
 	</form>

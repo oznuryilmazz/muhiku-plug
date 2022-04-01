@@ -4,7 +4,7 @@
  *
  * Functions for formatting data.
  *
- * @package WPEverest\Functions
+ * @package WPMuhiku\Functions
  * @version 1.0.0
  */
 
@@ -251,7 +251,7 @@ function mhk_let_to_num( $size ) {
  * @return string
  */
 function mhk_date_format() {
-	return apply_filters( 'everest_forms_date_format', get_option( 'date_format' ) );
+	return apply_filters( 'muhiku_forms_date_format', get_option( 'date_format' ) );
 }
 
 /**
@@ -260,7 +260,7 @@ function mhk_date_format() {
  * @return string
  */
 function mhk_time_format() {
-	return apply_filters( 'everest_forms_time_format', get_option( 'time_format' ) );
+	return apply_filters( 'muhiku_forms_time_format', get_option( 'time_format' ) );
 }
 
 /**
@@ -473,7 +473,7 @@ function mhk_trim_string( $string, $chars = 200, $suffix = '...' ) {
  * @return string
  */
 function mhk_format_content( $raw_string ) {
-	return apply_filters( 'everest_forms_format_content', apply_filters( 'everest_forms_short_description', $raw_string ), $raw_string );
+	return apply_filters( 'muhiku_forms_format_content', apply_filters( 'muhiku_forms_short_description', $raw_string ), $raw_string );
 }
 
 /**

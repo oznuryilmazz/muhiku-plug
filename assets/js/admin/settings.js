@@ -1,4 +1,4 @@
-/* global everest_forms_settings_params, jconfirm */
+/* global muhiku_forms_settings_params, jconfirm */
 (function ($, params) {
   // Confirm defaults.
   $(document).ready(function () {
@@ -88,48 +88,48 @@
   });
 
   // Show/hide based on reCAPTCHA type.
-  $("input#everest_forms_recaptcha_type")
+  $("input#muhiku_forms_recaptcha_type")
     .change(function () {
-      var recaptcha_v2_site_key = $("#everest_forms_recaptcha_v2_site_key")
+      var recaptcha_v2_site_key = $("#muhiku_forms_recaptcha_v2_site_key")
           .parents("tr")
           .eq(0),
-        recaptcha_v2_secret_key = $("#everest_forms_recaptcha_v2_secret_key")
+        recaptcha_v2_secret_key = $("#muhiku_forms_recaptcha_v2_secret_key")
           .parents("tr")
           .eq(0),
         recaptcha_v2_invisible_site_key = $(
-          "#everest_forms_recaptcha_v2_invisible_site_key"
+          "#muhiku_forms_recaptcha_v2_invisible_site_key"
         )
           .parents("tr")
           .eq(0),
         recaptcha_v2_invisible_secret_key = $(
-          "#everest_forms_recaptcha_v2_invisible_secret_key"
+          "#muhiku_forms_recaptcha_v2_invisible_secret_key"
         )
           .parents("tr")
           .eq(0),
-        recaptcha_v2_invisible = $("#everest_forms_recaptcha_v2_invisible")
+        recaptcha_v2_invisible = $("#muhiku_forms_recaptcha_v2_invisible")
           .parents("tr")
           .eq(0),
-        recaptcha_v3_site_key = $("#everest_forms_recaptcha_v3_site_key")
+        recaptcha_v3_site_key = $("#muhiku_forms_recaptcha_v3_site_key")
           .parents("tr")
           .eq(0),
-        recaptcha_v3_secret_key = $("#everest_forms_recaptcha_v3_secret_key")
+        recaptcha_v3_secret_key = $("#muhiku_forms_recaptcha_v3_secret_key")
           .parents("tr")
           .eq(0);
       recaptcha_v3_threshold_score = $(
-        "#everest_forms_recaptcha_v3_threshold_score"
+        "#muhiku_forms_recaptcha_v3_threshold_score"
       )
         .parents("tr")
         .eq(0);
-      (hcaptcha_site_key = $("#everest_forms_recaptcha_hcaptcha_site_key")
+      (hcaptcha_site_key = $("#muhiku_forms_recaptcha_hcaptcha_site_key")
         .parents("tr")
         .eq(0)),
-        (hcaptcha_secret_key = $("#everest_forms_recaptcha_hcaptcha_secret_key")
+        (hcaptcha_secret_key = $("#muhiku_forms_recaptcha_hcaptcha_secret_key")
           .parents("tr")
           .eq(0));
 
       if ($(this).is(":checked")) {
         if ("v2" === $(this).val()) {
-          if ($("#everest_forms_recaptcha_v2_invisible").is(":checked")) {
+          if ($("#muhiku_forms_recaptcha_v2_invisible").is(":checked")) {
             recaptcha_v2_site_key.hide();
             recaptcha_v2_secret_key.hide();
             recaptcha_v2_invisible_site_key.show();
@@ -173,26 +173,26 @@
     })
     .change();
 
-  $("input#everest_forms_recaptcha_v2_invisible").change(function () {
+  $("input#muhiku_forms_recaptcha_v2_invisible").change(function () {
     if ($(this).is(":checked")) {
-      $("#everest_forms_recaptcha_v2_site_key").parents("tr").eq(0).hide();
-      $("#everest_forms_recaptcha_v2_secret_key").parents("tr").eq(0).hide();
-      $("#everest_forms_recaptcha_v2_invisible_site_key")
+      $("#muhiku_forms_recaptcha_v2_site_key").parents("tr").eq(0).hide();
+      $("#muhiku_forms_recaptcha_v2_secret_key").parents("tr").eq(0).hide();
+      $("#muhiku_forms_recaptcha_v2_invisible_site_key")
         .parents("tr")
         .eq(0)
         .show();
-      $("#everest_forms_recaptcha_v2_invisible_secret_key")
+      $("#muhiku_forms_recaptcha_v2_invisible_secret_key")
         .parents("tr")
         .eq(0)
         .show();
     } else {
-      $("#everest_forms_recaptcha_v2_site_key").parents("tr").eq(0).show();
-      $("#everest_forms_recaptcha_v2_secret_key").parents("tr").eq(0).show();
-      $("#everest_forms_recaptcha_v2_invisible_site_key")
+      $("#muhiku_forms_recaptcha_v2_site_key").parents("tr").eq(0).show();
+      $("#muhiku_forms_recaptcha_v2_secret_key").parents("tr").eq(0).show();
+      $("#muhiku_forms_recaptcha_v2_invisible_site_key")
         .parents("tr")
         .eq(0)
         .hide();
-      $("#everest_forms_recaptcha_v2_invisible_secret_key")
+      $("#muhiku_forms_recaptcha_v2_invisible_secret_key")
         .parents("tr")
         .eq(0)
         .hide();
@@ -200,11 +200,11 @@
   });
 
   // Send Test Email.
-  $(".everest_forms_send_email_test").on("click", function (e) {
+  $(".muhiku_forms_send_email_test").on("click", function (e) {
     e.preventDefault();
-    let email = $("#everest_forms_email_send_to").val();
+    let email = $("#muhiku_forms_email_send_to").val();
     let data = {
-      action: "everest_forms_send_test_email",
+      action: "muhiku_forms_send_test_email",
       email: email,
       security: mhk_email_params.ajax_email_nonce,
     };
@@ -214,28 +214,28 @@
       type: "post",
       beforeSend: function () {
         var spinner = '<i class="mhk-loading mhk-loading-active"></i>';
-        $(".everest_forms_send_email_test")
-          .closest(".everest_forms_send_email_test")
+        $(".muhiku_forms_send_email_test")
+          .closest(".muhiku_forms_send_email_test")
           .append(spinner);
-        $(".everest-froms-send_test_email_notice").remove();
+        $(".muhiku-froms-send_test_email_notice").remove();
       },
       complete: function (response) {
         var message_string = "";
 
-        $(".everest_forms_send_email_test")
-          .closest(".everest_forms_send_email_test")
+        $(".muhiku_forms_send_email_test")
+          .closest(".muhiku_forms_send_email_test")
           .find(".mhk-loading")
           .remove();
-        $(".everest-froms-send_test_email_notice").remove();
+        $(".muhiku-froms-send_test_email_notice").remove();
         if (true === response.responseJSON.success) {
-          $("#everest_forms_email_send_to").val("");
+          $("#muhiku_forms_email_send_to").val("");
           message_string =
-            '<div id="message" class="updated inline everest-froms-send_test_email_notice"><p><strong>' +
+            '<div id="message" class="updated inline muhiku-froms-send_test_email_notice"><p><strong>' +
             response.responseJSON.data.message +
             "</strong></p></div>";
         } else {
           message_string =
-            '<div id="message" class="error inline everest-froms-send_test_email_notice"><p><strong>' +
+            '<div id="message" class="error inline muhiku-froms-send_test_email_notice"><p><strong>' +
             response.responseJSON.data.message +
             "</strong></p></div>";
         }
@@ -244,4 +244,4 @@
       },
     });
   });
-})(jQuery, everest_forms_settings_params);
+})(jQuery, muhiku_forms_settings_params);

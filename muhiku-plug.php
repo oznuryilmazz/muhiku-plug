@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Muhiku Plug
- * Plugin URI: https://wpeverest.com/wordpress-plugins/muhiku-plug/
+ * Plugin URI: https://wpmuhiku.com/wordpress-plugins/muhiku-plug/
  * Description: Drag and Drop contact form builder to easily create simple to complex forms for any purpose. Lightweight, Beautiful design, responsive and more.
  * Version: 1.8.6
- * Author: WPEverest
- * Author URI: https://wpeverest.com
+ * Author: WPMuhiku
+ * Author URI: https://wpmuhiku.com
  * Text Domain: muhiku-plug
  * Domain Path: /languages/
  *

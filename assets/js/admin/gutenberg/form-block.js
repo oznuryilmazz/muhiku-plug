@@ -20,7 +20,7 @@ const {
   Placeholder,
 } = wp.components;
 
-const EverestFormIcon = createElement(
+const MuhikuFormIcon = createElement(
   "svg",
   { width: 24, height: 24, viewBox: "0 0 24 24" },
   createElement("path", {
@@ -31,7 +31,7 @@ const EverestFormIcon = createElement(
 
 registerBlockType("muhiku-plug/form-selector", {
   title: mhk_form_block_data.i18n.title,
-  icon: EverestFormIcon,
+  icon: MuhikuFormIcon,
   category: "widgets",
   keywords: mhk_form_block_data.i18n.form_keywords,
   description: mhk_form_block_data.i18n.description,
@@ -113,9 +113,9 @@ registerBlockType("muhiku-plug/form-selector", {
       jsx.push(
         <Placeholder
           key="mhk-gutenberg-form-selector-wrap"
-          icon={EverestFormIcon}
+          icon={MuhikuFormIcon}
           instructions={mhk_form_block_data.i18n.title}
-          className="everest-form-gutenberg-form-selector-wrap"
+          className="muhiku-form-gutenberg-form-selector-wrap"
         >
           <SelectControl
             key="mhk-gutenberg-form-selector-select-control"

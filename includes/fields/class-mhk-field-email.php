@@ -53,9 +53,9 @@ class MHK_Field_Email extends MHK_Form_Fields {
 	 * Hook in tabs.
 	 */
 	public function init_hooks() {
-		add_filter( 'everest_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
-		add_filter( 'everest_forms_field_new_required', array( $this, 'field_default_required' ), 5, 3 );
-		add_filter( 'everest_forms_builder_field_option_class', array( $this, 'field_option_class' ), 10, 2 );
+		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
+		add_filter( 'muhiku_forms_field_new_required', array( $this, 'field_default_required' ), 5, 3 );
+		add_filter( 'muhiku_forms_builder_field_option_class', array( $this, 'field_option_class' ), 10, 2 );
 	}
 
 	/**
@@ -95,7 +95,7 @@ class MHK_Field_Email extends MHK_Form_Fields {
 				),
 				'secondary' => array(
 					'attr'     => array(
-						'name'        => "everest_forms[form_fields][{$field_id}][secondary]",
+						'name'        => "muhiku_forms[form_fields][{$field_id}][secondary]",
 						'value'       => '',
 						'placeholder' => ! empty( $field['confirmation_placeholder'] ) ? mhk_string_translation( $form_id, $field_id, $field['confirmation_placeholder'], '-confirm-placeholder' ) : '',
 					),
@@ -123,7 +123,7 @@ class MHK_Field_Email extends MHK_Form_Fields {
 		$properties = array_merge_recursive( $properties, $props );
 
 		// Input Primary: adjust name.
-		$properties['inputs']['primary']['attr']['name'] = "everest_forms[form_fields][{$field_id}][primary]";
+		$properties['inputs']['primary']['attr']['name'] = "muhiku_forms[form_fields][{$field_id}][primary]";
 
 		// Input Primary: remove error classes.
 		$properties['inputs']['primary']['class'] = array_diff(
@@ -409,7 +409,7 @@ class MHK_Field_Email extends MHK_Form_Fields {
 			update_option( 'mhk_validation_error', 'yes' );
 		}
 
-		do_action( 'everest_forms_email_validation', $field_id, $field_submit, $form_data );
+		do_action( 'muhiku_forms_email_validation', $field_id, $field_submit, $form_data );
 	}
 
 	/**

@@ -117,8 +117,8 @@ class MHK_Emails {
 		}
 
 		// Hooks.
-		add_action( 'everest_forms_email_send_before', array( $this, 'send_before' ) );
-		add_action( 'everest_forms_email_send_after', array( $this, 'send_after' ) );
+		add_action( 'muhiku_forms_email_send_before', array( $this, 'send_before' ) );
+		add_action( 'muhiku_forms_email_send_after', array( $this, 'send_after' ) );
 	}
 
 	/**
@@ -143,7 +143,7 @@ class MHK_Emails {
 			$this->from_name = get_bloginfo( 'name' );
 		}
 
-		return apply_filters( 'everest_forms_email_from_name', wp_specialchars_decode( $this->from_name ), $this );
+		return apply_filters( 'muhiku_forms_email_from_name', wp_specialchars_decode( $this->from_name ), $this );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class MHK_Emails {
 			$this->from_address = get_option( 'admin_email' );
 		}
 
-		return apply_filters( 'everest_forms_email_from_address', $this->from_address, $this );
+		return apply_filters( 'muhiku_forms_email_from_address', $this->from_address, $this );
 	}
 
 	/**
@@ -175,7 +175,7 @@ class MHK_Emails {
 			}
 		}
 
-		return apply_filters( 'everest_forms_email_reply_to', $this->reply_to, $this );
+		return apply_filters( 'muhiku_forms_email_reply_to', $this->reply_to, $this );
 	}
 
 	/**
@@ -197,7 +197,7 @@ class MHK_Emails {
 			$this->cc = implode( ',', $addresses );
 		}
 
-		return apply_filters( 'everest_forms_email_cc', $this->cc, $this );
+		return apply_filters( 'muhiku_forms_email_cc', $this->cc, $this );
 	}
 
 	/**
@@ -219,7 +219,7 @@ class MHK_Emails {
 			$this->bcc = implode( ',', $addresses );
 		}
 
-		return apply_filters( 'everest_forms_email_bcc', $this->bcc, $this );
+		return apply_filters( 'muhiku_forms_email_bcc', $this->bcc, $this );
 	}
 
 	/**
@@ -229,12 +229,12 @@ class MHK_Emails {
 	 */
 	public function get_content_type() {
 		if ( ! $this->content_type && $this->html ) {
-			$this->content_type = apply_filters( 'everest_forms_email_default_content_type', 'text/html', $this );
+			$this->content_type = apply_filters( 'muhiku_forms_email_default_content_type', 'text/html', $this );
 		} elseif ( ! $this->html ) {
 			$this->content_type = 'text/plain';
 		}
 
-		return apply_filters( 'everest_forms_email_content_type', $this->content_type, $this );
+		return apply_filters( 'muhiku_forms_email_content_type', $this->content_type, $this );
 	}
 
 	/**
@@ -257,7 +257,7 @@ class MHK_Emails {
 			$this->headers .= "Content-Type: {$this->get_content_type()}; charset=utf-8\r\n";
 		}
 
-		return apply_filters( 'everest_forms_email_headers', $this->headers, $this );
+		return apply_filters( 'muhiku_forms_email_headers', $this->headers, $this );
 	}
 
 	/**
@@ -269,9 +269,9 @@ class MHK_Emails {
 	public function build_email( $message ) {
 		if ( false === $this->html ) {
 			$message = $this->process_tag( $message, false, true );
-			$message = str_replace( '{all_fields}', $this->everest_forms_html_field_value( false ), $message );
+			$message = str_replace( '{all_fields}', $this->muhiku_forms_html_field_value( false ), $message );
 
-			return apply_filters( 'everest_forms_email_message', $message, $this );
+			return apply_filters( 'muhiku_forms_email_message', $message, $this );
 		}
 
 		ob_start();
@@ -279,27 +279,27 @@ class MHK_Emails {
 		mhk_get_template( 'emails/header-' . $this->get_template() . '.php' );
 
 		// Hooks into the email header.
-		do_action( 'everest_forms_email_header', $this );
+		do_action( 'muhiku_forms_email_header', $this );
 
 		mhk_get_template( 'emails/body-' . $this->get_template() . '.php' );
 
 		// Hooks into the email body.
-		do_action( 'everest_forms_email_body', $this );
+		do_action( 'muhiku_forms_email_body', $this );
 
 		mhk_get_template( 'emails/footer-' . $this->get_template() . '.php' );
 
 		// Hooks into the email footer.
-		do_action( 'everest_forms_email_footer', $this );
+		do_action( 'muhiku_forms_email_footer', $this );
 
 		$message = $this->process_tag( $message, false );
 		$message = nl2br( $message );
 
 		$body    = ob_get_clean();
 		$message = str_replace( '{email}', $message, $body );
-		$message = str_replace( '{all_fields}', $this->everest_forms_html_field_value( true ), $message );
+		$message = str_replace( '{all_fields}', $this->muhiku_forms_html_field_value( true ), $message );
 		$message = make_clickable( $message );
 
-		return apply_filters( 'everest_forms_email_message', $message, $this );
+		return apply_filters( 'muhiku_forms_email_message', $message, $this );
 	}
 
 	/**
@@ -330,24 +330,24 @@ class MHK_Emails {
 		}
 
 		// Hooks before email is sent.
-		do_action( 'everest_forms_email_send_before', $this );
+		do_action( 'muhiku_forms_email_send_before', $this );
 
 		// Email Template Enabled or not checked.
 		$email_template_included = ! empty( $this->form_data['settings']['email'][ $connection_id ]['choose_template'] ) ? true : false;
 
 		if ( $email_template_included && true === $this->html ) {
-			$message = apply_filters( 'everest_forms_email_template_message', $message, $this );
+			$message = apply_filters( 'muhiku_forms_email_template_message', $message, $this );
 		} else {
 			$message = $this->build_email( $message );
 		}
-		$this->attachments = apply_filters( 'everest_forms_email_attachments', $this->attachments, $this );
+		$this->attachments = apply_filters( 'muhiku_forms_email_attachments', $this->attachments, $this );
 		$subject           = mhk_decode_string( $this->process_tag( $subject ) );
 
 		// Let's do this.
 		$sent = wp_mail( $to, $subject, $message, $this->get_headers(), $this->attachments );
 
 		// Hooks after the email is sent.
-		do_action( 'everest_forms_email_send_after', $this );
+		do_action( 'muhiku_forms_email_send_after', $this );
 
 		return $sent;
 	}
@@ -395,7 +395,7 @@ class MHK_Emails {
 	 * @return string
 	 */
 	public function process_tag( $string = '', $sanitize = true, $linebreaks = false ) {
-		$tag = apply_filters( 'everest_forms_process_smart_tags', $string, $this->form_data, $this->fields, $this->entry_id );
+		$tag = apply_filters( 'muhiku_forms_process_smart_tags', $string, $this->form_data, $this->fields, $this->entry_id );
 		$tag = mhk_decode_string( $tag );
 
 		if ( $sanitize ) {
@@ -415,7 +415,7 @@ class MHK_Emails {
 	 * @param  bool $html Toggle to use HTML or plaintext.
 	 * @return string
 	 */
-	public function everest_forms_html_field_value( $html = true ) {
+	public function muhiku_forms_html_field_value( $html = true ) {
 		if ( empty( $this->fields ) ) {
 			return '';
 		}
@@ -434,7 +434,7 @@ class MHK_Emails {
 			ob_start();
 
 			// Hooks into the email field.
-			do_action( 'everest_forms_email_field', $this );
+			do_action( 'muhiku_forms_email_field', $this );
 
 			mhk_get_template( 'emails/field-' . $this->get_template() . '.php' );
 
@@ -444,7 +444,7 @@ class MHK_Emails {
 			$field_iterator = 1;
 			foreach ( $this->fields as $meta_id => $field ) {
 				if (
-					! apply_filters( 'everest_forms_email_display_empty_fields', false ) &&
+					! apply_filters( 'muhiku_forms_email_display_empty_fields', false ) &&
 					( empty( $field['value'] ) && '0' !== $field['value'] )
 				) {
 					continue;
@@ -456,8 +456,8 @@ class MHK_Emails {
 				}
 
 				// If there's the export data filter, utilize that and re-loop promptly.
-				if ( has_filter( "everest_forms_field_exporter_{$field['type']}" ) ) {
-					$formatted_string          = apply_filters( "everest_forms_field_exporter_{$field['type']}", $field, 'email-html', 2 );
+				if ( has_filter( "muhiku_forms_field_exporter_{$field['type']}" ) ) {
+					$formatted_string          = apply_filters( "muhiku_forms_field_exporter_{$field['type']}", $field, 'email-html', 2 );
 					$formatted_string['value'] = false === $formatted_string['value'] ? $empty_message : $formatted_string['value'];
 
 					$field_item = $field_template;
@@ -532,7 +532,7 @@ class MHK_Emails {
 				}
 
 				$field_item  = str_replace( '{field_name}', $field_name, $field_item );
-				$field_value = apply_filters( 'everest_forms_html_field_value', mhk_decode_string( $field_val ), $field['value'], $this->form_data, 'email-html', $field );
+				$field_value = apply_filters( 'muhiku_forms_html_field_value', mhk_decode_string( $field_val ), $field['value'], $this->form_data, 'email-html', $field );
 				$field_item  = str_replace( '{field_value}', $field_value, $field_item );
 
 				$message .= wpautop( $field_item );
@@ -543,7 +543,7 @@ class MHK_Emails {
 			 * Plain Text emails.
 			 */
 			foreach ( $this->fields as $field ) {
-				if ( ! apply_filters( 'everest_forms_email_display_empty_fields', false ) && ( empty( $field['value'] ) && '0' !== $field['value'] ) ) {
+				if ( ! apply_filters( 'muhiku_forms_email_display_empty_fields', false ) && ( empty( $field['value'] ) && '0' !== $field['value'] ) ) {
 					continue;
 				}
 
@@ -570,7 +570,7 @@ class MHK_Emails {
 
 				$message    .= '--- ' . mhk_decode_string( $field_name ) . " ---\r\n\r\n";
 				$field_value = mhk_decode_string( $field_val ) . "\r\n\r\n";
-				$message    .= apply_filters( 'everest_forms_plaintext_field_value', $field_value, $field['value'], $this->form_data, 'email-plain' );
+				$message    .= apply_filters( 'muhiku_forms_plaintext_field_value', $field_value, $field['value'], $this->form_data, 'email-plain' );
 			}
 		}
 
@@ -588,7 +588,7 @@ class MHK_Emails {
 	 * @return bool
 	 */
 	public function is_email_disabled() {
-		return (bool) apply_filters( 'everest_forms_disable_all_emails', false, $this );
+		return (bool) apply_filters( 'muhiku_forms_disable_all_emails', false, $this );
 	}
 
 	/**
@@ -600,9 +600,9 @@ class MHK_Emails {
 	 */
 	public function get_template() {
 		if ( ! $this->template ) {
-			$this->template = get_option( 'everest_forms_email_template', 'default' );
+			$this->template = get_option( 'muhiku_forms_email_template', 'default' );
 		}
 
-		return apply_filters( 'everest_forms_email_template', $this->template );
+		return apply_filters( 'muhiku_forms_email_template', $this->template );
 	}
 }

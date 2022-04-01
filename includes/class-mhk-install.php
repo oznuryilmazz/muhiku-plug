@@ -108,9 +108,9 @@ class MHK_Install {
 	 * This check is done on all requests and runs if the versions do not match.
 	 */
 	public static function check_version() {
-		if ( ! defined( 'IFRAME_REQUEST' ) && version_compare( get_option( 'everest_forms_version' ), mhk()->version, '<' ) ) {
+		if ( ! defined( 'IFRAME_REQUEST' ) && version_compare( get_option( 'muhiku_forms_version' ), mhk()->version, '<' ) ) {
 			self::install();
-			do_action( 'everest_forms_updated' );
+			do_action( 'muhiku_forms_updated' );
 		}
 	}
 
@@ -120,12 +120,12 @@ class MHK_Install {
 	 * This function is hooked into admin_init to affect admin only.
 	 */
 	public static function install_actions() {
-		if ( ! empty( $_GET['do_update_everest_forms'] ) ) {
+		if ( ! empty( $_GET['do_update_muhiku_forms'] ) ) {
 			check_admin_referer( 'mhk_db_update', 'mhk_db_update_nonce' );
 			self::update();
 			MHK_Admin_Notices::add_notice( 'update' );
 		}
-		if ( ! empty( $_GET['force_update_everest_forms'] ) ) {
+		if ( ! empty( $_GET['force_update_muhiku_forms'] ) ) {
 			do_action( 'wp_' . get_current_blog_id() . '_mhk_updater_cron' );
 			wp_safe_redirect( admin_url( 'admin.php?page=mhk-settings' ) );
 			exit;
@@ -164,8 +164,8 @@ class MHK_Install {
 
 		delete_transient( 'mhk_installing' );
 
-		do_action( 'everest_forms_flush_rewrite_rules' );
-		do_action( 'everest_forms_installed' );
+		do_action( 'muhiku_forms_flush_rewrite_rules' );
+		do_action( 'muhiku_forms_installed' );
 	}
 
 	/**
@@ -189,7 +189,7 @@ class MHK_Install {
 	 * @return boolean
 	 */
 	private static function is_new_install() {
-		return is_null( get_option( 'everest_forms_version', null ) ) && is_null( get_option( 'everest_forms_db_version', null ) );
+		return is_null( get_option( 'muhiku_forms_version', null ) ) && is_null( get_option( 'muhiku_forms_db_version', null ) );
 	}
 
 	/**
@@ -198,7 +198,7 @@ class MHK_Install {
 	 * @return boolean
 	 */
 	public static function needs_db_update() {
-		$current_db_version = get_option( 'everest_forms_db_version', null );
+		$current_db_version = get_option( 'muhiku_forms_db_version', null );
 		$updates            = self::get_db_update_callbacks();
 		$update_versions    = array_keys( $updates );
 		usort( $update_versions, 'version_compare' );
@@ -220,7 +220,7 @@ class MHK_Install {
 	 */
 	private static function maybe_update_db_version() {
 		if ( self::needs_db_update() ) {
-			if ( apply_filters( 'everest_forms_enable_auto_update_db', false ) ) {
+			if ( apply_filters( 'muhiku_forms_enable_auto_update_db', false ) ) {
 				self::init_background_updater();
 				self::update();
 			} else {
@@ -235,10 +235,10 @@ class MHK_Install {
 	 * Store the initial plugin activation date during install.
 	 */
 	private static function maybe_add_activated_date() {
-		$activated_date = get_option( 'everest_forms_activated', '' );
+		$activated_date = get_option( 'muhiku_forms_activated', '' );
 
 		if ( empty( $activated_date ) ) {
-			update_option( 'everest_forms_activated', time() );
+			update_option( 'muhiku_forms_activated', time() );
 		}
 	}
 
@@ -246,8 +246,8 @@ class MHK_Install {
 	 * Update MHK version to current.
 	 */
 	private static function update_mhk_version() {
-		delete_option( 'everest_forms_version' );
-		add_option( 'everest_forms_version', mhk()->version );
+		delete_option( 'muhiku_forms_version' );
+		add_option( 'muhiku_forms_version', mhk()->version );
 	}
 
 	/**
@@ -263,7 +263,7 @@ class MHK_Install {
 	 * Push all needed DB updates to the queue for processing.
 	 */
 	private static function update() {
-		$current_db_version = get_option( 'everest_forms_db_version' );
+		$current_db_version = get_option( 'muhiku_forms_db_version' );
 		$logger             = mhk_get_logger();
 		$update_queued      = false;
 
@@ -291,8 +291,8 @@ class MHK_Install {
 	 * @param string|null $version New MuhikuPlug DB version or null.
 	 */
 	public static function update_db_version( $version = null ) {
-		delete_option( 'everest_forms_db_version' );
-		add_option( 'everest_forms_db_version', is_null( $version ) ? mhk()->version : $version );
+		delete_option( 'muhiku_forms_db_version' );
+		add_option( 'muhiku_forms_db_version', is_null( $version ) ? mhk()->version : $version );
 	}
 
 	/**
@@ -313,10 +313,10 @@ class MHK_Install {
 	 * Create cron jobs (clear them first).
 	 */
 	private static function create_cron_jobs() {
-		wp_clear_scheduled_hook( 'everest_forms_cleanup_logs' );
-		wp_clear_scheduled_hook( 'everest_forms_cleanup_sessions' );
-		wp_schedule_event( time() + ( 3 * HOUR_IN_SECONDS ), 'daily', 'everest_forms_cleanup_logs' );
-		wp_schedule_event( time() + ( 6 * HOUR_IN_SECONDS ), 'twicedaily', 'everest_forms_cleanup_sessions' );
+		wp_clear_scheduled_hook( 'muhiku_forms_cleanup_logs' );
+		wp_clear_scheduled_hook( 'muhiku_forms_cleanup_sessions' );
+		wp_schedule_event( time() + ( 3 * HOUR_IN_SECONDS ), 'daily', 'muhiku_forms_cleanup_logs' );
+		wp_schedule_event( time() + ( 6 * HOUR_IN_SECONDS ), 'twicedaily', 'muhiku_forms_cleanup_sessions' );
 	}
 
 	/**
@@ -515,19 +515,19 @@ class MHK_Install {
 		$capabilities = array();
 
 		$capabilities['core'] = array(
-			'manage_everest_forms',
+			'manage_muhiku_forms',
 		);
 
 		$capability_types = array( 'forms', 'entries' );
 
 		foreach ( $capability_types as $capability_type ) {
 			if ( 'forms' === $capability_type ) {
-				$capabilities[ $capability_type ][] = "everest_forms_create_{$capability_type}";
+				$capabilities[ $capability_type ][] = "muhiku_forms_create_{$capability_type}";
 			}
 
 			foreach ( array( 'view', 'edit', 'delete' ) as $context ) {
-				$capabilities[ $capability_type ][] = "everest_forms_{$context}_{$capability_type}";
-				$capabilities[ $capability_type ][] = "everest_forms_{$context}_others_{$capability_type}";
+				$capabilities[ $capability_type ][] = "muhiku_forms_{$context}_{$capability_type}";
+				$capabilities[ $capability_type ][] = "muhiku_forms_{$context}_others_{$capability_type}";
 			}
 		}
 
@@ -552,9 +552,9 @@ class MHK_Install {
 			}
 
 			foreach ( array( 'view', 'edit', 'delete' ) as $context ) {
-				$meta_caps[ "everest_forms_{$context}_{$meta_cap_type}" ] = array(
-					'own'    => 'form' === $meta_cap_type ? "everest_forms_{$context}_forms" : "everest_forms_{$context}_entries",
-					'others' => 'form' === $meta_cap_type ? "everest_forms_{$context}_others_forms" : "everest_forms_{$context}_others_entries",
+				$meta_caps[ "muhiku_forms_{$context}_{$meta_cap_type}" ] = array(
+					'own'    => 'form' === $meta_cap_type ? "muhiku_forms_{$context}_forms" : "muhiku_forms_{$context}_entries",
+					'others' => 'form' === $meta_cap_type ? "muhiku_forms_{$context}_others_forms" : "muhiku_forms_{$context}_others_entries",
 				);
 			}
 		}
@@ -589,7 +589,7 @@ class MHK_Install {
 	 * Create default contact form.
 	 */
 	public static function create_forms() {
-		$forms_count = wp_count_posts( 'everest_form' );
+		$forms_count = wp_count_posts( 'muhiku_form' );
 
 		if ( empty( $forms_count->publish ) ) {
 			include_once dirname( __FILE__ ) . '/templates/contact.php';
@@ -599,7 +599,7 @@ class MHK_Install {
 				array(
 					'post_title'   => esc_html__( 'Contact Form', 'muhiku-plug' ),
 					'post_status'  => 'publish',
-					'post_type'    => 'everest_form',
+					'post_type'    => 'muhiku_form',
 					'post_content' => '{}',
 				)
 			);
@@ -613,7 +613,7 @@ class MHK_Install {
 				);
 			}
 
-			update_option( 'everest_forms_default_form_page_id', $form_id );
+			update_option( 'muhiku_forms_default_form_page_id', $form_id );
 		}
 	}
 
@@ -622,7 +622,7 @@ class MHK_Install {
 	 */
 	private static function create_files() {
 		// Bypass if filesystem is read-only and/or non-standard upload system is used.
-		if ( apply_filters( 'everest_forms_install_skip_create_files', false ) ) {
+		if ( apply_filters( 'muhiku_forms_install_skip_create_files', false ) ) {
 			return;
 		}
 
@@ -690,7 +690,7 @@ class MHK_Install {
 				return $caps;
 			}
 
-			if ( 'everest_form' !== $form->post_type ) {
+			if ( 'muhiku_form' !== $form->post_type ) {
 				return $caps;
 			}
 
@@ -730,8 +730,8 @@ class MHK_Install {
 	public static function plugin_row_meta( $plugin_meta, $plugin_file ) {
 		if ( MHK_PLUGIN_BASENAME === $plugin_file ) {
 			$new_plugin_meta = array(
-				'docs'    => '<a href="' . esc_url( apply_filters( 'everest_forms_docs_url', 'https://docs.wpeverest.com/documentation/plugins/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'View Muhiku Plug documentation', 'muhiku-plug' ) . '">' . esc_html__( 'Docs', 'muhiku-plug' ) . '</a>',
-				'support' => '<a href="' . esc_url( apply_filters( 'everest_forms_support_url', 'https://wordpress.org/support/plugin/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'Visit free customer support', 'muhiku-plug' ) . '">' . esc_html__( 'Free support', 'muhiku-plug' ) . '</a>',
+				'docs'    => '<a href="' . esc_url( apply_filters( 'muhiku_forms_docs_url', 'https://docs.wpmuhiku.com/documentation/plugins/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'View Muhiku Plug documentation', 'muhiku-plug' ) . '">' . esc_html__( 'Docs', 'muhiku-plug' ) . '</a>',
+				'support' => '<a href="' . esc_url( apply_filters( 'muhiku_forms_support_url', 'https://wordpress.org/support/plugin/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'Visit free customer support', 'muhiku-plug' ) . '">' . esc_html__( 'Free support', 'muhiku-plug' ) . '</a>',
 			);
 
 			return array_merge( $plugin_meta, $new_plugin_meta );

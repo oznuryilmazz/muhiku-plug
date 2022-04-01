@@ -102,10 +102,10 @@ class MHK_AJAX {
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
-			add_action( 'wp_ajax_everest_forms_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+			add_action( 'wp_ajax_muhiku_forms_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
 			if ( $nopriv ) {
-				add_action( 'wp_ajax_nopriv_everest_forms_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+				add_action( 'wp_ajax_nopriv_muhiku_forms_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
 				// MHK AJAX can be used for frontend ajax requests.
 				add_action( 'mhk_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
@@ -118,7 +118,7 @@ class MHK_AJAX {
 	 */
 	public static function get_next_id() {
 		// Run a security check.
-		check_ajax_referer( 'everest_forms_get_next_id', 'security' );
+		check_ajax_referer( 'muhiku_forms_get_next_id', 'security' );
 
 		$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : 0;
 		if ( $form_id < 1 ) {
@@ -130,7 +130,7 @@ class MHK_AJAX {
 		}
 
 		// Check permisssions.
-		if ( ! current_user_can( 'everest_forms_edit_form', $form_id ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_form', $form_id ) ) {
 			wp_send_json_error();
 		}
 
@@ -167,10 +167,10 @@ class MHK_AJAX {
 	public static function create_form() {
 		ob_start();
 
-		check_ajax_referer( 'everest_forms_create_form', 'security' );
+		check_ajax_referer( 'muhiku_forms_create_form', 'security' );
 
 		// Check permissions.
-		if ( ! current_user_can( 'everest_forms_create_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 			wp_die( -1 );
 		}
 
@@ -205,7 +205,7 @@ class MHK_AJAX {
 	 * AJAX Form save.
 	 */
 	public static function save_form() {
-		check_ajax_referer( 'everest_forms_save_form', 'security' );
+		check_ajax_referer( 'muhiku_forms_save_form', 'security' );
 
 		$logger = mhk_get_logger();
 
@@ -214,7 +214,7 @@ class MHK_AJAX {
 			__( 'Checking permissions.', 'muhiku-plug' ),
 			array( 'source' => 'form-save' )
 		);
-		if ( ! current_user_can( 'everest_forms_edit_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_forms' ) ) {
 			$logger->critical(
 				__( 'You do not have permission.', 'muhiku-plug' ),
 				array( 'source' => 'form-save' )
@@ -333,12 +333,12 @@ class MHK_AJAX {
 		}
 
 		$form_id     = mhk()->form->update( $data['id'], $data );
-		$form_styles = get_option( 'everest_forms_styles', array() );
+		$form_styles = get_option( 'muhiku_forms_styles', array() );
 		$logger->info(
 			__( 'Saving form.', 'muhiku-plug' ),
 			array( 'source' => 'form-save' )
 		);
-		do_action( 'everest_forms_save_form', $form_id, $data, array(), ! empty( $form_styles[ $form_id ] ) );
+		do_action( 'muhiku_forms_save_form', $form_id, $data, array(), ! empty( $form_styles[ $form_id ] ) );
 
 		if ( ! $form_id ) {
 			$logger->error(
@@ -369,10 +369,10 @@ class MHK_AJAX {
 	 * Ajax handler for form submission.
 	 */
 	public static function ajax_form_submission() {
-		check_ajax_referer( 'everest_forms_ajax_form_submission', 'security' );
+		check_ajax_referer( 'muhiku_forms_ajax_form_submission', 'security' );
 
-		if ( ! empty( $_POST['everest_forms']['id'] ) ) {
-			$process = mhk()->task->ajax_form_submission( mhk_sanitize_entry( wp_unslash( $_POST['everest_forms'] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! empty( $_POST['muhiku_forms']['id'] ) ) {
+			$process = mhk()->task->ajax_form_submission( mhk_sanitize_entry( wp_unslash( $_POST['muhiku_forms'] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			if ( 'success' === $process['response'] ) {
 				wp_send_json_success( $process );
 			}
@@ -385,7 +385,7 @@ class MHK_AJAX {
 	 * Ajax handler for template required addon activation.
 	 */
 	public static function template_activate_addon() {
-		check_ajax_referer( 'everest_forms_template_licence_check', 'security' );
+		check_ajax_referer( 'muhiku_forms_template_licence_check', 'security' );
 
 		if ( empty( $_POST['addon'] ) ) {
 			wp_send_json_error(
@@ -416,7 +416,7 @@ class MHK_AJAX {
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 */
 	public static function template_licence_check() {
-		check_ajax_referer( 'everest_forms_template_licence_check', 'security' );
+		check_ajax_referer( 'muhiku_forms_template_licence_check', 'security' );
 
 		if ( empty( $_POST['plan'] ) ) {
 			wp_send_json_error(
@@ -608,7 +608,7 @@ class MHK_AJAX {
 		check_ajax_referer( 'process-ajax-nonce', 'security' );
 
 		// Check permissions.
-		if ( ! current_user_can( 'everest_forms_edit_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_forms' ) ) {
 			wp_die( -1 );
 		}
 
@@ -620,7 +620,7 @@ class MHK_AJAX {
 			);
 		}
 
-		do_action( 'everest_forms_integration_account_connect_' . ( isset( $_POST['source'] ) ? sanitize_text_field( wp_unslash( $_POST['source'] ) ) : '' ), $_POST );
+		do_action( 'muhiku_forms_integration_account_connect_' . ( isset( $_POST['source'] ) ? sanitize_text_field( wp_unslash( $_POST['source'] ) ) : '' ), $_POST );
 	}
 
 	/**
@@ -630,7 +630,7 @@ class MHK_AJAX {
 		check_ajax_referer( 'process-ajax-nonce', 'security' );
 
 		// Check permissions.
-		if ( ! current_user_can( 'everest_forms_edit_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_forms' ) ) {
 			wp_die( -1 );
 		}
 
@@ -650,7 +650,7 @@ class MHK_AJAX {
 		check_ajax_referer( 'process-ajax-nonce', 'security' );
 
 		// Check permissions.
-		if ( ! current_user_can( 'everest_forms_edit_forms' ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_forms' ) ) {
 			wp_die( -1 );
 		}
 
@@ -662,13 +662,13 @@ class MHK_AJAX {
 			);
 		}
 
-		do_action( 'everest_forms_integration_account_disconnect_' . ( isset( $_POST['source'] ) ? sanitize_text_field( wp_unslash( $_POST['source'] ) ) : '' ), $_POST );
+		do_action( 'muhiku_forms_integration_account_disconnect_' . ( isset( $_POST['source'] ) ? sanitize_text_field( wp_unslash( $_POST['source'] ) ) : '' ), $_POST );
 
-		$connected_accounts = get_option( 'everest_forms_integrations', false );
+		$connected_accounts = get_option( 'muhiku_forms_integrations', false );
 
 		if ( ! empty( $connected_accounts[ $_POST['source'] ][ $_POST['key'] ] ) ) {
 			unset( $connected_accounts[ $_POST['source'] ][ $_POST['key'] ] );
-			update_option( 'everest_forms_integrations', $connected_accounts );
+			update_option( 'muhiku_forms_integrations', $connected_accounts );
 			wp_send_json_success( array( 'remove' => true ) );
 		} else {
 			wp_send_json_error(
@@ -704,12 +704,12 @@ class MHK_AJAX {
 		);
 
 		/* translators: %1$s - deactivation reason page; %2$d - deactivation url. */
-		$deactivation_notice = sprintf( __( 'Before we deactivate Muhiku Plug, would you care to <a href="%1$s" target="_blank">let us know why</a> so we can improve it for you? <a href="%2$s">No, deactivate now</a>.', 'muhiku-plug' ), 'https://wpeverest.com/deactivation/muhiku-plug/', $deactivate_url );
+		$deactivation_notice = sprintf( __( 'Before we deactivate Muhiku Plug, would you care to <a href="%1$s" target="_blank">let us know why</a> so we can improve it for you? <a href="%2$s">No, deactivate now</a>.', 'muhiku-plug' ), 'https://wpmuhiku.com/deactivation/muhiku-plug/', $deactivate_url );
 
 		wp_send_json(
 			array(
 				'fragments' => apply_filters(
-					'everest_forms_deactivation_notice_fragments',
+					'muhiku_forms_deactivation_notice_fragments',
 					array(
 						'deactivation_notice' => '<tr class="plugin-update-tr active updated" data-slug="muhiku-plug" data-plugin="muhiku-plug/muhiku-plug.php"><td colspan ="3" class="plugin-update colspanchange"><div class="notice inline notice-warning notice-alt"><p>' . $deactivation_notice . '</p></div></td></tr>',
 					)
@@ -722,10 +722,10 @@ class MHK_AJAX {
 	 * Triggered when clicking the rating footer.
 	 */
 	public static function rated() {
-		if ( ! current_user_can( 'manage_everest_forms' ) ) {
+		if ( ! current_user_can( 'manage_muhiku_forms' ) ) {
 			wp_die( -1 );
 		}
-		update_option( 'everest_forms_admin_footer_text_rated', 1 );
+		update_option( 'muhiku_forms_admin_footer_text_rated', 1 );
 		wp_die();
 	}
 
@@ -733,13 +733,13 @@ class MHK_AJAX {
 	 * Triggered when clicking the review notice button.
 	 */
 	public static function review_dismiss() {
-		if ( ! current_user_can( 'manage_everest_forms' ) ) {
+		if ( ! current_user_can( 'manage_muhiku_forms' ) ) {
 			wp_die( -1 );
 		}
-		$review              = get_option( 'everest_forms_review', array() );
+		$review              = get_option( 'muhiku_forms_review', array() );
 		$review['time']      = current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 		$review['dismissed'] = true;
-		update_option( 'everest_forms_review', $review );
+		update_option( 'muhiku_forms_review', $review );
 		wp_die();
 	}
 
@@ -748,12 +748,12 @@ class MHK_AJAX {
 	 */
 	public static function survey_dismiss() {
 
-		if ( ! current_user_can( 'manage_everest_forms' ) ) {
+		if ( ! current_user_can( 'manage_muhiku_forms' ) ) {
 			wp_die( -1 );
 		}
-		$survey              = get_option( 'everest_forms_survey', array() );
+		$survey              = get_option( 'muhiku_forms_survey', array() );
 		$survey['dismissed'] = true;
-		update_option( 'everest_forms_survey', $survey );
+		update_option( 'muhiku_forms_survey', $survey );
 		wp_die();
 	}
 
@@ -762,12 +762,12 @@ class MHK_AJAX {
 	 */
 	public static function enabled_form() {
 		// Run a security check.
-		check_ajax_referer( 'everest_forms_enabled_form', 'security' );
+		check_ajax_referer( 'muhiku_forms_enabled_form', 'security' );
 
 		$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : 0;
 		$enabled = isset( $_POST['enabled'] ) ? absint( $_POST['enabled'] ) : 0;
 
-		if ( ! current_user_can( 'everest_forms_edit_form', $form_id ) ) {
+		if ( ! current_user_can( 'muhiku_forms_edit_form', $form_id ) ) {
 			wp_die( -1 );
 		}
 
@@ -804,7 +804,7 @@ class MHK_AJAX {
 			$email = sanitize_email( isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : '' );
 
 			/* translators: %s: from address */
-			$subject = 'Everest Form: ' . sprintf( esc_html__( 'Test email from %s', 'muhiku-plug' ), $from );
+			$subject = 'Muhiku Form: ' . sprintf( esc_html__( 'Test email from %s', 'muhiku-plug' ), $from );
 			$header  = "Reply-To: {{from}} \r\n";
 			$header .= 'Content-Type: text/html; charset=UTF-8';
 			$message = sprintf(

@@ -26,7 +26,7 @@ function mhk_get_screen_ids() {
 		$mhk_screen_id . '_page_mhk-email-templates',
 	);
 
-	return apply_filters( 'everest_forms_screen_ids', $screen_ids );
+	return apply_filters( 'muhiku_forms_screen_ids', $screen_ids );
 }
 
 /**
@@ -70,7 +70,7 @@ function mhk_create_page( $slug, $option = '', $page_title = '', $page_content =
 		$valid_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status NOT IN ( 'pending', 'trash', 'future', 'auto-draft' )  AND post_name = %s LIMIT 1;", $slug ) );
 	}
 
-	$valid_page_found = apply_filters( 'everest_forms_create_page_id', $valid_page_found, $slug, $page_content );
+	$valid_page_found = apply_filters( 'muhiku_forms_create_page_id', $valid_page_found, $slug, $page_content );
 
 	if ( $valid_page_found ) {
 		if ( $option ) {
@@ -124,7 +124,7 @@ function mhk_create_page( $slug, $option = '', $page_title = '', $page_content =
  *
  * @param array[] $options Opens array to output.
  */
-function everest_forms_admin_fields( $options ) {
+function muhiku_forms_admin_fields( $options ) {
 	if ( ! class_exists( 'MHK_Admin_Settings', false ) ) {
 		include dirname( __FILE__ ) . '/class-mhk-admin-settings.php';
 	}
@@ -138,7 +138,7 @@ function everest_forms_admin_fields( $options ) {
  * @param array $options Options array to output.
  * @param array $data    Optional. Data to use for saving. Defaults to $_POST.
  */
-function everest_forms_update_options( $options, $data = null ) {
+function muhiku_forms_update_options( $options, $data = null ) {
 	if ( ! class_exists( 'MHK_Admin_Settings', false ) ) {
 		include dirname( __FILE__ ) . '/class-mhk-admin-settings.php';
 	}
@@ -154,7 +154,7 @@ function everest_forms_update_options( $options, $data = null ) {
  *
  * @return string
  */
-function everest_forms_settings_get_option( $option_name, $default = '' ) {
+function muhiku_forms_settings_get_option( $option_name, $default = '' ) {
 	if ( ! class_exists( 'MHK_Admin_Settings', false ) ) {
 		include dirname( __FILE__ ) . '/class-mhk-admin-settings.php';
 	}
@@ -175,7 +175,7 @@ function everest_forms_settings_get_option( $option_name, $default = '' ) {
  *
  * @return string
  */
-function everest_forms_panel_field( $option, $panel, $field, $form_data, $label, $args = array(), $echo = true ) {
+function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, $args = array(), $echo = true ) {
 	// Required params.
 	if ( empty( $option ) || empty( $panel ) || empty( $field ) ) {
 		return '';

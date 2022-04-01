@@ -1,9 +1,9 @@
-/* global everest_forms_text_limit_params */
+/* global muhiku_forms_text_limit_params */
 jQuery(function () {
   "use strict";
 
-  // everest_forms_text_limit_params is required to continue, ensure the object exists.
-  if (typeof everest_forms_text_limit_params === "undefined") {
+  // muhiku_forms_text_limit_params is required to continue, ensure the object exists.
+  if (typeof muhiku_forms_text_limit_params === "undefined") {
     return false;
   }
 
@@ -23,7 +23,7 @@ jQuery(function () {
           event.dataset.formId,
           event.dataset.fieldId,
           self.renderHint(
-            everest_forms_text_limit_params.i18n_messages_limit_characters,
+            muhiku_forms_text_limit_params.i18n_messages_limit_characters,
             event.value.length,
             limit
           )
@@ -45,7 +45,7 @@ jQuery(function () {
           event.dataset.formId,
           event.dataset.fieldId,
           self.renderHint(
-            everest_forms_text_limit_params.i18n_messages_limit_words,
+            muhiku_forms_text_limit_params.i18n_messages_limit_words,
             event.value.trim().split(/\s+/).length,
             limit
           )
@@ -108,7 +108,7 @@ jQuery(function () {
   TextLimitHandler.prototype.checkCharacters = function (hint, limit) {
     return function (event) {
       hint.textContent = self.renderHint(
-        everest_forms_text_limit_params.i18n_messages_limit_characters,
+        muhiku_forms_text_limit_params.i18n_messages_limit_characters,
         this.value.length,
         limit
       );
@@ -134,7 +134,7 @@ jQuery(function () {
       }
 
       hint.textContent = self.renderHint(
-        everest_forms_text_limit_params.i18n_messages_limit_words,
+        muhiku_forms_text_limit_params.i18n_messages_limit_words,
         words.length,
         limit
       );

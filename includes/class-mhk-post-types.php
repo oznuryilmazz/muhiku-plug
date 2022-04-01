@@ -21,24 +21,24 @@ class MHK_Post_Types {
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
 		add_action( 'admin_bar_menu', array( __CLASS__, 'admin_bar_menus' ), 100 );
-		add_action( 'everest_forms_after_register_post_type', array( __CLASS__, 'maybe_flush_rewrite_rules' ) );
-		add_action( 'everest_forms_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
+		add_action( 'muhiku_forms_after_register_post_type', array( __CLASS__, 'maybe_flush_rewrite_rules' ) );
+		add_action( 'muhiku_forms_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
 	}
 
 	/**
 	 * Register core post types.
 	 */
 	public static function register_post_types() {
-		if ( ! is_blog_installed() || post_type_exists( 'everest_form' ) ) {
+		if ( ! is_blog_installed() || post_type_exists( 'muhiku_form' ) ) {
 			return;
 		}
 
-		do_action( 'everest_forms_register_post_type' );
+		do_action( 'muhiku_forms_register_post_type' );
 
 		register_post_type(
-			'everest_form',
+			'muhiku_form',
 			apply_filters(
-				'everest_forms_register_post_type_product',
+				'muhiku_forms_register_post_type_product',
 				array(
 					'labels'              => array(
 						'name'                  => __( 'Muhiku Plug', 'muhiku-plug' ),
@@ -83,7 +83,7 @@ class MHK_Post_Types {
 			)
 		);
 
-		do_action( 'everest_forms_after_register_post_type' );
+		do_action( 'muhiku_forms_after_register_post_type' );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class MHK_Post_Types {
 	 * @param WP_Admin_Bar $wp_admin_bar Admin bar instance.
 	 */
 	public static function admin_bar_menus( $wp_admin_bar ) {
-		if ( ! is_admin_bar_showing() || ! current_user_can( 'manage_everest_forms' ) ) {
+		if ( ! is_admin_bar_showing() || ! current_user_can( 'manage_muhiku_forms' ) ) {
 			return;
 		}
 
@@ -103,7 +103,7 @@ class MHK_Post_Types {
 		}
 
 		// Add an option to create new form.
-		if ( apply_filters( 'everest_forms_show_admin_bar_menus', true ) ) {
+		if ( apply_filters( 'muhiku_forms_show_admin_bar_menus', true ) ) {
 			$wp_admin_bar->add_node(
 				array(
 					'parent' => 'new-content',
@@ -121,8 +121,8 @@ class MHK_Post_Types {
 	 * @since 1.2.0
 	 */
 	public static function maybe_flush_rewrite_rules() {
-		if ( 'yes' === get_option( 'everest_forms_queue_flush_rewrite_rules' ) ) {
-			update_option( 'everest_forms_queue_flush_rewrite_rules', 'no' );
+		if ( 'yes' === get_option( 'muhiku_forms_queue_flush_rewrite_rules' ) ) {
+			update_option( 'muhiku_forms_queue_flush_rewrite_rules', 'no' );
 			self::flush_rewrite_rules();
 		}
 	}

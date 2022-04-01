@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
 			<a href="https://wordpress.org/support/plugin/muhiku-plug/reviews?rate=5#new-post" class="button button-primary mhk-dismiss-review-notice mhk-review-received" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-external"></span><?php esc_html_e( 'Sure, I\'d love to!', 'muhiku-plug' ); ?></a>
 			<a href="#" class="button button-secondary mhk-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><span  class="dashicons dashicons-smiley"></span><?php esc_html_e( 'Remind me later', 'muhiku-plug' ); ?></a>
 			<a href="#" class="button button-secondary mhk-dismiss-review-notice" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-dismiss"></span><?php esc_html_e( 'I already did', 'muhiku-plug' ); ?></a>
-			<a href="https://wpeverest.com/support-forum/" class="button button-secondary mhk-have-query" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-testimonial"></span><?php esc_html_e( 'I have a query', 'muhiku-plug' ); ?></a>
+			<a href="https://wpmuhiku.com/support-forum/" class="button button-secondary mhk-have-query" target="_blank" rel="noopener noreferrer"><span class="dashicons dashicons-testimonial"></span><?php esc_html_e( 'I have a query', 'muhiku-plug' ); ?></a>
 		</p>
 	</div>
 </div>
@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 				event.preventDefault();
 			}
 			$.post( ajaxurl, {
-				action: 'everest_forms_review_dismiss'
+				action: 'muhiku_forms_review_dismiss'
 			} );
 			$( '.mhk-review-notice' ).remove();
 		} );

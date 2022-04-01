@@ -26,12 +26,12 @@ button.muhiku-plug-btn {
 	}
 
 	&.muhiku-plug-btn-primary {
-		background-color: $everestforms;
+		background-color: $muhikuforms;
 		color: $color-white;
 
 		&:hover {
 			color: $color-white;
-			background-color: darken($everestforms, 10%);
+			background-color: darken($muhikuforms, 10%);
 		}
 	}
 
@@ -42,11 +42,11 @@ button.muhiku-plug-btn {
 
 	&.muhiku-plug-btn-link {
 		font-weight: 600;
-		color: $everestforms;
+		color: $muhikuforms;
 		background: transparent;
 
 		&:hover {
-			color: darken($everestforms, 10%);
+			color: darken($muhikuforms, 10%);
 			background: transparent;
 		}
 
@@ -91,13 +91,13 @@ button.muhiku-plug-btn {
 
 	&:active,
 	&.is-active {
-		background: $everestforms;
+		background: $muhikuforms;
 		color: $color-white;
 	}
 
 	&:focus {
 		outline: none;
-		box-shadow: 0 0 0 2px lighten($everestforms, 35%);
+		box-shadow: 0 0 0 2px lighten($muhikuforms, 35%);
 	}
 }
 

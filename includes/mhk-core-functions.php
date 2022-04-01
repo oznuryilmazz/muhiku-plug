@@ -125,11 +125,11 @@ function mhk_get_template( $template_name, $args = array(), $template_path = '',
 		extract( $args ); // @codingStandardsIgnoreLine
 	}
 
-	do_action( 'everest_forms_before_template_part', $action_args['template_name'], $action_args['template_path'], $action_args['located'], $action_args['args'] );
+	do_action( 'muhiku_forms_before_template_part', $action_args['template_name'], $action_args['template_path'], $action_args['located'], $action_args['args'] );
 
 	include $action_args['located'];
 
-	do_action( 'everest_forms_after_template_part', $action_args['template_name'], $action_args['template_path'], $action_args['located'], $action_args['args'] );
+	do_action( 'muhiku_forms_after_template_part', $action_args['template_name'], $action_args['template_path'], $action_args['located'], $action_args['args'] );
 }
 
 /**
@@ -186,7 +186,7 @@ function mhk_locate_template( $template_name, $template_path = '', $default_path
 	}
 
 	// Return what we found.
-	return apply_filters( 'everest_forms_locate_template', $template, $template_name, $template_path );
+	return apply_filters( 'muhiku_forms_locate_template', $template, $template_name, $template_path );
 }
 
 /**
@@ -239,7 +239,7 @@ function mhk_print_js() {
 		 * @since 1.0.0
 		 * @param string $js JavaScript code.
 		 */
-		echo wp_kses( apply_filters( 'everest_forms_queued_js', $js ), array( 'script' => array( 'type' => true ) ) );
+		echo wp_kses( apply_filters( 'muhiku_forms_queued_js', $js ), array( 'script' => array( 'type' => true ) ) );
 		unset( $mhk_queued_js );
 	}
 }
@@ -255,7 +255,7 @@ function mhk_print_js() {
  */
 function mhk_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false ) {
 	if ( ! headers_sent() ) {
-		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'everest_forms_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
+		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'muhiku_forms_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
 	} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 		headers_sent( $file, $line );
 		trigger_error( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}", E_USER_NOTICE ); // @codingStandardsIgnoreLine
@@ -524,7 +524,7 @@ function mhk_nocache_headers() {
 /**
  * Get a shared logger instance.
  *
- * Use the everest_forms_logging_class filter to change the logging class. You may provide one of the following:
+ * Use the muhiku_forms_logging_class filter to change the logging class. You may provide one of the following:
  *     - a class name which will be instantiated as `new $class` with no arguments
  *     - an instance which will be used directly as the logger
  * In either case, the class or instance *must* implement MHK_Logger_Interface.
@@ -536,7 +536,7 @@ function mhk_nocache_headers() {
 function mhk_get_logger() {
 	static $logger = null;
 
-	$class = apply_filters( 'everest_forms_logging_class', 'MHK_Logger' );
+	$class = apply_filters( 'muhiku_forms_logging_class', 'MHK_Logger' );
 
 	if ( null !== $logger && is_string( $class ) && is_a( $logger, $class ) ) {
 		return $logger;
@@ -550,10 +550,10 @@ function mhk_get_logger() {
 		mhk_doing_it_wrong(
 			__FUNCTION__,
 			sprintf(
-				/* translators: 1: class name 2: everest_forms_logging_class 3: MHK_Logger_Interface */
+				/* translators: 1: class name 2: muhiku_forms_logging_class 3: MHK_Logger_Interface */
 				__( 'The class %1$s provided by %2$s filter must implement %3$s.', 'muhiku-plug' ),
 				'<code>' . esc_html( is_object( $class ) ? get_class( $class ) : $class ) . '</code>',
-				'<code>everest_forms_logging_class</code>',
+				'<code>muhiku_forms_logging_class</code>',
 				'<code>MHK_Logger_Interface</code>'
 			),
 			'1.2'
@@ -598,7 +598,7 @@ function mhk_print_r( $expression, $return = false ) {
 		),
 	);
 
-	$alternatives = apply_filters( 'everest_forms_print_r_alternatives', $alternatives, $expression );
+	$alternatives = apply_filters( 'muhiku_forms_print_r_alternatives', $alternatives, $expression );
 
 	foreach ( $alternatives as $alternative ) {
 		if ( function_exists( $alternative['func'] ) ) {
@@ -635,7 +635,7 @@ function mhk_register_default_log_handler( $handlers ) {
 	return $handlers;
 }
 
-add_filter( 'everest_forms_register_log_handlers', 'mhk_register_default_log_handler' );
+add_filter( 'muhiku_forms_register_log_handlers', 'mhk_register_default_log_handler' );
 
 /**
  * Based on wp_list_pluck, this calls a method instead of returning a property.
@@ -794,7 +794,7 @@ function mhk_delete_expired_transients() {
 
 	return absint( $rows + $rows2 );
 }
-add_action( 'everest_forms_installed', 'mhk_delete_expired_transients' );
+add_action( 'muhiku_forms_installed', 'mhk_delete_expired_transients' );
 
 /**
  * Make a URL relative, if possible.
@@ -836,14 +836,14 @@ function mhk_is_active_theme( $theme ) {
  * @since 1.0.0
  */
 function mhk_cleanup_session_data() {
-	$session_class = apply_filters( 'everest_forms_session_handler', 'MHK_Session_Handler' );
+	$session_class = apply_filters( 'muhiku_forms_session_handler', 'MHK_Session_Handler' );
 	$session       = new $session_class();
 
 	if ( is_callable( array( $session, 'cleanup_sessions' ) ) ) {
 		$session->cleanup_sessions();
 	}
 }
-add_action( 'everest_forms_cleanup_sessions', 'mhk_cleanup_session_data' );
+add_action( 'muhiku_forms_cleanup_sessions', 'mhk_cleanup_session_data' );
 
 /**
  * Return the html selected attribute if stringified $value is found in array of stringified $options
@@ -917,7 +917,7 @@ function mhk_get_form_fields( $form = false, $whitelist = array() ) {
 		'payment-checkbox',
 		'payment-total',
 	);
-	$allowed_form_fields = apply_filters( 'everest_forms_allowed_form_fields', $allowed_form_fields );
+	$allowed_form_fields = apply_filters( 'muhiku_forms_allowed_form_fields', $allowed_form_fields );
 
 	$whitelist = ! empty( $whitelist ) ? $whitelist : $allowed_form_fields;
 
@@ -1153,7 +1153,7 @@ function mhk_get_all_forms( $skip_disabled_entries = false ) {
 			}
 
 			// Check permissions for forms with viewable.
-			if ( current_user_can( 'everest_forms_view_form_entries', $form_id ) ) {
+			if ( current_user_can( 'muhiku_forms_view_form_entries', $form_id ) ) {
 				$forms[ $form_id ] = $form->post_title;
 			}
 		}
@@ -1510,7 +1510,7 @@ function mhk_max_upload( $bytes = false ) {
  * @return string
  */
 function mhk_get_required_label() {
-	return apply_filters( 'everest_forms_required_label', esc_html__( 'This field is required.', 'muhiku-plug' ) );
+	return apply_filters( 'muhiku_forms_required_label', esc_html__( 'This field is required.', 'muhiku-plug' ) );
 }
 
 /**
@@ -1565,7 +1565,7 @@ function mhk_decode_string( $string ) {
 
 	return wp_kses_decode_entities( html_entity_decode( $string, ENT_QUOTES ) );
 }
-add_filter( 'everest_forms_email_message', 'mhk_decode_string' );
+add_filter( 'muhiku_forms_email_message', 'mhk_decode_string' );
 
 /**
  * Get Countries.
@@ -1827,7 +1827,7 @@ function mhk_get_countries() {
 		'ZW' => esc_html__( 'Zimbabwe', 'muhiku-plug' ),
 	);
 
-	return (array) apply_filters( 'everest_forms_countries', $countries );
+	return (array) apply_filters( 'muhiku_forms_countries', $countries );
 }
 
 /**
@@ -1891,7 +1891,7 @@ function mhk_get_states() {
 		'WY' => esc_html__( 'Wyoming', 'muhiku-plug' ),
 	);
 
-	return (array) apply_filters( 'everest_forms_states', $states );
+	return (array) apply_filters( 'muhiku_forms_states', $states );
 }
 
 /**
@@ -1901,7 +1901,7 @@ function mhk_get_states() {
  */
 function mhk_get_fields_groups() {
 	return (array) apply_filters(
-		'everest_forms_builder_fields_groups',
+		'muhiku_forms_builder_fields_groups',
 		array(
 			'general'  => __( 'General Fields', 'muhiku-plug' ),
 			'advanced' => __( 'Advanced Fields', 'muhiku-plug' ),
@@ -2007,7 +2007,7 @@ function mhk_get_all_fields_settings() {
 		),
 	);
 
-	return apply_filters( 'everest_form_all_fields_settings', $settings );
+	return apply_filters( 'muhiku_form_all_fields_settings', $settings );
 }
 
 /**
@@ -2066,7 +2066,7 @@ function mhk_debug_data( $expression, $return = false ) {
  * @return mixed The translated string.
  */
 function mhk_string_translation( $form_id, $field_id, $value, $suffix = '' ) {
-	$context = isset( $form_id ) ? 'everest_forms_' . absint( $form_id ) : 0;
+	$context = isset( $form_id ) ? 'muhiku_forms_' . absint( $form_id ) : 0;
 	$name    = isset( $field_id ) ? mhk_clean( $field_id . $suffix ) : '';
 
 	if ( function_exists( 'icl_register_string' ) ) {
@@ -2092,7 +2092,7 @@ function mhk_cleanup_logs() {
 		$logger->clear_expired_logs();
 	}
 }
-add_action( 'everest_forms_cleanup_logs', 'mhk_cleanup_logs' );
+add_action( 'muhiku_forms_cleanup_logs', 'mhk_cleanup_logs' );
 
 
 /**

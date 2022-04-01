@@ -60,7 +60,7 @@ class MHK_Form_Task {
 	 */
 	public function __construct() {
 		add_action( 'wp', array( $this, 'listen_task' ) );
-		add_filter( 'everest_forms_field_properties', array( $this, 'load_previous_field_value' ), 99, 3 );
+		add_filter( 'muhiku_forms_field_properties', array( $this, 'load_previous_field_value' ), 99, 3 );
 	}
 
 	/**
@@ -69,18 +69,18 @@ class MHK_Form_Task {
 	 * @since 1.0.0
 	 */
 	public function listen_task() {
-		if ( ! empty( $_GET['everest_forms_return'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$this->entry_confirmation_redirect( '', sanitize_text_field( wp_unslash( $_GET['everest_forms_return'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_GET['muhiku_forms_return'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$this->entry_confirmation_redirect( '', sanitize_text_field( wp_unslash( $_GET['muhiku_forms_return'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 
-		$form_id = ! empty( $_POST['everest_forms']['id'] ) ? absint( $_POST['everest_forms']['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		$form_id = ! empty( $_POST['muhiku_forms']['id'] ) ? absint( $_POST['muhiku_forms']['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
 
 		if ( ! $form_id ) {
 			return;
 		}
 
-		if ( ! empty( $_POST['everest_forms']['id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$this->do_task( mhk_sanitize_entry( wp_unslash( $_POST['everest_forms'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! empty( $_POST['muhiku_forms']['id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$this->do_task( mhk_sanitize_entry( wp_unslash( $_POST['muhiku_forms'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
 
 		if ( ! mhk_is_amp() ) {
@@ -155,22 +155,22 @@ class MHK_Form_Task {
 			}
 
 			// Formatted form data for hooks.
-			$this->form_data = apply_filters( 'everest_forms_process_before_form_data', mhk_decode( $form->post_content ), $entry );
+			$this->form_data = apply_filters( 'muhiku_forms_process_before_form_data', mhk_decode( $form->post_content ), $entry );
 
 			// Pre-process/validate hooks and filter. Data is not validated or cleaned yet so use with caution.
-			$entry                      = apply_filters( 'everest_forms_process_before_filter', $entry, $this->form_data );
+			$entry                      = apply_filters( 'muhiku_forms_process_before_filter', $entry, $this->form_data );
 			$this->form_data['page_id'] = array_key_exists( 'post_id', $entry ) ? $entry['post_id'] : $form_id;
 
 			$logger->info(
 				__( 'Muhiku Plug Process Before.', 'muhiku-plug' ),
 				array( 'source' => 'form-submission' )
 			);
-			do_action( 'everest_forms_process_before', $entry, $this->form_data );
+			do_action( 'muhiku_forms_process_before', $entry, $this->form_data );
 			$logger->info(
 				__( 'Muhiku Plug Process Before Form ID.', 'muhiku-plug' ),
 				array( 'source' => 'form-submission' )
 			);
-			do_action( "everest_forms_process_before_{$form_id}", $entry, $this->form_data );
+			do_action( "muhiku_forms_process_before_{$form_id}", $entry, $this->form_data );
 
 			$ajax_form_submission = isset( $this->form_data['settings']['ajax_form_submission'] ) ? $this->form_data['settings']['ajax_form_submission'] : 0;
 			if ( '1' === $ajax_form_submission ) {
@@ -220,10 +220,10 @@ class MHK_Form_Task {
 						"Muhiku Plug Process Before validate {$field_type}.",
 						array( 'source' => 'form-submission' )
 					);
-					do_action( "everest_forms_process_validate_{$field_type}", $field_id, $field_submit, $this->form_data, $field_type );
+					do_action( "muhiku_forms_process_validate_{$field_type}", $field_id, $field_submit, $this->form_data, $field_type );
 				}
 
-				if ( 'credit-card' === $field_type && isset( $_POST['everest_form_stripe_payment_intent_id'] ) ) {
+				if ( 'credit-card' === $field_type && isset( $_POST['muhiku_form_stripe_payment_intent_id'] ) ) {
 					$this->mhk_notice_print = true;
 				}
 
@@ -250,22 +250,22 @@ class MHK_Form_Task {
 			}
 
 			// reCAPTCHA check.
-			if ( ! apply_filters( 'everest_forms_recaptcha_disabled', false ) ) {
-				$recaptcha_type      = get_option( 'everest_forms_recaptcha_type', 'v2' );
-				$invisible_recaptcha = get_option( 'everest_forms_recaptcha_v2_invisible', 'no' );
+			if ( ! apply_filters( 'muhiku_forms_recaptcha_disabled', false ) ) {
+				$recaptcha_type      = get_option( 'muhiku_forms_recaptcha_type', 'v2' );
+				$invisible_recaptcha = get_option( 'muhiku_forms_recaptcha_v2_invisible', 'no' );
 
 				if ( 'v2' === $recaptcha_type && 'no' === $invisible_recaptcha ) {
-					$site_key   = get_option( 'everest_forms_recaptcha_v2_site_key' );
-					$secret_key = get_option( 'everest_forms_recaptcha_v2_secret_key' );
+					$site_key   = get_option( 'muhiku_forms_recaptcha_v2_site_key' );
+					$secret_key = get_option( 'muhiku_forms_recaptcha_v2_secret_key' );
 				} elseif ( 'v2' === $recaptcha_type && 'yes' === $invisible_recaptcha ) {
-					$site_key   = get_option( 'everest_forms_recaptcha_v2_invisible_site_key' );
-					$secret_key = get_option( 'everest_forms_recaptcha_v2_invisible_secret_key' );
+					$site_key   = get_option( 'muhiku_forms_recaptcha_v2_invisible_site_key' );
+					$secret_key = get_option( 'muhiku_forms_recaptcha_v2_invisible_secret_key' );
 				} elseif ( 'v3' === $recaptcha_type ) {
-					$site_key   = get_option( 'everest_forms_recaptcha_v3_site_key' );
-					$secret_key = get_option( 'everest_forms_recaptcha_v3_secret_key' );
+					$site_key   = get_option( 'muhiku_forms_recaptcha_v3_site_key' );
+					$secret_key = get_option( 'muhiku_forms_recaptcha_v3_secret_key' );
 				} elseif ( 'hcaptcha' === $recaptcha_type ) {
-					$site_key   = get_option( 'everest_forms_recaptcha_hcaptcha_site_key' );
-					$secret_key = get_option( 'everest_forms_recaptcha_hcaptcha_secret_key' );
+					$site_key   = get_option( 'muhiku_forms_recaptcha_hcaptcha_site_key' );
+					$secret_key = get_option( 'muhiku_forms_recaptcha_hcaptcha_secret_key' );
 				}
 
 				if ( ! empty( $site_key ) && ! empty( $secret_key ) && isset( $this->form_data['settings']['recaptcha_support'] ) && '1' === $this->form_data['settings']['recaptcha_support'] &&
@@ -284,7 +284,7 @@ class MHK_Form_Task {
 					$token = ! empty( $_POST['g-recaptcha-response'] ) ? mhk_clean( wp_unslash( $_POST['g-recaptcha-response'] ) ) : false;
 
 					if ( 'v3' === $recaptcha_type ) {
-						$token = ! empty( $_POST['everest_forms']['recaptcha'] ) ? mhk_clean( wp_unslash( $_POST['everest_forms']['recaptcha'] ) ) : false;
+						$token = ! empty( $_POST['muhiku_forms']['recaptcha'] ) ? mhk_clean( wp_unslash( $_POST['muhiku_forms']['recaptcha'] ) ) : false;
 					}
 					if ( 'hcaptcha' === $recaptcha_type ) {
 						$token        = ! empty( $_POST['h-captcha-response'] ) ? mhk_clean( wp_unslash( $_POST['h-captcha-response'] ) ) : false;
@@ -296,7 +296,7 @@ class MHK_Form_Task {
 					if ( ! is_wp_error( $raw_response ) ) {
 						$response = json_decode( wp_remote_retrieve_body( $raw_response ) );
 						// Check reCAPTCHA response.
-						if ( empty( $response->success ) || ( 'v3' === $recaptcha_type && $response->score <= get_option( 'everest_forms_recaptcha_v3_threshold_score', apply_filters( 'everest_forms_recaptcha_v3_threshold', '0.5' ) ) ) ) {
+						if ( empty( $response->success ) || ( 'v3' === $recaptcha_type && $response->score <= get_option( 'muhiku_forms_recaptcha_v3_threshold_score', apply_filters( 'muhiku_forms_recaptcha_v3_threshold', '0.5' ) ) ) ) {
 							if ( 'v3' === $recaptcha_type ) {
 								if ( isset( $response->score ) ) {
 									$error .= ' (' . esc_html( $response->score ) . ')';
@@ -313,7 +313,7 @@ class MHK_Form_Task {
 				}
 			}
 			// Initial error check.
-			$errors = apply_filters( 'everest_forms_process_initial_errors', $this->errors, $this->form_data );
+			$errors = apply_filters( 'muhiku_forms_process_initial_errors', $this->errors, $this->form_data );
 			if ( isset( $_POST['__amp_form_verify'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				if ( empty( $errors[ $form_id ] ) ) {
 					wp_send_json( array(), 200 );
@@ -378,7 +378,7 @@ class MHK_Form_Task {
 				$honeypot = esc_html__( 'Muhiku Plug honeypot field triggered.', 'muhiku-plug' );
 			}
 
-			$honeypot = apply_filters( 'everest_forms_process_honeypot', $honeypot, $this->form_fields, $entry, $this->form_data );
+			$honeypot = apply_filters( 'muhiku_forms_process_honeypot', $honeypot, $this->form_fields, $entry, $this->form_data );
 
 			// If spam - return early.
 			if ( $honeypot ) {
@@ -403,7 +403,7 @@ class MHK_Form_Task {
 						sprintf( 'Muhiku Plug Process Format %s.', $field_type ),
 						array( 'source' => 'form-submission' )
 					);
-					do_action( "everest_forms_process_format_{$field_type}", $field_id, $field_submit, $this->form_data, $field_key );
+					do_action( "muhiku_forms_process_format_{$field_type}", $field_id, $field_submit, $this->form_data, $field_key );
 				}
 			}
 
@@ -412,27 +412,27 @@ class MHK_Form_Task {
 				'Muhiku Plug Process Format After.',
 				array( 'source' => 'form-submission' )
 			);
-			do_action( 'everest_forms_process_format_after', $this->form_data );
+			do_action( 'muhiku_forms_process_format_after', $this->form_data );
 
 			// Process hooks/filter - this is where most addons should hook
 			// because at this point we have completed all field validation and
 			// formatted the data.
-			$this->form_fields = apply_filters( 'everest_forms_process_filter', $this->form_fields, $entry, $this->form_data );
-			$logger->notice( sprintf( 'Everest Form Process: %s', mhk_print_r( $this->form_fields, true ) ) );
+			$this->form_fields = apply_filters( 'muhiku_forms_process_filter', $this->form_fields, $entry, $this->form_data );
+			$logger->notice( sprintf( 'Muhiku Form Process: %s', mhk_print_r( $this->form_fields, true ) ) );
 
 			$logger->info(
 				'Muhiku Plug Process.',
 				array( 'source' => 'form-submission' )
 			);
-			do_action( 'everest_forms_process', $this->form_fields, $entry, $this->form_data );
+			do_action( 'muhiku_forms_process', $this->form_fields, $entry, $this->form_data );
 			$logger->info(
 				"Muhiku Plug Process {$form_id}.",
 				array( 'source' => 'form-submission' )
 			);
-			do_action( "everest_forms_process_{$form_id}", $this->form_fields, $entry, $this->form_data );
+			do_action( "muhiku_forms_process_{$form_id}", $this->form_fields, $entry, $this->form_data );
 
-			$this->form_fields = apply_filters( 'everest_forms_process_after_filter', $this->form_fields, $entry, $this->form_data );
-			$logger->notice( sprintf( 'Everest Form Process After: %s', mhk_print_r( $this->form_fields, true ) ) );
+			$this->form_fields = apply_filters( 'muhiku_forms_process_after_filter', $this->form_fields, $entry, $this->form_data );
+			$logger->notice( sprintf( 'Muhiku Form Process After: %s', mhk_print_r( $this->form_fields, true ) ) );
 
 			// One last error check - don't proceed if there are any errors.
 			if ( ! empty( $this->errors[ $form_id ] ) ) {
@@ -465,7 +465,7 @@ class MHK_Form_Task {
 			$logger->notice( sprintf( 'Successfully Send the email' ) );
 
 			// @todo remove this way of printing notices.
-			add_filter( 'everest_forms_success', array( $this, 'check_success_message' ), 10, 2 );
+			add_filter( 'muhiku_forms_success', array( $this, 'check_success_message' ), 10, 2 );
 
 			// Pass completed and formatted fields in POST.
 			$_POST['muhiku-plug']['complete'] = $this->form_fields;
@@ -478,12 +478,12 @@ class MHK_Form_Task {
 				__( 'Muhiku Plug Process Completed.', 'muhiku-plug' ),
 				array( 'source' => 'form-submission' )
 			);
-			do_action( 'everest_forms_process_complete', $this->form_fields, $entry, $this->form_data, $entry_id );
+			do_action( 'muhiku_forms_process_complete', $this->form_fields, $entry, $this->form_data, $entry_id );
 			$logger->info(
 				"Muhiku Plug Process Completed {$form_id}.",
 				array( 'source' => 'form-submission' )
 			);
-			do_action( "everest_forms_process_complete_{$form_id}", $this->form_fields, $entry, $this->form_data, $entry_id );
+			do_action( "muhiku_forms_process_complete_{$form_id}", $this->form_fields, $entry, $this->form_data, $entry_id );
 		} catch ( Exception $e ) {
 			mhk_add_notice( $e->getMessage(), 'error' );
 			$logger->error(
@@ -501,15 +501,15 @@ class MHK_Form_Task {
 		$settings = $this->form_data['settings'];
 		$message  = isset( $settings['successful_form_submission_message'] ) ? $settings['successful_form_submission_message'] : __( 'Thanks for contacting us! We will be in touch with you shortly.', 'muhiku-plug' );
 
-		if ( defined( 'MHK_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'everest_forms_pdf_download_after_submit', 'no' ) ) {
-			global $__everest_form_id;
-			global $__everest_form_entry_id;
-			$__everest_form_id       = $form_id;
-			$__everest_form_entry_id = $entry_id;
+		if ( defined( 'MHK_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'muhiku_forms_pdf_download_after_submit', 'no' ) ) {
+			global $__muhiku_form_id;
+			global $__muhiku_form_entry_id;
+			$__muhiku_form_id       = $form_id;
+			$__muhiku_form_entry_id = $entry_id;
 		}
 
 		// Check Conditional Logic and get the redirection URL.
-		$submission_redirection_process = apply_filters( 'everest_forms_submission_redirection_process', array(), $this->form_fields, $this->form_data );
+		$submission_redirection_process = apply_filters( 'muhiku_forms_submission_redirection_process', array(), $this->form_fields, $this->form_data );
 
 		// Backward compatibility for mhk form templates.
 		$this->form_data['settings']['redirect_to'] = '0' === $this->form_data['settings']['redirect_to'] ? 'same' : $this->form_data['settings']['redirect_to'];
@@ -520,9 +520,9 @@ class MHK_Form_Task {
 			$response_data['form_id']  = $form_id;
 			$response_data['entry_id'] = $entry_id;
 
-			if ( defined( 'MHK_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'everest_forms_pdf_download_after_submit', 'no' ) ) {
+			if ( defined( 'MHK_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'muhiku_forms_pdf_download_after_submit', 'no' ) ) {
 				$response_data['pdf_download'] = true;
-				$pdf_download_message          = get_option( 'everest_forms_pdf_custom_download_text', '' );
+				$pdf_download_message          = get_option( 'muhiku_forms_pdf_custom_download_text', '' );
 				if ( empty( $pdf_download_message ) ) {
 					$pdf_download_message = __( 'Download your form submission in PDF format', 'muhiku-plug' );
 				}
@@ -560,7 +560,7 @@ class MHK_Form_Task {
 				mhk_add_notice( $message, 'success' );
 			}
 			// $this->entry_confirmation_redirect( $this->form_data );
-			$response_data = apply_filters( 'everest_forms_after_success_ajax_message', $response_data, $this->form_data, $entry );
+			$response_data = apply_filters( 'muhiku_forms_after_success_ajax_message', $response_data, $this->form_data, $entry );
 			return $response_data;
 		} elseif ( ( 'same' === $this->form_data['settings']['redirect_to'] && empty( $submission_redirection_process ) ) || ( ! empty( $submission_redirection_process ) && 'same_page' == $submission_redirection_process['redirect_to'] ) ) {
 				mhk_add_notice( $message, 'success' );
@@ -570,7 +570,7 @@ class MHK_Form_Task {
 			array( 'source' => 'form-submission' )
 		);
 
-		do_action( 'everest_forms_after_success_message', $this->form_data, $entry );
+		do_action( 'muhiku_forms_after_success_message', $this->form_data, $entry );
 		$this->entry_confirmation_redirect( $this->form_data );
 
 	}
@@ -596,7 +596,7 @@ class MHK_Form_Task {
 	 * @param string $url Redirect URL.
 	 */
 	public function ajax_process_redirect( $url ) {
-		$form_id = isset( $_POST['everest_forms']['id'] ) ? absint( $_POST['everest_forms']['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		$form_id = isset( $_POST['muhiku_forms']['id'] ) ? absint( $_POST['muhiku_forms']['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
 
 		if ( empty( $form_id ) ) {
 			wp_send_json_error();
@@ -607,9 +607,9 @@ class MHK_Form_Task {
 			'redirect_url' => $url,
 		);
 
-		$response = apply_filters( 'everest_forms_ajax_submit_redirect', $response, $form_id, $url );
+		$response = apply_filters( 'muhiku_forms_ajax_submit_redirect', $response, $form_id, $url );
 
-		do_action( 'everest_forms_ajax_submit_completed', $form_id, $response );
+		do_action( 'muhiku_forms_ajax_submit_completed', $form_id, $response );
 		wp_send_json_success( $response );
 	}
 
@@ -711,7 +711,7 @@ class MHK_Form_Task {
 				break;
 		}
 
-		$submission_redirect_process = apply_filters( 'everest_forms_submission_redirection_process', array(), $this->form_fields, $this->form_data );
+		$submission_redirect_process = apply_filters( 'muhiku_forms_submission_redirection_process', array(), $this->form_fields, $this->form_data );
 
 		if ( ! empty( $submission_redirect_process ) ) {
 			$settings['redirect_to']  = $submission_redirect_process['redirect_to'];
@@ -741,7 +741,7 @@ class MHK_Form_Task {
 		// Redirect if needed, to either a page or URL, after form processing.
 		if ( ! empty( $this->form_data['settings']['confirmation_type'] ) && 'message' !== $this->form_data['settings']['confirmation_type'] ) {
 			if ( 'redirect' === $this->form_data['settings']['confirmation_type'] ) {
-				$url = apply_filters( 'everest_forms_process_smart_tags', $this->form_data['settings']['confirmation_redirect'], $this->form_data, $this->form_fields, $this->entry_id );
+				$url = apply_filters( 'muhiku_forms_process_smart_tags', $this->form_data['settings']['confirmation_redirect'], $this->form_data, $this->form_fields, $this->entry_id );
 			}
 
 			if ( 'page' === $this->form_data['settings']['confirmation_type'] ) {
@@ -755,14 +755,14 @@ class MHK_Form_Task {
 			return;
 		}
 		if ( isset( $settings['submission_message_scroll'] ) && $settings['submission_message_scroll'] ) {
-			add_filter( 'everest_forms_success_notice_class', array( $this, 'add_scroll_notice_class' ) );
+			add_filter( 'muhiku_forms_success_notice_class', array( $this, 'add_scroll_notice_class' ) );
 		}
 
 		if ( ! empty( $url ) ) {
-			$url = apply_filters( 'everest_forms_process_redirect_url', $url, $form_id, $this->form_fields );
+			$url = apply_filters( 'muhiku_forms_process_redirect_url', $url, $form_id, $this->form_fields );
 			wp_safe_redirect( esc_url_raw( $url ) );
-			do_action( 'everest_forms_process_redirect', $form_id );
-			do_action( "everest_forms_process_redirect_{$form_id}", $form_id );
+			do_action( 'muhiku_forms_process_redirect', $form_id );
+			do_action( "muhiku_forms_process_redirect_{$form_id}", $form_id );
 			exit;
 		}
 	}
@@ -790,7 +790,7 @@ class MHK_Form_Task {
 	 */
 	public function entry_email( $fields, $entry, $form_data, $entry_id, $context = '' ) {
 		// Provide the opportunity to override via a filter.
-		if ( ! apply_filters( 'everest_forms_entry_email', true, $fields, $entry, $form_data ) ) {
+		if ( ! apply_filters( 'muhiku_forms_entry_email', true, $fields, $entry, $form_data ) ) {
 			return;
 		}
 
@@ -799,7 +799,7 @@ class MHK_Form_Task {
 			$this->entry_id = (int) $entry_id;
 		}
 
-		$fields = apply_filters( 'everest_forms_entry_email_data', $fields, $entry, $form_data );
+		$fields = apply_filters( 'muhiku_forms_entry_email_data', $fields, $entry, $form_data );
 
 		if ( ! isset( $form_data['settings']['email']['connection_1'] ) ) {
 			$old_email_data                                 = $form_data['settings']['email'];
@@ -821,7 +821,7 @@ class MHK_Form_Task {
 				continue;
 			}
 
-			$process_email = apply_filters( 'everest_forms_entry_email_process', true, $fields, $form_data, $context, $connection_id );
+			$process_email = apply_filters( 'muhiku_forms_entry_email_process', true, $fields, $form_data, $context, $connection_id );
 
 			if ( ! $process_email ) {
 				continue;
@@ -833,13 +833,13 @@ class MHK_Form_Task {
 			// Setup email properties.
 			/* translators: %s - form name. */
 			$email['subject']        = ! empty( $notification['mhk_email_subject'] ) ? $notification['mhk_email_subject'] : sprintf( esc_html__( 'New %s Entry', 'muhiku-plug' ), $form_data['settings']['form_title'] );
-			$email['address']        = explode( ',', apply_filters( 'everest_forms_process_smart_tags', $mhk_to_email, $form_data, $fields, $this->entry_id ) );
+			$email['address']        = explode( ',', apply_filters( 'muhiku_forms_process_smart_tags', $mhk_to_email, $form_data, $fields, $this->entry_id ) );
 			$email['address']        = array_map( 'sanitize_email', $email['address'] );
 			$email['sender_name']    = ! empty( $notification['mhk_from_name'] ) ? $notification['mhk_from_name'] : get_bloginfo( 'name' );
 			$email['sender_address'] = ! empty( $notification['mhk_from_email'] ) ? $notification['mhk_from_email'] : get_option( 'admin_email' );
 			$email['reply_to']       = ! empty( $notification['mhk_reply_to'] ) ? $notification['mhk_reply_to'] : $email['sender_address'];
 			$email['message']        = ! empty( $notification['mhk_email_message'] ) ? $notification['mhk_email_message'] : '{all_fields}';
-			$email                   = apply_filters( 'everest_forms_entry_email_atts', $email, $fields, $entry, $form_data );
+			$email                   = apply_filters( 'muhiku_forms_entry_email_atts', $email, $fields, $entry, $form_data );
 
 			$attachment = '';
 
@@ -856,10 +856,10 @@ class MHK_Form_Task {
 			 *  This filter relies on consistent data being passed for the resultant filters to function.
 			 *  The third param passed for the filter, $fields, is derived from validation routine, not the DB.
 			 */
-			$emails->__set( 'attachments', apply_filters( 'everest_forms_email_file_attachments', $attachment, $fields, $form_data, 'entry-email', $connection_id, $entry_id ) );
+			$emails->__set( 'attachments', apply_filters( 'muhiku_forms_email_file_attachments', $attachment, $fields, $form_data, 'entry-email', $connection_id, $entry_id ) );
 
 			// Maybe include Cc and Bcc email addresses.
-			if ( 'yes' === get_option( 'everest_forms_enable_email_copies' ) ) {
+			if ( 'yes' === get_option( 'muhiku_forms_enable_email_copies' ) ) {
 				if ( ! empty( $notification['mhk_carboncopy'] ) ) {
 					$emails->__set( 'cc', $notification['mhk_carboncopy'] );
 				}
@@ -868,7 +868,7 @@ class MHK_Form_Task {
 				}
 			}
 
-			$emails = apply_filters( 'everest_forms_entry_email_before_send', $emails );
+			$emails = apply_filters( 'muhiku_forms_entry_email_before_send', $emails );
 
 			// Send entry email.
 			foreach ( $email['address'] as $address ) {
@@ -896,13 +896,13 @@ class MHK_Form_Task {
 		}
 
 		// Provide the opportunity to override via a filter.
-		if ( ! apply_filters( 'everest_forms_entry_save', true, $fields, $entry, $form_data ) ) {
+		if ( ! apply_filters( 'muhiku_forms_entry_save', true, $fields, $entry, $form_data ) ) {
 			return;
 		}
 
-		do_action( 'everest_forms_process_entry_save', $fields, $entry, $form_id, $form_data );
+		do_action( 'muhiku_forms_process_entry_save', $fields, $entry, $form_id, $form_data );
 
-		$fields      = apply_filters( 'everest_forms_entry_save_data', $fields, $entry, $form_data );
+		$fields      = apply_filters( 'muhiku_forms_entry_save_data', $fields, $entry, $form_data );
 		$browser     = mhk_get_browser();
 		$user_ip     = mhk_get_ip_address();
 		$user_device = mhk_get_user_device();
@@ -911,13 +911,13 @@ class MHK_Form_Task {
 		$entry_id    = false;
 
 		// GDPR enhancements - If user details are disabled globally discard the IP and UA.
-		if ( 'yes' === get_option( 'everest_forms_disable_user_details' ) ) {
+		if ( 'yes' === get_option( 'muhiku_forms_disable_user_details' ) ) {
 			$user_agent = '';
 			$user_ip    = '';
 		}
 
 		$entry_data = apply_filters(
-			'everest_forms_entry_data',
+			'muhiku_forms_entry_data',
 			array(
 				'form_id'         => $form_id,
 				'user_id'         => get_current_user_id(),
@@ -947,7 +947,7 @@ class MHK_Form_Task {
 		// Create meta data.
 		if ( $entry_id ) {
 			foreach ( $fields as $field ) {
-				$field = apply_filters( 'everest_forms_entry_save_fields', $field, $form_data, $entry_id );
+				$field = apply_filters( 'muhiku_forms_entry_save_fields', $field, $form_data, $entry_id );
 				// Add only whitelisted fields to entry meta.
 				if ( in_array( $field['type'], array( 'html', 'title' ), true ) ) {
 					continue;
@@ -996,7 +996,7 @@ class MHK_Form_Task {
 		wp_cache_delete( $form_id, 'mhk-search-entries' );
 		wp_cache_delete( MHK_Cache_Helper::get_cache_prefix( 'entries' ) . '_unread_count', 'entries' );
 
-		do_action( 'everest_forms_complete_entry_save', $entry_id, $fields, $entry, $form_id, $form_data );
+		do_action( 'muhiku_forms_complete_entry_save', $entry_id, $fields, $entry, $form_id, $form_data );
 
 		return $this->entry_id;
 	}
@@ -1011,10 +1011,10 @@ class MHK_Form_Task {
 	 */
 	public function load_previous_field_value( $properties, $field, $form_data ) {
 
-		if ( ! isset( $_POST['everest_forms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! isset( $_POST['muhiku_forms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			return $properties;
 		}
-		$data = ! empty( $_POST['everest_forms']['form_fields'][ $field['id'] ] ) ? wp_unslash( $_POST['everest_forms']['form_fields'][ $field['id'] ] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$data = ! empty( $_POST['muhiku_forms']['form_fields'][ $field['id'] ] ) ? wp_unslash( $_POST['muhiku_forms']['form_fields'][ $field['id'] ] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		if ( 'checkbox' === $field['type'] ) {
 			foreach ( $field['choices'] as $key => $option_value ) {
