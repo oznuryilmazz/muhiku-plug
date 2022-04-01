@@ -1,30 +1,19 @@
 <?php
 /**
- * Abstract Settings API Class
- *
- * Admin Settings API used by Integrations, Shipping Methods, and Payment Gateways.
- *
  * @package MuhikuPlug\Abstracts
  * @since   1.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Settings_API class.
- */
 abstract class MHK_Settings_API {
 
 	/**
-	 * The plugin ID. Used for option names.
-	 *
 	 * @var string
 	 */
 	public $plugin_id = 'muhiku_forms_';
 
 	/**
-	 * ID of the class extending the settings API. Used in option names.
-	 *
 	 * @var string
 	 */
 	public $id = '';

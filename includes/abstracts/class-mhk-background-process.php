@@ -1,10 +1,5 @@
 <?php
 /**
- * Abstract WP_Background_Process class.
- *
- * Uses https://github.com/A5hleyRich/wp-background-processing to handle DB
- * updates in the background.
- *
  * @package MuhikuPlug/Classes
  */
 
@@ -18,14 +13,9 @@ if ( ! class_exists( 'WP_Background_Process', false ) ) {
 	include_once dirname( MHK_PLUGIN_FILE ) . '/includes/libraries/wp-background-process.php';
 }
 
-/**
- * MHK_Background_Process class.
- */
 abstract class MHK_Background_Process extends WP_Background_Process {
 
 	/**
-	 * Is queue empty.
-	 *
 	 * @return bool
 	 */
 	protected function is_queue_empty() {
@@ -47,9 +37,7 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 	}
 
 	/**
-	 * Get batch.
-	 *
-	 * @return stdClass Return the first batch from the queue.
+	 * @return stdClass
 	 */
 	protected function get_batch() {
 		global $wpdb;
@@ -78,20 +66,12 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 	}
 
 	/**
-	 * See if the batch limit has been exceeded.
-	 *
 	 * @return bool
 	 */
 	protected function batch_limit_exceeded() {
 		return $this->time_exceeded() || $this->memory_exceeded();
 	}
 
-	/**
-	 * Handle.
-	 *
-	 * Pass each queue item to the task handler, while remaining
-	 * within server memory and time limit constraints.
-	 */
 	protected function handle() {
 		$this->lock_process();
 
@@ -108,12 +88,10 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 				}
 
 				if ( $this->batch_limit_exceeded() ) {
-					// Batch limits reached.
 					break;
 				}
 			}
 
-			// Update or delete current batch.
 			if ( ! empty( $batch->data ) ) {
 				$this->update( $batch->key, $batch->data );
 			} else {
@@ -123,7 +101,6 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 
 		$this->unlock_process();
 
-		// Start next batch or complete process.
 		if ( ! $this->is_queue_empty() ) {
 			$this->dispatch();
 		} else {
@@ -132,20 +109,16 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 	}
 
 	/**
-	 * Get memory limit.
-	 *
 	 * @return int
 	 */
 	protected function get_memory_limit() {
 		if ( function_exists( 'ini_get' ) ) {
 			$memory_limit = ini_get( 'memory_limit' );
 		} else {
-			// Sensible default.
 			$memory_limit = '128M';
 		}
 
 		if ( ! $memory_limit || -1 === intval( $memory_limit ) ) {
-			// Unlimited, set to 32GB.
 			$memory_limit = '32G';
 		}
 
@@ -153,8 +126,6 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 	}
 
 	/**
-	 * Schedule cron healthcheck.
-	 *
 	 * @param array $schedules Schedules.
 	 * @return array
 	 */
@@ -165,10 +136,8 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 			$interval = apply_filters( $this->identifier . '_cron_interval', $this->cron_interval_identifier );
 		}
 
-		// Adds every 5 minutes to the existing schedules.
 		$schedules[ $this->identifier . '_cron_interval' ] = array(
 			'interval' => MINUTE_IN_SECONDS * $interval,
-			/* translators: %d: interval */
 			'display'  => sprintf( __( 'Every %d minutes', 'muhiku-plug' ), $interval ),
 		);
 
@@ -176,7 +145,6 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 	}
 
 	/**
-	 * Delete all batches.
 	 *
 	 * @return MHK_Background_Process
 	 */
@@ -193,16 +161,10 @@ abstract class MHK_Background_Process extends WP_Background_Process {
 
 		$key = $wpdb->esc_like( $this->identifier . '_batch_' ) . '%';
 
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$table} WHERE {$column} LIKE %s", $key ) ); // @codingStandardsIgnoreLine.
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$table} WHERE {$column} LIKE %s", $key ) ); 
 
 		return $this;
 	}
-
-	/**
-	 * Kill process.
-	 *
-	 * Stop processing queue items, clear cronjob and delete all batches.
-	 */
 	public function kill_process() {
 		if ( ! $this->is_queue_empty() ) {
 			$this->delete_all_batches();

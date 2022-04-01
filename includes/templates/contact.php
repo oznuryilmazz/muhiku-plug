@@ -1,7 +1,5 @@
 <?php
 /**
- * Contact form Template.
- *
  * @package MuhikuPlug\Templates
  * @version 1.0.0
  * @since   1.0.0
