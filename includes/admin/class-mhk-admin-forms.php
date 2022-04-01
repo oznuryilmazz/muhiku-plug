@@ -146,9 +146,9 @@ class MHK_Admin_Forms {
 		$forms_table_list->prepare_items();
 		?>
 		<div class="wrap">
-			<h1 class="wp-heading-inline"><?php esc_html_e( 'All Forms', 'muhiku-plug' ); ?></h1>
+			<h1 class="wp-heading-inline"><?php esc_html_e( 'Bütün Öneri Talebi Formları', 'muhiku-plug' ); ?></h1>
 			<?php if ( current_user_can( 'muhiku_forms_create_forms' ) ) : ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=mhk-builder&create-form=1' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'muhiku-plug' ); ?></a>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=mhk-builder&create-form=1' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Yeni Form Ekle', 'muhiku-plug' ); ?></a>
 			<?php endif; ?>
 			<hr class="wp-header-end">
 
@@ -158,7 +158,7 @@ class MHK_Admin_Forms {
 				<input type="hidden" name="page" value="muhiku-plug"/>
 				<?php
 					$forms_table_list->views();
-					$forms_table_list->search_box( __( 'Search Forms', 'muhiku-plug' ), 'muhiku-plug' );
+					$forms_table_list->search_box( __( 'Form İçinde Ara', 'muhiku-plug' ), 'muhiku-plug' );
 					$forms_table_list->display();
 
 					wp_nonce_field( 'save', 'muhiku-plug_nonce' );

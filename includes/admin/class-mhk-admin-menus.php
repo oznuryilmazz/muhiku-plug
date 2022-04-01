@@ -62,14 +62,14 @@ class MHK_Admin_Menus {
 	 * Add menu items.
 	 */
 	public function builder_menu() {
-		$builder_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Builder', 'muhiku-plug' ), esc_html__( 'All Forms', 'muhiku-plug' ), current_user_can( 'muhiku_forms_create_forms' ) ? 'muhiku_forms_create_forms' : 'muhiku_forms_view_forms', 'mhk-builder', array( $this, 'builder_page' ) );
+		$builder_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Builder', 'muhiku-plug' ), esc_html__( 'Bütün Öneri Talebi Formları', 'muhiku-plug' ), current_user_can( 'muhiku_forms_create_forms' ) ? 'muhiku_forms_create_forms' : 'muhiku_forms_view_forms', 'mhk-builder', array( $this, 'builder_page' ) );
 
-		add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Setup', 'muhiku-plug' ), esc_html__( 'Add New', 'muhiku-plug' ), current_user_can( 'muhiku_forms_create_forms' ) ? 'muhiku_forms_create_forms' : 'muhiku_forms_edit_forms', 'mhk-builder&create-form=1', array( $this, 'builder_page' ) );
+		add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Setup', 'muhiku-plug' ), esc_html__( 'Yeni Form Ekle', 'muhiku-plug' ), current_user_can( 'muhiku_forms_create_forms' ) ? 'muhiku_forms_create_forms' : 'muhiku_forms_edit_forms', 'mhk-builder&create-form=1', array( $this, 'builder_page' ) );
 
 		add_action( 'load-' . $builder_page, array( $this, 'builder_page_init' ) );
 
 		/*
-		 * Page redirects based on user's capability as 'All Forms' and 'Add New' both have same handle.
+		 * Page redirects based on user's capability as 'All Forms' and 'Yeni Form Ekle' both have same handle.
 		 *
 		 * - If only `muhiku_forms_create_forms` roles - dont show view all forms list table.
 		 * - If only `muhiku_forms_view_forms` roles - dont show create new template selection.
@@ -123,7 +123,7 @@ class MHK_Admin_Menus {
 	 * Add menu item.
 	 */
 	public function entries_menu() {
-		$entries_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Entries', 'muhiku-plug' ), esc_html__( 'Entries', 'muhiku-plug' ), current_user_can( 'muhiku_forms_view_entries' ) ? 'muhiku_forms_view_entries' : 'muhiku_forms_view_others_entries', 'mhk-entries', array( $this, 'entries_page' ) );
+		$entries_page = add_submenu_page( 'muhiku-plug', esc_html__( 'Muhiku Plug Entries', 'muhiku-plug' ), esc_html__( 'Yanıtlar', 'muhiku-plug' ), current_user_can( 'muhiku_forms_view_entries' ) ? 'muhiku_forms_view_entries' : 'muhiku_forms_view_others_entries', 'mhk-entries', array( $this, 'entries_page' ) );
 		add_action( 'load-' . $entries_page, array( $this, 'entries_page_init' ) );
 	}
 
@@ -256,7 +256,7 @@ class MHK_Admin_Menus {
 			}
 		}
 
-		// Remove 'Add New' sub menu item if a user can't create forms.
+		// Remove 'Yeni Form Ekle' sub menu item if a user can't create forms.
 		if ( ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 			foreach ( $submenu['muhiku-plug'] as $key => $item ) {
 				if ( isset( $item[2] ) && 'mhk-builder&create-form=1' === $item[2] ) {

@@ -34,7 +34,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 	 * No items found text.
 	 */
 	public function no_items() {
-		esc_html_e( 'No Forms found.', 'muhiku-plug' );
+		esc_html_e( 'Form Bulunamadı.', 'muhiku-plug' );
 	}
 
 	/**
@@ -46,10 +46,10 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		$forms_columns = array(
 			'cb'        => '<input type="checkbox" />',
 			'enabled'   => '',
-			'title'     => esc_html__( 'Title', 'muhiku-plug' ),
-			'shortcode' => esc_html__( 'Shortcode', 'muhiku-plug' ),
-			'author'    => esc_html__( 'Author', 'muhiku-plug' ),
-			'date'      => esc_html__( 'Date', 'muhiku-plug' ),
+			'title'     => esc_html__( 'Başlık', 'muhiku-plug' ),
+			'shortcode' => esc_html__( 'Kısa Kod', 'muhiku-plug' ),
+			'author'    => esc_html__( 'Yaratan', 'muhiku-plug' ),
+			'date'      => esc_html__( 'Tarih', 'muhiku-plug' ),
 		);
 
 		// Hide form enabled toggle if in trash page.
@@ -59,7 +59,7 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 
 		// Only show entries column if the user can view entries.
 		if ( current_user_can( 'muhiku_forms_view_entries' ) || current_user_can( 'muhiku_forms_view_others_entries' ) ) {
-			$forms_columns['entries'] = esc_html__( 'Entries', 'muhiku-plug' );
+			$forms_columns['entries'] = esc_html__( 'Yanıtlar', 'muhiku-plug' );
 		}
 
 		// Only "Move to trash" bulk action exist, lets hide cb if the user cannot delete forms.
@@ -173,14 +173,14 @@ class MHK_Admin_Forms_Table_List extends WP_List_Table {
 		}
 
 		if ( current_user_can( 'muhiku_forms_view_form_entries', $posts->ID ) && 'trash' !== $post_status ) {
-			$actions['entries'] = '<a href="' . esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $posts->ID ) ) . '" title="' . esc_html__( 'View Entries', 'muhiku-plug' ) . '">' . __( 'Entries', 'muhiku-plug' ) . '</a>';
+			$actions['entries'] = '<a href="' . esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $posts->ID ) ) . '" title="' . esc_html__( 'View Entries', 'muhiku-plug' ) . '">' . __( 'Yanıtlar', 'muhiku-plug' ) . '</a>';
 		}
 
 		if ( current_user_can( 'muhiku_forms_delete_form', $posts->ID ) ) {
 			if ( 'trash' === $post_status ) {
 				$actions['untrash'] = '<a aria-label="' . esc_attr__( 'Restore this item from the Trash', 'muhiku-plug' ) . '" href="' . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $posts->ID ) ), 'untrash-post_' . $posts->ID ) . '">' . esc_html__( 'Restore', 'muhiku-plug' ) . '</a>';
 			} elseif ( EMPTY_TRASH_DAYS ) {
-				$actions['trash'] = '<a class="submitdelete" aria-label="' . esc_attr__( 'Move this item to the Trash', 'muhiku-plug' ) . '" href="' . get_delete_post_link( $posts->ID ) . '">' . esc_html__( 'Trash', 'muhiku-plug' ) . '</a>';
+				$actions['trash'] = '<a class="submitdelete" aria-label="' . esc_attr__( 'Move this item to the Trash', 'muhiku-plug' ) . '" href="' . get_delete_post_link( $posts->ID ) . '">' . esc_html__( 'Çöpe At', 'muhiku-plug' ) . '</a>';
 			}
 			if ( 'trash' === $post_status || ! EMPTY_TRASH_DAYS ) {
 				$actions['delete'] = '<a class="submitdelete" aria-label="' . esc_attr__( 'Delete this item permanently', 'muhiku-plug' ) . '" href="' . get_delete_post_link( $posts->ID, '', true ) . '">' . esc_html__( 'Delete permanently', 'muhiku-plug' ) . '</a>';

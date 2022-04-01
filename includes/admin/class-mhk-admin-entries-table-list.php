@@ -103,8 +103,8 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 		$columns            = array();
 		$columns['cb']      = '<input type="checkbox" />';
 		$columns            = apply_filters( 'muhiku_forms_entries_table_form_fields_columns', $this->get_columns_form_fields( $columns ), $this->form_id, $this->form_data );
-		$columns['date']    = esc_html__( 'Date Created', 'muhiku-plug' );
-		$columns['actions'] = esc_html__( 'Actions', 'muhiku-plug' );
+		$columns['date']    = esc_html__( 'Oluşturulma Tarihi', 'muhiku-plug' );
+		$columns['actions'] = esc_html__( 'Eylemler', 'muhiku-plug' );
 		// Columns Adjustment Settings.
 		if ( defined( 'EFP_VERSION' ) ) {
 			$columns['more'] = '<a href="#" class="muhiku-plug-entries-setting" title="' . esc_attr__( 'More Options', 'muhiku-plug' ) . '" data-mhk-form_id="' . $this->form_id . '"><i class="dashicons dashicons-admin-generic"></i></a>';
@@ -297,7 +297,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 
 		if ( 'trash' !== $entry->status ) {
 			if ( current_user_can( 'muhiku_forms_view_entry', $entry->entry_id ) ) {
-				$actions['view'] = '<a href="' . esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $entry->form_id . '&amp;view-entry=' . $entry->entry_id ) ) . '">' . esc_html__( 'View', 'muhiku-plug' ) . '</a>';
+				$actions['view'] = '<a href="' . esc_url( admin_url( 'admin.php?page=mhk-entries&amp;form_id=' . $entry->form_id . '&amp;view-entry=' . $entry->entry_id ) ) . '">' . esc_html__( 'Görüntüle', 'muhiku-plug' ) . '</a>';
 			}
 
 			if ( current_user_can( 'muhiku_forms_delete_entry', $entry->entry_id ) ) {
@@ -313,7 +313,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 						),
 						'trash-entry'
 					)
-				) . '">' . esc_html__( 'Trash', 'muhiku-plug' ) . '</a>';
+				) . '">' . esc_html__( 'Çöpe At', 'muhiku-plug' ) . '</a>';
 			}
 		} else {
 			if ( current_user_can( 'muhiku_forms_edit_entry', $entry->entry_id ) ) {

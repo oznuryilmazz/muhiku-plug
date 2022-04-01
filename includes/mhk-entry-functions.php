@@ -103,7 +103,7 @@ function mhk_get_entry_statuses( $form_data = array() ) {
 		'muhiku_forms_entry_statuses',
 		array(
 			'publish' => esc_html__( 'Published', 'muhiku-plug' ),
-			'trash'   => esc_html__( 'Trash', 'muhiku-plug' ),
+			'trash'   => esc_html__( 'Çöpe At', 'muhiku-plug' ),
 		),
 		$form_data
 	);

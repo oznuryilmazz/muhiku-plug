@@ -56,7 +56,7 @@ class MHK_Admin_Entries {
 		$entries_table_list->prepare_items();
 		?>
 		<div id="muhiku-plug-entries-list" class="wrap">
-			<h1 class="wp-heading-inline"><?php esc_html_e( 'Entries', 'muhiku-plug' ); ?></h1>
+			<h1 class="wp-heading-inline"><?php esc_html_e( 'Yanıtlar', 'muhiku-plug' ); ?></h1>
 			<hr class="wp-header-end">
 
 			<?php settings_errors(); ?>

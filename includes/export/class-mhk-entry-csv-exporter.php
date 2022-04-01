@@ -77,8 +77,8 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 
 		// Set the default columns.
 		$columns['status']           = esc_html__( 'Status', 'muhiku-plug' );
-		$columns['date_created']     = esc_html__( 'Date Created', 'muhiku-plug' );
-		$columns['date_created_gmt'] = esc_html__( 'Date Created GMT', 'muhiku-plug' );
+		$columns['date_created']     = esc_html__( 'Oluşturulma Tarihi', 'muhiku-plug' );
+		$columns['date_created_gmt'] = esc_html__( 'Oluşturulma Tarihi GMT', 'muhiku-plug' );
 
 		// If user details are disabled globally discard the IP and UA.
 		if ( 'yes' !== get_option( 'muhiku_forms_disable_user_details' ) ) {
