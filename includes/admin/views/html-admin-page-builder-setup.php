@@ -20,11 +20,20 @@ defined( 'ABSPATH' ) || exit;
 			<div class="muhiku-plug-logo">
 				<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="0 0 24 24"><path fill="#7e3bd0" d="M21.23,10H17.79L16.62,8h3.46ZM17.77,4l1.15,2H15.48L14.31,4Zm-15,16L12,4l5.77,10H10.85L12,12h2.31L12,8,6.23,18H20.08l1.16,2Z"/></svg>
 			</div>
-			<h4><?php esc_html_e( 'Yeni Bir Form Oluştur', 'muhiku-plug' ); ?></h4>
+			<h4><?php esc_html_e( 'Add New Form', 'muhiku-plug' ); ?></h4>
+			<?php if ( apply_filters( 'muhiku_forms_refresh_templates', true ) ) : ?>
+				<a href="<?php echo esc_url( $refresh_url ); ?>" class="muhiku-plug-btn page-title-action"><?php esc_html_e( 'Refresh Templates', 'muhiku-plug' ); ?></a>
+			<?php endif; ?>
 			<nav class="muhiku-plug-tab">
 				<ul>
 					<li class="muhiku-plug-tab-nav active">
-						<a href="#" id="mhk-form-all" class="muhiku-plug-tab-nav-link"><?php esc_html_e( 'Hepsi', 'muhiku-plug' ); ?></a>
+						<a href="#" id="mhk-form-all" class="muhiku-plug-tab-nav-link"><?php esc_html_e( 'All', 'muhiku-plug' ); ?></a>
+					</li>
+					<li class="muhiku-plug-tab-nav">
+						<a href="#" id="mhk-form-basic" class="muhiku-plug-tab-nav-link"><?php esc_html_e( 'Free', 'muhiku-plug' ); ?></a>
+					</li>
+					<li class="muhiku-plug-tab-nav">
+						<a href="#" id="mhk-form-pro" class="muhiku-plug-tab-nav-link"><?php esc_html_e( 'Premium', 'muhiku-plug' ); ?></a>
 					</li>
 				</ul>
 			</nav>
@@ -34,7 +43,7 @@ defined( 'ABSPATH' ) || exit;
 			echo '<div id="message" class="notice notice-warning is-dismissible"><p>' . esc_html__( 'Couldn\'t connect to templates server. Please reload again.', 'muhiku-plug' ) . '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">x</span></button></div>';
 		}
 		?>
-		<div class="muhiku-plug-form-template mhk-setup-templates">
+		<div class="muhiku-plug-form-template mhk-setup-templates" data-license-type="<?php echo esc_attr( $license_plan ); ?>">
 			<?php
 			if ( empty( $templates ) ) {
 				echo '<div id="message" class="error"><p>' . esc_html__( 'Something went wrong. Please refresh your templates.', 'muhiku-plug' ) . '</p></div>';
@@ -61,12 +70,14 @@ defined( 'ABSPATH' ) || exit;
 						$click_class = 'mhk-template-select';
 					}
 
+					// Upgrade checks.
 					if ( empty( $license_plan ) && ! in_array( 'free', $template->plan, true ) ) {
 						$upgrade_class = 'upgrade-modal';
 					} elseif ( ! in_array( str_replace( '-lifetime', '', $license_plan ), $template->plan, true ) && ! in_array( 'free', $template->plan, true ) ) {
 						$upgrade_class = 'upgrade-modal';
 					}
 
+					/* translators: %s: Template title */
 					$template_name = sprintf( esc_attr_x( '%s template', 'Template name', 'muhiku-plug' ), esc_attr( $template->title ) );
 					?>
 					<div class="muhiku-plug-template-wrap mhk-template"  id="muhiku-plug-template-<?php echo esc_attr( $template->slug ); ?>">
@@ -92,6 +103,22 @@ defined( 'ABSPATH' ) || exit;
 	</div>
 </div>
 <?php
+/**
+ * Prints the JavaScript templates for install admin notices.
+ *
+ * Template takes one argument with four values:
+ *
+ *     param {object} data {
+ *         Arguments for admin notice.
+ *
+ *         @type string id        ID of the notice.
+ *         @type string className Class names for the notice.
+ *         @type string message   The notice's message.
+ *         @type string type      The type of update the notice is for. Either 'plugin' or 'theme'.
+ *     }
+ *
+ * @since 1.6.0
+ */
 function muhiku_forms_print_admin_notice_templates() {
 	?>
 	<script id="tmpl-wp-installs-admin-notice" type="text/html">

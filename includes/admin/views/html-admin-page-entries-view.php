@@ -211,7 +211,7 @@ $trash_link = wp_nonce_url(
 										<p class="muhiku-plug-entry-referer">
 											<span class="dashicons dashicons-admin-links"></span>
 											<?php esc_html_e( 'Referer Link:', 'muhiku-plug' ); ?>
-											<strong><a href="<?php echo esc_url( $entry->referer ); ?>" target="_blank"><?php esc_html_e( 'Görüntüle', 'muhiku-plug' ); ?></a></strong>
+											<strong><a href="<?php echo esc_url( $entry->referer ); ?>" target="_blank"><?php esc_html_e( 'View', 'muhiku-plug' ); ?></a></strong>
 										</p>
 									<?php endif; ?>
 

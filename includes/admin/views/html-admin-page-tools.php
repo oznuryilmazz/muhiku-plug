@@ -7,6 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:ignore WordPress.WP.GlobalVariablesOverride
 $tabs        = apply_filters(
 	'muhiku_forms_admin_status_tabs',
 	array(
