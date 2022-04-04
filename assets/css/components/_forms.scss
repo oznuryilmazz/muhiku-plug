@@ -1,4 +1,3 @@
-// Global naming class `muhiku-plug-input-control` to control all typable input types.
 .muhiku-plug-input-control {
 	border: 1px solid $input-border-color;
 
@@ -7,7 +6,6 @@
 	}
 }
 
-// Input group
 .muhiku-plug-input-group {
 	$self: &;
 	position: relative;

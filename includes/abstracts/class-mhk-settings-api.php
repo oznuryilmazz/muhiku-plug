@@ -1,7 +1,6 @@
 <?php
 /**
  * @package MuhikuPlug\Abstracts
- * @since   1.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -19,36 +18,26 @@ abstract class MHK_Settings_API {
 	public $id = '';
 
 	/**
-	 * Validation errors.
-	 *
 	 * @var array of strings
 	 */
 	public $errors = array();
 
 	/**
-	 * Setting values.
-	 *
 	 * @var array
 	 */
 	public $settings = array();
 
 	/**
-	 * Form option fields.
-	 *
 	 * @var array
 	 */
 	public $form_fields = array();
 
 	/**
-	 * The posted settings data. When empty, $_POST data will be used.
-	 *
 	 * @var array
 	 */
 	protected $data = array();
 
 	/**
-	 * Get the form fields after they are initialized.
-	 *
 	 * @return array of options
 	 */
 	public function get_form_fields() {
@@ -56,8 +45,6 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Set default required properties for each field.
-	 *
 	 * @param array $field Setting field array.
 	 * @return array
 	 */
@@ -67,22 +54,12 @@ abstract class MHK_Settings_API {
 		}
 		return $field;
 	}
-
-	/**
-	 * Output the admin options table.
-	 */
 	public function admin_options() {
 		echo '<table class="form-table">' . wp_kses_post( $this->generate_settings_html( $this->get_form_fields(), false ) ) . '</table>';
 	}
-
-	/**
-	 * Initialise settings form fields.
-	 */
 	public function init_form_fields() {}
 
 	/**
-	 * Return the name of the option in the WP DB.
-	 *
 	 * @return string
 	 */
 	public function get_option_key() {
@@ -90,9 +67,7 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Get a fields type. Defaults to "text" if not set.
-	 *
-	 * @param  array $field Field key.
+	 * @param  array $field 
 	 * @return string
 	 */
 	public function get_field_type( $field ) {
@@ -100,9 +75,7 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Get a fields default value. Defaults to "" if not set.
-	 *
-	 * @param  array $field Field key.
+	 * @param  array $field
 	 * @return string
 	 */
 	public function get_field_default( $field ) {
@@ -110,63 +83,52 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Get a field's posted and validated value.
-	 *
-	 * @param string $key Field key.
-	 * @param array  $field Field array.
-	 * @param array  $post_data Posted data.
+	 * @param string $key 
+	 * @param array  $field 
+	 * @param array  $post_data 
 	 * @return string
 	 */
 	public function get_field_value( $key, $field, $post_data = array() ) {
 		$type      = $this->get_field_type( $field );
 		$field_key = $this->get_field_key( $key );
-		$post_data = empty( $post_data ) ? $_POST : $post_data; // phpcs:ignore WordPress.Security.NonceVerification
+		$post_data = empty( $post_data ) ? $_POST : $post_data; 
 		$value     = isset( $post_data[ $field_key ] ) ? $post_data[ $field_key ] : null;
 
 		if ( isset( $field['sanitize_callback'] ) && is_callable( $field['sanitize_callback'] ) ) {
 			return call_user_func( $field['sanitize_callback'], $value );
 		}
 
-		// Look for a validate_FIELDID_field method for special handling.
 		if ( is_callable( array( $this, 'validate_' . $key . '_field' ) ) ) {
 			return $this->{'validate_' . $key . '_field'}( $key, $value );
 		}
 
-		// Look for a validate_FIELDTYPE_field method.
 		if ( is_callable( array( $this, 'validate_' . $type . '_field' ) ) ) {
 			return $this->{'validate_' . $type . '_field'}( $key, $value );
 		}
 
-		// Fallback to text.
 		return $this->validate_text_field( $key, $value );
 	}
 
 	/**
-	 * Sets the POSTed data. This method can be used to set specific data, instead of taking it from the $_POST array.
-	 *
-	 * @param array $data Posted data.
+	 * @param array $data
 	 */
 	public function set_post_data( $data = array() ) {
 		$this->data = $data;
 	}
 
 	/**
-	 * Returns the POSTed data, to be used to save the settings.
-	 *
 	 * @return array
 	 */
 	public function get_post_data() {
 		if ( ! empty( $this->data ) && is_array( $this->data ) ) {
 			return $this->data;
 		}
-		return $_POST; // phpcs:ignore WordPress.Security.NonceVerification
+		return $_POST; 
 	}
 
 	/**
-	 * Update a single option.
-	 *
-	 * @param  string $key   Option key.
-	 * @param  mixed  $value Value to set.
+	 * @param  string $key  
+	 * @param  mixed  $value 
 	 * @return bool was anything saved?
 	 */
 	public function update_option( $key, $value = '' ) {
@@ -180,9 +142,6 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Processes and saves options.
-	 * If there is an error thrown, will continue to save and validate fields, but will leave the erroring field out.
-	 *
 	 * @return bool was anything saved?
 	 */
 	public function process_admin_options() {
@@ -204,24 +163,16 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Add an error message for display in admin on save.
-	 *
-	 * @param string $error Error message.
+	 * @param string $error 
 	 */
 	public function add_error( $error ) {
 		$this->errors[] = $error;
 	}
 
-	/**
-	 * Get admin error messages.
-	 */
 	public function get_errors() {
 		return $this->errors;
 	}
 
-	/**
-	 * Display admin error messages.
-	 */
 	public function display_errors() {
 		if ( $this->get_errors() ) {
 			echo '<div id="muhiku_forms_errors" class="error notice is-dismissible">';
@@ -233,18 +184,11 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Initialise Settings.
-	 *
-	 * Store all settings in a single database entry
-	 * and make sure the $settings array is either the default
-	 * or the settings stored in the database.
-	 *
 	 * @uses get_option(), add_option()
 	 */
 	public function init_settings() {
 		$this->settings = get_option( $this->get_option_key(), null );
 
-		// If there are no settings defined, use defaults.
 		if ( ! is_array( $this->settings ) ) {
 			$form_fields    = $this->get_form_fields();
 			$this->settings = array_merge( array_fill_keys( array_keys( $form_fields ), '' ), wp_list_pluck( $form_fields, 'default' ) );
@@ -252,12 +196,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Get option from DB.
-	 *
-	 * Gets an option from the settings API, using defaults if necessary to prevent undefined notices.
-	 *
-	 * @param  string $key Option key.
-	 * @param  mixed  $empty_value Value when empty.
+	 * @param  string $key 
+	 * @param  mixed  $empty_value 
 	 * @return string The value specified for the option or a default value for the option.
 	 */
 	public function get_option( $key, $empty_value = null ) {
@@ -265,7 +205,6 @@ abstract class MHK_Settings_API {
 			$this->init_settings();
 		}
 
-		// Get option default if unset.
 		if ( ! isset( $this->settings[ $key ] ) ) {
 			$form_fields            = $this->get_form_fields();
 			$this->settings[ $key ] = isset( $form_fields[ $key ] ) ? $this->get_field_default( $form_fields[ $key ] ) : '';
@@ -279,9 +218,7 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Prefix key for settings.
-	 *
-	 * @param  string $key Field key.
+	 * @param  string $key 
 	 * @return string
 	 */
 	public function get_field_key( $key ) {
@@ -289,12 +226,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Settings HTML.
-	 *
-	 * Generate the HTML for the fields on the "settings" screen.
-	 *
 	 * @param  array $form_fields (default: array()) Array of form fields.
-	 * @param  bool  $echo Echo or return.
+	 * @param  bool  $echo 
 	 * @return string the html for the settings
 	 * @uses   method_exists()
 	 */
@@ -307,9 +240,9 @@ abstract class MHK_Settings_API {
 			foreach ( $form_fields as $k => $v ) {
 				$type = $this->get_field_type( $v );
 				if ( method_exists( $this, 'generate_' . $type . '_html' ) ) {
-					echo $this->{'generate_' . $type . '_html'}( $k, $v ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo $this->{'generate_' . $type . '_html'}( $k, $v ); 
 				} else {
-					echo $this->generate_text_html( $k, $v ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo $this->generate_text_html( $k, $v ); 
 				}
 			}
 		} else {
@@ -328,9 +261,7 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Get HTML for tooltips.
-	 *
-	 * @param  array $data Data for the tooltip.
+	 * @param  array $data 
 	 * @return string
 	 */
 	public function get_tooltip_html( $data ) {
@@ -346,9 +277,7 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Get HTML for descriptions.
-	 *
-	 * @param  array $data Data for the description.
+	 * @param  array $data 
 	 * @return string
 	 */
 	public function get_description_html( $data ) {
@@ -366,9 +295,7 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Get custom attributes.
-	 *
-	 * @param  array $data Field data.
+	 * @param  array $data
 	 * @return string
 	 */
 	public function get_custom_attribute_html( $data ) {
@@ -384,10 +311,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Text Input HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key 
+	 * @param  array  $data 
 	 * @return string
 	 */
 	public function generate_text_html( $key, $data ) {
@@ -426,10 +351,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Password Input HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key 
+	 * @param  array  $data 
 	 * @return string
 	 */
 	public function generate_password_html( $key, $data ) {
@@ -438,10 +361,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Color Picker Input HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key 
+	 * @param  array  $data 
 	 * @return string
 	 */
 	public function generate_color_html( $key, $data ) {
@@ -481,10 +402,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Textarea HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key 
+	 * @param  array  $data
 	 * @return string
 	 */
 	public function generate_textarea_html( $key, $data ) {
@@ -523,10 +442,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Checkbox HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key
+	 * @param  array  $data
 	 * @return string
 	 */
 	public function generate_checkbox_html( $key, $data ) {
@@ -570,10 +487,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Select HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key
+	 * @param  array  $data
 	 * @return string
 	 */
 	public function generate_select_html( $key, $data ) {
@@ -617,10 +532,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Multiselect HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key 
+	 * @param  array  $data 
 	 * @return string
 	 */
 	public function generate_multiselect_html( $key, $data ) {
@@ -677,10 +590,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Generate Title HTML.
-	 *
-	 * @param  string $key Field key.
-	 * @param  array  $data Field data.
+	 * @param  string $key 
+	 * @param  array  $data 
 	 * @return string
 	 */
 	public function generate_title_html( $key, $data ) {
@@ -706,12 +617,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Validate Text Field.
-	 *
-	 * Make sure the data is escaped correctly, etc.
-	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key 
+	 * @param  string $value 
 	 * @return string
 	 */
 	public function validate_text_field( $key, $value ) {
@@ -720,10 +627,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Validate Password Field. No input sanitization is used to avoid corrupting passwords.
-	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key 
+	 * @param  string $value
 	 * @return string
 	 */
 	public function validate_password_field( $key, $value ) {
@@ -732,10 +637,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Validate Textarea Field.
-	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key
+	 * @param  string $value 
 	 * @return string
 	 */
 	public function validate_textarea_field( $key, $value ) {
@@ -757,12 +660,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Validate Checkbox Field.
-	 *
-	 * If not set, return "no", otherwise return "yes".
-	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key 
+	 * @param  string $value
 	 * @return string
 	 */
 	public function validate_checkbox_field( $key, $value ) {
@@ -770,10 +669,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Validate Select Field.
-	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key 
+	 * @param  string $value 
 	 * @return string
 	 */
 	public function validate_select_field( $key, $value ) {
@@ -782,10 +679,8 @@ abstract class MHK_Settings_API {
 	}
 
 	/**
-	 * Validate Multiselect Field.
-	 *
-	 * @param  string $key Field key.
-	 * @param  string $value Posted Value.
+	 * @param  string $key 
+	 * @param  string $value 
 	 * @return string|array
 	 */
 	public function validate_multiselect_field( $key, $value ) {

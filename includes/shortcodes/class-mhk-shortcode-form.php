@@ -1,37 +1,17 @@
 <?php
 /**
- * Form Shortcode
- *
- * Used on the show frontend form.
- *
  * @package MuhikuPlug\Shortcodes\Form
- * @version 1.0.0
- * @since   1.3.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Form Shortcode class.
- */
 class MHK_Shortcode_Form {
 
 	/**
-	 * Contains information for multi-part forms.
-	 *
-	 * Forms that do not contain parts return false, otherwise returns an array
-	 * that contains the number of total parts and part counter used when
-	 * displaying part rows.
-	 *
-	 * @since 1.3.2
-	 *
 	 * @var array
 	 */
 	public static $parts = array();
 
-	/**
-	 * Hooks in tab.
-	 */
 	public static function hooks() {
 		add_filter( 'amp_skip_post', array( 'MHK_Shortcode_Form', 'amp_skip_post' ) );
 		add_action( 'muhiku_forms_frontend_output_success', 'mhk_print_notices', 10, 2 );
@@ -54,8 +34,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Get the amp-state ID for a given form.
-	 *
 	 * @param int $form_id Form ID.
 	 * @return string State ID.
 	 */
@@ -64,26 +42,17 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Disable AMP if query param is detected.
-	 *
-	 * This allows the full form to be accessible for Pro users or sites
-	 * that do not have SSL.
-	 *
-	 * @since 1.5.3
-	 *
 	 * @param bool $skip Skip AMP mode, display full post.
 	 *
 	 * @return bool
 	 */
 	public static function amp_skip_post( $skip ) {
 
-		return isset( $_GET['nonamp'] ) ? true : $skip; // phpcs:ignore WordPress.Security.NonceVerification
+		return isset( $_GET['nonamp'] ) ? true : $skip;  
 	}
 
 
 	/**
-	 * Form footer area.
-	 *
 	 * @param array $form_data   Form data and settings.
 	 * @param bool  $title       Whether to display form title.
 	 * @param bool  $description Whether to display form description.
@@ -91,7 +60,7 @@ class MHK_Shortcode_Form {
 	public static function footer( $form_data, $title, $description ) {
 		$form_id         = absint( $form_data['id'] );
 		$settings        = isset( $form_data['settings'] ) ? $form_data['settings'] : array();
-		$submit          = apply_filters( 'muhiku_forms_field_submit', isset( $settings['submit_button_text'] ) ? $settings['submit_button_text'] : __( 'Submit', 'muhiku-plug' ), $form_data );
+		$submit          = apply_filters( 'muhiku_forms_field_submit', isset( $settings['submit_button_text'] ) ? $settings['submit_button_text'] : __( 'Gönder', 'muhiku-plug' ), $form_data );
 		$submit_btn      = mhk_string_translation( $form_data['id'], 'submit_button', $submit );
 		$process         = '';
 		$classes         = isset( $form_data['settings']['submit_button_class'] ) ? mhk_sanitize_classes( $form_data['settings']['submit_button_class'] ) : '';
@@ -101,10 +70,8 @@ class MHK_Shortcode_Form {
 		$data_attrs      = array();
 		$mhk_amp_classes = array();
 
-		// Visibility class.
 		$visibility_class = apply_filters( 'muhiku_forms_field_submit_visibility_class', array(), $parts, $form_data );
 
-		// Check for submit button processing-text.
 		if ( ! isset( $settings['submit_button_processing_text'] ) ) {
 			$process = 'data-process-text="' . esc_attr__( 'Processing&hellip;', 'muhiku-plug' ) . '"';
 		} elseif ( ! empty( $settings['submit_button_processing_text'] ) ) {
@@ -120,7 +87,6 @@ class MHK_Shortcode_Form {
 			}
 		}
 
-		// Submit button area.
 		$conditional_id = 'mhk-submit-' . $form_id;
 		if ( isset( $form_data['settings']['submit']['connection_1']['conditional_logic_status'] ) && '1' === $form_data['settings']['submit']['connection_1']['conditional_logic_status'] ) {
 			$con_rules = array(
@@ -173,8 +139,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Message.
-	 *
 	 * @param array $field Field.
 	 * @param array $form_data Form data.
 	 */
@@ -193,8 +157,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Description.
-	 *
 	 * @param array $field Field.
 	 * @param array $form_data Form data.
 	 */
@@ -203,12 +165,10 @@ class MHK_Shortcode_Form {
 
 		$description = $field['properties']['description'];
 
-		// If the description is empty don't proceed.
 		if ( empty( $description['value'] ) ) {
 			return;
 		}
 
-		// Determine positioning.
 		if ( 'muhiku_forms_display_field_before' === $action && 'before' !== $description['position'] ) {
 			return;
 		}
@@ -228,15 +188,12 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Label.
-	 *
 	 * @param array $field Field.
 	 * @param array $form_data Form data.
 	 */
 	public static function label( $field, $form_data ) {
 
 		$label = $field['properties']['label'];
-		// If the label is empty or disabled don't proceed.
 		if ( empty( $label['value'] ) || $label['disabled'] ) {
 			return;
 		}
@@ -286,8 +243,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Wrapper end.
-	 *
 	 * @param array $field Field.
 	 * @param array $form_data Form data.
 	 */
@@ -296,8 +251,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Wrapper start.
-	 *
 	 * @param array $field Field.
 	 * @param array $form_data Form data.
 	 */
@@ -311,8 +264,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Form header for displaying form title and description if enabled.
-	 *
 	 * @param array $form_data   Form data and settings.
 	 * @param bool  $title       Whether to display form title.
 	 * @param bool  $description Whether to display form description.
@@ -321,7 +272,6 @@ class MHK_Shortcode_Form {
 	public static function header( $form_data, $title, $description, $errors ) {
 		$settings = isset( $form_data['settings'] ) ? $form_data['settings'] : array();
 
-		// Check if title and/or description is enabled.
 		if ( true === $title || true === $description ) {
 			echo '<div class="mhk-title-container">';
 
@@ -336,15 +286,12 @@ class MHK_Shortcode_Form {
 			echo '</div>';
 		}
 
-		// Output header errors if they exist.
 		if ( ! empty( $errors['header'] ) ) {
 			mhk_add_notice( $errors['header'], 'error' );
 		}
 	}
 
 	/**
-	 * Form field area.
-	 *
 	 * @param array $form_data   Form data and settings.
 	 * @param bool  $title       Whether to display form title.
 	 * @param bool  $description Whether to display form description.
@@ -352,37 +299,24 @@ class MHK_Shortcode_Form {
 	public static function fields( $form_data, $title, $description ) {
 		$structure = isset( $form_data['structure'] ) ? $form_data['structure'] : array();
 
-		// Bail if empty form fields.
 		if ( empty( $form_data['form_fields'] ) ) {
 			return;
 		}
 
-		// Form fields area.
 		echo '<div class="mhk-field-container">';
 
 		wp_nonce_field( 'muhiku-plug_process_submit', '_wpnonce' . $form_data['id'] );
 
-		/**
-		 * Hook: muhiku_forms_display_fields_before.
-		 *
-		 * @hooked MuhikuPlug_MultiPart::display_fields_before() Multi-Part markup open.
-		 */
 		do_action( 'muhiku_forms_display_fields_before', $form_data );
 
 		foreach ( $structure as $row_key => $row ) {
-			/**
-			 * Hook: muhiku_forms_display_repeater_fields.
-			 *
-			 * @hooked MHK_Repeater_Fields->display_repeater_fields() Display Repeater Fields.
-			 */
+		
 			$is_repeater = apply_filters( 'muhiku_forms_display_repeater_fields', false, $row, $form_data, true );
 
-			/**
-			 * Hook: muhiku_forms_display_row_before.
-			 */
+		
 			do_action( 'muhiku_forms_display_row_before', $row_key, $form_data );
 
-			echo '<div class="mhk-frontend-row" data-row="' . esc_attr( $row_key ) . '"' . esc_attr( $is_repeater ) . '>'; // @codingStandardsIgnoreLine
+			echo '<div class="mhk-frontend-row" data-row="' . esc_attr( $row_key ) . '"' . esc_attr( $is_repeater ) . '>';  
 
 			foreach ( $row as $grid_key => $grid ) {
 				$number_of_grid = count( $row );
@@ -407,13 +341,10 @@ class MHK_Shortcode_Form {
 						continue;
 					}
 
-					// Get field attributes.
 					$attributes = self::get_field_attributes( $field, $form_data );
 
-					// Get field properties.
 					$properties = self::get_field_properties( $field, $form_data, $attributes );
 
-					// Add properties to the field so it's available everywhere.
 					$field['properties'] = $properties;
 
 					do_action( 'muhiku_forms_display_field_before', $field, $form_data );
@@ -426,43 +357,24 @@ class MHK_Shortcode_Form {
 				echo '</div>';
 			}
 
-			/**
-			 * Hook: muhiku_forms_add_remove_buttons.
-			 *
-			 * @hooked MHK_Repeater_Fields->add_remove_buttons() Show Add and Remove buttons.
-			 */
 			do_action( 'muhiku_forms_add_remove_buttons', $row, $form_data, $is_repeater );
 
 			echo '</div>';
 
-			/**
-			 * Hook: muhiku_forms_display_row_after.
-			 *
-			 * @hooked MuhikuPlug_MultiPart::display_row_after() Multi-Part markup (close previous part, open next).
-			 */
 			do_action( 'muhiku_forms_display_row_after', $row_key, $form_data );
 		}
 
-		/**
-		 * Hook: muhiku_forms_display_fields_after.
-		 *
-		 * @hooked MuhikuPlug_MultiPart::display_fields_after() Multi-Part markup open.
-		 */
 		do_action( 'muhiku_forms_display_fields_after', $form_data );
 
 		echo '</div>';
 	}
 
 	/**
-	 * Anti-spam honeypot output if configured.
-	 *
-	 * @since 1.4.9
 	 * @param array $form_data   Form data and settings.
 	 */
 	public static function honeypot( $form_data ) {
 		$names = array( 'Name', 'Phone', 'Comment', 'Message', 'Email', 'Website' );
 
-		// Output the honeypot container.
 		if ( isset( $form_data['settings']['honeypot'] ) && '1' === $form_data['settings']['honeypot'] ) {
 			echo '<div class="mhk-honeypot-container mhk-field-hp">';
 
@@ -475,8 +387,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Google reCAPTCHA output if configured.
-	 *
 	 * @param array $form_data Form data and settings.
 	 */
 	public static function recaptcha( $form_data ) {
@@ -500,7 +410,6 @@ class MHK_Shortcode_Form {
 		if ( ! $site_key || ! $secret_key ) {
 			return;
 		}
-		// Check that the CAPTCHA is configured for the specific form.
 		if (
 		! isset( $form_data['settings']['recaptcha_support'] ) ||
 		'1' !== $form_data['settings']['recaptcha_support']
@@ -515,7 +424,7 @@ class MHK_Shortcode_Form {
 					esc_attr( 'mhk_' . $form_data['id'] )
 				);
 			}
-			return; // Only v3 is supported in AMP.
+			return; 
 		}
 
 		if ( isset( $form_data['settings']['recaptcha_support'] ) && '1' === $form_data['settings']['recaptcha_support'] ) {
@@ -529,7 +438,6 @@ class MHK_Shortcode_Form {
 				$form_data
 			);
 
-			// Load reCAPTCHA support if form supports it.
 			if ( $site_key && $secret_key ) {
 				if ( 'v2' === $recaptcha_type ) {
 					$recaptcha_api = apply_filters( 'muhiku_forms_frontend_recaptcha_url', 'https://www.google.com/recaptcha/api.js?onload=MHKRecaptchaLoad&render=explicit', $recaptcha_type, $form_id );
@@ -564,7 +472,6 @@ class MHK_Shortcode_Form {
 					$recaptcha_inline .= 'var MHKRecaptchaCallback = function(el){jQuery(el).parent().find(".mhk-recaptcha-hidden").val("1").trigger("change").valid();};';
 				}
 
-				// Enqueue reCaptcha scripts.
 				wp_enqueue_script(
 					'mhk-recaptcha',
 					$recaptcha_api,
@@ -573,14 +480,12 @@ class MHK_Shortcode_Form {
 					true
 				);
 
-				// Load reCaptcha callback once.
 				static $count = 1;
 				if ( 1 === $count ) {
 						wp_add_inline_script( 'mhk-recaptcha', $recaptcha_inline );
 						$count++;
 				}
 
-				// Output the reCAPTCHA container.
 				$class = ( 'v3' === $recaptcha_type || ( 'v2' === $recaptcha_type && 'yes' === $invisible_recaptcha ) ) ? 'recaptcha-hidden' : '';
 				echo '<div class="mhk-recaptcha-container ' . esc_attr( $class ) . '" style="display:' . ( ! empty( self::$parts[ $form_id ] ) ? 'none' : 'block' ) . '">';
 
@@ -600,8 +505,6 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Get field attributes.
-	 *
 	 * @param array $field Field.
 	 * @param array $form_data Form data.
 	 *
@@ -623,12 +526,10 @@ class MHK_Shortcode_Form {
 			'input_data'        => array(),
 		);
 
-		// Check user field defined classes.
 		if ( ! empty( $field['css'] ) ) {
 			$attributes['field_class'] = array_merge( $attributes['field_class'], mhk_sanitize_classes( $field['css'], true ) );
 		}
 
-		// Check for input column layouts.
 		if ( ! empty( $field['input_columns'] ) ) {
 			if ( 'inline' === $field['input_columns'] ) {
 				$attributes['field_class'][] = 'muhiku-plug-list-inline';
@@ -637,46 +538,37 @@ class MHK_Shortcode_Form {
 			}
 		}
 
-		// Input class.
 		if ( ! in_array( $field['type'], array( 'checkbox', 'radio', 'payment-checkbox', 'payment-multiple' ), true ) ) {
 			$attributes['input_class'][] = 'input-text';
 		}
 
-		// Check label visibility.
 		if ( ! empty( $field['label_hide'] ) ) {
 			$attributes['label_class'][] = 'mhk-label-hide';
 		}
 
-		// Check size.
 		if ( ! empty( $field['size'] ) ) {
 			$attributes['input_class'][] = 'mhk-field-' . sanitize_html_class( $field['size'] );
 		}
 
-		// Check if required.
 		if ( ! empty( $field['required'] ) ) {
 			$attributes['field_class'][] = 'validate-required';
 		}
 
-		// Check if extra validation required.
 		if ( in_array( $field['type'], array( 'email', 'phone' ), true ) ) {
 			$attributes['field_class'][] = 'validate-' . esc_attr( $field['type'] );
 		}
 
-		// Check if there are errors.
 		if ( isset( mhk()->task->errors[ $form_id ][ $field_id ] ) ) {
 			$attributes['input_class'][] = 'mhk-error';
 			$attributes['field_class'][] = 'muhiku-plug-invalid';
 		}
 
-		// This filter is deprecated, filter the properties (below) instead.
 		$attributes = apply_filters( 'mhk_field_atts', $attributes, $field, $form_data );
 
 		return $attributes;
 	}
 
 	/**
-	 * Return base properties for a specific field.
-	 *
 	 * @param array $field      Field data and settings.
 	 * @param array $form_data  Form data and settings.
 	 * @param array $attributes List of field attributes.
@@ -688,7 +580,6 @@ class MHK_Shortcode_Form {
 			$attributes = self::get_field_attributes( $field, $form_data );
 		}
 
-		// This filter is for backwards compatibility purposes.
 		$types = array( 'text', 'textarea', 'number', 'email', 'hidden', 'url', 'html', 'title', 'password', 'phone', 'address', 'checkbox', 'radio', 'select' );
 		if ( in_array( $field['type'], $types, true ) ) {
 			$field = apply_filters( "muhiku_forms_{$field['type']}_field_display", $field, $attributes, $form_data );
@@ -697,10 +588,8 @@ class MHK_Shortcode_Form {
 		$form_id  = absint( $form_data['id'] );
 		$field_id = sanitize_text_field( $field['id'] );
 
-		// Field container data.
 		$container_data = array();
 
-		// Embed required-field-message to the container if the field is required.
 		if ( isset( $field['required'] ) && ( '1' === $field['required'] || true === $field['required'] ) ) {
 			$has_sub_fields     = false;
 			$sub_field_messages = array();
@@ -740,7 +629,7 @@ class MHK_Shortcode_Form {
 			}
 		}
 		$errors     = isset( mhk()->task->errors[ $form_id ][ $field_id ] ) ? mhk()->task->errors[ $form_id ][ $field_id ] : '';
-		$defaults   = isset( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ( ! is_array( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) ) ? $_POST['muhiku_forms']['form_fields'][ $field_id ] : ''; // @codingStandardsIgnoreLine
+		$defaults   = isset( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ( ! is_array( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) ) ? $_POST['muhiku_forms']['form_fields'][ $field_id ] : '';  
 		$properties = apply_filters(
 			'muhiku_forms_field_properties_' . $field['type'],
 			array(
@@ -803,20 +692,16 @@ class MHK_Shortcode_Form {
 	}
 
 	/**
-	 * Output the shortcode.
-	 *
 	 * @param array $atts Attributes.
 	 */
 	public static function output( $atts ) {
 		wp_enqueue_script( 'muhiku-plug' );
 
-		// Load jQuery flatpickr libraries. https://github.com/flatpickr/flatpickr.
 		if ( mhk_is_field_exists( $atts['id'], 'date-time' ) ) {
 			wp_enqueue_style( 'flatpickr' );
 			wp_enqueue_script( 'flatpickr' );
 		}
 
-		// Load jQuery mailcheck library - https://github.com/mailcheck/mailcheck.
 		if ( mhk_is_field_exists( $atts['id'], 'email' ) && (bool) apply_filters( 'muhiku_forms_mailcheck_enabled', true ) ) {
 			wp_enqueue_script( 'mailcheck' );
 		}
@@ -833,18 +718,14 @@ class MHK_Shortcode_Form {
 			$atts,
 			'output'
 		);
-
-		// Scripts load action.
 		do_action( 'muhiku_forms_shortcode_scripts', $atts );
 
 		ob_start();
 		self::view( $atts );
-		echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo ob_get_clean(); 
 	}
 
 	/**
-	 * Form view.
-	 *
 	 * @param array $atts Attributes.
 	 */
 	private static function view( $atts ) {
@@ -857,14 +738,12 @@ class MHK_Shortcode_Form {
 			return;
 		}
 
-		// Grab the form data, if not found then we bail.
 		$form = mhk()->form->get( (int) $id );
 
 		if ( empty( $form ) || 'publish' !== $form->post_status ) {
 			return;
 		}
 
-		// Basic form information.
 		$form_data            = apply_filters( 'muhiku_forms_frontend_form_data', mhk_decode( $form->post_content ) );
 		$form_id              = absint( $form->ID );
 		$settings             = $form_data['settings'];
@@ -873,14 +752,13 @@ class MHK_Shortcode_Form {
 		$description          = filter_var( $description, FILTER_VALIDATE_BOOLEAN );
 		$errors               = isset( mhk()->task->errors[ $form_id ] ) ? mhk()->task->errors[ $form_id ] : array();
 		$form_enabled         = isset( $form_data['form_enabled'] ) ? absint( $form_data['form_enabled'] ) : 1;
-		$disable_message      = isset( $form_data['settings']['form_disable_message'] ) ? mhk_string_translation( $form_data['id'], 'form_disable_message', $form_data['settings']['form_disable_message'] ) : __( 'This form is disabled.', 'muhiku-plug' );
+		$disable_message      = isset( $form_data['settings']['form_disable_message'] ) ? mhk_string_translation( $form_data['id'], 'form_disable_message', $form_data['settings']['form_disable_message'] ) : __( 'Bu form aktif değil', 'muhiku-plug' );
 		$ajax_form_submission = isset( $settings['ajax_form_submission'] ) ? $settings['ajax_form_submission'] : 0;
 
 		if ( 0 !== $ajax_form_submission ) {
 			wp_enqueue_script( 'muhiku-plug-ajax-submission' );
 		}
 
-		// If the form is disabled or does not contain any fields do not proceed.
 		if ( empty( $form_data['form_fields'] ) ) {
 			echo '<!-- Muhiku Plug: no fields, form hidden -->';
 			return;
@@ -891,17 +769,11 @@ class MHK_Shortcode_Form {
 			return;
 		}
 
-		// We need to stop output processing in case we are on AMP page.
 		if ( mhk_is_amp( false ) && ( ! current_theme_supports( 'amp' ) || apply_filters( 'mhkforms_amp_pro', class_exists( 'MuhikuPlug_Pro' ) ) || ! is_ssl() || ! defined( 'AMP__VERSION' ) || version_compare( AMP__VERSION, '1.2', '<' ) ) ) {
 
 			$full_page_url = home_url( add_query_arg( 'nonamp', '1' ) . '#mhkforms-' . absint( $form->ID ) );
 
 			/**
-			 * Allow modifying the text or url for the full page on the AMP pages.
-			 *
-			 * @since 1.4.1.1
-			 * @since 1.7.1 Added $form_id, $full_page_url, and $form_data arguments.
-			 *
 			 * @param int   $form_id   Form id.
 			 * @param array $form_data Form data and settings.
 			 *
@@ -926,18 +798,15 @@ class MHK_Shortcode_Form {
 			return;
 		}
 
-		// Before output hook.
 		do_action( 'muhiku_forms_frontend_output_before', $form_data, $form );
 
-		// Check for return hash.
 		if (
-		! empty( $_GET['muhiku_forms_return'] ) // phpcs:ignore WordPress.Security.NonceVerification
+		! empty( $_GET['muhiku_forms_return'] ) 
 		&& mhk()->task->is_valid_hash
 		&& absint( mhk()->task->form_data['id'] ) === $form_id
 		) {
-			// Output success message if no redirection happened.
 			if ( 'same' === $form_data['settings']['redirect_to'] ) {
-				mhk_add_notice( isset( $form_data['settings']['successful_form_submission_message'] ) ? $form_data['settings']['successful_form_submission_message'] : esc_html__( 'Thanks for contacting us! We will be in touch with you shortly.', 'muhiku-plug' ), 'success' );
+				mhk_add_notice( isset( $form_data['settings']['successful_form_submission_message'] ) ? $form_data['settings']['successful_form_submission_message'] : esc_html__( 'Bizimle önerini paylaştığın için teşekkür ederiz! En kısa zamanda sizinle iletişime geçeceğiz..', 'muhiku-plug' ), 'success' );
 			}
 
 			do_action( 'muhiku_forms_frontend_output_success', mhk()->task->form_data, mhk()->task->form_fields, mhk()->task->entry_id );
@@ -950,17 +819,11 @@ class MHK_Shortcode_Form {
 			return;
 		}
 
-		// Allow filter to return early if some condition is not meet.
 		if ( ! apply_filters( 'muhiku_forms_frontend_load', true, $form_data ) ) {
 			do_action( 'muhiku_forms_frontend_not_loaded', $form_data, $form );
 			return;
 		}
 
-		/**
-		 * BW compatiable for multi-parts form.
-		 *
-		 * @todo Remove in Major MHK version 1.6.0
-		 */
 		if ( defined( 'MHK_MULTI_PART_PLUGIN_FILE' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 			$plugin_data = get_plugin_data( MHK_MULTI_PART_PLUGIN_FILE, false, false );
@@ -994,14 +857,11 @@ class MHK_Shortcode_Form {
 			}
 		}
 
-		// Allow Multi-Part to be customized.
 		$parts                   = ! empty( self::$parts[ $form_id ] ) ? self::$parts[ $form_id ] : array();
 		self::$parts[ $form_id ] = apply_filters( 'muhiku_forms_parts_data', $parts, $form_data, $form_id );
 
-		// Allow final action to be customized.
 		$action = apply_filters( 'muhiku_forms_frontend_form_action', $action, $form_data );
 
-		// Allow form container classes to be filtered and user defined classes.
 		$classes = apply_filters( 'muhiku_forms_frontend_container_class', array(), $form_data );
 		if ( ! empty( $settings['form_class'] ) ) {
 			$classes = array_merge( $classes, explode( ' ', $settings['form_class'] ) );
@@ -1027,7 +887,6 @@ class MHK_Shortcode_Form {
 
 		if ( mhk_is_amp() ) {
 
-			// Set submitting state.
 			if ( ! isset( $form_atts['atts']['on'] ) ) {
 				$form_atts['atts']['on'] = '';
 			} else {
@@ -1051,7 +910,6 @@ class MHK_Shortcode_Form {
 				)
 			);
 
-			// Upgrade the form to be an amp-form to avoid sanitizer conversion.
 			if ( isset( $form_atts['atts']['action'] ) ) {
 				$form_atts['atts']['action-xhr'] = $form_atts['atts']['action'];
 				unset( $form_atts['atts']['action'] );
@@ -1061,7 +919,6 @@ class MHK_Shortcode_Form {
 		}
 
 		$form_atts = apply_filters( 'muhiku_forms_frontend_form_atts', $form_atts, $form_data );
-		// Begin to build the output.
 		do_action( 'muhiku_forms_frontend_output_container_before', $form_data, $form );
 
 		printf( '<div class="mhk-container %s" id="mhk-%d">', esc_attr( $classes ), absint( $form_id ) );
@@ -1096,18 +953,14 @@ class MHK_Shortcode_Form {
 
 		echo '</div><!-- .mhk-container -->';
 
-		// After output hook.
 		do_action( 'muhiku_forms_frontend_output_after', $form_data, $form );
 
-		// Debug information.
 		if ( is_super_admin() ) {
 			mhk_debug_data( $form_data );
 		}
 	}
 
 	/**
-	 * ReCaptcha Langauge.
-	 *
 	 * @param url $url  Recaptcha URL.
 	 *
 	 *  @return $url

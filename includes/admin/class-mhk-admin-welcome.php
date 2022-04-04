@@ -1,23 +1,12 @@
 <?php
 /**
- * Welcome Class
- *
- * Takes new users to Welcome Page.
- *
  * @package MuhikuPlug/Admin
- * @version 1.5.5
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Welcome class.
- */
 class MHK_Admin_Welcome {
 
-	/**
-	 * Hook in methods.
-	 */
 	public static function init() {
 		if (
 			apply_filters( 'muhiku_forms_show_welcome_page', true )
@@ -28,13 +17,10 @@ class MHK_Admin_Welcome {
 		}
 	}
 
-	/**
-	 * Add admin menus/screens.
-	 */
 	public static function add_menu() {
 		$welcome_page = add_dashboard_page(
-			esc_html__( 'Welcome to Muhiku Plug', 'muhiku-plug' ),
-			esc_html__( 'Welcome to Muhiku Plug', 'muhiku-plug' ),
+			esc_html__( 'Muhikuya hoşgeldin', 'muhiku-plug' ),
+			esc_html__( 'Muhikuya hoşgeldin', 'muhiku-plug' ),
 			'manage_muhiku_forms',
 			'mhk-welcome',
 			array( __CLASS__, 'welcome_page' )
@@ -43,27 +29,14 @@ class MHK_Admin_Welcome {
 		add_action( 'load-' . $welcome_page, array( __CLASS__, 'welcome_page_init' ) );
 	}
 
-	/**
-	 * Removed the dashboard pages from the admin menu.
-	 *
-	 * This means the pages are still available to us, but hidden.
-	 *
-	 * @since 1.0.0
-	 */
 	public static function hide_menu() {
 		remove_submenu_page( 'index.php', 'mhk-welcome' );
 	}
 
-	/**
-	 * Welcome page init.
-	 */
 	public static function welcome_page_init() {
 		delete_transient( '_mhk_activation_redirect' );
 	}
 
-	/**
-	 * Show the welcome page.
-	 */
 	public static function welcome_page() {
 		?>
 		<div id="muhiku-plug-welcome" >
@@ -97,8 +70,7 @@ class MHK_Admin_Welcome {
 							<p><?php esc_html_e( 'Let\'s get started with the first contact forms for your site.', 'muhiku-plug' ); ?></p>
 						</div>
 					</a>
-					<a href="https://docs.wpmuhiku.com/docs/muhiku-plug/" class="muhiku-plug-welcome-container__action-card" target="blank">
-						<figure class="muhiku-plug-welcome-container__action-card-img">
+					<figure class="muhiku-plug-welcome-container__action-card-img">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><style>.cls-1{fill:none;}.cls-1,.cls-2{stroke:#3D8FC9;stroke-linecap:round;stroke-miterlimit:10;stroke-width:2px;}.cls-2{fill:#E1F0FA;}</style></defs><rect x="13" y="5" width="26" height="38" rx="2" ry="2" class="cls-1"/><path class="cls-1" d="M22,19a3,3,0,0,0-3,3V40a3,3,0,0,1-3,3h9V22A3,3,0,0,0,22,19Z"/><path class="cls-2" d="M49,19H22a3,3,0,0,1,3,3V57a2,2,0,0,0,2,2H49a2,2,0,0,0,2-2V21A2,2,0,0,0,49,19Z"/><line class="cls-1" x1="30" y1="27" x2="46" y2="27"/><line class="cls-1" x1="18" y1="13" x2="34" y2="13"/><line class="cls-1" x1="30" y1="33" x2="46" y2="33"/><line class="cls-1" x1="30" y1="39" x2="46" y2="39"/><line class="cls-1" x1="30" y1="45" x2="40" y2="45"/><line class="cls-1" x1="44" y1="45" x2="46" y2="45"/><line class="cls-1" x1="30" y1="51" x2="40" y2="51"/><line class="cls-1" x1="44" y1="51" x2="46" y2="51"/></svg>
 						</figure>
 						<div class="muhiku-plug-welcome-container__action-card-content">

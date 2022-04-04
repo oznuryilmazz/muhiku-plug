@@ -1,46 +1,28 @@
 <?php
 /**
  * MuhikuPlug Updates
- *
- * Functions for updating data, used by the background updater.
- *
  * @package MuhikuPlug\Functions
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Update DB Version.
- */
+
 function mhk_update_100_db_version() {
 	MHK_Install::update_db_version( '1.0.0' );
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_101_db_version() {
 	MHK_Install::update_db_version( '1.0.1' );
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_102_db_version() {
 	MHK_Install::update_db_version( '1.0.2' );
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_103_db_version() {
 	MHK_Install::update_db_version( '1.0.3' );
 }
 
-/**
- * Update all forms for meta-key.
- */
 function mhk_update_110_update_forms() {
 	$forms = mhk_get_all_forms();
 
@@ -56,21 +38,14 @@ function mhk_update_110_update_forms() {
 			}
 		}
 
-		// Update form data.
 		mhk()->form->update( $form_id, $form_data );
 	}
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_110_db_version() {
 	MHK_Install::update_db_version( '1.1.0' );
 }
 
-/**
- * Delete global email related options.
- */
 function mhk_update_116_delete_options() {
 	$delete_options = array(
 		'mhk_to_email',
@@ -88,16 +63,10 @@ function mhk_update_116_delete_options() {
 	}
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_116_db_version() {
 	MHK_Install::update_db_version( '1.1.6' );
 }
 
-/**
- * Update settings option to use new renamed option for 1.2.0.
- */
 function mhk_update_120_db_rename_options() {
 	$rename_options = array(
 		'mhk_email_template'        => 'muhiku_forms_email_template',
@@ -121,13 +90,9 @@ function mhk_update_120_db_rename_options() {
 	}
 }
 
-/**
- * Update email settings adding connection data.
- */
 function mhk_update_140_db_multiple_email() {
 	$forms = mhk()->form->get_multiple( array( 'order' => 'DESC' ) );
 
-	// Loop through each forms.
 	foreach ( $forms as $form ) {
 		$form_id   = isset( $form->ID ) ? $form->ID : '0';
 		$form_data = ! empty( $form->post_content ) ? mhk_decode( $form->post_content ) : '';
@@ -135,18 +100,15 @@ function mhk_update_140_db_multiple_email() {
 		if ( ! empty( $form_data['settings'] ) ) {
 			$email = (array) $form_data['settings']['email'];
 
-			// New email conn.
 			$new_email                    = array();
 			$new_email['connection_name'] = esc_html__( 'Admin Notification', 'muhiku-plug' );
 			$new_email                    = array_merge( $new_email, $email );
 
-			// Unset previous email data structure.
 			$email_settings = array( 'mhk_send_confirmation_email', 'mhk_user_to_email', 'mhk_user_email_subject', 'mhk_user_email_message', 'attach_pdf_to_user_email' );
 			foreach ( $email_settings as $email_setting ) {
 				unset( $email_setting );
 			}
 
-			// Maintain the multiple-email connections data structure.
 			if ( ! isset( $form_data['settings']['email']['connection_1'] ) ) {
 				$unique_connection_id           = sprintf( 'connection_%s', uniqid() );
 				$form_data['settings']['email'] = array( 'connection_1' => $new_email );
@@ -174,50 +136,31 @@ function mhk_update_140_db_multiple_email() {
 				}
 			}
 
-			// Update form data.
 			mhk()->form->update( $form_id, $form_data );
 		}
 	}
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_120_db_version() {
 	MHK_Install::update_db_version( '1.2.0' );
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_130_db_version() {
 	MHK_Install::update_db_version( '1.3.0' );
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_140_db_version() {
 	MHK_Install::update_db_version( '1.4.0' );
 }
 
-/**
- * Delete global reCAPTCHA related options.
- */
 function mhk_update_144_delete_options() {
 	delete_option( 'muhiku_forms_recaptcha_validation' );
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_144_db_version() {
 	MHK_Install::update_db_version( '1.4.4' );
 }
 
-/**
- * Update settings option to use new renamed option for 1.4.9.
- */
 function mhk_update_149_db_rename_options() {
 	$rename_options = array(
 		'muhiku_forms_recaptcha_site_key'    => 'muhiku_forms_recaptcha_v2_site_key',
@@ -234,13 +177,9 @@ function mhk_update_149_db_rename_options() {
 	}
 }
 
-/**
- * Remove payment option field from all forms.
- */
 function mhk_update_149_no_payment_options() {
 	$forms = mhk_get_all_forms();
 
-	// Loop through each forms.
 	foreach ( $forms as $form_id => $form ) {
 		$form_obj  = mhk()->form->get( $form_id );
 		$form_data = ! empty( $form_obj->post_content ) ? mhk_decode( $form_obj->post_content ) : '';
@@ -253,25 +192,17 @@ function mhk_update_149_no_payment_options() {
 			}
 		}
 
-		// Update form data.
 		mhk()->form->update( $form_id, $form_data );
 	}
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_149_db_version() {
 	MHK_Install::update_db_version( '1.4.9' );
 }
 
-/**
- * Update date field type for all forms.
- */
 function mhk_update_150_field_datetime_type() {
 	$forms = mhk()->form->get_multiple( array( 'order' => 'DESC' ) );
 
-	// Loop through each forms.
 	foreach ( $forms as $form ) {
 		$form_id   = isset( $form->ID ) ? $form->ID : '0';
 		$form_data = ! empty( $form->post_content ) ? mhk_decode( $form->post_content ) : '';
@@ -284,28 +215,18 @@ function mhk_update_150_field_datetime_type() {
 			}
 		}
 
-		// Update form data.
 		mhk()->form->update( $form_id, $form_data );
 	}
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_150_db_version() {
 	MHK_Install::update_db_version( '1.5.0' );
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_160_db_version() {
 	MHK_Install::update_db_version( '1.6.0' );
 }
 
-/**
- * Update core capabilities.
- */
 function mhk_update_175_remove_capabilities() {
 	global $wp_roles;
 
@@ -314,14 +235,13 @@ function mhk_update_175_remove_capabilities() {
 	}
 
 	if ( ! isset( $wp_roles ) ) {
-		$wp_roles = new WP_Roles(); // @codingStandardsIgnoreLine
+		$wp_roles = new WP_Roles(); 
 	}
 
 	$capability_types = array( 'muhiku_form' );
 
 	foreach ( $capability_types as $capability_type ) {
 		$capabilities[ $capability_type ] = array(
-			// Post type.
 			"edit_{$capability_type}",
 			"read_{$capability_type}",
 			"delete_{$capability_type}",
@@ -336,7 +256,6 @@ function mhk_update_175_remove_capabilities() {
 			"edit_private_{$capability_type}s",
 			"edit_published_{$capability_type}s",
 
-			// Terms.
 			"manage_{$capability_type}_terms",
 			"edit_{$capability_type}_terms",
 			"delete_{$capability_type}_terms",
@@ -344,7 +263,6 @@ function mhk_update_175_remove_capabilities() {
 		);
 	}
 
-	// Remove unused core capabilities.
 	foreach ( $capabilities as $cap_group ) {
 		foreach ( $cap_group as $cap ) {
 			$wp_roles->remove_cap( 'administrator', $cap );
@@ -352,9 +270,6 @@ function mhk_update_175_remove_capabilities() {
 	}
 }
 
-/**
- * Restore draft forms to publish.
- */
 function mhk_update_175_restore_draft_forms() {
 	$form_ids = get_posts(
 		array(
@@ -375,9 +290,6 @@ function mhk_update_175_restore_draft_forms() {
 	}
 }
 
-/**
- * Update DB Version.
- */
 function mhk_update_175_db_version() {
 	MHK_Install::update_db_version( '1.7.5' );
 }

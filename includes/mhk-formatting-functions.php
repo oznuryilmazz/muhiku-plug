@@ -1,19 +1,12 @@
 <?php
 /**
- * MuhikuPlug Formatting
- *
- * Functions for formatting data.
- *
  * @package WPMuhiku\Functions
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Converts a string (e.g. 'yes' or 'no') to a bool.
- *
- * @param string $string String to convert.
+ * @param string $string 
  * @return bool
  */
 function mhk_string_to_bool( $string ) {
@@ -21,9 +14,7 @@ function mhk_string_to_bool( $string ) {
 }
 
 /**
- * Converts a bool to a 'yes' or 'no'.
- *
- * @param bool $bool String to convert.
+ * @param bool $bool 
  * @return string
  */
 function mhk_bool_to_string( $bool ) {
@@ -34,9 +25,6 @@ function mhk_bool_to_string( $bool ) {
 }
 
 /**
- * Add a suffix into an array.
- *
- * @since  1.4.5
  * @param  array  $array  Raw array data.
  * @param  string $suffix Suffix to be added.
  * @return array Modified array with suffix added.
@@ -46,9 +34,6 @@ function mhk_suffix_array( $array = array(), $suffix = '' ) {
 }
 
 /**
- * Implode an array into a string by $glue and remove empty values.
- *
- * @since  1.4.5
  * @param  array  $array Array to convert.
  * @param  string $glue  Glue, defaults to ' '.
  * @return string
@@ -58,8 +43,6 @@ function mhk_array_to_string( $array = array(), $glue = ' ' ) {
 }
 
 /**
- * Explode a string into an array by $delimiter and remove empty values.
- *
  * @param  string $string    String to convert.
  * @param  string $delimiter Delimiter, defaults to ','.
  * @return array
@@ -69,9 +52,6 @@ function mhk_string_to_array( $string, $delimiter = ',' ) {
 }
 
 /**
- * Format dimensions for display.
- *
- * @since  1.4.5
  * @param  array $dimensions Array of dimensions.
  * @param  array $unit       Unit, defaults to 'px'.
  * @return string
@@ -81,9 +61,6 @@ function mhk_sanitize_dimension_unit( $dimensions = array(), $unit = 'px' ) {
 }
 
 /**
- * Sanitize taxonomy names. Slug format (no spaces, lowercase).
- * Urldecode is used to reverse munging of UTF8 characters.
- *
  * @param string $taxonomy Taxonomy name.
  * @return string
  */
@@ -92,10 +69,6 @@ function mhk_sanitize_taxonomy_name( $taxonomy ) {
 }
 
 /**
- * Sanitize permalink values before insertion into DB.
- *
- * Cannot use mhk_clean because it sometimes strips % chars and breaks the user's setting.
- *
  * @param  string $value Permalink.
  * @return string
  */
@@ -114,8 +87,6 @@ function mhk_sanitize_permalink( $value ) {
 }
 
 /**
- * Gets the filename part of a download URL.
- *
  * @param string $file_url File URL.
  * @return string
  */
@@ -127,9 +98,6 @@ function mhk_get_filename_from_url( $file_url ) {
 }
 
 /**
- * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
- * Non-scalar values are ignored.
- *
  * @param string|array $var Data to sanitize.
  * @return string|array
  */
@@ -142,8 +110,6 @@ function mhk_clean( $var ) {
 }
 
 /**
- * Run mhk_clean over posted textarea but maintain line breaks.
- *
  * @param  string $var Data to sanitize.
  * @return string
  */
@@ -152,9 +118,6 @@ function mhk_sanitize_textarea( $var ) {
 }
 
 /**
- * Sanitize a string destined to be a tooltip.
- *
- * @since  1.0.0 Tooltips are encoded with htmlspecialchars to prevent XSS. Should not be used in conjunction with esc_attr()
  * @param  string $var Data to sanitize.
  * @return string
  */
@@ -178,8 +141,6 @@ function mhk_sanitize_tooltip( $var ) {
 }
 
 /**
- * Merge two arrays.
- *
  * @param array $a1 First array to merge.
  * @param array $a2 Second array to merge.
  * @return array
@@ -199,8 +160,6 @@ function mhk_array_overlay( $a1, $a2 ) {
 }
 
 /**
- * Array combine.
- *
  * @param  array $array Array of data.
  * @return array
  */
@@ -213,10 +172,6 @@ function mhk_sanitize_array_combine( $array ) {
 }
 
 /**
- * Notation to numbers.
- *
- * This function transforms the php.ini notation for numbers (like '2M') to an integer.
- *
  * @param  string $size Size value.
  * @return int
  */
@@ -246,8 +201,6 @@ function mhk_let_to_num( $size ) {
 }
 
 /**
- * MuhikuPlug Date Format - Allows to change date format for everything MuhikuPlug.
- *
  * @return string
  */
 function mhk_date_format() {
@@ -255,8 +208,6 @@ function mhk_date_format() {
 }
 
 /**
- * MuhikuPlug Time Format - Allows to change time format for everything MuhikuPlug.
- *
  * @return string
  */
 function mhk_time_format() {
@@ -264,8 +215,6 @@ function mhk_time_format() {
 }
 
 /**
- * Callback which can flatten post meta (gets the first value if it's an array).
- *
  * @param  array $value Value to flatten.
  * @return mixed
  */
@@ -276,15 +225,12 @@ function mhk_flatten_meta_callback( $value ) {
 if ( ! function_exists( 'mhk_rgb_from_hex' ) ) {
 
 	/**
-	 * Convert RGB to HEX.
-	 *
 	 * @param mixed $color Color.
 	 *
 	 * @return array
 	 */
 	function mhk_rgb_from_hex( $color ) {
 		$color = str_replace( '#', '', $color );
-		// Convert shorthand colors to full format, e.g. "FFF" -> "FFFFFF".
 		$color = preg_replace( '~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color );
 
 		$rgb      = array();
@@ -299,8 +245,6 @@ if ( ! function_exists( 'mhk_rgb_from_hex' ) ) {
 if ( ! function_exists( 'mhk_hex_darker' ) ) {
 
 	/**
-	 * Make HEX color darker.
-	 *
 	 * @param mixed $color  Color.
 	 * @param int   $factor Darker factor.
 	 *                      Defaults to 30.
@@ -329,8 +273,6 @@ if ( ! function_exists( 'mhk_hex_darker' ) ) {
 if ( ! function_exists( 'mhk_hex_lighter' ) ) {
 
 	/**
-	 * Make HEX color lighter.
-	 *
 	 * @param mixed $color  Color.
 	 * @param int   $factor Lighter factor.
 	 *                      Defaults to 30.
@@ -360,8 +302,6 @@ if ( ! function_exists( 'mhk_hex_lighter' ) ) {
 if ( ! function_exists( 'mhk_is_light' ) ) {
 
 	/**
-	 * Determine whether a hex color is light.
-	 *
 	 * @param mixed $color Color.
 	 * @return bool  True if a light color.
 	 */
@@ -381,8 +321,6 @@ if ( ! function_exists( 'mhk_is_light' ) ) {
 if ( ! function_exists( 'mhk_light_or_dark' ) ) {
 
 	/**
-	 * Detect if we should use a light or dark color on a background color.
-	 *
 	 * @param mixed  $color Color.
 	 * @param string $dark  Darkest reference.
 	 *                      Defaults to '#000000'.
@@ -398,8 +336,6 @@ if ( ! function_exists( 'mhk_light_or_dark' ) ) {
 if ( ! function_exists( 'mhk_format_hex' ) ) {
 
 	/**
-	 * Format string as hex.
-	 *
 	 * @param string $hex HEX color.
 	 * @return string|null
 	 */
@@ -415,8 +351,6 @@ if ( ! function_exists( 'mhk_format_hex' ) ) {
 }
 
 /**
- * Format phone numbers.
- *
  * @param  string $phone Phone number.
  * @return string
  */
@@ -425,8 +359,6 @@ function mhk_format_phone_number( $phone ) {
 }
 
 /**
- * Wrapper for mb_strtoupper which see's if supported first.
- *
  * @param  string $string String to format.
  * @return string
  */
@@ -435,9 +367,6 @@ function mhk_strtoupper( $string ) {
 }
 
 /**
- * Make a string lowercase.
- * Try to use mb_strtolower() when available.
- *
  * @param  string $string String to format.
  * @return string
  */
@@ -446,8 +375,6 @@ function mhk_strtolower( $string ) {
 }
 
 /**
- * Trim a string and append a suffix.
- *
  * @param  string  $string String to trim.
  * @param  integer $chars  Amount of characters.
  *                         Defaults to 200.
@@ -467,8 +394,6 @@ function mhk_trim_string( $string, $chars = 200, $suffix = '...' ) {
 }
 
 /**
- * Format content to display shortcodes.
- *
  * @param  string $raw_string Raw string.
  * @return string
  */
@@ -477,8 +402,6 @@ function mhk_format_content( $raw_string ) {
 }
 
 /**
- * Process oEmbeds.
- *
  * @param  string $content Content.
  * @return string
  */
@@ -491,54 +414,38 @@ function mhk_do_oembeds( $content ) {
 }
 
 /**
- * Array merge and sum function.
- *
- * Source:  https://gist.github.com/Nickology/f700e319cbafab5eaedc
- *
- * @since  1.0.0
  * @return array
  */
 function mhk_array_merge_recursive_numeric() {
 	$arrays = func_get_args();
 
-	// If there's only one array, it's already merged.
 	if ( 1 === count( $arrays ) ) {
 		return $arrays[0];
 	}
 
-	// Remove any items in $arrays that are NOT arrays.
 	foreach ( $arrays as $key => $array ) {
 		if ( ! is_array( $array ) ) {
 			unset( $arrays[ $key ] );
 		}
 	}
 
-	// We start by setting the first array as our final array.
-	// We will merge all other arrays with this one.
 	$final = array_shift( $arrays );
 
 	foreach ( $arrays as $b ) {
 		foreach ( $final as $key => $value ) {
-			// If $key does not exist in $b, then it is unique and can be safely merged.
 			if ( ! isset( $b[ $key ] ) ) {
 				$final[ $key ] = $value;
 			} else {
-				// If $key is present in $b, then we need to merge and sum numeric values in both.
 				if ( is_numeric( $value ) && is_numeric( $b[ $key ] ) ) {
-					// If both values for these keys are numeric, we sum them.
 					$final[ $key ] = $value + $b[ $key ];
 				} elseif ( is_array( $value ) && is_array( $b[ $key ] ) ) {
-					// If both values are arrays, we recursively call ourself.
 					$final[ $key ] = mhk_array_merge_recursive_numeric( $value, $b[ $key ] );
 				} else {
-					// If both keys exist but differ in type, then we cannot merge them.
-					// In this scenario, we will $b's value for $key is used.
 					$final[ $key ] = $b[ $key ];
 				}
 			}
 		}
 
-		// Finally, we need to merge any keys that exist only in $b.
 		foreach ( $b as $key => $value ) {
 			if ( ! isset( $final[ $key ] ) ) {
 				$final[ $key ] = $value;
@@ -550,9 +457,6 @@ function mhk_array_merge_recursive_numeric() {
 }
 
 /**
- * Implode and escape HTML attributes for output.
- *
- * @since 1.2.0
  * @param array $raw_attributes Attribute name value pairs.
  * @return string
  */
@@ -565,9 +469,6 @@ function mhk_implode_html_attributes( $raw_attributes ) {
 }
 
 /**
- * Parse a relative date option from the settings API into a standard format.
- *
- * @since 1.2.0
  * @param mixed $raw_value Value stored in DB.
  * @return array Nicely formatted array with number and unit values.
  */
@@ -597,26 +498,16 @@ function mhk_parse_relative_date_option( $raw_value ) {
 }
 
 /**
- * Callback which can flatten structure data (gets the value if it's a multidimensional array).
- *
- * @since  1.3.0
  * @param  array $value Value to flatten.
  * @return array
  */
 function mhk_flatten_array( $value = array() ) {
 	$return = array();
-	array_walk_recursive( $value, function( $a ) use ( &$return ) { $return[] = $a; } ); // @codingStandardsIgnoreLine.
+	array_walk_recursive( $value, function( $a ) use ( &$return ) { $return[] = $a; } ); 
 	return $return;
 }
 
 /**
- * An `array_splice` which does preverse the keys of the replacement array
- *
- * The argument list is identical to `array_splice`
- *
- * @since 1.6.5
- *
- * @link https://github.com/lode/gaps/blob/master/src/gaps.php
  *
  * @param  array $input       The input array.
  * @param  int   $offset      The offeset to start.

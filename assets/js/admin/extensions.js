@@ -3,10 +3,6 @@
   (__ = wp.i18n.__), (_x = wp.i18n._x), (sprintf = wp.i18n.sprintf);
 
   /**
-   * Sends an Ajax request to the server to install a extension.
-   *
-   * @since 4.6.0
-   *
    * @param {object}                   args         Arguments.
    * @param {string}                   args.slug    Plugin identifier in the WordPress.org Plugin repository.
    * @param {installExtensionSuccess=} args.success Optional. Success callback. Default: wp.updates.installPluginSuccess
@@ -34,17 +30,12 @@
       .addClass("updating-message")
       .attr(
         "aria-label",
-        sprintf(
-          /* translators: %s: Plugin name and version. */
-          _x("Installing %s...", "muhiku-plug"),
-          $message.data("name")
-        )
+        sprintf(_x("Installing %s...", "muhiku-plug"), $message.data("name"))
       )
       .text(__("Installing..."));
 
     wp.a11y.speak(__("Installing... please wait."), "polite");
 
-    // Remove previous error messages, if any.
     $card
       .removeClass("plugin-card-install-failed")
       .find(".notice.notice-error")
@@ -56,10 +47,6 @@
   };
 
   /**
-   * Updates the UI appropriately after a successful extension install.
-   *
-   * @since 4.6.0
-   *
    * @typedef {object} installPluginSuccess
    * @param {object} response             Response from the server.
    * @param {string} response.slug        Slug of the installed plugin.
@@ -78,11 +65,7 @@
         .addClass("updated-message active")
         .attr(
           "aria-label",
-          sprintf(
-            /* translators: %s: Plugin name and version. */
-            _x("%s installed!", "muhiku-plug"),
-            response.pluginName
-          )
+          sprintf(_x("%s installed!", "muhiku-plug"), response.pluginName)
         )
         .text(_x("Installed!", "plugin"));
 
@@ -98,11 +81,7 @@
         .addClass("updated-message installed button-disabled")
         .attr(
           "aria-label",
-          sprintf(
-            /* translators: %s: Plugin name and version. */
-            _x("%s installed!", "muhiku-plug"),
-            response.pluginName
-          )
+          sprintf(_x("%s installed!", "muhiku-plug"), response.pluginName)
         )
         .text(_x("Installed!", "muhiku-plug"));
 
@@ -117,7 +96,6 @@
             .addClass("status-active")
             .text(wp.updates.l10n.pluginInstalled);
 
-          // Transform the 'Install' button into an 'Activate' button.
           $message
             .removeClass(
               "install-now installed button-disabled updated-message"
@@ -130,7 +108,6 @@
               .attr(
                 "aria-label",
                 sprintf(
-                  /* translators: %s: Plugin name. */
                   _x("Network Activate %s", "muhiku-plug"),
                   response.pluginName
                 )
@@ -140,11 +117,7 @@
             $message
               .attr(
                 "aria-label",
-                sprintf(
-                  /* translators: %s: Plugin name. */
-                  _x("Activate %s", "muhiku-plug"),
-                  response.pluginName
-                )
+                sprintf(_x("Activate %s", "muhiku-plug"), response.pluginName)
               )
               .text(__("Activate"));
           }
@@ -154,10 +127,6 @@
   };
 
   /**
-   * Updates the UI appropriately after a failed extension install.
-   *
-   * @since 4.6.0
-   *
    * @typedef {object} installExtensionError
    * @param {object}  response              Response from the server.
    * @param {string}  response.slug         Slug of the plugin to be installed.
@@ -180,7 +149,6 @@
       }
 
       errorMessage = sprintf(
-        /* translators: %s: Error string for a failed installation. */
         __("Installation failed: %s"),
         response.errorMessage
       );
@@ -191,7 +159,6 @@
         .attr(
           "aria-label",
           sprintf(
-            /* translators: %s: Plugin name and version. */
             _x("%s installation failed", "muhiku-plug"),
             $button.data("name")
           )
@@ -220,7 +187,6 @@
       }
 
       errorMessage = sprintf(
-        /* translators: %s: Error string for a failed installation. */
         __("Installation failed: %s"),
         response.errorMessage
       );
@@ -234,7 +200,6 @@
         );
 
       $card.on("click", ".notice.is-dismissible .notice-dismiss", function () {
-        // Use same delay as the total duration of the notice fadeTo + slideUp animation.
         setTimeout(function () {
           $card
             .removeClass("plugin-card-update-failed")
@@ -249,7 +214,6 @@
         .attr(
           "aria-label",
           sprintf(
-            /* translators: %s: Plugin name and version. */
             _x("%s installation failed", "muhiku-plug"),
             $button.data("name")
           )
@@ -262,10 +226,6 @@
     }
   };
 
-  /**
-   * Pulls available jobs from the queue and runs them.
-   * @see https://core.trac.wordpress.org/ticket/39364
-   */
   wp.updates.queueChecker = function () {
     var job;
 
@@ -275,7 +235,6 @@
 
     job = wp.updates.queue.shift();
 
-    // Handle a queue job.
     switch (job.action) {
       case "muhiku_forms_install_extension":
         wp.updates.installExtension(job.data);
@@ -285,7 +244,6 @@
         break;
     }
 
-    // Handle a queue job.
     $document.trigger("wp-updates-queue-job", job);
   };
 
@@ -293,8 +251,6 @@
     var $pluginFilter = $("#extension-filter");
 
     /**
-     * Click handler for extension installs.
-     *
      * @param {Event} event Event interface.
      */
     $pluginFilter.on(
@@ -326,11 +282,7 @@
               .removeClass("updating-message")
               .attr(
                 "aria-label",
-                sprintf(
-                  /* translators: %s: Plugin name. */
-                  _x("Install %s now", "muhiku-plug"),
-                  pluginName
-                )
+                sprintf(_x("Install %s now", "muhiku-plug"), pluginName)
               )
               .text(__("Install Now"));
 

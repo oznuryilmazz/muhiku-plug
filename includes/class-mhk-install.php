@@ -1,21 +1,13 @@
 <?php
 /**
- * Installation related functions and actions.
- *
  * @package MuhikuPlug\Classes
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Install Class.
- */
 class MHK_Install {
 
 	/**
-	 * DB updates and callbacks that need to be run per version.
-	 *
 	 * @var array
 	 */
 	private static $db_updates = array(
@@ -74,39 +66,24 @@ class MHK_Install {
 	);
 
 	/**
-	 * Background update class.
-	 *
 	 * @var object
 	 */
 	private static $background_updater;
 
-	/**
-	 * Hook in tabs.
-	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'check_version' ), 5 );
 		add_action( 'init', array( __CLASS__, 'init_background_updater' ), 5 );
 		add_action( 'admin_init', array( __CLASS__, 'install_actions' ) );
 		add_filter( 'map_meta_cap', array( __CLASS__, 'filter_map_meta_cap' ), 10, 4 );
 		add_filter( 'plugin_action_links_' . MHK_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
-		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
 		add_filter( 'wpmu_drop_tables', array( __CLASS__, 'wpmu_drop_tables' ) );
 		add_filter( 'cron_schedules', array( __CLASS__, 'cron_schedules' ) );
 	}
-
-	/**
-	 * Init background updates
-	 */
 	public static function init_background_updater() {
 		include_once dirname( __FILE__ ) . '/class-mhk-background-updater.php';
 		self::$background_updater = new MHK_Background_Updater();
 	}
 
-	/**
-	 * Check MuhikuPlug version and run the updater is required.
-	 *
-	 * This check is done on all requests and runs if the versions do not match.
-	 */
 	public static function check_version() {
 		if ( ! defined( 'IFRAME_REQUEST' ) && version_compare( get_option( 'muhiku_forms_version' ), mhk()->version, '<' ) ) {
 			self::install();
@@ -114,11 +91,6 @@ class MHK_Install {
 		}
 	}
 
-	/**
-	 * Install actions when a update button is clicked within the admin area.
-	 *
-	 * This function is hooked into admin_init to affect admin only.
-	 */
 	public static function install_actions() {
 		if ( ! empty( $_GET['do_update_muhiku_forms'] ) ) {
 			check_admin_referer( 'mhk_db_update', 'mhk_db_update_nonce' );
@@ -131,21 +103,15 @@ class MHK_Install {
 			exit;
 		}
 	}
-
-	/**
-	 * Install MHK.
-	 */
 	public static function install() {
 		if ( ! is_blog_installed() ) {
 			return;
 		}
 
-		// Check if we are not already running this routine.
 		if ( 'yes' === get_transient( 'mhk_installing' ) ) {
 			return;
 		}
 
-		// If we made it till here nothing is running yet, lets set the transient now.
 		set_transient( 'mhk_installing', 'yes', MINUTE_IN_SECONDS * 10 );
 		mhk_maybe_define_constant( 'MHK_INSTALLING', true );
 
@@ -168,24 +134,15 @@ class MHK_Install {
 		do_action( 'muhiku_forms_installed' );
 	}
 
-	/**
-	 * Reset any notices added to admin.
-	 */
 	private static function remove_admin_notices() {
 		include_once dirname( __FILE__ ) . '/admin/class-mhk-admin-notices.php';
 		MHK_Admin_Notices::remove_all_notices();
 	}
-
-	/**
-	 * Setup MHK environment - post types, taxonomies, endpoints.
-	 */
 	private static function setup_environment() {
 		MHK_Post_Types::register_post_types();
 	}
 
 	/**
-	 * Is this a brand new MHK install?
-	 *
 	 * @return boolean
 	 */
 	private static function is_new_install() {
@@ -193,8 +150,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Is a DB update needed?
-	 *
 	 * @return boolean
 	 */
 	public static function needs_db_update() {
@@ -206,18 +161,12 @@ class MHK_Install {
 		return ! is_null( $current_db_version ) && version_compare( $current_db_version, end( $update_versions ), '<' );
 	}
 
-	/**
-	 * See if we need to set redirect transients for activation or not.
-	 */
 	private static function maybe_set_activation_transients() {
 		if ( self::is_new_install() ) {
 			set_transient( '_mhk_activation_redirect', 1, 30 );
 		}
 	}
 
-	/**
-	 * See if we need to show or run database updates during install.
-	 */
 	private static function maybe_update_db_version() {
 		if ( self::needs_db_update() ) {
 			if ( apply_filters( 'muhiku_forms_enable_auto_update_db', false ) ) {
@@ -231,9 +180,6 @@ class MHK_Install {
 		}
 	}
 
-	/**
-	 * Store the initial plugin activation date during install.
-	 */
 	private static function maybe_add_activated_date() {
 		$activated_date = get_option( 'muhiku_forms_activated', '' );
 
@@ -242,26 +188,18 @@ class MHK_Install {
 		}
 	}
 
-	/**
-	 * Update MHK version to current.
-	 */
 	private static function update_mhk_version() {
 		delete_option( 'muhiku_forms_version' );
 		add_option( 'muhiku_forms_version', mhk()->version );
 	}
 
 	/**
-	 * Get list of DB update callbacks.
-	 *
 	 * @return array
 	 */
 	public static function get_db_update_callbacks() {
 		return self::$db_updates;
 	}
 
-	/**
-	 * Push all needed DB updates to the queue for processing.
-	 */
 	private static function update() {
 		$current_db_version = get_option( 'muhiku_forms_db_version' );
 		$logger             = mhk_get_logger();
@@ -286,8 +224,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Update DB version to current.
-	 *
 	 * @param string|null $version New MuhikuPlug DB version or null.
 	 */
 	public static function update_db_version( $version = null ) {
@@ -296,8 +232,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Add more cron schedules.
-	 *
 	 * @param  array $schedules List of WP scheduled cron jobs.
 	 * @return array
 	 */
@@ -309,9 +243,6 @@ class MHK_Install {
 		return $schedules;
 	}
 
-	/**
-	 * Create cron jobs (clear them first).
-	 */
 	private static function create_cron_jobs() {
 		wp_clear_scheduled_hook( 'muhiku_forms_cleanup_logs' );
 		wp_clear_scheduled_hook( 'muhiku_forms_cleanup_sessions' );
@@ -319,11 +250,6 @@ class MHK_Install {
 		wp_schedule_event( time() + ( 6 * HOUR_IN_SECONDS ), 'twicedaily', 'muhiku_forms_cleanup_sessions' );
 	}
 
-	/**
-	 * Default options.
-	 *
-	 * Sets up the default options used on the settings page.
-	 */
 	private static function create_options() {
 		// Include settings so that we can run through defaults.
 		include_once dirname( __FILE__ ) . '/admin/class-mhk-admin-settings.php';
@@ -347,9 +273,6 @@ class MHK_Install {
 		}
 	}
 
-	/**
-	 * Set up the database tables which the plugin needs to function.
-	 */
 	private static function create_tables() {
 		global $wpdb;
 
@@ -357,21 +280,12 @@ class MHK_Install {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		/**
-		 * Before updating with DBDELTA, add fields column to entries table schema.
-		 */
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}mhk_entries';" ) ) {
 			if ( ! $wpdb->get_var( "SHOW COLUMNS FROM `{$wpdb->prefix}mhk_entries` LIKE 'fields';" ) ) {
 				$wpdb->query( "ALTER TABLE {$wpdb->prefix}mhk_entries ADD `fields` longtext NULL AFTER `referer`;" );
 			}
 		}
 
-		/**
-		 * Change wp_mhk_sessions schema to use a bigint auto increment field
-		 * instead of char(32) field as the primary key. Doing this change primarily
-		 * as it should reduce the occurrence of deadlocks, but also because it is
-		 * not a good practice to use a char(32) field as the primary key of a table.
-		 */
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}mhk_sessions'" ) ) {
 			if ( ! $wpdb->get_var( "SHOW KEYS FROM {$wpdb->prefix}mhk_sessions WHERE Key_name = 'PRIMARY' AND Column_name = 'session_id'" ) ) {
 				$wpdb->query(
@@ -384,10 +298,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Get Table schema.
-	 *
-	 * When adding or removing a table, make sure to update the list of tables in MHK_Install::get_tables().
-	 *
 	 * @return string
 	 */
 	private static function get_schema() {
@@ -438,9 +348,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Return a list of MuhikuPlug tables. Used to make sure all UM tables are dropped when uninstalling the plugin
-	 * in a single site or multi site environment.
-	 *
 	 * @return array UM tables.
 	 */
 	public static function get_tables() {
@@ -455,9 +362,6 @@ class MHK_Install {
 		return $tables;
 	}
 
-	/**
-	 * Drop MuhikuPlug tables.
-	 */
 	public static function drop_tables() {
 		global $wpdb;
 
@@ -469,8 +373,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Uninstall tables when MU blog is deleted.
-	 *
 	 * @param  array $tables List of tables that will be deleted by WP.
 	 * @return string[]
 	 */
@@ -478,9 +380,6 @@ class MHK_Install {
 		return array_merge( $tables, self::get_tables() );
 	}
 
-	/**
-	 * Create roles and capabilities.
-	 */
 	public static function create_roles() {
 		global $wp_roles;
 
@@ -489,7 +388,7 @@ class MHK_Install {
 		}
 
 		if ( ! isset( $wp_roles ) ) {
-			$wp_roles = new WP_Roles(); // @codingStandardsIgnoreLine
+			$wp_roles = new WP_Roles(); 
 		}
 
 		$capabilities = self::get_core_capabilities();
@@ -502,13 +401,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Get the core capabilities.
-	 *
-	 * Core capabilities are assigned to admin during installation or reset.
-	 *
-	 * @since 1.0.0
-	 * @since 1.7.5 Removed unused post type capabilities and added supported ones.
-	 *
 	 * @return array $capabilities Core capabilities.
 	 */
 	private static function get_core_capabilities() {
@@ -535,10 +427,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Get the meta capabilities.
-	 *
-	 * @since 1.7.5
-	 *
 	 * @param string $cap Capability name to get.
 	 * @return array $meta_caps Meta capabilities.
 	 */
@@ -562,9 +450,6 @@ class MHK_Install {
 		return $meta_caps;
 	}
 
-	/**
-	 * Remove MuhikuPlug roles.
-	 */
 	public static function remove_roles() {
 		global $wp_roles;
 
@@ -573,7 +458,7 @@ class MHK_Install {
 		}
 
 		if ( ! isset( $wp_roles ) ) {
-			$wp_roles = new WP_Roles(); // @codingStandardsIgnoreLine
+			$wp_roles = new WP_Roles();
 		}
 
 		$capabilities = self::get_core_capabilities();
@@ -585,16 +470,12 @@ class MHK_Install {
 		}
 	}
 
-	/**
-	 * Create default contact form.
-	 */
 	public static function create_forms() {
 		$forms_count = wp_count_posts( 'muhiku_form' );
 
 		if ( empty( $forms_count->publish ) ) {
 			include_once dirname( __FILE__ ) . '/templates/contact.php';
 
-			// Create a form.
 			$form_id = wp_insert_post(
 				array(
 					'post_title'   => esc_html__( 'Contact Form', 'muhiku-plug' ),
@@ -617,16 +498,10 @@ class MHK_Install {
 		}
 	}
 
-	/**
-	 * Create files/directories.
-	 */
 	private static function create_files() {
-		// Bypass if filesystem is read-only and/or non-standard upload system is used.
 		if ( apply_filters( 'muhiku_forms_install_skip_create_files', false ) ) {
 			return;
 		}
-
-		// Install files and folders for uploading files and prevent hotlinking.
 		$files = array(
 			array(
 				'base'    => MHK_LOG_DIR,
@@ -642,20 +517,16 @@ class MHK_Install {
 
 		foreach ( $files as $file ) {
 			if ( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) ) {
-				$file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_read_fopen
+				$file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ); 
 				if ( $file_handle ) {
-					fwrite( $file_handle, $file['content'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite
-					fclose( $file_handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+					fwrite( $file_handle, $file['content'] ); 
+					fclose( $file_handle ); 
 				}
 			}
 		}
 	}
 
 	/**
-	 * Filter user's capabilities for the given primitive or meta capability.
-	 *
-	 * @since 1.7.5
-	 *
 	 * @param  string[] $caps    Array of the user's capabilities.
 	 * @param  string   $cap     Capability being checked.
 	 * @param  int      $user_id The user ID.
@@ -667,11 +538,9 @@ class MHK_Install {
 		$meta_caps  = self::get_meta_caps();
 		$entry_caps = self::get_meta_caps( 'entry' );
 
-		// Check if meta cap is valid to proceed.
 		if ( in_array( $cap, array_keys( $meta_caps ), true ) ) {
 			$id = isset( $args[0] ) ? (int) $args[0] : 0;
 
-			// Check if meta cap requires form ID from entry.
 			if ( in_array( $cap, array_keys( $entry_caps ), true ) ) {
 				$entry = mhk_get_entry( $id, false, array( 'cap' => false ) );
 				if ( ! $entry ) {
@@ -694,11 +563,9 @@ class MHK_Install {
 				return $caps;
 			}
 
-			// If the post author is set and the user is the author...
 			if ( $form->post_author && $user_id === (int) $form->post_author ) {
 				$caps = isset( $meta_caps[ $cap ]['own'] ) ? array( $meta_caps[ $cap ]['own'] ) : array( 'do_not_allow' );
 			} else {
-				// The user is trying someone else's form.
 				$caps = isset( $meta_caps[ $cap ]['others'] ) ? array( $meta_caps[ $cap ]['others'] ) : array( 'do_not_allow' );
 			}
 		}
@@ -707,8 +574,6 @@ class MHK_Install {
 	}
 
 	/**
-	 * Display action links in the Plugins list table.
-	 *
 	 * @param  array $actions Plugin Action links.
 	 * @return array
 	 */
@@ -720,25 +585,6 @@ class MHK_Install {
 		return array_merge( $new_actions, $actions );
 	}
 
-	/**
-	 * Display row meta in the Plugins list table.
-	 *
-	 * @param  array  $plugin_meta Plugin Row Meta.
-	 * @param  string $plugin_file Plugin Row Meta.
-	 * @return array
-	 */
-	public static function plugin_row_meta( $plugin_meta, $plugin_file ) {
-		if ( MHK_PLUGIN_BASENAME === $plugin_file ) {
-			$new_plugin_meta = array(
-				'docs'    => '<a href="' . esc_url( apply_filters( 'muhiku_forms_docs_url', 'https://docs.wpmuhiku.com/documentation/plugins/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'View Muhiku Plug documentation', 'muhiku-plug' ) . '">' . esc_html__( 'Docs', 'muhiku-plug' ) . '</a>',
-				'support' => '<a href="' . esc_url( apply_filters( 'muhiku_forms_support_url', 'https://wordpress.org/support/plugin/muhiku-plug/' ) ) . '" aria-label="' . esc_attr__( 'Visit free customer support', 'muhiku-plug' ) . '">' . esc_html__( 'Free support', 'muhiku-plug' ) . '</a>',
-			);
-
-			return array_merge( $plugin_meta, $new_plugin_meta );
-		}
-
-		return (array) $plugin_meta;
-	}
 }
 
 MHK_Install::init();

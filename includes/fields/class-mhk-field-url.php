@@ -1,21 +1,12 @@
 <?php
 /**
- * URL field.
- *
  * @package MuhikuPlug\Fields
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Field_URL class.
- */
 class MHK_Field_URL extends MHK_Form_Fields {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		$this->name     = esc_html__( 'Website / URL', 'muhiku-plug' );
 		$this->type     = 'url';
@@ -46,40 +37,26 @@ class MHK_Field_URL extends MHK_Form_Fields {
 	}
 
 	/**
-	 * Field preview inside the builder.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field data and settings.
 	 */
 	public function field_preview( $field ) {
-		// Define data.
 		$placeholder = ! empty( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
 
-		// Label.
 		$this->field_preview_option( 'label', $field );
 
-		// Primary input.
 		echo '<input type="url" placeholder="' . esc_attr( $placeholder ) . '" class="widefat" disabled>';
 
-		// Description.
 		$this->field_preview_option( 'description', $field );
 	}
 
 	/**
-	 * Field display on the form front-end.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field Data.
 	 * @param array $field_atts Field attributes.
 	 * @param array $form_data All Form Data.
 	 */
 	public function field_display( $field, $field_atts, $form_data ) {
-		// Define data.
 		$primary = $field['properties']['inputs']['primary'];
 
-		// Primary field.
 		printf(
 			'<input type="url" %s %s >',
 			mhk_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),

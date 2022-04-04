@@ -1,36 +1,24 @@
 <?php
 /**
- * Provides logging capabilities for debugging purposes.
- *
- * @class   MHK_Logger
- * @version 1.0.0
  * @package MuhikuPlug/Classes
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Logger class
- */
+
 class MHK_Logger implements MHK_Logger_Interface {
 
 	/**
-	 * Stores registered log handlers.
-	 *
 	 * @var array
 	 */
 	protected $handlers;
 
 	/**
-	 * Minimum log level this handler will process.
-	 *
 	 * @var int Integer representation of minimum log level to handle.
 	 */
 	protected $threshold;
 
 	/**
-	 * Constructor for the logger.
-	 *
 	 * @param array  $handlers Optional. Array of log handlers. If $handlers is not provided, the filter 'muhiku_forms_register_log_handlers' will be used to define the handlers. If $handlers is provided, the filter will not be applied and the handlers will be used directly.
 	 * @param string $threshold Optional. Define an explicit threshold. May be configured via  MHK_LOG_THRESHOLD. By default, all logs will be processed.
 	 */
@@ -74,8 +62,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Determine whether to handle or ignore log.
-	 *
 	 * @param string $level emergency|alert|critical|error|warning|notice|info|debug.
 	 * @return bool True if the log should be handled.
 	 */
@@ -87,11 +73,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Add a log entry.
-	 *
-	 * This is not the preferred method for adding log messages. Please use log() or any one of
-	 * the level methods (debug(), info(), etc.). This method may be deprecated in the future.
-	 *
 	 * @param string $handle File handle.
 	 * @param string $message Message to log.
 	 * @param string $level Logging level.
@@ -113,8 +94,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Add a log entry.
-	 *
 	 * @param string $level One of the following:
 	 *     'emergency': System is unusable.
 	 *     'alert': Action must be taken immediately.
@@ -128,13 +107,11 @@ class MHK_Logger implements MHK_Logger_Interface {
 	 * @param array  $context Optional. Additional information for log handlers.
 	 */
 	public function log( $level, $message, $context = array() ) {
-		// Check Log is disabled.
 		if ( 'no' === get_option( 'muhiku_forms_enable_log', 'no' ) ) {
 			return false;
 		}
 
 		if ( ! MHK_Log_Levels::is_valid_level( $level ) ) {
-			/* translators: 1: MHK_Logger::log 2: level */
 			mhk_doing_it_wrong( __METHOD__, sprintf( __( '%1$s was called with an invalid level "%2$s".', 'muhiku-plug' ), '<code>MHK_Logger::log</code>', $level ), '1.2' );
 		}
 
@@ -148,12 +125,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds an emergency level message.
-	 *
-	 * System is unusable.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -162,13 +133,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds an alert level message.
-	 *
-	 * Action must be taken immediately.
-	 * Example: Entire website down, database unavailable, etc.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -177,13 +141,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds a critical level message.
-	 *
-	 * Critical conditions.
-	 * Example: Application component unavailable, unexpected exception.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -192,13 +149,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds an error level message.
-	 *
-	 * Runtime errors that do not require immediate action but should typically be logged
-	 * and monitored.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -207,15 +157,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds a warning level message.
-	 *
-	 * Exceptional occurrences that are not errors.
-	 *
-	 * Example: Use of deprecated APIs, poor use of an API, undesirable things that are not
-	 * necessarily wrong.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -224,12 +165,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds a notice level message.
-	 *
-	 * Normal but significant events.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -238,13 +173,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds a info level message.
-	 *
-	 * Interesting events.
-	 * Example: User logs in, SQL logs.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -253,12 +181,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Adds a debug level message.
-	 *
-	 * Detailed debug information.
-	 *
-	 * @see MHK_Logger::log
-	 *
 	 * @param string $message Message to log.
 	 * @param array  $context Log context.
 	 */
@@ -267,8 +189,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 	}
 
 	/**
-	 * Clear entries from chosen file.
-	 *
 	 * @param string $source Source/handle to clear.
 	 * @return bool
 	 */
@@ -283,12 +203,6 @@ class MHK_Logger implements MHK_Logger_Interface {
 		}
 		return true;
 	}
-
-	/**
-	 * Clear all logs older than a defined number of days. Defaults to 30 days.
-	 *
-	 * @since 1.6.2
-	 */
 	public function clear_expired_logs() {
 		$days      = absint( apply_filters( 'muhiku_forms_logger_days_to_retain_logs', 30 ) );
 		$timestamp = strtotime( "-{$days} days" );

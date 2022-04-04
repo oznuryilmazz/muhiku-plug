@@ -1,29 +1,18 @@
 <?php
 /**
  * Cache Helper Class
- *
- * @class   MHK_Cache_Helper
- * @version 1.0.0
  * @package MuhikuPlug/Classes
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Cache_Helper Class.
- */
 class MHK_Cache_Helper {
 
-	/**
-	 * Hook in methods.
-	 */
 	public static function init() {
 		add_action( 'admin_notices', array( __CLASS__, 'notices' ) );
 	}
 
 	/**
-	 * Get prefix for use with wp_cache_set. Allows all cache in a group to be invalidated at once.
-	 *
 	 * @param  string $group Group of cache to get.
 	 * @return string
 	 */
@@ -39,8 +28,6 @@ class MHK_Cache_Helper {
 	}
 
 	/**
-	 * Increment group cache prefix (invalidates cache).
-	 *
 	 * @param string $group Group of cache to clear.
 	 */
 	public static function incr_cache_prefix( $group ) {
@@ -48,8 +35,6 @@ class MHK_Cache_Helper {
 	}
 
 	/**
-	 * Set constants to prevent caching by some plugins.
-	 *
 	 * @param  mixed $return Value to return. Previously hooked into a filter.
 	 * @return mixed
 	 */
@@ -60,9 +45,6 @@ class MHK_Cache_Helper {
 		return $return;
 	}
 
-	/**
-	 * Notices function.
-	 */
 	public static function notices() {
 		if ( ! function_exists( 'w3tc_pgcache_flush' ) || ! function_exists( 'w3_instance' ) ) {
 			return;
@@ -77,7 +59,6 @@ class MHK_Cache_Helper {
 			<div class="error">
 				<p>
 				<?php
-				/* translators: 1: key 2: URL */
 				echo wp_kses_post( sprintf( __( 'In order for <strong>database caching</strong> to work with Muhiku Plug you must add %1$s to the "Ignored Query Strings" option in <a href="%2$s">W3 Total Cache settings</a>.', 'muhiku-plug' ), '<code>_mhk_session_</code>', esc_url( admin_url( 'admin.php?page=w3tc_dbcache' ) ) ) );
 				?>
 				</p>

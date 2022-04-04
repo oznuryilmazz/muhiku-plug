@@ -1,44 +1,29 @@
 <?php
 /**
- * EverestForms Admin Settings Class
- *
  * @package EverestForms\Admin
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 
-	/**
-	 * MHK_Admin_Settings Class.
-	 */
 	class MHK_Admin_Settings {
 
 		/**
-		 * Setting pages.
-		 *
 		 * @var array
 		 */
 		private static $settings = array();
 
 		/**
-		 * Error messages.
-		 *
 		 * @var array
 		 */
 		private static $errors = array();
 
 		/**
-		 * Update messages.
-		 *
 		 * @var array
 		 */
 		private static $messages = array();
 
-		/**
-		 * Include the settings page classes.
-		 */
 		public static function get_settings_pages() {
 			if ( empty( self::$settings ) ) {
 				$settings = array();
@@ -57,30 +42,23 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 			return self::$settings;
 		}
 
-		/**
-		 * Save the settings.
-		 */
 		public static function save() {
 			global $current_tab;
 
 			check_admin_referer( 'muhiku-forms-settings' );
 
-			// Trigger actions.
 			do_action( 'muhiku_forms_settings_save_' . $current_tab );
 			do_action( 'muhiku_forms_update_options_' . $current_tab );
 			do_action( 'muhiku_forms_update_options' );
 
 			self::add_message( esc_html__( 'Your settings have been saved.', 'muhiku-forms' ) );
 
-			// Clear any unwanted data and flush rules.
 			update_option( 'muhiku_forms_queue_flush_rewrite_rules', 'yes' );
 
 			do_action( 'muhiku_forms_settings_saved' );
 		}
 
 		/**
-		 * Add a message.
-		 *
 		 * @param string $text Message.
 		 */
 		public static function add_message( $text ) {
@@ -88,17 +66,12 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 		}
 
 		/**
-		 * Add an error.
-		 *
 		 * @param string $text Message.
 		 */
 		public static function add_error( $text ) {
 			self::$errors[] = $text;
 		}
 
-		/**
-		 * Output messages + errors.
-		 */
 		public static function show_messages() {
 			if ( count( self::$errors ) > 0 ) {
 				foreach ( self::$errors as $error ) {
@@ -111,11 +84,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 			}
 		}
 
-		/**
-		 * Settings page.
-		 *
-		 * Handles the display of the main muhiku-forms settings page in admin.
-		 */
 		public static function output() {
 			global $current_section, $current_tab;
 
@@ -133,15 +101,12 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 				)
 			);
 
-			// Get tabs for the settings page.
 			$tabs = apply_filters( 'muhiku_forms_settings_tabs_array', array() );
 
 			include dirname( __FILE__ ) . '/views/html-admin-settings.php';
 		}
 
 		/**
-		 * Get a setting from the settings API.
-		 *
 		 * @param string $option_name Option name.
 		 * @param mixed  $default     Default value.
 		 * @return mixed
@@ -151,15 +116,12 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 				return $default;
 			}
 
-			// Array value.
 			if ( strstr( $option_name, '[' ) ) {
 
 				parse_str( $option_name, $option_array );
 
-				// Option name is first key.
 				$option_name = current( array_keys( $option_array ) );
 
-				// Get value.
 				$option_values = get_option( $option_name, '' );
 
 				$key = key( $option_array[ $option_name ] );
@@ -170,7 +132,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 					$option_value = null;
 				}
 			} else {
-				// Single value.
 				$option_value = get_option( $option_name, null );
 			}
 
@@ -184,10 +145,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 		}
 
 		/**
-		 * Output admin fields.
-		 *
-		 * Loops though the muhiku-forms options array and outputs each field.
-		 *
 		 * @param array[] $options Opens array to output.
 		 */
 		public static function output_fields( $options ) {
@@ -226,7 +183,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 					$value['value'] = self::get_option( $value['id'], $value['default'] );
 				}
 
-				// Custom attribute handling.
 				$custom_attributes = array();
 
 				if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
@@ -235,15 +191,12 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 					}
 				}
 
-				// Description handling.
 				$field_description = self::get_field_description( $value );
 				$description       = $field_description['description'];
 				$tooltip_html      = $field_description['tooltip_html'];
 
-				// Switch based on type.
 				switch ( $value['type'] ) {
 
-					// Section Titles.
 					case 'title':
 						if ( ! empty( $value['title'] ) ) {
 							echo '<h2>' . esc_html( $value['title'] ) . '</h2>';
@@ -257,7 +210,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						}
 						break;
 
-					// Section Ends.
 					case 'sectionend':
 						if ( ! empty( $value['id'] ) ) {
 							do_action( 'muhiku_forms_settings_' . sanitize_title( $value['id'] ) . '_end' );
@@ -268,7 +220,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						}
 						break;
 
-					// Standard text inputs and subtypes like 'number'.
 					case 'text':
 					case 'password':
 					case 'datetime':
@@ -343,12 +294,10 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 								type="hidden"
 							>
 						<?php
-						// Adding scripts.
 						wp_enqueue_script( 'jquery' );
 						wp_enqueue_media();
 						wp_enqueue_script( 'mhk-file-uploader' );
 						break;
-					// Color picker.
 					case 'color':
 						$option_value = $value['value'];
 
@@ -382,7 +331,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						<?php
 						break;
 
-					// Textarea.
 					case 'textarea':
 						$option_value = $value['value'];
 
@@ -413,7 +361,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						<?php
 						break;
 
-					// Select boxes.
 					case 'select':
 					case 'multiselect':
 						$option_value = $value['value'];
@@ -462,7 +409,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						<?php
 						break;
 
-					// Radio inputs.
 					case 'radio':
 						$option_value = $value['value'];
 
@@ -506,7 +452,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						<?php
 						break;
 
-					// Toggle input.
 					case 'toggle':
 						$option_value = $value['value'];
 
@@ -539,53 +484,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						<?php
 						break;
 
-					// Radio image inputs.
-					case 'radio-image':
-						$option_value = $value['value'];
-
-						?>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?> <?php echo wp_kses_post( $tooltip_html ); ?></label>
-							</th>
-							<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
-								<fieldset>
-									<ul>
-									<?php
-									foreach ( $value['options'] as $key => $val ) {
-										?>
-										<li>
-											<label>
-												<img src="<?php echo esc_html( $val['image'] ); ?>">
-												<input
-												name="<?php echo esc_attr( $value['id'] ); ?>"
-												value="<?php echo esc_attr( $key ); ?>"
-												type="radio"
-												style="<?php echo esc_attr( $value['css'] ); ?>"
-												class="<?php echo esc_attr( $value['class'] ); ?>"
-												<?php
-												if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
-													foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
-														echo esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
-													}
-												}
-												?>
-												<?php checked( $key, $option_value ); ?>
-												/>
-												<?php echo esc_html( $val['name'] ); ?></label>
-										</li>
-										<?php
-									}
-									?>
-									</ul>
-									<?php echo wp_kses_post( $description ); ?>
-								</fieldset>
-							</td>
-						</tr>
-						<?php
-						break;
-
-					// Checkbox input.
 					case 'checkbox':
 						$option_value     = $value['value'];
 						$visibility_class = array();
@@ -662,7 +560,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						}
 						break;
 
-					// Single page selects.
 					case 'single_select_page':
 						$args = array(
 							'name'             => $value['id'],
@@ -692,50 +589,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						<?php
 						break;
 
-					// Days/months/years selector.
-					case 'relative_date_selector':
-						$periods      = array(
-							'days'   => __( 'Day(s)', 'muhiku-forms' ),
-							'weeks'  => __( 'Week(s)', 'muhiku-forms' ),
-							'months' => __( 'Month(s)', 'muhiku-forms' ),
-							'years'  => __( 'Year(s)', 'muhiku-forms' ),
-						);
-						$option_value = mhk_parse_relative_date_option( $value['value'] );
-						?>
-						<tr valign="top">
-							<th scope="row" class="titledesc">
-								<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?> <?php echo wp_kses_post( $tooltip_html ); ?></label>
-							</th>
-							<td class="forminp">
-							<input
-									name="<?php echo esc_attr( $value['id'] ); ?>[number]"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
-									type="number"
-									style="width: 80px;"
-									value="<?php echo esc_attr( $option_value['number'] ); ?>"
-									class="<?php echo esc_attr( $value['class'] ); ?>"
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-									step="1"
-									min="1"
-									<?php
-									if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
-										foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
-											echo esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
-										}
-									}
-									?>
-									/>&nbsp;
-								<select name="<?php echo esc_attr( $value['id'] ); ?>[unit]" style="width: auto;">
-									<?php
-									foreach ( $periods as $value => $label ) {
-										echo '<option value="' . esc_attr( $value ) . '"' . selected( $option_value['unit'], $value, false ) . '>' . esc_html( $label ) . '</option>';
-									}
-									?>
-								</select> <?php echo ( $description ) ? wp_kses_post( $description ) : ''; ?>
-							</td>
-						</tr>
-						<?php
-						break;
 					// For anchor tag.
 					case 'link':
 						?>
@@ -779,11 +632,7 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 		}
 
 		/**
-		 * Helper function to get the formatted description and tip HTML for a
-		 * given form field. Plugins can call this when implementing their own custom
-		 * settings types.
-		 *
-		 * @param  array $value The form field value array.
+		 * @param  array $value 
 		 * @return array The description and tip as a 2 element array.
 		 */
 		public static function get_field_description( $value ) {
@@ -820,33 +669,26 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 		}
 
 		/**
-		 * Save admin fields.
-		 *
-		 * Loops though the muhiku-forms options array and outputs each field.
-		 *
 		 * @param array $options Options array to output.
 		 * @param array $data    Optional. Data to use for saving. Defaults to $_POST.
 		 * @return bool
 		 */
 		public static function save_fields( $options, $data = null ) {
 			if ( is_null( $data ) ) {
-				$data = $_POST; // phpcs:ignore WordPress.Security.NonceVerification
+				$data = $_POST;
 			}
 			if ( empty( $data ) ) {
 				return false;
 			}
 
-			// Options to update will be stored here and saved later.
 			$update_options   = array();
 			$autoload_options = array();
 
-			// Loop options and get values to save.
 			foreach ( $options as $option ) {
 				if ( ! isset( $option['id'] ) || ! isset( $option['type'] ) || ( isset( $option['is_option'] ) && false === $option['is_option'] ) ) {
 					continue;
 				}
 
-				// Get posted value.
 				if ( strstr( $option['id'], '[' ) ) {
 					parse_str( $option['id'], $option_name_array );
 					$option_name  = current( array_keys( $option_name_array ) );
@@ -858,7 +700,6 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 					$raw_value    = isset( $data[ $option['id'] ] ) ? wp_unslash( $data[ $option['id'] ] ) : null;
 				}
 
-				// Format the value based on option type.
 				switch ( $option['type'] ) {
 					case 'checkbox':
 						$value = '1' === $raw_value || 'yes' === $raw_value ? 'yes' : 'no';
@@ -883,25 +724,14 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 						break;
 				}
 
-				/**
-				 * Sanitize the value of an option.
-				 *
-				 * @since 1.0.0
-				 */
 				$value = apply_filters( 'muhiku_forms_admin_settings_sanitize_option', $value, $option, $raw_value );
 
-				/**
-				 * Sanitize the value of an option by option name.
-				 *
-				 * @since 1.0.0
-				 */
 				$value = apply_filters( "muhiku_forms_admin_settings_sanitize_option_$option_name", $value, $option, $raw_value );
 
 				if ( is_null( $value ) ) {
 					continue;
 				}
 
-				// Check if option is an array and handle that differently to single values.
 				if ( $option_name && $setting_name ) {
 					if ( ! isset( $update_options[ $option_name ] ) ) {
 						$update_options[ $option_name ] = get_option( $option_name, array() );
@@ -916,15 +746,9 @@ if ( ! class_exists( 'MHK_Admin_Settings', false ) ) :
 
 				$autoload_options[ $option_name ] = isset( $option['autoload'] ) ? (bool) $option['autoload'] : true;
 
-				/**
-				 * Fire an action before saved.
-				 *
-				 * @deprecated 1.2.0 - doesn't allow manipulation of values!
-				 */
 				do_action( 'muhiku_forms_update_option', $option );
 			}
 
-			// Save all options in our array.
 			foreach ( $update_options as $name => $value ) {
 				update_option( $name, $value, $autoload_options[ $name ] ? 'yes' : 'no' );
 			}

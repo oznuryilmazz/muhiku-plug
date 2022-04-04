@@ -1,21 +1,13 @@
 <?php
 /**
- * Contains Validation functions
- *
- * @version  1.0.0
  * @package  MuhikuPlug/Classes
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Validation Class.
- */
 class MHK_Validation {
 
 	/**
-	 * Validates an email using WordPress native is_email function.
-	 *
 	 * @param  string $email Email address to validate.
 	 * @return bool
 	 */
@@ -24,8 +16,6 @@ class MHK_Validation {
 	}
 
 	/**
-	 * Validates a phone number using a regular expression.
-	 *
 	 * @param  string $phone Phone number to validate.
 	 * @return bool
 	 */
@@ -38,8 +28,6 @@ class MHK_Validation {
 	}
 
 	/**
-	 * Format the phone number.
-	 *
 	 * @param  mixed $tel Phone number to format.
 	 * @return string
 	 */

@@ -1,9 +1,6 @@
 <?php
 /**
- * Functionality related to the admin TinyMCE editor.
- *
  * @package MuhikuPlug/Admin
- * @version 1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,21 +9,13 @@ if ( ! class_exists( 'MHK_Admin_Editor', false ) ) {
 	return new MHK_Admin_Editor();
 }
 
-/**
- * MHK_Admin_Editor Class.
- */
 class MHK_Admin_Editor {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		add_action( 'media_buttons', array( $this, 'media_button' ), 15 );
 	}
 
 	/**
-	 * Allow easy shortcode insertion via a custom media button.
-	 *
 	 * @param string $editor_id Unique editor identifier, e.g. 'content'.
 	 */
 	public function media_button( $editor_id ) {
@@ -77,7 +66,6 @@ class MHK_Admin_Editor {
 							echo '<p>';
 							printf(
 								wp_kses(
-									/* translators: %s - Muhiku Builder page. */
 									__( 'Whoops, you haven\'t created a form yet. Want to <a href="%s">give it a go</a>?', 'muhiku-plug' ),
 									array(
 										'a' => array(

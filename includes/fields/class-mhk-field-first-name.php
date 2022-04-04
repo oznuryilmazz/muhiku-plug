@@ -1,23 +1,14 @@
 <?php
 /**
- * First name field.
- *
  * @package MuhikuPlug\Fields
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Field_First_Name class.
- */
 class MHK_Field_First_Name extends MHK_Form_Fields {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
-		$this->name     = esc_html__( 'First Name', 'muhiku-plug' );
+		$this->name     = esc_html__( 'İsim', 'muhiku-plug' );
 		$this->type     = 'first-name';
 		$this->icon     = 'mhk-icon mhk-icon-first-name';
 		$this->order    = 10;
@@ -46,40 +37,26 @@ class MHK_Field_First_Name extends MHK_Form_Fields {
 	}
 
 	/**
-	 * Field preview inside the builder.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $field Field data and settings.
+	 * @param array $field 
 	 */
 	public function field_preview( $field ) {
 
-		// Define data.
 		$placeholder = ! empty( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
 
-		// Label.
 		$this->field_preview_option( 'label', $field );
 
-		// Primary input.
 		echo '<input type="text" placeholder="' . esc_attr( $placeholder ) . '" class="widefat" disabled>';
 
-		// Description.
 		$this->field_preview_option( 'description', $field );
 	}
 
 	/**
-	 * Field display on the form front-end.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field Data.
 	 * @param array $field_atts Field attributes.
 	 * @param array $form_data All Form Data.
 	 */
 	public function field_display( $field, $field_atts, $form_data ) {
-		// Define data.
 		$primary = $field['properties']['inputs']['primary'];
-		// Primary field.
 		printf(
 			'<input type="text" %s %s>',
 			mhk_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),

@@ -1,27 +1,17 @@
 <?php
 /**
- * Smart tag functionality.
- *
  * @package MuhikuPlug\Classes
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Smart Tag Class.
- */
 class MHK_Smart_Tags {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		add_filter( 'muhiku_forms_process_smart_tags', array( $this, 'process' ), 10, 4 );
 	}
 
 	/**
-	 * Other smart tags.
-	 *
 	 * @return string|array
 	 */
 	public function other_smart_tags() {
@@ -48,9 +38,8 @@ class MHK_Smart_Tags {
 	}
 
 	/**
-	 * Process and parse smart tags.
 	 *
-	 * @param string       $content The string to preprocess.
+	 * @param string       $content 
 	 * @param array        $form_data Array of the form data.
 	 * @param string|array $fields Form fields.
 	 * @param int|string   $entry_id Entry ID.
@@ -58,10 +47,8 @@ class MHK_Smart_Tags {
 	 * @return string
 	 */
 	public function process( $content, $form_data, $fields = '', $entry_id = '' ) {
-		// Field smart tags (settings, etc).
 		preg_match_all( '/\{field_id="(.+?)"\}/', $content, $ids );
 
-		// We can only process field smart tags if we have $fields.
 		if ( ! empty( $ids[1] ) && ! empty( $fields ) ) {
 
 			foreach ( $ids[1] as $key => $field_id ) {
@@ -75,7 +62,6 @@ class MHK_Smart_Tags {
 				}
 
 				if ( count( $mixed_field_id ) > 1 && ! empty( $fields[ $mixed_field_id[1] ] ) ) {
-					// Properly display signature field in smart tag.
 					if ( 'signature' === $fields[ $mixed_field_id[1] ]['type'] ) {
 						if ( ! is_array( $value ) && false !== strpos( $value, $uploads['basedir'] ) ) {
 							$value = trailingslashit( content_url() ) . str_replace( str_replace( 'uploads', '', $uploads['basedir'] ), '', $value );
@@ -89,7 +75,6 @@ class MHK_Smart_Tags {
 						}
 					}
 
-					// Properly display Radio field in smart tag.
 					if ( isset( $value['image'] ) && 'radio' === $fields[ $mixed_field_id[1] ]['type'] ) {
 						if ( ! is_array( $value ) && false !== strpos( $value['image'], $uploads['basedir'] ) ) {
 							$value = trailingslashit( content_url() ) . str_replace( str_replace( 'uploads', '', $uploads['basedir'] ), '', $value['image'] );
@@ -104,7 +89,6 @@ class MHK_Smart_Tags {
 						}
 					}
 
-					// Properly display Checkboxes field in smart tag.
 					if ( isset( $value['images'] ) && ( 'checkbox' === $fields[ $mixed_field_id[1] ]['type'] || 'payment-checkbox' === $fields[ $mixed_field_id[1] ]['type'] ) ) {
 						$checkbox_images = '';
 						foreach ( $value['images'] as $image_key => $image_value ) {
@@ -123,7 +107,6 @@ class MHK_Smart_Tags {
 						$value = $checkbox_images;
 					}
 
-					// Properly display Files and Image Upload field in smart tag.
 					if ( 'image-upload' === $fields[ $mixed_field_id[1] ]['type'] || 'file-upload' === $fields[ $mixed_field_id[1] ]['type'] ) {
 						$files = '';
 
@@ -165,8 +148,6 @@ class MHK_Smart_Tags {
 				}
 			}
 		}
-
-		// Other Smart tags.
 		preg_match_all( '/\{(.+?)\}/', $content, $other_tags );
 
 		if ( ! empty( $other_tags[1] ) ) {
@@ -254,7 +235,7 @@ class MHK_Smart_Tags {
 						break;
 
 					case 'referrer_url':
-						$referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : ''; // @codingStandardsIgnoreLine
+						$referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';  
 						$content = str_replace( '{' . $other_tag . '}', sanitize_text_field( $referer ), $content );
 						break;
 

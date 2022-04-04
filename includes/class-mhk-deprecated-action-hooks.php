@@ -1,21 +1,13 @@
 <?php
 /**
- * Deprecated action hooks
- *
  * @package MuhikuPlug\Abstracts
- * @since   1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Handles deprecation notices and triggering of legacy action hooks.
- */
 class MHK_Deprecated_Action_Hooks extends MHK_Deprecated_Hooks {
 
 	/**
-	 * Array of deprecated hooks we need to handle. Format of 'new' => 'old'.
-	 *
 	 * @var array
 	 */
 	protected $deprecated_hooks = array(
@@ -45,8 +37,6 @@ class MHK_Deprecated_Action_Hooks extends MHK_Deprecated_Hooks {
 	);
 
 	/**
-	 * Array of versions on each hook has been deprecated.
-	 *
 	 * @var array
 	 */
 	protected $deprecated_version = array(
@@ -70,8 +60,6 @@ class MHK_Deprecated_Action_Hooks extends MHK_Deprecated_Hooks {
 	);
 
 	/**
-	 * Hook into the new hook so we can handle deprecated hooks once fired.
-	 *
 	 * @param string $hook_name Hook name.
 	 */
 	public function hook_in( $hook_name ) {
@@ -79,8 +67,6 @@ class MHK_Deprecated_Action_Hooks extends MHK_Deprecated_Hooks {
 	}
 
 	/**
-	 * If the old hook is in-use, trigger it.
-	 *
 	 * @param  string $new_hook          New hook name.
 	 * @param  string $old_hook          Old hook name.
 	 * @param  array  $new_callback_args New callback args.
@@ -96,8 +82,6 @@ class MHK_Deprecated_Action_Hooks extends MHK_Deprecated_Hooks {
 	}
 
 	/**
-	 * Fire off a legacy hook with it's args.
-	 *
 	 * @param  string $old_hook          Old hook name.
 	 * @param  array  $new_callback_args New callback args.
 	 * @return mixed

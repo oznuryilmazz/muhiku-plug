@@ -1,9 +1,6 @@
 <?php
 /**
- * MuhikuPlug Builder Page/Tab
- *
  * @package MuhikuPlug\Admin
- * @since   1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -14,66 +11,46 @@ if ( ! class_exists( 'MHK_Admin_Form_Panel', false ) ) {
 
 if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 
-	/**
-	 * MHK_Builder_Page Class.
-	 */
 	abstract class MHK_Builder_Page extends MHK_Admin_Form_Panel {
 
 		/**
-		 * Form object.
-		 *
 		 * @var object
 		 */
 		protected $form;
 
 		/**
-		 * Builder page id.
-		 *
 		 * @var string
 		 */
 		protected $id = '';
 
 		/**
-		 * Builder page label.
-		 *
 		 * @var string
 		 */
 		protected $label = '';
 
 		/**
-		 * Is sidebar available?
-		 *
 		 * @var boolean
 		 */
 		protected $sidebar = false;
 
 		/**
-		 * Array of form data.
-		 *
 		 * @var array
 		 */
 		public $form_data = array();
 
-		/**
-		 * Constructor.
-		 */
 		public function __construct() {
-			$form_id         = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+			$form_id         = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0;  
 			$this->form      = mhk()->form->get( $form_id );
 			$this->form_data = is_object( $this->form ) ? mhk_decode( $this->form->post_content ) : array();
 
-			// Init hooks.
 			$this->init_hooks();
 
-			// Hooks.
 			add_filter( 'muhiku_forms_builder_tabs_array', array( $this, 'add_builder_page' ), 20 );
 			add_action( 'muhiku_forms_builder_sidebar_' . $this->id, array( $this, 'output_sidebar' ) );
 			add_action( 'muhiku_forms_builder_content_' . $this->id, array( $this, 'output_content' ) );
 		}
 
 		/**
-		 * Get builder page ID.
-		 *
 		 * @return string
 		 */
 		public function get_id() {
@@ -81,8 +58,6 @@ if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 		}
 
 		/**
-		 * Get builder page label.
-		 *
 		 * @return string
 		 */
 		public function get_label() {
@@ -90,8 +65,6 @@ if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 		}
 
 		/**
-		 * Get builder page sidebar.
-		 *
 		 * @return string
 		 */
 		public function get_sidebar() {
@@ -99,8 +72,6 @@ if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 		}
 
 		/**
-		 * Get builder page form data.
-		 *
 		 * @return string
 		 */
 		public function get_form_data() {
@@ -108,8 +79,6 @@ if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 		}
 
 		/**
-		 * Add this page to builder.
-		 *
 		 * @param  array $pages Builder pages.
 		 * @return mixed
 		 */
@@ -123,12 +92,10 @@ if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 		}
 
 		/**
-		 * Add sidebar tab sections.
-		 *
-		 * @param string $name Name of the section.
-		 * @param string $slug Slug of the section.
-		 * @param string $icon Icon of the section.
-		 * @param string $container_name Name of that container.
+		 * @param string $name
+		 * @param string $slug 
+		 * @param string $icon 
+		 * @param string $container_name 
 		 */
 		public function add_sidebar_tab( $name, $slug, $icon = '', $container_name = 'setting' ) {
 			$class  = '';
@@ -144,19 +111,10 @@ if ( ! class_exists( 'MHK_Builder_Page', false ) ) :
 			echo '</a>';
 		}
 
-		/**
-		 * Hook in tabs.
-		 */
 		public function init_hooks() {}
 
-		/**
-		 * Outputs the builder sidebar.
-		 */
 		public function output_sidebar() {}
 
-		/**
-		 * Outputs the builder content.
-		 */
 		public function output_content() {}
 	}
 

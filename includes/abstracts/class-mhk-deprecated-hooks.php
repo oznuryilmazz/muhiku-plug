@@ -1,7 +1,6 @@
 <?php
 /**
  * @package MuhikuPlug\Abstracts
- * @since   1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -70,16 +69,16 @@ abstract class MHK_Deprecated_Hooks {
 
 	/**
 	 *
-	 * @param  string $new_hook          New hook name.
-	 * @param  string $old_hook          Old hook name.
-	 * @param  array  $new_callback_args New callback args.
-	 * @param  mixed  $return_value      Returned value.
+	 * @param  string $new_hook          
+	 * @param  string $old_hook          
+	 * @param  array  $new_callback_args 
+	 * @param  mixed  $return_value      
 	 * @return mixed
 	 */
 	abstract public function handle_deprecated_hook( $new_hook, $old_hook, $new_callback_args, $return_value );
 
 	/**
-	 * @param string $old_hook Old hook name.
+	 * @param string $old_hook 
 	 * @return string
 	 */
 	protected function get_deprecated_version( $old_hook ) {
@@ -87,16 +86,16 @@ abstract class MHK_Deprecated_Hooks {
 	}
 
 	/**
-	 * @param string $old_hook Old hook.
-	 * @param string $new_hook New hook.
+	 * @param string $old_hook 
+	 * @param string $new_hook
 	 */
 	protected function display_notice( $old_hook, $new_hook ) {
 		mhk_deprecated_hook( esc_html( $old_hook ), esc_html( $this->get_deprecated_version( $old_hook ) ), esc_html( $new_hook ) );
 	}
 
 	/**
-	 * @param  string $old_hook          Old hook name.
-	 * @param  array  $new_callback_args New callback args.
+	 * @param  string $old_hook          
+	 * @param  array  $new_callback_args 
 	 * @return mixed
 	 */
 	abstract protected function trigger_hook( $old_hook, $new_callback_args );

@@ -1,36 +1,26 @@
 <?php
 /**
- * Log handling functionality.
- *
  * @package MuhikuPlug\Abstracts
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Abstract MHK Log Handler Class
- */
 abstract class MHK_Log_Handler implements MHK_Log_Handler_Interface {
 
 	/**
-	 * Formats a timestamp for use in log messages.
-	 *
-	 * @param int $timestamp Log timestamp.
+	 * @param int $timestamp 
 	 *
 	 * @return string Formatted time for use in log entry.
 	 */
 	protected static function format_time( $timestamp ) {
-		return date( 'c', $timestamp ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions
+		return date( 'c', $timestamp ); 
 	}
 
 	/**
-	 * Builds a log entry text from level, timestamp and message.
-	 *
-	 * @param  int    $timestamp Log timestamp.
-	 * @param  string $level emergency|alert|critical|error|warning|notice|info|debug.
-	 * @param  string $message Log message.
-	 * @param  array  $context Additional information for log handlers.
+	 * @param  int    $timestamp 
+	 * @param  string $level 
+	 * @param  string $message 
+	 * @param  array  $context 
 	 *
 	 * @return string Formatted log entry.
 	 */

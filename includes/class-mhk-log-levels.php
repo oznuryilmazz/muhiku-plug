@@ -1,33 +1,14 @@
 <?php
 /**
- * Standard log levels
- *
- * @version 1.0.0
  * @package MuhikuPlug/Classes
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Log levels class.
- */
+
 abstract class MHK_Log_Levels {
 
-	/**
-	 * Log Levels
-	 *
-	 * Description of levels:
-	 *     'emergency': System is unusable.
-	 *     'alert': Action must be taken immediately.
-	 *     'critical': Critical conditions.
-	 *     'error': Error conditions.
-	 *     'warning': Warning conditions.
-	 *     'notice': Normal but significant condition.
-	 *     'info': Informational messages.
-	 *     'debug': Debug-level messages.
-	 *
-	 * @see @link {https://tools.ietf.org/html/rfc5424}
-	 */
+
 	const EMERGENCY = 'emergency';
 	const ALERT     = 'alert';
 	const CRITICAL  = 'critical';
@@ -38,8 +19,6 @@ abstract class MHK_Log_Levels {
 	const DEBUG     = 'debug';
 
 	/**
-	 * Level strings mapped to integer severity.
-	 *
 	 * @var array
 	 */
 	protected static $level_to_severity = array(
@@ -54,10 +33,6 @@ abstract class MHK_Log_Levels {
 	);
 
 	/**
-	 * Severity integers mapped to level strings.
-	 *
-	 * This is the inverse of $level_severity.
-	 *
 	 * @var array
 	 */
 	protected static $severity_to_level = array(
@@ -72,8 +47,6 @@ abstract class MHK_Log_Levels {
 	);
 
 	/**
-	 * Validate a level string.
-	 *
 	 * @param string $level Log level.
 	 * @return bool True if $level is a valid level.
 	 */
@@ -82,8 +55,6 @@ abstract class MHK_Log_Levels {
 	}
 
 	/**
-	 * Translate level string to integer.
-	 *
 	 * @param string $level Log level, options: emergency|alert|critical|error|warning|notice|info|debug.
 	 * @return int 100 (debug) - 800 (emergency) or 0 if not recognized
 	 */
@@ -97,8 +68,6 @@ abstract class MHK_Log_Levels {
 	}
 
 	/**
-	 * Translate severity integer to level string.
-	 *
 	 * @param int $severity Serevity level.
 	 * @return bool|string False if not recognized. Otherwise string representation of level.
 	 */

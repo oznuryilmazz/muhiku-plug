@@ -1,11 +1,6 @@
 /* exported mhkSetClipboard, mhkClearClipboard */
 
 /**
- * Simple text copy functions using native browser clipboard capabilities.
- * @since 1.2.0
- */
-
-/**
  * Set the user's clipboard contents.
  *
  * @param string data: Text to copy to clipboard.

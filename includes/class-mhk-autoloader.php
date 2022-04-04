@@ -1,28 +1,17 @@
 <?php
 /**
- * MuhikuPlug Autoloader.
- *
  * @package MuhikuPlug\Classes
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Autoloader Class.
- */
 class MHK_Autoloader {
 
 	/**
-	 * Path to the includes directory.
-	 *
 	 * @var string
 	 */
 	private $include_path = '';
 
-	/**
-	 * Class Constructor Method.
-	 */
 	public function __construct() {
 		if ( function_exists( '__autoload' ) ) {
 			spl_autoload_register( '__autoload' );
@@ -34,8 +23,6 @@ class MHK_Autoloader {
 	}
 
 	/**
-	 * Take a class name and turn it into a file name.
-	 *
 	 * @param  string $class Class name.
 	 * @return string
 	 */
@@ -44,8 +31,6 @@ class MHK_Autoloader {
 	}
 
 	/**
-	 * Include a class file.
-	 *
 	 * @param  string $path File path.
 	 * @return bool Successful or not.
 	 */
@@ -58,8 +43,6 @@ class MHK_Autoloader {
 	}
 
 	/**
-	 * Auto-load MHK classes on demand to reduce memory consumption.
-	 *
 	 * @param string $class Class name.
 	 */
 	public function autoload( $class ) {

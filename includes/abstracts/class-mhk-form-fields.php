@@ -1,99 +1,67 @@
 <?php
 /**
- * Abstract MHK_Form_Fields Class
- *
- * @version 1.0.0
  * @package MuhikuFroms/Abstracts
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Form fields class.
- */
 abstract class MHK_Form_Fields {
 
 	/**
-	 * Field name.
-	 *
 	 * @var string
 	 */
 	public $name;
 
 	/**
-	 * Field type.
-	 *
 	 * @var string
 	 */
 	public $type;
 
 	/**
-	 * Field icon.
-	 *
 	 * @var mixed
 	 */
 	public $icon = '';
 
 	/**
-	 * Field class.
-	 *
 	 * @var string
 	 */
 	public $class = '';
 
 	/**
-	 * Form ID.
-	 *
 	 * @var int|mixed
 	 */
 	public $form_id;
 
 	/**
-	 * Field group.
-	 *
 	 * @var string
 	 */
 	public $group = 'general';
 
 	/**
-	 * Is available in Pro?
-	 *
 	 * @var boolean
 	 */
 	public $is_pro = false;
 
 	/**
-	 * Placeholder to hold default value(s) for some field types.
-	 *
 	 * @var mixed
 	 */
 	public $defaults;
 
 	/**
-	 * Array of form data.
-	 *
 	 * @var array
 	 */
 	public $form_data;
 
 	/**
-	 * Array of field settings.
-	 *
 	 * @var array
 	 */
 	protected $settings = array();
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		$this->class   = $this->is_pro ? 'upgrade-modal' : $this->class;
-		$this->form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification
+		$this->form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false; 
 
-		// Init hooks.
 		$this->init_hooks();
-
-		// Hooks.
 		add_action( 'muhiku_forms_builder_fields_options_' . $this->type, array( $this, 'field_options' ) );
 		add_action( 'muhiku_forms_builder_fields_preview_' . $this->type, array( $this, 'field_preview' ) );
 		add_action( 'wp_ajax_muhiku_forms_new_field_' . $this->type, array( $this, 'field_new' ) );
@@ -105,38 +73,26 @@ abstract class MHK_Form_Fields {
 		add_filter( 'muhiku_forms_field_exporter_' . $this->type, array( $this, 'field_exporter' ) );
 	}
 
-	/**
-	 * Hook in tabs.
-	 */
 	public function init_hooks() {}
 
 	/**
-	 * Prefill field value with either fallback or dynamic data.
-	 * Needs to be public (although internal) to be used in WordPress hooks.
-	 *
-	 * @since 1.6.5
-	 *
-	 * @param array $properties Field properties.
-	 * @param array $field      Current field specific data.
-	 * @param array $form_data  Prepared form data/settings.
+	 * @param array $properties 
+	 * @param array $field      
+	 * @param array $form_data  
 	 *
 	 * @return array Modified field properties.
 	 */
 	public function field_prefill_value_property( $properties, $field, $form_data ) {
-		// Process only for current field.
 		if ( $this->type !== $field['type'] ) {
 			return $properties;
 		}
 
-		// Set the form data, so we can reuse it later, even on front-end.
 		$this->form_data = $form_data;
 
 		return $properties;
 	}
 
 	/**
-	 * Get the form fields after they are initialized.
-	 *
 	 * @return array of options
 	 */
 	public function get_field_settings() {
@@ -144,10 +100,6 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Output form fields options.
-	 *
-	 * Loops though the field options array and outputs each field.
-	 *
 	 * @param array $field Field data.
 	 */
 	public function field_options( $field ) {
@@ -179,26 +131,15 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Field preview inside the builder.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $field Field data and settings.
+	 * @param array $field 
 	 */
 	public function field_preview( $field ) {}
 
 	/**
-	 * Helper function to create field option elements.
-	 *
-	 * Field option elements are pieces that help create a field option.
-	 * They are used to quickly build field options.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string  $option Field option to render.
-	 * @param array   $field  Field data and settings.
-	 * @param array   $args   Field preview arguments.
-	 * @param boolean $echo   Print or return the value. Print by default.
+	 * @param string  $option 
+	 * @param array   $field  
+	 * @param array   $args   
+	 * @param boolean $echo  
 	 *
 	 * @return mixed echo or return string
 	 */
@@ -218,7 +159,6 @@ abstract class MHK_Form_Fields {
 			}
 		}
 
-		// BW compat for number attrs.
 		if ( ! empty( $args['min'] ) ) {
 			$args['attrs']['min'] = esc_attr( $args['min'] );
 			unset( $args['min'] );
@@ -242,20 +182,16 @@ abstract class MHK_Form_Fields {
 		}
 
 		switch ( $option ) {
-
-			// Row.
 			case 'row':
 				$output = sprintf( '<div class="muhiku-plug-field-option-row muhiku-plug-field-option-row-%s %s" id="muhiku-plug-field-option-row-%s-%s" data-field-id="%s" %s>%s</div>', $slug, $class, $id, $slug, $id, $data, $args['content'] );
 				break;
 
-			// Icon.
 			case 'icon':
 				$element_tooltip = isset( $args['tooltip'] ) ? $args['tooltip'] : 'Edit Label';
 				$icon            = isset( $args['icon'] ) ? $args['icon'] : 'dashicons-edit';
 				$output         .= sprintf( ' <i class="dashicons %s muhiku-plug-icon %s" title="%s" %s></i>', esc_attr( $icon ), $class, esc_attr( $element_tooltip ), $data );
 				break;
 
-			// Label.
 			case 'label':
 				$output = sprintf( '<label for="muhiku-plug-field-option-%s-%s" class="%s" %s>%s', $id, $slug, $class, $data, esc_html( $args['value'] ) );
 				if ( isset( $args['tooltip'] ) && ! empty( $args['tooltip'] ) ) {
@@ -267,7 +203,6 @@ abstract class MHK_Form_Fields {
 				$output .= '</label>';
 				break;
 
-			// Text input.
 			case 'text':
 				$type        = ! empty( $args['type'] ) ? esc_attr( $args['type'] ) : 'text';
 				$placeholder = ! empty( $args['placeholder'] ) ? esc_attr( $args['placeholder'] ) : '';
@@ -279,13 +214,11 @@ abstract class MHK_Form_Fields {
 				$output = sprintf( '%s<input type="%s" class="widefat %s" id="muhiku-plug-field-option-%s-%s" name="form_fields[%s][%s]" value="%s" placeholder="%s" %s>', $before, $type, $class, $id, $slug, $id, $slug, esc_attr( $args['value'] ), $placeholder, $data );
 				break;
 
-			// Textarea.
 			case 'textarea':
 				$rows   = ! empty( $args['rows'] ) ? (int) $args['rows'] : '3';
 				$output = sprintf( '<textarea class="widefat %s" id="muhiku-plug-field-option-%s-%s" name="form_fields[%s][%s]" rows="%s" %s>%s</textarea>', $class, $id, $slug, $id, $slug, $rows, $data, $args['value'] );
 				break;
 
-			// Checkbox.
 			case 'checkbox':
 				$checked = checked( '1', $args['value'], false );
 				$output  = sprintf( '<input type="checkbox" class="widefat %s" id="muhiku-plug-field-option-%s-%s" name="form_fields[%s][%s]" value="1" %s %s>', $class, $id, $slug, $id, $slug, $checked, $data );
@@ -296,7 +229,6 @@ abstract class MHK_Form_Fields {
 				$output .= '</label>';
 				break;
 
-			// Toggle.
 			case 'toggle':
 				$checked = checked( '1', $args['value'], false );
 				$icon    = $args['value'] ? 'fa-toggle-on' : 'fa-toggle-off';
@@ -306,7 +238,6 @@ abstract class MHK_Form_Fields {
 				$output .= sprintf( '<input type="checkbox" class="widefat %s" id="muhiku-plug-field-option-%s-%s" name="form_fields[%s][%s]" value="1" %s %s></span>', $class, $id, $slug, $id, $slug, $checked, $data );
 				break;
 
-			// Select.
 			case 'select':
 				$options     = $args['options'];
 				$value       = isset( $args['value'] ) ? $args['value'] : '';
@@ -331,7 +262,6 @@ abstract class MHK_Form_Fields {
 				$output .= '</select>';
 				break;
 
-			// Radio.
 			case 'radio':
 				$options = $args['options'];
 				$default = isset( $args['default'] ) ? $args['default'] : '';
@@ -361,14 +291,10 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Helper function to create common field options that are used frequently.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string  $option Option.
-	 * @param array   $field  Field data.
-	 * @param array   $args   Arguments.
-	 * @param boolean $echo   True to echo.
+	 * @param string  $option 
+	 * @param array   $field  
+	 * @param array   $args   
+	 * @param boolean $echo   
 	 *
 	 * @return mixed echo or return string
 	 */
@@ -384,13 +310,7 @@ abstract class MHK_Form_Fields {
 		}
 
 		switch ( $option ) {
-			/**
-			 * Basic Fields.
-			 */
 
-			/*
-			 * Basic Options markup.
-			 */
 			case 'basic-options':
 				if ( 'open' === $markup ) {
 					if ( $echo ) {
@@ -411,19 +331,14 @@ abstract class MHK_Form_Fields {
 				}
 				break;
 
-			/*
-			 * Field Label.
-			 */
 			case 'label':
 				$value   = ! empty( $field['label'] ) ? esc_attr( $field['label'] ) : '';
-				$tooltip = esc_html__( 'Enter text for the form field label. This is recommended and can be hidden in the Advanced Settings.', 'muhiku-plug' );
 				$output  = $this->field_element(
 					'label',
 					$field,
 					array(
 						'slug'    => 'label',
-						'value'   => esc_html__( 'Label', 'muhiku-plug' ),
-						'tooltip' => $tooltip,
+						'value'   => esc_html__( 'Alan İsmi', 'muhiku-plug' ),
 					),
 					false
 				);
@@ -447,19 +362,14 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Field Meta.
-			 */
 			case 'meta':
 				$value   = ! empty( $field['meta-key'] ) ? esc_attr( $field['meta-key'] ) : mhk_get_meta_key_field_option( $field );
-				$tooltip = esc_html__( 'Enter meta key to be stored in database.', 'muhiku-plug' );
 				$output  = $this->field_element(
 					'label',
 					$field,
 					array(
 						'slug'    => 'meta-key',
-						'value'   => esc_html__( 'Meta Key', 'muhiku-plug' ),
-						'tooltip' => $tooltip,
+						'value'   => esc_html__( 'Kısa İsim', 'muhiku-plug' ),
 					),
 					false
 				);
@@ -484,19 +394,14 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Field Description.
-			 */
 			case 'description':
 				$value   = ! empty( $field['description'] ) ? esc_attr( $field['description'] ) : '';
-				$tooltip = esc_html__( 'Enter text for the form field description.', 'muhiku-plug' );
 				$output  = $this->field_element(
 					'label',
 					$field,
 					array(
 						'slug'    => 'description',
-						'value'   => esc_html__( 'Description', 'muhiku-plug' ),
-						'tooltip' => $tooltip,
+						'value'   => esc_html__( 'Açıklama Metni', 'muhiku-plug' ),
 					),
 					false
 				);
@@ -520,21 +425,16 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Field Required toggle.
-			 */
 			case 'required':
 				$default = ! empty( $args['default'] ) ? $args['default'] : '0';
 				$value   = isset( $field['required'] ) ? $field['required'] : $default;
-				$tooltip = esc_html__( 'Check this option to mark the field required. A form will not submit unless all required fields are provided.', 'muhiku-plug' );
 				$output  = $this->field_element(
 					'checkbox',
 					$field,
 					array(
 						'slug'    => 'required',
 						'value'   => $value,
-						'desc'    => esc_html__( 'Required', 'muhiku-plug' ),
-						'tooltip' => $tooltip,
+						'desc'    => esc_html__( 'Gerekli', 'muhiku-plug' ),
 					),
 					false
 				);
@@ -548,9 +448,7 @@ abstract class MHK_Form_Fields {
 					$echo
 				);
 				break;
-			/**
-			 * Required Field Message.
-			 */
+
 			case 'required_field_message':
 				$has_sub_fields = false;
 				$sub_fields     = array();
@@ -568,152 +466,16 @@ abstract class MHK_Form_Fields {
 						$sub_fields[ $row_slug ] = array(
 							'label' => array(
 								'value'   => $row_label,
-								'tooltip' => esc_html__( 'Enter a message to show for this row if it\'s required.', 'muhiku-plug' ),
+								'tooltip' => esc_html__( 'Bu Alan Gereklidir.', 'muhiku-plug' ),
 							),
 							'text'  => array(
 								'value' => isset( $field[ $row_slug ] ) ? esc_attr( $field[ $row_slug ] ) : esc_attr( $required_validation ),
 							),
 						);
 					}
-				} elseif ( 'address' === $field['type'] ) {
-					$has_sub_fields = true;
-					$sub_fields     = array(
-						'required-field-message-address1' => array(
-							'label' => array(
-								'value'   => esc_html__( 'Address Line 1', 'muhiku-plug' ),
-								'tooltip' => esc_html__( 'Enter a message to show for Address Line 1 if it\'s required.', 'muhiku-plug' ),
-							),
-							'text'  => array(
-								'value' => isset( $field['required-field-message-address1'] ) ? esc_attr( $field['required-field-message-address1'] ) : esc_attr( $required_validation ),
-							),
-						),
-						'required-field-message-city'     => array(
-							'label' => array(
-								'value'   => esc_html__( 'City', 'muhiku-plug' ),
-								'tooltip' => esc_html__( 'Enter a message to show for City if it\'s required.', 'muhiku-plug' ),
-							),
-							'text'  => array(
-								'value' => isset( $field['required-field-message-city'] ) ? esc_attr( $field['required-field-message-city'] ) : esc_attr( $required_validation ),
-							),
-						),
-						'required-field-message-state'    => array(
-							'label' => array(
-								'value'   => esc_html__( 'State / Province / Region', 'muhiku-plug' ),
-								'tooltip' => esc_html__( 'Enter a message to show for State/Province/Region if it\'s required.', 'muhiku-plug' ),
-							),
-							'text'  => array(
-								'value' => isset( $field['required-field-message-state'] ) ? esc_attr( $field['required-field-message-state'] ) : esc_attr( $required_validation ),
-							),
-						),
-						'required-field-message-postal'   => array(
-							'label' => array(
-								'value'   => esc_html__( 'Zip / Postal Code', 'muhiku-plug' ),
-								'tooltip' => esc_html__( 'Enter a message to show for Zip/Postal Code if it\'s required.', 'muhiku-plug' ),
-							),
-							'text'  => array(
-								'value' => isset( $field['required-field-message-postal'] ) ? esc_attr( $field['required-field-message-postal'] ) : esc_attr( $required_validation ),
-							),
-						),
-						'required-field-message-country'  => array(
-							'label' => array(
-								'value'   => esc_html__( 'Country', 'muhiku-plug' ),
-								'tooltip' => esc_html__( 'Enter a message to show for Country if it\'s required.', 'muhiku-plug' ),
-							),
-							'text'  => array(
-								'value' => isset( $field['required-field-message-country'] ) ? esc_attr( $field['required-field-message-country'] ) : esc_attr( $required_validation ),
-							),
-						),
-					);
-				}
-
-				if ( true === $has_sub_fields ) {
-					$sub_field_output_array = array();
-					foreach ( $sub_fields as $sub_field_slug => $sub_field_data ) {
-						$value   = isset( $field['required-field-message'] ) ? esc_attr( $field['required-field-message'] ) : esc_attr( $required_validation );
-						$tooltip = esc_html__( 'Enter a message to show for this field if it\'s required.', 'muhiku-plug' );
-						$output  = $this->field_element(
-							'label',
-							$field,
-							array(
-								'slug'    => $sub_field_slug,
-								'value'   => $sub_field_data['label']['value'],
-								'tooltip' => $sub_field_data['label']['tooltip'],
-							),
-							false
-						);
-						$output .= $this->field_element(
-							'text',
-							$field,
-							array(
-								'slug'  => $sub_field_slug,
-								'value' => $sub_field_data['text']['value'],
-							),
-							false
-						);
-						$output  = $this->field_element(
-							'row',
-							$field,
-							array(
-								'slug'    => $sub_field_slug,
-								'content' => $output,
-							),
-							false
-						);
-
-						$sub_field_output_array[] = $output;
-					}
-
-					$output = implode( '', $sub_field_output_array );
-					$output = $this->field_element(
-						'row',
-						$field,
-						array(
-							'slug'    => 'required-field-message',
-							'class'   => isset( $field['required'] ) ? '' : 'hidden',
-							'content' => $output,
-						),
-						$echo
-					);
-				} else {
-					$value   = isset( $field['required-field-message'] ) ? esc_attr( $field['required-field-message'] ) : esc_attr( $required_validation );
-					$tooltip = esc_html__( 'Enter a message to show for this field if it\'s required.', 'muhiku-plug' );
-
-					$output  = $this->field_element(
-						'label',
-						$field,
-						array(
-							'slug'    => 'required-field-message',
-							'value'   => esc_html__( 'Required Field Message', 'muhiku-plug' ),
-							'tooltip' => $tooltip,
-						),
-						false
-					);
-					$output .= $this->field_element(
-						'text',
-						$field,
-						array(
-							'slug'  => 'required-field-message',
-							'value' => $value,
-							'class' => 'muhiku-plug-field-option-row',
-						),
-						false
-					);
-					$output  = $this->field_element(
-						'row',
-						$field,
-						array(
-							'slug'    => 'required-field-message',
-							'class'   => isset( $field['required'] ) ? '' : 'hidden',
-							'content' => $output,
-						),
-						$echo
-					);
-				}
+				} 
 				break;
 
-			/**
-			 * Field Visibilty.
-			 */
 			case 'field_visiblity':
 				$default        = ! empty( $args['default'] ) ? $args['default'] : '0';
 				$readonly_value = isset( $field['readonly_field_visibility'] ) ? $field['readonly_field_visibility'] : $default;
@@ -762,9 +524,6 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-				/**
-			 * No Duplicates.
-			 */
 			case 'no_duplicates':
 				$default = ! empty( $args['default'] ) ? $args['default'] : '0';
 				$value   = ! empty( $field['no_duplicates'] ) ? esc_attr( $field['no_duplicates'] ) : '';
@@ -790,9 +549,7 @@ abstract class MHK_Form_Fields {
 					$echo
 				);
 				break;
-				/**
-			 * No Duplicates.
-			 */
+
 			case 'autocomplete_address':
 				$default = ! empty( $args['default'] ) ? $args['default'] : '0';
 				$value   = ! empty( $field['autocomplete_address'] ) ? esc_attr( $field['autocomplete_address'] ) : '';
@@ -857,9 +614,6 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Code Block.
-			 */
 			case 'code':
 				$value   = ! empty( $field['code'] ) ? esc_attr( $field['code'] ) : '';
 				$tooltip = esc_html__( 'Enter code for the form field.', 'muhiku-plug' );
@@ -893,9 +647,6 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Choices.
-			 */
 			case 'choices':
 				$class      = array();
 				$label      = ! empty( $args['label'] ) ? esc_html( $args['label'] ) : esc_html__( 'Choices', 'muhiku-plug' );
@@ -913,52 +664,21 @@ abstract class MHK_Form_Fields {
 				if ( ! empty( $field['multiple_choices'] ) ) {
 					$input_type = 'checkbox';
 				}
-
-				// Add bulk options toggle handle.
-				$bulk_add_enabled           = apply_filters( 'mhk_bulk_add_enabled', true );
-				$licensed                   = ( false === mhk_get_license_plan() ) ? false : true;
-				$upgradable_feature_class   = ( true === $licensed ) ? '' : 'mhk-upgradable-feature';
-				$bulk_options_toggle_handle = sprintf( '<a href="#" class="mhk-toggle-bulk-options after-label-description %s">%s</a>', esc_attr( $upgradable_feature_class ), esc_html__( 'Bulk Add', 'muhiku-plug' ) );
-
-				// Field label.
-				$field_label   = $this->field_element(
-					'label',
-					$field,
-					array(
-						'slug'          => 'choices',
-						'value'         => $label,
-						'tooltip'       => esc_html__( 'Add choices for the form field.', 'muhiku-plug' ),
-						'after_tooltip' => $bulk_options_toggle_handle, // @todo Bulk import and export for choices.
-					)
-				);
 				$field_content = '';
 
-				if ( true === $bulk_add_enabled && true === $licensed ) {
-					$field_content .= $this->field_option(
-						'add_bulk_options',
-						$field,
-						array(
-							'class' => 'muhiku-plug-hidden',
-						)
-					);
-				}
 
 				if ( 'select' === $field['type'] ) {
 					$selection_btn   = array();
 					$selection_types = array(
 						'single'   => array(
 							'type'  => 'radio',
-							'label' => esc_html__( 'Single Selection', 'muhiku-plug' ),
-						),
-						'multiple' => array(
-							'type'  => 'checkbox',
-							'label' => esc_html__( 'Multiple Selection', 'muhiku-plug' ),
+							'label' => esc_html__( 'Tekli Seçim', 'muhiku-plug' ),
 						),
 					);
 
 					$active_type = ! empty( $field['multiple_choices'] ) && '1' === $field['multiple_choices'] ? 'multiple' : 'single';
 					foreach ( $selection_types as $key => $selection_type ) {
-						$selection_btn[ $key ] = '<span data-selection="' . esc_attr( $key ) . '" data-type="' . esc_attr( $selection_type['type'] ) . '" class="flex muhiku-plug-btn ' . ( $active_type === $key ? 'is-active' : '' ) . ' ' . ( false === $licensed && 'multiple' === $key ? 'upgrade-modal' : '' ) . '" data-feature="' . esc_html__( 'Multiple selection', 'muhiku-plug' ) . '">' . esc_html( $selection_type['label'] ) . '</span>';
+						$selection_btn[ $key ] = '<span data-selection="' . esc_attr( $key ) . '" data-type="' . esc_attr( $selection_type['type'] ) . '" class="flex muhiku-plug-btn ' . ( $active_type === $key ? 'is-active' : '' ) . '" data-feature="' . esc_html__( 'Multiple selection', 'muhiku-plug' ) . '">' . esc_html( $selection_type['label'] ) . '</span>';
 					}
 
 					$field_content .= sprintf(
@@ -969,7 +689,6 @@ abstract class MHK_Form_Fields {
 					);
 				}
 
-				// Field contents.
 				$field_content .= sprintf(
 					'<ul data-next-id="%s" class="mhk-choices-list %s" data-field-id="%s" data-field-type="%s">',
 					max( array_keys( $choices ) ) + 1,
@@ -982,7 +701,6 @@ abstract class MHK_Form_Fields {
 					$name    = sprintf( 'form_fields[%s][choices][%s]', $field['id'], $key );
 					$image   = ! empty( $choice['image'] ) ? $choice['image'] : '';
 
-					// BW compatibility for value in payment fields.
 					if ( ! empty( $field['amount'][ $key ]['value'] ) ) {
 						$choice['value'] = mhk_format_amount( mhk_sanitize_amount( $field['amount'][ $key ]['value'] ) );
 					}
@@ -1017,21 +735,17 @@ abstract class MHK_Form_Fields {
 				}
 				$field_content .= '</ul>';
 
-				// Final field output.
 				$output = $this->field_element(
 					'row',
 					$field,
 					array(
 						'slug'    => 'choices',
-						'content' => $field_label . $field_content,
+						'content' =>  $field_content,
 					),
 					$echo
 				);
 				break;
 
-			/*
-			 * Choices Images.
-			 */
 			case 'choices_images':
 				$field_content = sprintf(
 					'<div class="notice notice-warning%s"><p>%s</p></div>',
@@ -1039,19 +753,6 @@ abstract class MHK_Form_Fields {
 					esc_html__( 'For best results, images should be square and at least 200 × 160 pixels or smaller.', 'muhiku-plug' )
 				);
 
-				$field_content .= $this->field_element(
-					'checkbox',
-					$field,
-					array(
-						'slug'    => 'choices_images',
-						'value'   => isset( $field['choices_images'] ) ? '1' : '0',
-						'desc'    => esc_html__( 'Use image choices', 'muhiku-plug' ),
-						'tooltip' => esc_html__( 'Check this option to enable using images with the choices.', 'muhiku-plug' ),
-					),
-					false
-				);
-
-				// Final field output.
 				$output = $this->field_element(
 					'row',
 					$field,
@@ -1063,14 +764,10 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/**
-			 * Add bulk options.
-			 */
 			case 'add_bulk_options':
 				$class = ! empty( $args['class'] ) ? esc_attr( $args['class'] ) : '';
 				$label = ! empty( $args['label'] ) ? esc_html( $args['label'] ) : esc_html__( 'Add Bulk Options', 'muhiku-plug' );
 
-				// Field label.
 				$field_label = $this->field_element(
 					'label',
 					$field,
@@ -1083,7 +780,6 @@ abstract class MHK_Form_Fields {
 					false
 				);
 
-				// Preset contents.
 				$presets      = array(
 					array(
 						'label'   => esc_html__( 'Months', 'muhiku-plug' ),
@@ -1196,7 +892,6 @@ abstract class MHK_Form_Fields {
 				}
 				$presets_html .= '</div>';
 
-				// Field contents.
 				$field_content  = $this->field_element(
 					'textarea',
 					$field,
@@ -1208,7 +903,6 @@ abstract class MHK_Form_Fields {
 				);
 				$field_content .= sprintf( '<a class="button button-small mhk-add-bulk-options" href="#">%s</a>', esc_html__( 'Add New Choices', 'muhiku-plug' ) );
 
-				// Final field output.
 				$output = $this->field_element(
 					'row',
 					$field,
@@ -1221,24 +915,15 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/**
-			 * Advanced Fields.
-			 */
-
-			/*
-			 * Default value.
-			 */
 			case 'default_value':
 				$value   = ! empty( $field['default_value'] ) || ( isset( $field['default_value'] ) && '0' === (string) $field['default_value'] ) ? esc_attr( $field['default_value'] ) : '';
-				$tooltip = esc_html__( 'Enter text for the default form field value.', 'muhiku-plug' );
 				$toggle  = '';
 				$output  = $this->field_element(
 					'label',
 					$field,
 					array(
 						'slug'          => 'default_value',
-						'value'         => esc_html__( 'Default Value', 'muhiku-plug' ),
-						'tooltip'       => $tooltip,
+						'value'         => esc_html__( 'Varsayılan Değer', 'muhiku-plug' ),
 						'after_tooltip' => $toggle,
 					),
 					false
@@ -1253,7 +938,6 @@ abstract class MHK_Form_Fields {
 					false
 				);
 
-				// Smart tag for default value.
 				$exclude_fields = array( 'rating', 'number', 'range-slider', 'payment-quantity' );
 
 				if ( ! in_array( $field['type'], $exclude_fields, true ) ) {
@@ -1274,9 +958,6 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Advanced Options markup.
-			 */
 			case 'advanced-options':
 				$markup = ! empty( $args['markup'] ) ? $args['markup'] : 'open';
 
@@ -1285,11 +966,11 @@ abstract class MHK_Form_Fields {
 					$override = ! empty( $override ) ? 'style="display:' . $override . ';"' : '';
 					if ( $echo ) {
 						echo sprintf( '<div class="muhiku-plug-field-option-group muhiku-plug-field-option-group-advanced muhiku-plug-hide closed" id="muhiku-plug-field-option-advanced-%s" %s>', esc_attr( $field['id'] ), ( ! empty( $override ) ? 'style="display:' . esc_attr( apply_filters( 'muhiku_forms_advanced_options_override', false ) ) . ';"' : '' ) );
-						echo sprintf( '<a href="#" class="muhiku-plug-field-option-group-toggle">%s<i class="handlediv"></i></a>', esc_html__( 'Advanced Options', 'muhiku-plug' ) );
+						echo sprintf( '<a href="#" class="muhiku-plug-field-option-group-toggle">%s<i class="handlediv"></i></a>', esc_html__( 'Geliştirilmiş Seçenekler', 'muhiku-plug' ) );
 						echo '<div class="muhiku-plug-field-option-group-inner">';
 					} else {
 						$output  = sprintf( '<div class="muhiku-plug-field-option-group muhiku-plug-field-option-group-advanced muhiku-plug-hide closed" id="muhiku-plug-field-option-advanced-%s" %s>', $field['id'], $override );
-						$output .= sprintf( '<a href="#" class="muhiku-plug-field-option-group-toggle">%s<i class="handlediv"></i></a>', __( 'Advanced Options', 'muhiku-plug' ) );
+						$output .= sprintf( '<a href="#" class="muhiku-plug-field-option-group-toggle">%s<i class="handlediv"></i></a>', __( 'Geliştirilmiş Seçenekler', 'muhiku-plug' ) );
 						$output .= '<div class="muhiku-plug-field-option-group-inner">';
 					}
 				} else {
@@ -1302,19 +983,14 @@ abstract class MHK_Form_Fields {
 
 				break;
 
-			/*
-			 * Placeholder.
-			 */
 			case 'placeholder':
 				$value   = ! empty( $field['placeholder'] ) || ( isset( $field['placeholder'] ) && '0' === (string) $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
-				$tooltip = esc_html__( 'Enter text for the form field placeholder.', 'muhiku-plug' );
 				$output  = $this->field_element(
 					'label',
 					$field,
 					array(
 						'slug'    => 'placeholder',
-						'value'   => esc_html__( 'Placeholder Text', 'muhiku-plug' ),
-						'tooltip' => $tooltip,
+						'value'   => esc_html__( 'Yer Tutucu Metin', 'muhiku-plug' ),
 					),
 					false
 				);
@@ -1367,7 +1043,6 @@ abstract class MHK_Form_Fields {
 					$tooltip = esc_html__( 'Enter name of the parameter to populate the field.', 'muhiku-plug' );
 					$value   = ! empty( $field['parameter_name'] ) ? esc_attr( $field['parameter_name'] ) : '';
 
-					// Build output.
 					$output  = $this->field_element(
 						'label',
 						$field,
@@ -1400,62 +1075,16 @@ abstract class MHK_Form_Fields {
 					);
 				break;
 
-			/*
-			 * CSS classes.
-			 */
-			case 'css':
-				$toggle  = '';
-				$tooltip = esc_html__( 'Enter CSS class names for this field container. Multiple class names should be separated with spaces.', 'muhiku-plug' );
-				$value   = ! empty( $field['css'] ) ? esc_attr( $field['css'] ) : '';
-
-				// Build output.
-				$output  = $this->field_element(
-					'label',
-					$field,
-					array(
-						'slug'          => 'css',
-						'value'         => esc_html__( 'CSS Classes', 'muhiku-plug' ),
-						'tooltip'       => $tooltip,
-						'after_tooltip' => $toggle,
-					),
-					false
-				);
-				$output .= $this->field_element(
-					'text',
-					$field,
-					array(
-						'slug'  => 'css',
-						'value' => $value,
-					),
-					false
-				);
-				$output  = $this->field_element(
-					'row',
-					$field,
-					array(
-						'slug'    => 'css',
-						'content' => $output,
-					),
-					$echo
-				);
-				break;
-
-			/*
-			 * Hide Label.
-			 */
 			case 'label_hide':
 				$value   = isset( $field['label_hide'] ) ? $field['label_hide'] : '0';
-				$tooltip = esc_html__( 'Check this option to hide the form field label.', 'muhiku-plug' );
 
-				// Build output.
 				$output = $this->field_element(
 					'checkbox',
 					$field,
 					array(
 						'slug'    => 'label_hide',
 						'value'   => $value,
-						'desc'    => esc_html__( 'Hide Label', 'muhiku-plug' ),
-						'tooltip' => $tooltip,
+						'desc'    => esc_html__( 'Alanı Gizle', 'muhiku-plug' ),
 					),
 					false
 				);
@@ -1470,14 +1099,10 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Hide Sub-Labels.
-			 */
 			case 'sublabel_hide':
 				$value   = isset( $field['sublabel_hide'] ) ? $field['sublabel_hide'] : '0';
 				$tooltip = esc_html__( 'Check this option to hide the form field sub-label.', 'muhiku-plug' );
 
-				// Build output.
 				$output = $this->field_element(
 					'checkbox',
 					$field,
@@ -1500,54 +1125,6 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/*
-			 * Input columns.
-			 */
-			case 'input_columns':
-				$value   = ! empty( $field['input_columns'] ) ? esc_attr( $field['input_columns'] ) : '';
-				$tooltip = esc_html__( 'Select the column layout for displaying field choices.', 'muhiku-plug' );
-				$options = array(
-					''       => esc_html__( 'One Column', 'muhiku-plug' ),
-					'2'      => esc_html__( 'Two Columns', 'muhiku-plug' ),
-					'3'      => esc_html__( 'Three Columns', 'muhiku-plug' ),
-					'inline' => esc_html__( 'Inline', 'muhiku-plug' ),
-				);
-
-				// Build output.
-				$output  = $this->field_element(
-					'label',
-					$field,
-					array(
-						'slug'    => 'input_columns',
-						'value'   => esc_html__( 'Layout', 'muhiku-plug' ),
-						'tooltip' => $tooltip,
-					),
-					false
-				);
-				$output .= $this->field_element(
-					'select',
-					$field,
-					array(
-						'slug'    => 'input_columns',
-						'value'   => $value,
-						'options' => $options,
-					),
-					false
-				);
-				$output  = $this->field_element(
-					'row',
-					$field,
-					array(
-						'slug'    => 'input_columns',
-						'content' => $output,
-					),
-					$echo
-				);
-				break;
-
-			/**
-			* Whitelisted Domain.
-			*/
 			case 'whitelist_domain':
 				$default = ! empty( $args['default'] ) ? $args['default'] : '0';
 				$value   = ! empty( $field['whitelist_domain'] ) ? esc_attr( $field['whitelist_domain'] ) : '';
@@ -1606,39 +1183,6 @@ abstract class MHK_Form_Fields {
 				);
 				break;
 
-			/**
-			 * Select All.
-			 */
-			case 'select_all':
-				$value   = isset( $field['select_all'] ) ? '1' : '0';
-				$tooltip = esc_html__( 'Check this option to hide the form field label.', 'muhiku-plug' );
-
-				$output = $this->field_element(
-					'checkbox',
-					$field,
-					array(
-						'slug'    => 'select_all',
-						'value'   => $value,
-						'class'   => 'mhk-select-all-chk',
-						'desc'    => esc_html__( 'Select All', 'muhiku-plug' ),
-						'tooltip' => esc_html__( 'Check this option to select all the options.', 'muhiku-plug' ),
-					),
-					false
-				);
-				$output = $this->field_element(
-					'row',
-					$field,
-					array(
-						'slug'    => 'select_all',
-						'content' => $output,
-					),
-					$echo
-				);
-				break;
-
-			/*
-			 * Default.
-			 */
 			default:
 				if ( is_callable( array( $this, $option ) ) ) {
 					$this->{$option}( $field );
@@ -1660,22 +1204,17 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Helper function to create common field options that are used frequently
-	 * in the field preview.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string  $option Field option to render.
-	 * @param array   $field  Field data and settings.
-	 * @param array   $args   Field preview arguments.
-	 * @param boolean $echo   Print or return the value. Print by default.
+	 * @param string  $option 
+	 * @param array   $field  
+	 * @param array   $args   
+	 * @param boolean $echo   
 	 *
 	 * @return mixed Print or return a string.
 	 */
 	public function field_preview_option( $option, $field, $args = array(), $echo = true ) {
 		$output    = '';
 		$class     = ! empty( $args['class'] ) ? mhk_sanitize_classes( $args['class'] ) : '';
-		$form_id   = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		$form_id   = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0;  
 		$form_data = mhk()->form->get( absint( $form_id ), array( 'content_only' => true ) );
 		$markup    = '';
 
@@ -1728,14 +1267,12 @@ abstract class MHK_Form_Fields {
 				$values         = ! empty( $field['choices'] ) ? $field['choices'] : $this->defaults;
 				$choices_fields = array( 'select', 'radio', 'checkbox', 'payment-multiple', 'payment-checkbox' );
 
-				// Notify if choices source is currently empty.
 				if ( empty( $values ) ) {
 					$values = array(
 						'label' => esc_html__( '(empty)', 'muhiku-plug' ),
 					);
 				}
 
-				// Build output.
 				if ( ! in_array( $field['type'], $choices_fields, true ) ) {
 					break;
 				}
@@ -1773,12 +1310,10 @@ abstract class MHK_Form_Fields {
 					if ( $echo ) {
 						echo sprintf( '<select class="%s" %s data-placeholder="%s" disabled>', esc_attr( mhk_sanitize_classes( $list_class, true ) ), esc_attr( $multiple ), esc_attr( $placeholder ) );
 
-						// Optional placeholder.
 						if ( ! empty( $placeholder ) ) {
 							echo sprintf( '<option value="" class="placeholder">%s</option>', esc_html( $placeholder ) );
 						}
 
-						// Build the select options (even though user can only see 1st option).
 						foreach ( $values as $value ) {
 							$default  = isset( $value['default'] ) ? (bool) $value['default'] : false;
 							$selected = ! empty( $placeholder ) && empty( $multiple ) ? '' : selected( true, $default, false );
@@ -1789,12 +1324,10 @@ abstract class MHK_Form_Fields {
 					} else {
 						$output = sprintf( '<select class="%s" %s data-placeholder="%s" disabled>', mhk_sanitize_classes( $list_class, true ), esc_attr( $multiple ), esc_attr( $placeholder ) );
 
-						// Optional placeholder.
 						if ( ! empty( $placeholder ) ) {
 							$output .= sprintf( '<option value="" class="placeholder">%s</option>', esc_html( $placeholder ) );
 						}
 
-						// Build the select options (even though user can only see 1st option).
 						foreach ( $values as $value ) {
 							$default  = isset( $value['default'] ) ? (bool) $value['default'] : false;
 							$selected = ! empty( $placeholder ) && empty( $multiple ) ? '' : selected( true, $default, false );
@@ -1808,7 +1341,6 @@ abstract class MHK_Form_Fields {
 					if ( $echo ) {
 						echo sprintf( '<ul class="%s">', esc_attr( mhk_sanitize_classes( $list_class, true ) ) );
 
-						// Individual checkbox/radio options.
 						foreach ( $values as $value ) {
 							$default     = isset( $value['default'] ) ? $value['default'] : '';
 							$selected    = checked( '1', $default, false );
@@ -1852,7 +1384,6 @@ abstract class MHK_Form_Fields {
 					} else {
 						$output = sprintf( '<ul class="%s">', mhk_sanitize_classes( $list_class, true ) );
 
-						// Individual checkbox/radio options.
 						foreach ( $values as $value ) {
 							$default     = isset( $value['default'] ) ? $value['default'] : '';
 							$selected    = checked( '1', $default, false );
@@ -1908,31 +1439,21 @@ abstract class MHK_Form_Fields {
 		}
 	}
 
-	/**
-	 * Create a new field in the admin AJAX editor.
-	 *
-	 * @since 1.0.0
-	 */
 	public function field_new() {
-		// Run a security check.
 		check_ajax_referer( 'muhiku_forms_field_drop', 'security' );
 
-		// Check for form ID.
 		if ( ! isset( $_POST['form_id'] ) || empty( $_POST['form_id'] ) ) {
 			die( esc_html__( 'No form ID found', 'muhiku-plug' ) );
 		}
 
-		// Check for permissions.
 		if ( ! current_user_can( 'muhiku_forms_edit_form', (int) $_POST['form_id'] ) ) {
 			die( esc_html__( 'You do no have permission.', 'muhiku-plug' ) );
 		}
 
-		// Check for field type to add.
 		if ( ! isset( $_POST['field_type'] ) || empty( $_POST['field_type'] ) ) {
 			die( esc_html__( 'No field type found', 'muhiku-plug' ) );
 		}
 
-		// Grab field data.
 		$field_args     = ! empty( $_POST['defaults'] ) && is_array( $_POST['defaults'] ) ? array_map( 'sanitize_text_field', wp_unslash( $_POST['defaults'] ) ) : array();
 		$field_type     = esc_attr( sanitize_text_field( wp_unslash( $_POST['field_type'] ) ) );
 		$field_id       = mhk()->form->field_unique_key( sanitize_text_field( wp_unslash( $_POST['form_id'] ) ) );
@@ -1947,13 +1468,11 @@ abstract class MHK_Form_Fields {
 		$field_required = apply_filters( 'muhiku_forms_field_new_required', '', $field );
 		$field_class    = apply_filters( 'muhiku_forms_field_new_class', '', $field );
 
-		// Field types that default to required.
 		if ( ! empty( $field_required ) ) {
 			$field_required    = 'required';
 			$field['required'] = '1';
 		}
 
-		// Build Preview.
 		ob_start();
 		$this->field_preview( $field );
 		$preview  = sprintf( '<div class="muhiku-plug-field muhiku-plug-field-%s %s %s" id="muhiku-plug-field-%s" data-field-id="%s" data-field-type="%s">', $field_type, $field_required, $field_class, $field['id'], $field['id'], $field_type );
@@ -1970,7 +1489,6 @@ abstract class MHK_Form_Fields {
 		$preview .= ob_get_clean();
 		$preview .= '</div>';
 
-		// Build Options.
 		$options      = sprintf( '<div class="muhiku-plug-field-option muhiku-plug-field-option-%s" id="muhiku-plug-field-option-%s" data-field-id="%s">', esc_attr( $field['type'] ), $field['id'], $field['id'] );
 			$options .= sprintf( '<input type="hidden" name="form_fields[%s][id]" value="%s" class="muhiku-plug-field-option-hidden-id">', $field['id'], $field['id'] );
 			$options .= sprintf( '<input type="hidden" name="form_fields[%s][type]" value="%s" class="muhiku-plug-field-option-hidden-type">', $field['id'], esc_attr( $field['type'] ) );
@@ -1982,7 +1500,6 @@ abstract class MHK_Form_Fields {
 		$form_field_array = explode( '-', $field_id );
 		$field_id_int     = absint( $form_field_array[ count( $form_field_array ) - 1 ] );
 
-		// Prepare to return compiled results.
 		wp_send_json_success(
 			array(
 				'form_id'       => (int) $_POST['form_id'],
@@ -1995,10 +1512,6 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Field display on the form front-end.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field Data.
 	 * @param array $field_atts Field attributes.
 	 * @param array $form_data All Form Data.
@@ -2006,10 +1519,6 @@ abstract class MHK_Form_Fields {
 	public function field_display( $field, $field_atts, $form_data ) {}
 
 	/**
-	 * Edit form field display on the entry back-end.
-	 *
-	 * @since 1.7.0
-	 *
 	 * @param array $entry_field Entry field data.
 	 * @param array $field       Field data.
 	 * @param array $form_data   Form data and settings.
@@ -2030,14 +1539,10 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Get the value to prefill, based on field data and current properties.
-	 *
-	 * @since 1.7.0
-	 *
-	 * @param string $raw_value  Raw Value, always a string.
-	 * @param string $input      Subfield inside the field.
-	 * @param array  $properties Field properties.
-	 * @param array  $field      Field specific data.
+	 * @param string $raw_value  
+	 * @param string $input      
+	 * @param array  $properties 
+	 * @param array  $field      
 	 *
 	 * @return array Modified field properties.
 	 */
@@ -2057,7 +1562,6 @@ abstract class MHK_Form_Fields {
 			) {
 				$properties['inputs'][ $input ]['attr']['value'] = $get_value;
 
-				// Update data attributes depending on the field type.
 				if ( isset( $field['type'] ) && 'range-slider' === $field['type'] ) {
 					$properties['inputs'][ $input ]['data']['from'] = $get_value;
 				}
@@ -2068,10 +1572,6 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Get the value to prefill for choices section, based on field data and current properties.
-	 *
-	 * @since 1.7.0
-	 *
 	 * @param string $get_value  Requested value.
 	 * @param array  $properties Field properties.
 	 * @param array  $field      Field specific data.
@@ -2093,7 +1593,6 @@ abstract class MHK_Form_Fields {
 			}
 		}
 
-		// Redefine selected choice.
 		if ( null !== $default_key ) {
 			foreach ( $field['choices'] as $choice_key => $choice_arr ) {
 				if ( $choice_key === $default_key ) {
@@ -2108,12 +1607,8 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Remove all admin-defined defaults from choices-related fields only.
-	 *
-	 * @since 1.7.0
-	 *
-	 * @param array $field      Field data and settings.
-	 * @param array $properties Field Properties to be modified.
+	 * @param array $field     
+	 * @param array $properties 
 	 */
 	protected function remove_field_choices_defaults( $field, &$properties ) {
 		if ( ! empty( $field['choices'] ) ) {
@@ -2132,12 +1627,8 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Display field input errors if present.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key   Input key.
-	 * @param array  $field Field data and settings.
+	 * @param string $key   
+	 * @param array  $field 
 	 */
 	public function field_display_error( $key, $field ) {
 		// Need an error.
@@ -2153,16 +1644,11 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Display field input sublabel if present.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key      Input key.
-	 * @param string $position Sublabel position.
-	 * @param array  $field    Field data and settings.
+	 * @param string $key      
+	 * @param string $position 
+	 * @param array  $field    
 	 */
 	public function field_display_sublabel( $key, $position, $field ) {
-		// Need a sublabel value.
 		if ( empty( $field['properties']['inputs'][ $key ]['sublabel']['value'] ) ) {
 			return;
 		}
@@ -2184,29 +1670,23 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Validates field on form submit.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $field_id Field Id.
-	 * @param array  $field_submit Submitted Data.
-	 * @param array  $form_data All Form Data.
+	 * @param string $field_id 
+	 * @param array  $field_submit 
+	 * @param array  $form_data 
 	 */
 	public function validate( $field_id, $field_submit, $form_data ) {
 		$field_type         = isset( $form_data['form_fields'][ $field_id ]['type'] ) ? $form_data['form_fields'][ $field_id ]['type'] : '';
 		$required_field     = isset( $form_data['form_fields'][ $field_id ]['required'] ) ? $form_data['form_fields'][ $field_id ]['required'] : false;
 		$conditional_status = isset( $form_data['form_fields'][ $field_id ]['conditional_logic_status'] ) ? $form_data['form_fields'][ $field_id ]['conditional_logic_status'] : 0;
 
-		// Basic required check - If field is marked as required, check for entry data.
 		if ( false !== $required_field && '1' !== $conditional_status && ( empty( $field_submit ) && '0' !== $field_submit ) ) {
 			mhk()->task->errors[ $form_data['id'] ][ $field_id ] = mhk_get_required_label();
 			update_option( 'mhk_validation_error', 'yes' );
 		}
 
-		// Type validations.
 		switch ( $field_type ) {
 			case 'url':
-				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && filter_var( $field_submit, FILTER_VALIDATE_URL ) === false ) { // phpcs:ignore WordPress.Security.NonceVerification
+				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && filter_var( $field_submit, FILTER_VALIDATE_URL ) === false ) {  
 					$validation_text = get_option( 'mhk_' . $field_type . '_validation', esc_html__( 'Please enter a valid url', 'muhiku-plug' ) );
 				}
 				break;
@@ -2216,12 +1696,12 @@ abstract class MHK_Form_Fields {
 				} else {
 					$value = ! empty( $field_submit ) ? $field_submit : '';
 				}
-				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! is_email( $value ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! is_email( $value ) ) {  
 					$validation_text = get_option( 'mhk_' . $field_type . '_validation', esc_html__( 'Please enter a valid email address', 'muhiku-plug' ) );
 				}
 				break;
 			case 'number':
-				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! is_numeric( $field_submit ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+				if ( ! empty( $_POST['muhiku_forms']['form_fields'][ $field_id ] ) && ! is_numeric( $field_submit ) ) {  
 					$validation_text = get_option( 'mhk_' . $field_type . '_validation', esc_html__( 'Please enter a valid number', 'muhiku-plug' ) );
 				}
 				break;
@@ -2234,14 +1714,10 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Formats and sanitizes field.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int    $field_id     Field ID.
-	 * @param mixed  $field_submit Submitted field value.
-	 * @param array  $form_data    Form data and settings.
-	 * @param string $meta_key     Field meta key.
+	 * @param int    $field_id     
+	 * @param mixed  $field_submit 
+	 * @param array  $form_data    
+	 * @param string $meta_key    
 	 */
 	public function format( $field_id, $field_submit, $form_data, $meta_key ) {
 		if ( is_array( $field_submit ) ) {
@@ -2251,7 +1727,6 @@ abstract class MHK_Form_Fields {
 
 		$name = ! empty( $form_data['form_fields'][ $field_id ]['label'] ) ? make_clickable( $form_data['form_fields'][ $field_id ]['label'] ) : '';
 
-		// Sanitize but keep line breaks.
 		$value = mhk_sanitize_textarea_field( $field_submit );
 
 		mhk()->task->form_fields[ $field_id ] = array(
@@ -2264,9 +1739,7 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Field with limit.
-	 *
-	 * @param  array $field Field to check.
+	 * @param  array $field 
 	 * @return boolean
 	 */
 	protected function field_is_limit( $field ) {
@@ -2276,9 +1749,7 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Filter callback for outputting formatted data.
-	 *
-	 * @param array $field Field Data.
+	 * @param array $field 
 	 */
 	public function field_exporter( $field ) {
 		$export = array();
@@ -2324,14 +1795,10 @@ abstract class MHK_Form_Fields {
 	}
 
 	/**
-	 * Recursively process an array with an implosion.
+	 * @param  array  $array     
+	 * @param  string $delimiter 
 	 *
-	 * @since 1.6.6
-	 *
-	 * @param  array  $array     Array that needs to be recursively imploded.
-	 * @param  string $delimiter Delimiter for the implosion - defaults to <br>.
-	 *
-	 * @return string $output Imploded array.
+	 * @return string $output 
 	 */
 	protected function implode_recursive( $array, $delimiter = '<br>' ) {
 		$output = '';

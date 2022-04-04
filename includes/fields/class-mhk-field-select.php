@@ -1,21 +1,12 @@
 <?php
 /**
- * Select Dropdown field.
- *
  * @package MuhikuPlug\Fields
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Field_Select class.
- */
 class MHK_Field_Select extends MHK_Form_Fields {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		$this->name     = esc_html__( 'Dropdown', 'muhiku-plug' );
 		$this->type     = 'select';
@@ -24,17 +15,17 @@ class MHK_Field_Select extends MHK_Form_Fields {
 		$this->group    = 'general';
 		$this->defaults = array(
 			1 => array(
-				'label'   => esc_html__( 'Option 1', 'muhiku-plug' ),
+				'label'   => esc_html__( 'Seçenek 1', 'muhiku-plug' ),
 				'value'   => '',
 				'default' => '',
 			),
 			2 => array(
-				'label'   => esc_html__( 'Option 2', 'muhiku-plug' ),
+				'label'   => esc_html__( 'Seçenek 2', 'muhiku-plug' ),
 				'value'   => '',
 				'default' => '',
 			),
 			3 => array(
-				'label'   => esc_html__( 'Option 3', 'muhiku-plug' ),
+				'label'   => esc_html__( 'Seçenek 3', 'muhiku-plug' ),
 				'value'   => '',
 				'default' => '',
 			),
@@ -64,19 +55,12 @@ class MHK_Field_Select extends MHK_Form_Fields {
 		parent::__construct();
 	}
 
-	/**
-	 * Hook in tabs.
-	 */
 	public function init_hooks() {
 		add_action( 'muhiku_forms_shortcode_scripts', array( $this, 'load_assets' ) );
 		add_filter( 'muhiku_forms_field_properties_' . $this->type, array( $this, 'field_properties' ), 5, 3 );
 	}
 
 	/**
-	 * Define additional field properties.
-	 *
-	 * @since 1.7.0
-	 *
 	 * @param array $properties Field properties.
 	 * @param array $field      Field settings.
 	 * @param array $form_data  Form data and settings.
@@ -84,15 +68,12 @@ class MHK_Field_Select extends MHK_Form_Fields {
 	 * @return array of additional field properties.
 	 */
 	public function field_properties( $properties, $field, $form_data ) {
-		// Define data.
 		$form_id  = absint( $form_data['id'] );
 		$field_id = $field['id'];
 		$choices  = $field['choices'];
 
-		// Remove primary input.
 		unset( $properties['inputs']['primary'] );
 
-		// Set input container (<select>) properties.
 		$properties['input_container'] = array(
 			'class' => array( 'input-text' ),
 			'data'  => array(),
@@ -102,7 +83,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			),
 		);
 
-		// Set input properties.
 		foreach ( $choices as $key => $choice ) {
 			$depth = isset( $choice['depth'] ) ? absint( $choice['depth'] ) : 1;
 
@@ -134,7 +114,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			);
 		}
 
-		// Required class for validation.
 		if ( ! empty( $field['required'] ) ) {
 			$properties['input_container']['class'][] = 'mhk-field-required';
 		}
@@ -143,8 +122,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 	}
 
 	/**
-	 * Register/queue frontend scripts.
-	 *
 	 * @param array $atts Shortcode attributes.
 	 */
 	public static function load_assets( $atts ) {
@@ -167,47 +144,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 	}
 
 	/**
-	 * Enable enhanced select field option.
-	 *
-	 * @param array $field Field Data.
-	 */
-	public function enhanced_select( $field ) {
-		$plan    = mhk_get_license_plan();
-		$value   = isset( $field['enhanced_select'] ) && false !== $plan ? $field['enhanced_select'] : '0';
-		$tooltip = esc_html__( 'Check this option to enable enhanced select. It enables you to search items in the dropdown field.', 'muhiku-plug' );
-
-		// Enable enhanced select toggle field.
-		$enhanced_select = $this->field_element(
-			'checkbox',
-			$field,
-			array(
-				'slug'    => 'enhanced_select',
-				'value'   => $value,
-				'class'   => ( false === $plan ) ? 'disabled' : '',
-				'desc'    => esc_html__( 'Enable Enhanced Select', 'muhiku-plug' ),
-				'tooltip' => $tooltip,
-			),
-			false
-		);
-		$this->field_element(
-			'row',
-			$field,
-			array(
-				'slug'    => 'enhanced_select',
-				'content' => $enhanced_select,
-				'class'   => ( false === $plan ) ? 'upgrade-modal' : '',
-				'data'    => array(
-					'feature' => esc_html__( 'Enhanced select', 'muhiku-plug' ),
-				),
-			)
-		);
-	}
-
-	/**
-	 * Field preview inside the builder.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field data and settings.
 	 */
 	public function field_preview( $field ) {
@@ -220,27 +156,19 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			$args['class'] = 'mhk-enhanced-select';
 		}
 
-		// Label.
 		$this->field_preview_option( 'label', $field );
 
-		// Choices.
 		$this->field_preview_option( 'choices', $field, $args );
 
-		// Description.
 		$this->field_preview_option( 'description', $field );
 	}
 
 	/**
-	 * Field display on the form front-end.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field Data.
 	 * @param array $field_atts Field attributes.
 	 * @param array $form_data All Form Data.
 	 */
 	public function field_display( $field, $field_atts, $form_data ) {
-		// Define data.
 		$container         = $field['properties']['input_container'];
 		$choices           = $field['properties']['inputs'];
 		$field             = apply_filters( 'muhiku_forms_select_field_display', $field, $field_atts, $form_data );
@@ -254,7 +182,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			$container['attr']['required'] = 'required';
 		}
 
-		// Enable enhanced select.
 		if ( false !== $plan && ! empty( $field['enhanced_select'] ) && '1' === $field['enhanced_select'] ) {
 			$container['class'][] = 'mhk-enhanced-select';
 
@@ -263,22 +190,18 @@ class MHK_Field_Select extends MHK_Form_Fields {
 				$field_placeholder = $first_choices['label']['text'];
 			}
 
-			// Set placeholder for select2.
 			$container['data']['placeholder'] = esc_attr( $field_placeholder );
 		}
 
-		// Enable multiple choices selection.
 		if ( false !== $plan && ! empty( $field['multiple_choices'] ) && '1' === $field['multiple_choices'] ) {
 			$is_multiple                   = true;
 			$container['attr']['multiple'] = 'multiple';
 
-			// Change a name attribute.
 			if ( ! empty( $container['attr']['name'] ) ) {
 				$container['attr']['name'] .= '[]';
 			}
 		}
 
-		// Check to see if any of the options have selected by default.
 		foreach ( $choices as $choice ) {
 			if ( ! empty( $choice['default'] ) ) {
 				$has_default = true;
@@ -286,7 +209,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			}
 		}
 
-		// Conditional logic.
 		if ( isset( $choices['primary'] ) ) {
 			$container['attr']['conditional_id'] = $choices['primary']['attr']['conditional_id'];
 
@@ -294,26 +216,15 @@ class MHK_Field_Select extends MHK_Form_Fields {
 				$container['attr']['conditional_rules'] = $choices['primary']['attr']['conditional_rules'];
 			}
 		}
-
-		// Select All checkbox.
-		if ( '1' === $select_all ) {
-			if ( isset( $container['attr']['multiple'] ) && 'multiple' === $container['attr']['multiple'] ) {
-				$container['attr']['select_all_unselect_all'] = 'true';
-			}
-		}
-
-		// Primary select field.
 		printf(
 			'<select %s >',
 			mhk_html_attributes( $container['id'], $container['class'], $container['data'], $container['attr'] )
 		);
 
-		// Optional placeholder.
 		if ( ! empty( $field_placeholder ) ) {
 			printf( '<option value="" class="placeholder" disabled %s>%s</option>', selected( false, $has_default || $is_multiple, false ), esc_html( $field_placeholder ) );
 		}
 
-		// Build the select options.
 		foreach ( $choices as $choice ) {
 			if ( empty( $choice['container'] ) ) {
 				continue;
@@ -331,10 +242,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 	}
 
 	/**
-	 * Edit form field display on the entry back-end.
-	 *
-	 * @since 1.7.0
-	 *
 	 * @param array $entry_field Entry field data.
 	 * @param array $field       Field data.
 	 * @param array $form_data   Form data and settings.
@@ -354,10 +261,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 	}
 
 	/**
-	 * Formats and sanitizes field.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param int    $field_id     Field ID.
 	 * @param mixed  $field_submit Submitted field value.
 	 * @param array  $form_data    Form data and settings.
@@ -368,7 +271,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 		$name  = make_clickable( $field['label'] );
 		$value = array();
 
-		// Convert field value into to array.
 		if ( ! is_array( $field_submit ) ) {
 			$field_submit = array( $field_submit );
 		}
@@ -384,9 +286,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			'meta_key'  => $meta_key,
 		);
 
-		// Normal processing, dynamic population is off.
-		// If show_values is true, that means values posted are the raw values
-		// and not the labels. So we need to get the label values.
 		if ( ! empty( $field['show_values'] ) && '1' === $field['show_values'] ) {
 			foreach ( $field_submit as $item ) {
 				foreach ( $field['choices'] as $choice ) {
@@ -402,7 +301,6 @@ class MHK_Field_Select extends MHK_Form_Fields {
 			$data['value'] = $value_raw;
 		}
 
-		// Push field details to be saved.
 		mhk()->task->form_fields[ $field_id ] = $data;
 	}
 }

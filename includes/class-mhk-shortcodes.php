@@ -1,21 +1,12 @@
 <?php
 /**
- * Shortcodes
- *
  * @package MuhikuPlug\Classes
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MuhikuPlug Shortcodes class.
- */
 class MHK_Shortcodes {
 
-	/**
-	 * Init shortcodes.
-	 */
 	public static function init() {
 		self::init_shortcode_hooks();
 
@@ -29,8 +20,6 @@ class MHK_Shortcodes {
 	}
 
 	/**
-	 * Shortcode Wrapper.
-	 *
 	 * @param string[] $function Callback function.
 	 * @param array    $atts     Attributes. Default to empty array.
 	 * @param array    $wrapper  Customer wrapper data.
@@ -58,8 +47,6 @@ class MHK_Shortcodes {
 	}
 
 	/**
-	 * Form shortcode.
-	 *
 	 * @param  array $atts Attributes.
 	 * @return string
 	 */
@@ -67,9 +54,6 @@ class MHK_Shortcodes {
 		return self::shortcode_wrapper( array( 'MHK_Shortcode_Form', 'output' ), $atts );
 	}
 
-	/**
-	 * Initialize shortcode.
-	 */
 	public static function init_shortcode_hooks() {
 		self::shortcode_wrapper( array( 'MHK_Shortcode_Form', 'hooks' ) );
 	}

@@ -3,7 +3,6 @@
  * Plugin Name: Muhiku Plug
  * Plugin URI: https://muhiku.com/
  * Description: Muhiku Plug-in
- * Version: 1.8.6
  * Author: Öznur Yılmaz
  * Author URI: https://oznuryilmaz.com/
  * Text Domain: muhiku-plug
@@ -24,7 +23,6 @@ if ( ! class_exists( 'MuhikuPlug' ) ) {
 }
 
 /**
- * @since  1.0.0
  * @return MuhikuPlug
  */
 

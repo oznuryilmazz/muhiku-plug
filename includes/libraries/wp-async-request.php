@@ -1,58 +1,36 @@
 <?php
 /**
- * WP Async Request
- *
  * @package WP-Background-Processing
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Abstract WP_Async_Request class.
- */
 abstract class WP_Async_Request {
 
 	/**
-	 * Prefix
-	 *
-	 * (default value: 'wp')
-	 *
 	 * @var string
 	 * @access protected
 	 */
 	protected $prefix = 'wp';
 
 	/**
-	 * Action
-	 *
-	 * (default value: 'async_request')
-	 *
 	 * @var string
 	 * @access protected
 	 */
 	protected $action = 'async_request';
 
 	/**
-	 * Identifier
-	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $identifier;
 
 	/**
-	 * Data
-	 *
-	 * (default value: array())
-	 *
 	 * @var array
 	 * @access protected
 	 */
 	protected $data = array();
 
-	/**
-	 * Initiate new async request
-	 */
 	public function __construct() {
 		$this->identifier = $this->prefix . '_' . $this->action;
 
@@ -61,8 +39,6 @@ abstract class WP_Async_Request {
 	}
 
 	/**
-	 * Set data used during the request
-	 *
 	 * @param array $data Data.
 	 *
 	 * @return $this
@@ -74,8 +50,6 @@ abstract class WP_Async_Request {
 	}
 
 	/**
-	 * Dispatch the async request
-	 *
 	 * @return array|WP_Error
 	 */
 	public function dispatch() {
@@ -86,8 +60,6 @@ abstract class WP_Async_Request {
 	}
 
 	/**
-	 * Get query args
-	 *
 	 * @return array
 	 */
 	protected function get_query_args() {
@@ -102,8 +74,6 @@ abstract class WP_Async_Request {
 	}
 
 	/**
-	 * Get query URL
-	 *
 	 * @return string
 	 */
 	protected function get_query_url() {
@@ -115,8 +85,6 @@ abstract class WP_Async_Request {
 	}
 
 	/**
-	 * Get post args
-	 *
 	 * @return array
 	 */
 	protected function get_post_args() {
@@ -133,13 +101,7 @@ abstract class WP_Async_Request {
 		);
 	}
 
-	/**
-	 * Maybe handle
-	 *
-	 * Check for correct nonce and pass to handler.
-	 */
 	public function maybe_handle() {
-		// Don't lock up other requests while processing
 		session_write_close();
 
 		check_ajax_referer( $this->identifier, 'nonce' );
@@ -148,13 +110,6 @@ abstract class WP_Async_Request {
 
 		wp_die();
 	}
-
-	/**
-	 * Handle
-	 *
-	 * Override this method to perform any actions required
-	 * during the async request.
-	 */
 	abstract protected function handle();
 
 }

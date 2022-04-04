@@ -1,18 +1,11 @@
 <?php
 /**
- * MuhikuPlug Template
- *
- * Functions for the templating system.
- *
  * @package MuhikuPlug/Functions
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Add body classes for MHK pages.
- *
  * @param  array $classes Body Classes.
  * @return array
  */
@@ -26,11 +19,6 @@ function mhk_body_class( $classes ) {
 	return array_unique( $classes );
 }
 
-/**
- * NO JS handling.
- *
- * @since 1.2.0
- */
 function mhk_no_js() {
 	if ( mhk_is_amp() ) {
 		return;
@@ -45,8 +33,6 @@ function mhk_no_js() {
 }
 
 /**
- * Output generator tag to aid debugging.
- *
  * @param string $gen Generator.
  * @param string $type Type.
  *

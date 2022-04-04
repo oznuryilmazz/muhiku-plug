@@ -1,43 +1,27 @@
 <?php
 /**
- * Handle frontend scripts
- *
- * @class   MHK_Frontend_Scripts
- * @version 1.0.0
  * @package MuhikuPlug/Classes/
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Frontend_Scripts Class.
- */
 class MHK_Frontend_Scripts {
 
 	/**
-	 * Contains an array of script handles registered by MHK.
-	 *
 	 * @var array
 	 */
 	private static $scripts = array();
 
 	/**
-	 * Contains an array of script handles registered by MHK.
-	 *
 	 * @var array
 	 */
 	private static $styles = array();
 
 	/**
-	 * Contains an array of script handles localized by MHK.
-	 *
 	 * @var array
 	 */
 	private static $wp_localize_scripts = array();
 
-	/**
-	 * Hook in methods.
-	 */
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'load_scripts' ) );
 		add_action( 'wp_print_scripts', array( __CLASS__, 'localize_printed_scripts' ), 5 );
@@ -45,8 +29,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Get styles for the frontend.
-	 *
 	 * @return array
 	 */
 	public static function get_styles() {
@@ -65,8 +47,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Return asset URL.
-	 *
 	 * @param string $path Assets path.
 	 *
 	 * @return string
@@ -76,8 +56,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Register a script for use.
-	 *
 	 * @uses   wp_register_script()
 	 * @param  string   $handle    Name of the script. Should be unique.
 	 * @param  string   $path      Full URL of the script, or path of the script relative to the WordPress root directory.
@@ -91,8 +69,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Register and enqueue a script for use.
-	 *
 	 * @uses   wp_enqueue_script()
 	 * @param  string   $handle    Name of the script. Should be unique.
 	 * @param  string   $path      Full URL of the script, or path of the script relative to the WordPress root directory.
@@ -108,8 +84,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Register a style for use.
-	 *
 	 * @uses   wp_register_style()
 	 * @param  string   $handle  Name of the stylesheet. Should be unique.
 	 * @param  string   $path    Full URL of the stylesheet, or path of the stylesheet relative to the WordPress root directory.
@@ -128,8 +102,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Register and enqueue a styles for use.
-	 *
 	 * @uses   wp_enqueue_style()
 	 * @param  string   $handle  Name of the stylesheet. Should be unique.
 	 * @param  string   $path    Full URL of the stylesheet, or path of the stylesheet relative to the WordPress root directory.
@@ -145,9 +117,6 @@ class MHK_Frontend_Scripts {
 		wp_enqueue_style( $handle );
 	}
 
-	/**
-	 * Register all MHK scripts.
-	 */
 	private static function register_scripts() {
 		if ( mhk_is_amp() ) {
 			return;
@@ -201,9 +170,6 @@ class MHK_Frontend_Scripts {
 		}
 	}
 
-	/**
-	 * Register all MHK sty;es.
-	 */
 	private static function register_styles() {
 		$register_styles = array(
 			'mhk_select2'   => array(
@@ -224,9 +190,6 @@ class MHK_Frontend_Scripts {
 		}
 	}
 
-	/**
-	 * Register/queue frontend scripts.
-	 */
 	public static function load_scripts() {
 		global $post;
 
@@ -237,10 +200,8 @@ class MHK_Frontend_Scripts {
 		self::register_scripts();
 		self::register_styles();
 
-		// Enqueue dashicons.
 		wp_enqueue_style( 'dashicons' );
 
-		// CSS Styles.
 		$enqueue_styles = self::get_styles();
 		if ( $enqueue_styles ) {
 			foreach ( $enqueue_styles as $handle => $args ) {
@@ -254,8 +215,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Localize a MHK script once.
-	 *
 	 * @param string $handle Script handle the data will be attached to.
 	 */
 	private static function localize_script( $handle ) {
@@ -273,8 +232,6 @@ class MHK_Frontend_Scripts {
 	}
 
 	/**
-	 * Return data for script handles.
-	 *
 	 * @param  string $handle Script handle the data will be attached to.
 	 * @return array|bool
 	 */
@@ -283,14 +240,14 @@ class MHK_Frontend_Scripts {
 			case 'muhiku-plug':
 				$params = array(
 					'ajax_url'                             => mhk()->ajax_url(),
-					'submit'                               => esc_html__( 'Submit', 'muhiku-plug' ),
+					'submit'                               => esc_html__( 'Gönder', 'muhiku-plug' ),
 					'disable_user_details'                 => get_option( 'muhiku_forms_disable_user_details' ),
 					'muhiku_forms_data_save'              => wp_create_nonce( 'muhiku_forms_data_save_nonce' ),
 					'i18n_messages_required'               => get_option( 'muhiku_forms_required_validation' ),
 					'i18n_messages_url'                    => get_option( 'muhiku_forms_url_validation' ),
 					'i18n_messages_email'                  => get_option( 'muhiku_forms_email_validation' ),
 					'i18n_messages_email_suggestion'       => get_option( 'muhiku_forms_email_suggestion', esc_html__( 'Did you mean {suggestion}?', 'muhiku-plug' ) ),
-					'i18n_messages_email_suggestion_title' => esc_attr__( 'Click to accept this suggestion.', 'muhiku-plug' ),
+					'i18n_messages_email_suggestion_title' => esc_attr__( 'Bu öneriyi kabul etmek için tıklayın.', 'muhiku-plug' ),
 					'i18n_messages_confirm'                => get_option( 'muhiku_forms_confirm_validation', __( 'Field values do not match.', 'muhiku-plug' ) ),
 					'i18n_messages_check_limit'            => get_option( 'muhiku_forms_check_limit_validation', esc_html__( 'You have exceeded number of allowed selections: {#}.', 'muhiku-plug' ) ),
 					'i18n_messages_number'                 => get_option( 'muhiku_forms_number_validation' ),
@@ -310,10 +267,10 @@ class MHK_Frontend_Scripts {
 				$params = array(
 					'ajax_url'            => admin_url( 'admin-ajax.php' ),
 					'mhk_ajax_submission' => wp_create_nonce( 'muhiku_forms_ajax_form_submission' ),
-					'submit'              => esc_html__( 'Submit', 'muhiku-plug' ),
-					'error'               => esc_html__( 'Something went wrong while making an AJAX submission', 'muhiku-plug' ),
-					'required'            => esc_html__( 'This field is required.', 'muhiku-plug' ),
-					'pdf_download'        => esc_html__( 'Click here to download your pdf submission', 'muhiku-plug' ),
+					'submit'              => esc_html__( 'Gönder', 'muhiku-plug' ),
+					'error'               => esc_html__( 'AJAX gönderimi yapılırken bir şeyler ters gitti', 'muhiku-plug' ),
+					'required'            => esc_html__( 'Bu alan gereklidir.', 'muhiku-plug' ),
+					'pdf_download'        => esc_html__( 'Pdf gönderiminizi indirmek için buraya tıklayın', 'muhiku-plug' ),
 				);
 				break;
 			default:
@@ -323,9 +280,6 @@ class MHK_Frontend_Scripts {
 		return apply_filters( 'muhiku_forms_get_script_data', $params, $handle );
 	}
 
-	/**
-	 * Localize scripts only when enqueued.
-	 */
 	public static function localize_printed_scripts() {
 		foreach ( self::$scripts as $handle ) {
 			self::localize_script( $handle );

@@ -1,21 +1,12 @@
 <?php
 /**
- * Muhiku Plug Message Functions
- *
- * Functions for error/message handling and display.
- *
  * @package MuhikuPlug/Functions
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get the count of notices added, either for all notices (default) or for one.
- * particular notice type specified by $notice_type.
- *
- * @since  1.0.0
- * @param  string $notice_type Optional. The name of the notice type - either error, success or notice.
+ * @param  string $notice_type 
  * @return int
  */
 function mhk_notice_count( $notice_type = '' ) {
@@ -42,11 +33,8 @@ function mhk_notice_count( $notice_type = '' ) {
 }
 
 /**
- * Check if a notice has already been added.
- *
- * @since  1.0.0
- * @param  string $message The text to display in the notice.
- * @param  string $notice_type Optional. The name of the notice type - either error, success or notice.
+ * @param  string $message 
+ * @param  string $notice_type 
  * @return bool
  */
 function mhk_has_notice( $message, $notice_type = 'success' ) {
@@ -62,11 +50,8 @@ function mhk_has_notice( $message, $notice_type = 'success' ) {
 }
 
 /**
- * Add and store a notice.
- *
- * @since 1.0.0
- * @param string $message The text to display in the notice.
- * @param string $notice_type Optional. The name of the notice type - either error, success or notice.
+ * @param string $message 
+ * @param string $notice_type 
  */
 function mhk_add_notice( $message, $notice_type = 'success' ) {
 	if ( ! did_action( 'muhiku_forms_init' ) ) {
@@ -78,8 +63,6 @@ function mhk_add_notice( $message, $notice_type = 'success' ) {
 	}
 
 	$notices = mhk()->session->get( 'mhk_notices', array() );
-
-	// Backward compatibility.
 	if ( 'success' === $notice_type ) {
 		$message = apply_filters( 'muhiku_forms_add_message', $message );
 	}
@@ -90,9 +73,6 @@ function mhk_add_notice( $message, $notice_type = 'success' ) {
 }
 
 /**
- * Set all notices at once.
- *
- * @since 1.0.0
  * @param mixed $notices Array of notices.
  */
 function mhk_set_notices( $notices ) {
@@ -103,11 +83,6 @@ function mhk_set_notices( $notices ) {
 	mhk()->session->set( 'mhk_notices', $notices );
 }
 
-/**
- * Unset all notices.
- *
- * @since 1.0.0
- */
 function mhk_clear_notices() {
 	if ( ! did_action( 'muhiku_forms_init' ) ) {
 		mhk_doing_it_wrong( __FUNCTION__, __( 'This function should not be called before muhiku_forms_init.', 'muhiku-plug' ), '1.0' );
@@ -117,9 +92,6 @@ function mhk_clear_notices() {
 }
 
 /**
- * Prints messages and errors which are stored in the session, then clears them.
- *
- * @since 1.0.0
  *
  * @param array $form_data Prepared form settings.
  */
@@ -133,8 +105,7 @@ function mhk_print_notices( $form_data = array() ) {
 	$all_notices  = mhk()->session->get( 'mhk_notices', array() );
 	$notice_types = apply_filters( 'muhiku_forms_notice_types', array( 'error', 'success', 'notice' ) );
 
-	// Skips notice print if it isn't the right form.
-	if ( isset( $_REQUEST['muhiku_forms']['id'] ) && ( (int) $form_id !== (int) $_REQUEST['muhiku_forms']['id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+	if ( isset( $_REQUEST['muhiku_forms']['id'] ) && ( (int) $form_id !== (int) $_REQUEST['muhiku_forms']['id'] ) ) {  
 		return;
 	}
 
@@ -157,9 +128,6 @@ function mhk_print_notices( $form_data = array() ) {
 add_action( 'muhiku_forms_display_fields_before', 'mhk_print_notices', 10 );
 
 /**
- * Print a single notice immediately.
- *
- * @since 1.0.0
  * @param string $message The text to display in the notice.
  * @param string $notice_type Optional. The name of the notice type - either error, success or notice.
  */
@@ -177,10 +145,7 @@ function mhk_print_notice( $message, $notice_type = 'success' ) {
 }
 
 /**
- * Returns all queued notices, optionally filtered by a notice type.
- *
- * @since  1.0.0
- * @param  string $notice_type Optional. The name of the notice type - either error, success or notice.
+ * @param  string $notice_type 
  * @return array|mixed
  */
 function mhk_get_notices( $notice_type = '' ) {
@@ -203,8 +168,6 @@ function mhk_get_notices( $notice_type = '' ) {
 }
 
 /**
- * Add notices for WP Errors.
- *
  * @param WP_Error $errors Errors.
  */
 function mhk_add_wp_error_notices( $errors ) {

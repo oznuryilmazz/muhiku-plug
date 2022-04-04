@@ -1,19 +1,13 @@
-/* global muhiku_forms_text_limit_params */
 jQuery(function () {
   "use strict";
 
-  // muhiku_forms_text_limit_params is required to continue, ensure the object exists.
   if (typeof muhiku_forms_text_limit_params === "undefined") {
     return false;
   }
 
-  /**
-   * TextLimitHandler class.
-   */
   var TextLimitHandler = function () {
     self = this;
 
-    // Limit by characters.
     Array.prototype.slice
       .call(document.querySelectorAll(".muhiku-plug-limit-characters-enabled"))
       .map(function (event) {
@@ -30,12 +24,10 @@ jQuery(function () {
         );
         event.parentNode.appendChild(hint);
 
-        // Event listener.
         event.addEventListener("keyup", self.checkCharacters(hint, limit));
         event.addEventListener("keydown", self.checkCharacters(hint, limit));
       });
 
-    // Limit by words count.
     Array.prototype.slice
       .call(document.querySelectorAll(".muhiku-plug-limit-words-enabled"))
       .map(function (event) {
@@ -52,7 +44,6 @@ jQuery(function () {
         );
         event.parentNode.appendChild(hint);
 
-        // Event listener.
         event.addEventListener("keyup", self.checkWords(hint, limit));
         event.addEventListener("keydown", self.checkWords(hint, limit));
         event.addEventListener("paste", self.pasteWords(limit));
@@ -60,10 +51,6 @@ jQuery(function () {
   };
 
   /**
-   * Predefine hint text to display.
-   *
-   * @since 1.6.0
-   *
    * @param {string} hintText Hint text.
    * @param {number} count Current count.
    * @param {number} limit Limit to.
@@ -75,10 +62,6 @@ jQuery(function () {
   };
 
   /**
-   * Create HTMLElement hint element with text.
-   *
-   * @since 1.6.0
-   *
    * @param {number} formId Form id.
    * @param {number} fieldId Form field id.
    * @param {string} text Text to hint element.
@@ -96,10 +79,6 @@ jQuery(function () {
   };
 
   /**
-   * Keyup/Keydown event higher order function for characters limit.
-   *
-   * @since 1.6.0
-   *
    * @param {object} hint HTMLElement hint element.
    * @param {number} limit Max allowed number of characters.
    *
@@ -116,10 +95,6 @@ jQuery(function () {
   };
 
   /**
-   * Keyup/Keydown event higher order function for words limit.
-   *
-   * @since 1.6.0
-   *
    * @param {object} hint HTMLElement hint element.
    * @param {number} limit Max allowed number of characters.
    *
@@ -142,10 +117,6 @@ jQuery(function () {
   };
 
   /**
-   * Get passed text from clipboard.
-   *
-   * @since 1.6.0
-   *
    * @param {ClipboardEvent} e Clipboard event.
    *
    * @returns {string} Text from clipboard.
@@ -160,10 +131,6 @@ jQuery(function () {
   };
 
   /**
-   * Paste event higher order function for words limit.
-   *
-   * @since 1.6.0
-   *
    * @param {number} limit Max allowed number of words.
    *
    * @returns {Function} Event handler.
@@ -177,8 +144,5 @@ jQuery(function () {
     };
   };
 
-  /**
-   * Init TextLimitHandler.
-   */
   new TextLimitHandler();
 });

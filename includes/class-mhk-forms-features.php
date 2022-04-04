@@ -1,28 +1,17 @@
 <?php
 /**
- * MuhikuPlug features
- *
  * @package MuhikuPlug\Admin
- * @since   1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Features Class.
- */
 class MHK_Forms_Features {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		add_filter( 'muhiku_forms_fields', array( $this, 'form_fields' ) );
 	}
 
 	/**
-	 * Load additional fields available in the Pro version.
-	 *
 	 * @param  array $fields Registered form fields.
 	 * @return array
 	 */

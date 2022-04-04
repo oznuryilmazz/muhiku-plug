@@ -1,29 +1,17 @@
 <?php
 /**
- * MuhikuForm Gutenberg blocks
- *
  * @package muhkuForms\Class
- * @version 1.3.4
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Guten Block Class.
- */
 class MHK_Form_Block {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_block' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 	}
 
-	/**
-	 * Register the block and its scripts.
-	 */
 	public function register_block() {
 		if ( ! function_exists( 'register_block_type' ) ) {
 			return;
@@ -65,9 +53,6 @@ class MHK_Form_Block {
 		);
 	}
 
-	/**
-	 * Load Gutenberg block scripts.
-	 */
 	public function enqueue_block_editor_assets() {
 		wp_register_style(
 			'muhiku-plug-block-editor',
@@ -118,9 +103,7 @@ class MHK_Form_Block {
 	}
 
 	/**
-	 * Get form HTML to display in a Gutenberg block.
-	 *
-	 * @param  array $attr Attributes passed by Gutenberg block.
+	 * @param  array $attr 
 	 * @return string
 	 */
 	public function get_form_html( $attr ) {
@@ -130,13 +113,12 @@ class MHK_Form_Block {
 			return '';
 		}
 
-		// Wrapper classes.
 		$classes = 'muhiku-plug';
 		if ( isset( $attr['className'] ) ) {
 			$classes .= ' ' . $attr['className'];
 		}
 
-		$is_gb_editor = defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $_REQUEST['context'] ) && 'edit' === $_REQUEST['context']; // phpcs:ignore WordPress.Security.NonceVerification
+		$is_gb_editor = defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $_REQUEST['context'] ) && 'edit' === $_REQUEST['context'];  
 		$title        = ! empty( $attr['displayTitle'] ) ? true : false;
 		$description  = ! empty( $attr['displayDescription'] ) ? true : false;
 		$popup        = ! empty( $attr['displayPopup'] ) ? true : false;
@@ -144,7 +126,6 @@ class MHK_Form_Block {
 		$popup_text   = ! empty( $attr['displayPopupText'] ) ? $attr['displayPopupText'] : 'View Form';
 		$popup_size   = ! empty( $attr['displayPopupSize'] ) ? $attr['displayPopupSize'] : false;
 
-		// Disable form fields if called from the Gutenberg editor.
 		if ( $is_gb_editor ) {
 			add_filter(
 				'muhiku_forms_frontend_container_class',

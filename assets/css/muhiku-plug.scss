@@ -217,7 +217,6 @@
 	}
 	.mhk-field-container {
 		.mhk-frontend-row {
-			// Prevents style conflict on entries list-table.
 			&:not(.wp-list-table) {
 				display: flex;
 				flex-wrap: wrap;

@@ -1,23 +1,12 @@
 <?php
 /**
- * Post Types
- *
- * Registers post types and taxonomies.
- *
  * @package MuhikuPlug\Classes
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Post types Class.
- */
 class MHK_Post_Types {
 
-	/**
-	 * Hook in methods.
-	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 5 );
 		add_action( 'admin_bar_menu', array( __CLASS__, 'admin_bar_menus' ), 100 );
@@ -25,9 +14,6 @@ class MHK_Post_Types {
 		add_action( 'muhiku_forms_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
 	}
 
-	/**
-	 * Register core post types.
-	 */
 	public static function register_post_types() {
 		if ( ! is_blog_installed() || post_type_exists( 'muhiku_form' ) ) {
 			return;
@@ -87,9 +73,6 @@ class MHK_Post_Types {
 	}
 
 	/**
-	 * Add "Muhiku Plug" link in admin bar main menu.
-	 *
-	 * @since 1.2.0
 	 * @param WP_Admin_Bar $wp_admin_bar Admin bar instance.
 	 */
 	public static function admin_bar_menus( $wp_admin_bar ) {
@@ -97,12 +80,10 @@ class MHK_Post_Types {
 			return;
 		}
 
-		// Show only when the user is a member of this site, or they're a super admin.
 		if ( ! is_user_member_of_blog() && ! is_super_admin() ) {
 			return;
 		}
 
-		// Add an option to create new form.
 		if ( apply_filters( 'muhiku_forms_show_admin_bar_menus', true ) ) {
 			$wp_admin_bar->add_node(
 				array(
@@ -115,11 +96,6 @@ class MHK_Post_Types {
 		}
 	}
 
-	/**
-	 * Flush rules if the event is queued.
-	 *
-	 * @since 1.2.0
-	 */
 	public static function maybe_flush_rewrite_rules() {
 		if ( 'yes' === get_option( 'muhiku_forms_queue_flush_rewrite_rules' ) ) {
 			update_option( 'muhiku_forms_queue_flush_rewrite_rules', 'no' );
@@ -127,9 +103,6 @@ class MHK_Post_Types {
 		}
 	}
 
-	/**
-	 * Flush rewrite rules.
-	 */
 	public static function flush_rewrite_rules() {
 		flush_rewrite_rules();
 	}

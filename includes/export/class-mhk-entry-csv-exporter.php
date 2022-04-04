@@ -1,51 +1,34 @@
 <?php
 /**
- * Handles entry CSV export.
- *
  * @package MuhikuPlug\Export
- * @since   1.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Include dependencies.
- */
 if ( ! class_exists( 'MHK_CSV_Exporter', false ) ) {
 	require_once MHK_ABSPATH . 'includes/export/abstract-mhk-csv-exporter.php';
 }
 
-/**
- * MHK_Entry_CSV_Exporter Class.
- */
 class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 
 	/**
-	 * Form ID.
-	 *
 	 * @var int|mixed
 	 */
 	public $form_id;
 
 	/**
-	 * Entry ID.
-	 *
 	 * @var int|mixed
 	 */
 	public $entry_id;
 
 	/**
-	 * Type of export used in filter names.
-	 *
 	 * @var string
 	 */
 	protected $export_type = 'entry';
 
 	/**
-	 * Constructor.
-	 *
-	 * @param int $form_id  Form ID.
-	 * @param int $entry_id Entry ID.
+	 * @param int $form_id  
+	 * @param int $entry_id 
 	 */
 	public function __construct( $form_id = '', $entry_id = '' ) {
 		$this->form_id      = absint( $form_id );
@@ -54,8 +37,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Return an array of columns to export.
-	 *
 	 * @return array
 	 */
 	public function get_default_column_names() {
@@ -63,10 +44,8 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 		$form_obj  = mhk()->form->get( $this->form_id );
 		$form_data = ! empty( $form_obj->post_content ) ? mhk_decode( $form_obj->post_content ) : '';
 
-		// Set Entry ID at first.
 		$columns['entry_id'] = esc_html__( 'ID', 'muhiku-plug' );
 
-		// Add whitelisted fields to export columns.
 		if ( ! empty( $form_data['form_fields'] ) ) {
 			foreach ( $form_data['form_fields'] as $field ) {
 				if ( ! in_array( $field['type'], array( 'html', 'title', 'captcha' ), true ) ) {
@@ -75,12 +54,10 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 			}
 		}
 
-		// Set the default columns.
 		$columns['status']           = esc_html__( 'Status', 'muhiku-plug' );
 		$columns['date_created']     = esc_html__( 'Oluşturulma Tarihi', 'muhiku-plug' );
 		$columns['date_created_gmt'] = esc_html__( 'Oluşturulma Tarihi GMT', 'muhiku-plug' );
 
-		// If user details are disabled globally discard the IP and UA.
 		if ( 'yes' !== get_option( 'muhiku_forms_disable_user_details' ) ) {
 			$columns['user_device']     = esc_html__( 'User Device', 'muhiku-plug' );
 			$columns['user_ip_address'] = esc_html__( 'User IP Address', 'muhiku-plug' );
@@ -89,11 +66,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 		return apply_filters( "muhiku_forms_export_{$this->export_type}_default_columns", $columns );
 	}
 
-	/**
-	 * Prepare data for export.
-	 *
-	 * @since 1.6.0
-	 */
 	public function prepare_data_to_export() {
 		$this->row_data = array();
 
@@ -109,7 +81,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 				)
 			);
 
-			// Get the entries.
 			$entries = array_map( 'mhk_get_entry', $entry_ids );
 
 			foreach ( $entries as $entry ) {
@@ -120,9 +91,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 		return $this->row_data;
 	}
 
-	/**
-	 * Prepare and get quiz report data in CSV format.
-	 */
 	public function get_quiz_report() {
 		$form_data          = MHK()->form->get(
 			absint( $this->form_id ),
@@ -139,11 +107,9 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 		$obtained_score     = 0;
 		$include_all_fields = apply_filters( 'mhk_include_all_fields_in_quiz_report_csv', false );
 
-		// Add form fields in the CSV content.
 		foreach ( $form_fields as $field_id => $field ) {
 			$quiz_enabled = isset( $field['quiz_status'] ) && '1' === $field['quiz_status'] ? true : false;
 
-			// Move onto next field if this field has quiz disabled and non-quiz fields are to be excluded.
 			if ( false === $include_all_fields && false === $quiz_enabled ) {
 				continue;
 			}
@@ -160,7 +126,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 				$respondent_score += $field_score;
 
 				if ( ! empty( $correct_answer ) ) {
-					// Determine if the given answer is correct.
 					if ( 'select' === $field['type'] ) {
 						foreach ( $correct_answer as $answer_key => $answer_status ) {
 							$choice = $field['choices'][ $answer_key ]['label'];
@@ -183,17 +148,14 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 						$correct_answers     = array();
 						$given_answers       = array();
 
-						// Prepare list of correct answers.
 						foreach ( $correct_answer_keys as $correct_answer_key ) {
 							$correct_answers[] = $choices[ $correct_answer_key ]['label'];
 						}
 
-						// Prepare list of given answers.
 						foreach ( $given_answer_data as $given_answer ) {
 							$given_answers[] = $given_answer;
 						}
 
-						// See if all the given answers are correct answers.
 						foreach ( $given_answers as $given_answer ) {
 							if ( ! in_array( $given_answer, $correct_answers, true ) ) {
 								$is_correct = false;
@@ -204,7 +166,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 				}
 			}
 
-			// Add score if the given answer is correct.
 			if ( true === $is_correct ) {
 				$score           = $field_score;
 				$obtained_score += $field_score;
@@ -214,7 +175,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 			$row[]     = $this->sanitize_csv_cell_data( $score );
 		}
 
-		// Add extra columns.
 		$extra_data = array(
 			'Total Score'      => $total_score,
 			'Respondent Score' => $respondent_score,
@@ -234,9 +194,7 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Sanitize data for a cell in CSV.
-	 *
-	 * @param string $str Data to sanitize.
+	 * @param string $str 
 	 */
 	public function sanitize_csv_cell_data( $str ) {
 		$str = (string) $str;
@@ -246,9 +204,7 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Take a entry id and generate row data from it for export.
-	 *
-	 * @param  object $entry Entry object.
+	 * @param  object $entry 
 	 * @return array
 	 */
 	protected function generate_row_data( $entry ) {
@@ -260,7 +216,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 			$raw_value = '';
 
 			if ( isset( $entry->meta[ $column_id ] ) ) {
-				// Filter for entry meta data.
 				$value     = $entry->meta[ $column_id ];
 				$raw_value = $entry->meta[ $column_id ];
 
@@ -271,7 +226,6 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 				$value = apply_filters( 'muhiku_forms_html_field_value', $value, $entry->meta[ $column_id ], $entry, 'export-csv', $column_id );
 
 			} elseif ( is_callable( array( $this, "get_column_value_{$column_id}" ) ) ) {
-				// Handle special columns which don't map 1:1 to entry data.
 				$value     = $this->{"get_column_value_{$column_id}"}( $entry );
 				$raw_value = $value;
 			}
@@ -283,16 +237,14 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Get entry type.
-	 *
-	 * @param  string $column_id meta key of the column.
-	 * @param  object $entry Entry being exported.
+	 * @param  string $column_id 
+	 * @param  object $entry
 	 * @return string
 	 */
 	protected function get_entry_type( $column_id, $entry ) {
 		$fields = json_decode( $entry->fields, 1 );
 		if ( is_null( $fields ) || ! is_array( $fields ) ) {
-			return false; // Conditional false with fake values.
+			return false; 
 		}
 		foreach ( $fields as $field ) {
 			if ( $column_id === $field['meta_key'] ) {
@@ -303,9 +255,7 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Get entry id value.
-	 *
-	 * @param  object $entry Entry being exported.
+	 * @param  object $entry 
 	 * @return int
 	 */
 	protected function get_column_value_entry_id( $entry ) {
@@ -313,9 +263,7 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Get entry status value.
-	 *
-	 * @param  object $entry Entry being exported.
+	 * @param  object $entry 
 	 * @return string
 	 */
 	protected function get_column_value_status( $entry ) {
@@ -329,9 +277,7 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Get date created value.
-	 *
-	 * @param  object $entry Entry being exported.
+	 * @param  object $entry
 	 * @return string
 	 */
 	protected function get_column_value_date_created( $entry ) {
@@ -341,14 +287,11 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 			$timestamp = strtotime( $entry->date_created );
 		}
 
-		/* translators: 1: entry date 2: entry time */
 		return sprintf( esc_html__( '%1$s %2$s', 'muhiku-plug' ), date_i18n( mhk_date_format(), $timestamp ), date_i18n( mhk_time_format(), $timestamp ) );
 	}
 
 	/**
-	 * Get GMT date created value.
-	 *
-	 * @param  object $entry Entry being exported.
+	 * @param  object $entry 
 	 * @return string
 	 */
 	protected function get_column_value_date_created_gmt( $entry ) {
@@ -358,14 +301,11 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 			$timestamp = strtotime( $entry->date_created ) + ( get_option( 'gmt_offset' ) * 3600 );
 		}
 
-		/* translators: 1: entry date 2: entry time */
 		return sprintf( esc_html__( '%1$s %2$s', 'muhiku-plug' ), date_i18n( mhk_date_format(), $timestamp ), date_i18n( mhk_time_format(), $timestamp ) );
 	}
 
 	/**
-	 * Get entry user device value.
-	 *
-	 * @param  object $entry Entry being exported.
+	 * @param  object $entry 
 	 * @return string
 	 */
 	protected function get_column_value_user_device( $entry ) {
@@ -373,9 +313,7 @@ class MHK_Entry_CSV_Exporter extends MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Get entry user IP address value.
-	 *
-	 * @param  object $entry Entry being exported.
+	 * @param  object $entry 
 	 * @return string
 	 */
 	protected function get_column_value_user_ip_address( $entry ) {

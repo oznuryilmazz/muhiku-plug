@@ -1,45 +1,28 @@
 <?php
 /**
- * Handles log entries by writing to a file.
- *
  * @package MuhikuPlug/Classes/Log_Handlers
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Handles log entries by writing to a file.
- */
 class MHK_Log_Handler_File extends MHK_Log_Handler {
 
 	/**
-	 * Stores open file handles.
-	 *
 	 * @var array
 	 */
 	protected $handles = array();
 
 	/**
-	 * File size limit for log files in bytes.
-	 *
 	 * @var int
 	 */
 	protected $log_size_limit;
 
 	/**
-	 * Cache logs that could not be written.
-	 *
-	 * If a log is written too early in the request, pluggable functions may be unavailable. These
-	 * logs will be cached and written on 'plugins_loaded' action.
-	 *
 	 * @var array
 	 */
 	protected $cached_logs = array();
 
 	/**
-	 * Constructor for the logger.
-	 *
 	 * @param int $log_size_limit Optional. Size limit for log files. Default 5mb.
 	 */
 	public function __construct( $log_size_limit = null ) {
@@ -52,11 +35,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 		add_action( 'plugins_loaded', array( $this, 'write_cached_logs' ) );
 	}
 
-	/**
-	 * Destructor.
-	 *
-	 * Cleans up open file handles.
-	 */
 	public function __destruct() {
 		foreach ( $this->handles as $handle ) {
 			if ( is_resource( $handle ) ) {
@@ -66,8 +44,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Handle a log entry.
-	 *
 	 * @param int    $timestamp Log timestamp.
 	 * @param string $level emergency|alert|critical|error|warning|notice|info|debug.
 	 * @param string $message Log message.
@@ -94,8 +70,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Builds a log entry text from timestamp, level and message.
-	 *
 	 * @param int    $timestamp Log timestamp.
 	 * @param string $level emergency|alert|critical|error|warning|notice|info|debug.
 	 * @param string $message Log message.
@@ -121,8 +95,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Open log file for writing.
-	 *
 	 * @param string $handle Log handle.
 	 * @param string $mode Optional. File mode. Default 'a'.
 	 * @return bool Success.
@@ -136,15 +108,15 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 
 		if ( $file ) {
 			if ( ! file_exists( $file ) ) {
-				$temphandle = @fopen( $file, 'w+' ); // @codingStandardsIgnoreLine
-				@fclose( $temphandle ); // @codingStandardsIgnoreLine
+				$temphandle = @fopen( $file, 'w+' );  
+				@fclose( $temphandle );  
 
 				if ( defined( 'FS_CHMOD_FILE' ) ) {
-					@chmod( $file, FS_CHMOD_FILE ); // @codingStandardsIgnoreLine
+					@chmod( $file, FS_CHMOD_FILE );  
 				}
 			}
 
-			$resource = @fopen( $file, $mode ); // @codingStandardsIgnoreLine
+			$resource = @fopen( $file, $mode );  
 
 			if ( $resource ) {
 				$this->handles[ $handle ] = $resource;
@@ -156,8 +128,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Check if a handle is open.
-	 *
 	 * @param string $handle Log handle.
 	 * @return bool True if $handle is open.
 	 */
@@ -166,8 +136,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Close a handle.
-	 *
 	 * @param string $handle Log handle.
 	 * @return bool success
 	 */
@@ -175,7 +143,7 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 		$result = false;
 
 		if ( $this->is_open( $handle ) ) {
-			$result = fclose( $this->handles[ $handle ] ); // @codingStandardsIgnoreLine
+			$result = fclose( $this->handles[ $handle ] );  
 			unset( $this->handles[ $handle ] );
 		}
 
@@ -183,8 +151,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Add a log entry to chosen file.
-	 *
 	 * @param string $entry Log entry text.
 	 * @param string $handle Log entry handle.
 	 *
@@ -207,8 +173,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Clear entries from chosen file.
-	 *
 	 * @param string $handle Log handle.
 	 *
 	 * @return bool
@@ -216,13 +180,8 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	public function clear( $handle ) {
 		$result = false;
 
-		// Close the file if it's already open.
 		$this->close( $handle );
 
-		/**
-		 * $this->open( $handle, 'w' ) == Open the file for writing only. Place the file pointer at
-		 * the beginning of the file, and truncate the file to zero length.
-		 */
 		if ( $this->open( $handle, 'w' ) && is_resource( $this->handles[ $handle ] ) ) {
 			$result = true;
 		}
@@ -233,8 +192,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Remove/delete the chosen file.
-	 *
 	 * @param string $handle Log handle.
 	 *
 	 * @return bool
@@ -256,10 +213,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Check if log file should be rotated.
-	 *
-	 * Compares the size of the log file to determine whether it is over the size limit.
-	 *
 	 * @param string $handle Log handle.
 	 * @return bool True if if should be rotated.
 	 */
@@ -280,17 +233,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Rotate log files.
-	 *
-	 * Logs are rotated by prepending '.x' to the '.log' suffix.
-	 * The current log plus 10 historical logs are maintained.
-	 * For example:
-	 *     base.9.log -> [ REMOVED ]
-	 *     base.8.log -> base.9.log
-	 *     ...
-	 *     base.0.log -> base.1.log
-	 *     base.log   -> base.0.log
-	 *
 	 * @param string $handle Log handle.
 	 */
 	protected function log_rotate( $handle ) {
@@ -301,8 +243,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Increment a log file suffix.
-	 *
 	 * @param string   $handle Log handle.
 	 * @param null|int $number Optional. Default null. Log suffix number to be incremented.
 	 * @return bool True if increment was successful, otherwise false.
@@ -323,16 +263,14 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 			$this->close( $rename_from );
 		}
 
-		if ( is_writable( $rename_from ) ) { // phpcs:ignore WordPress.VIP.FileSystemWritesDisallow.file_ops_is_writable
-			return rename( $rename_from, $rename_to ); // phpcs:ignore WordPress.VIP.FileSystemWritesDisallow.file_ops_rename
+		if ( is_writable( $rename_from ) ) { 
+			return rename( $rename_from, $rename_to ); 
 		} else {
 			return false;
 		}
 	}
 
 	/**
-	 * Get a log file path.
-	 *
 	 * @param string $handle Log name.
 	 * @return bool|string The log file path or false if path cannot be determined.
 	 */
@@ -346,11 +284,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Get a log file name.
-	 *
-	 * File names consist of the handle, followed by the date, followed by a hash, .log.
-	 *
-	 * @since 3.3
 	 * @param string $handle Log name.
 	 * @return bool|string The log file name or false if cannot be determined.
 	 */
@@ -366,8 +299,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Cache log to write later.
-	 *
 	 * @param string $entry Log entry text.
 	 * @param string $handle Log entry handle.
 	 */
@@ -378,9 +309,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 		);
 	}
 
-	/**
-	 * Write cached logs.
-	 */
 	public function write_cached_logs() {
 		foreach ( $this->cached_logs as $log ) {
 			$this->add( $log['entry'], $log['handle'] );
@@ -388,9 +316,6 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 	}
 
 	/**
-	 * Delete all logs older than a defined timestamp.
-	 *
-	 * @since 1.6.2
 	 * @param integer $timestamp Timestamp to delete logs before.
 	 */
 	public static function delete_logs_before_timestamp( $timestamp = 0 ) {
@@ -404,19 +329,16 @@ class MHK_Log_Handler_File extends MHK_Log_Handler {
 			$last_modified = filemtime( trailingslashit( MHK_LOG_DIR ) . $log_file );
 
 			if ( $last_modified < $timestamp ) {
-				@unlink( trailingslashit( MHK_LOG_DIR ) . $log_file ); // @codingStandardsIgnoreLine.
+				@unlink( trailingslashit( MHK_LOG_DIR ) . $log_file );
 			}
 		}
 	}
 
 	/**
-	 * Get all log files in the log directory.
-	 *
-	 * @since 1.6.2
 	 * @return array
 	 */
 	public static function get_log_files() {
-		$files  = @scandir( MHK_LOG_DIR ); // @codingStandardsIgnoreLine.
+		$files  = @scandir( MHK_LOG_DIR );  .
 		$result = array();
 
 		if ( ! empty( $files ) ) {

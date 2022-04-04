@@ -1,25 +1,16 @@
 <?php
 /**
- * MuhikuPlug Core Functions
- *
- * General core functions available on both the front-end and admin.
- *
  * @package MuhikuPlug/Functions
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-// Include core functions (available in both admin and frontend).
 require MHK_ABSPATH . 'includes/mhk-conditional-functions.php';
 require MHK_ABSPATH . 'includes/mhk-deprecated-functions.php';
 require MHK_ABSPATH . 'includes/mhk-formatting-functions.php';
 require MHK_ABSPATH . 'includes/mhk-entry-functions.php';
 
 /**
- * Define a constant if it is not already defined.
- *
- * @since 1.0.0
  * @param string $name  Constant name.
  * @param mixed  $value Value.
  */
@@ -30,10 +21,6 @@ function mhk_maybe_define_constant( $name, $value ) {
 }
 
 /**
- * Get template part.
- *
- * MHK_TEMPLATE_DEBUG_MODE will prevent overrides in themes from taking priority.
- *
  * @param mixed  $slug Template slug.
  * @param string $name Template name (default: '').
  */
@@ -57,7 +44,6 @@ function mhk_get_template_part( $slug, $name = '' ) {
 		}
 
 		if ( ! $template ) {
-			// If template file doesn't exist, look in yourtheme/slug.php and yourtheme/muhiku-plug/slug.php.
 			$template = MHK_TEMPLATE_DEBUG_MODE ? '' : locate_template(
 				array(
 					"{$slug}.php",
@@ -69,7 +55,6 @@ function mhk_get_template_part( $slug, $name = '' ) {
 		wp_cache_set( $cache_key, $template, 'muhiku-plug' );
 	}
 
-	// Allow 3rd party plugins to filter template file from their plugin.
 	$template = apply_filters( 'mhk_get_template_part', $template, $slug, $name );
 
 	if ( $template ) {
@@ -78,12 +63,10 @@ function mhk_get_template_part( $slug, $name = '' ) {
 }
 
 /**
- * Get other templates passing attributes and including the file.
- *
- * @param string $template_name Template name.
- * @param array  $args          Arguments. (default: array).
- * @param string $template_path Template path. (default: '').
- * @param string $default_path  Default path. (default: '').
+ * @param string $template_name 
+ * @param array  $args          
+ * @param string $template_path 
+ * @param string $default_path  
  */
 function mhk_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 	$cache_key = sanitize_key( implode( '-', array( 'template', $template_name, $template_path, $default_path, MHK_VERSION ) ) );
@@ -94,12 +77,10 @@ function mhk_get_template( $template_name, $args = array(), $template_path = '',
 		wp_cache_set( $cache_key, $template, 'muhiku-plug' );
 	}
 
-	// Allow 3rd party plugin filter template file from their plugin.
 	$filter_template = apply_filters( 'mhk_get_template', $template, $template_name, $args, $template_path, $default_path );
 
 	if ( $filter_template !== $template ) {
 		if ( ! file_exists( $filter_template ) ) {
-			/* translators: %s template */
 			mhk_doing_it_wrong( __FUNCTION__, sprintf( __( '%s does not exist.', 'muhiku-plug' ), '<code>' . $filter_template . '</code>' ), '1.0.0' );
 			return;
 		}
@@ -122,7 +103,7 @@ function mhk_get_template( $template_name, $args = array(), $template_path = '',
 			);
 			unset( $args['action_args'] );
 		}
-		extract( $args ); // @codingStandardsIgnoreLine
+		extract( $args ); 
 	}
 
 	do_action( 'muhiku_forms_before_template_part', $action_args['template_name'], $action_args['template_path'], $action_args['located'], $action_args['args'] );
@@ -133,10 +114,6 @@ function mhk_get_template( $template_name, $args = array(), $template_path = '',
 }
 
 /**
- * Like mhk_get_template, but returns the HTML instead of outputting.
- *
- * @see    mhk_get_template
- * @since  1.0.0
  * @param  string $template_name Template name.
  * @param  array  $args          Arguments. (default: array).
  * @param  string $template_path Template path. (default: '').
@@ -150,13 +127,6 @@ function mhk_get_template_html( $template_name, $args = array(), $template_path 
 }
 
 /**
- * Locate a template and return the path for inclusion.
- *
- * This is the load order:
- *
- * yourtheme/$template_path/$template_name
- * yourtheme/$template_name
- * $default_path/$template_name
  *
  * @param  string $template_name Template name.
  * @param  string $template_path Template path. (default: '').
@@ -172,7 +142,6 @@ function mhk_locate_template( $template_name, $template_path = '', $default_path
 		$default_path = mhk()->plugin_path() . '/templates/';
 	}
 
-	// Look within passed path within the theme - this is priority.
 	$template = locate_template(
 		array(
 			trailingslashit( $template_path ) . $template_name,
@@ -180,17 +149,14 @@ function mhk_locate_template( $template_name, $template_path = '', $default_path
 		)
 	);
 
-	// Get default template/.
 	if ( ! $template || MHK_TEMPLATE_DEBUG_MODE ) {
 		$template = $default_path . $template_name;
 	}
 
-	// Return what we found.
 	return apply_filters( 'muhiku_forms_locate_template', $template, $template_name, $template_path );
 }
 
 /**
- * Send HTML emails from MuhikuPlug.
  *
  * @param mixed  $to          Receiver.
  * @param mixed  $subject     Subject.
@@ -205,9 +171,7 @@ function mhk_mail( $to, $subject, $message, $headers = "Content-Type: text/html\
 }
 
 /**
- * Queue some JavaScript code to be output in the footer.
- *
- * @param string $code Code.
+ * @param string $code
  */
 function mhk_enqueue_js( $code ) {
 	global $mhk_queued_js;
@@ -219,14 +183,10 @@ function mhk_enqueue_js( $code ) {
 	$mhk_queued_js .= "\n" . $code . "\n";
 }
 
-/**
- * Output any queued javascript code in the footer.
- */
 function mhk_print_js() {
 	global $mhk_queued_js;
 
 	if ( ! empty( $mhk_queued_js ) ) {
-		// Sanitize.
 		$mhk_queued_js = wp_check_invalid_utf8( $mhk_queued_js );
 		$mhk_queued_js = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", $mhk_queued_js );
 		$mhk_queued_js = str_replace( "\r", '', $mhk_queued_js );
@@ -234,10 +194,7 @@ function mhk_print_js() {
 		$js = "<!-- Muhiku Plug JavaScript -->\n<script type=\"text/javascript\">\njQuery(function($) { $mhk_queued_js });\n</script>\n";
 
 		/**
-		 * Queued jsfilter.
-		 *
-		 * @since 1.0.0
-		 * @param string $js JavaScript code.
+		 * @param string $js 
 		 */
 		echo wp_kses( apply_filters( 'muhiku_forms_queued_js', $js ), array( 'script' => array( 'type' => true ) ) );
 		unset( $mhk_queued_js );
@@ -245,28 +202,22 @@ function mhk_print_js() {
 }
 
 /**
- * Set a cookie - wrapper for setcookie using WP constants.
- *
- * @param  string  $name   Name of the cookie being set.
- * @param  string  $value  Value of the cookie.
- * @param  integer $expire Expiry of the cookie.
- * @param  bool    $secure Whether the cookie should be served only over https.
- * @param  bool    $httponly Whether the cookie is only accessible over HTTP, not scripting languages like JavaScript. @since 1.4.9.
+ * @param  string  $name  
+ * @param  string  $value  
+ * @param  integer $expire 
+ * @param  bool    $secure 
+ * @param  bool    $httponly
  */
 function mhk_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false ) {
 	if ( ! headers_sent() ) {
 		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'muhiku_forms_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
 	} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 		headers_sent( $file, $line );
-		trigger_error( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}", E_USER_NOTICE ); // @codingStandardsIgnoreLine
+		trigger_error( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}", E_USER_NOTICE );  
 	}
 }
 
 /**
- * Get a log file path.
- *
- * @since 1.0.0
- *
  * @param  string $handle name.
  * @return string the log file path.
  */
@@ -275,12 +226,6 @@ function mhk_get_log_file_path( $handle ) {
 }
 
 /**
- * Get a csv file name.
- *
- * File names consist of the handle, followed by the date, followed by a hash, .csv.
- *
- * @since 1.3.0
- *
  * @param  string $handle Name.
  * @return bool|string The csv file name or false if cannot be determined.
  */
@@ -296,8 +241,6 @@ function mhk_get_csv_file_name( $handle ) {
 }
 
 /**
- * Recursively get page children.
- *
  * @param  int $page_id Page ID.
  * @return int[]
  */
@@ -322,25 +265,14 @@ function mhk_get_page_children( $page_id ) {
 }
 
 /**
- * Get user agent string.
- *
- * @since  1.0.0
  * @return string
  */
 function mhk_get_user_agent() {
-	return isset( $_SERVER['HTTP_USER_AGENT'] ) ? mhk_clean( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : ''; // @codingStandardsIgnoreLine
+	return isset( $_SERVER['HTTP_USER_AGENT'] ) ? mhk_clean( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';  
 }
 
-// This function can be removed when WP 3.9.2 or greater is required.
 if ( ! function_exists( 'hash_equals' ) ) :
 	/**
-	 * Compare two strings in constant time.
-	 *
-	 * This function was added in PHP 5.6.
-	 * It can leak the length of a string.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param  string $a Expected string.
 	 * @param  string $b Actual string.
 	 * @return bool Whether strings are equal.
@@ -352,7 +284,6 @@ if ( ! function_exists( 'hash_equals' ) ) :
 		}
 		$result = 0;
 
-		// Do not attempt to "optimize" this.
 		for ( $i = 0; $i < $a_length; $i ++ ) {
 			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
 		}
@@ -362,9 +293,6 @@ if ( ! function_exists( 'hash_equals' ) ) :
 endif;
 
 /**
- * Generate a rand hash.
- *
- * @since  1.0.0
  * @return string
  */
 function mhk_rand_hash() {
@@ -372,13 +300,10 @@ function mhk_rand_hash() {
 		return sha1( wp_rand() );
 	}
 
-	return bin2hex( openssl_random_pseudo_bytes( 20 ) ); // @codingStandardsIgnoreLine
+	return bin2hex( openssl_random_pseudo_bytes( 20 ) );  
 }
 
 /**
- * Find all possible combinations of values from the input array and return in a logical order.
- *
- * @since  1.0.0
  * @param  array $input Input.
  * @return array
  */
@@ -388,29 +313,23 @@ function mhk_array_cartesian( $input ) {
 	$indexes = array();
 	$index   = 0;
 
-	// Generate indexes from keys and values so we have a logical sort order.
 	foreach ( $input as $key => $values ) {
 		foreach ( $values as $value ) {
 			$indexes[ $key ][ $value ] = $index++;
 		}
 	}
 
-	// Loop over the 2D array of indexes and generate all combinations.
 	foreach ( $indexes as $key => $values ) {
-		// When result is empty, fill with the values of the first looped array.
 		if ( empty( $results ) ) {
 			foreach ( $values as $value ) {
 				$results[] = array( $key => $value );
 			}
 		} else {
-			// Second and subsequent input sub-array merging.
 			foreach ( $results as $result_key => $result ) {
 				foreach ( $values as $value ) {
-					// If the key is not set, we can set it.
 					if ( ! isset( $results[ $result_key ][ $key ] ) ) {
 						$results[ $result_key ][ $key ] = $value;
 					} else {
-						// If the key is set, we can add a new combination to the results array.
 						$new_combination         = $results[ $result_key ];
 						$new_combination[ $key ] = $value;
 						$results[]               = $new_combination;
@@ -419,18 +338,13 @@ function mhk_array_cartesian( $input ) {
 			}
 		}
 	}
-
-	// Sort the indexes.
 	arsort( $results );
 
-	// Convert indexes back to values.
 	foreach ( $results as $result_key => $result ) {
 		$converted_values = array();
 
-		// Sort the values.
 		arsort( $results[ $result_key ] );
 
-		// Convert the values.
 		foreach ( $results[ $result_key ] as $key => $value ) {
 			$converted_values[ $key ] = array_search( $value, $indexes[ $key ], true );
 		}
@@ -442,9 +356,6 @@ function mhk_array_cartesian( $input ) {
 }
 
 /**
- * Run a MySQL transaction query, if supported.
- *
- * @since 1.0.0
  * @param string $type Types: start (default), commit, rollback.
  * @param bool   $force use of transactions.
  */
@@ -471,8 +382,6 @@ function mhk_transaction_query( $type = 'start', $force = false ) {
 }
 
 /**
- * Outputs a "back" link so admin screens can easily jump back a page.
- *
  * @param string $label Title of the page to return to.
  * @param string $url   URL of the page to return to.
  */
@@ -481,9 +390,6 @@ function mhk_back_link( $label, $url ) {
 }
 
 /**
- * Display a MuhikuPlug help tip.
- *
- * @since  1.0.0
  *
  * @param  string $tip        Help tip text.
  * @param  bool   $allow_html Allow sanitized HTML if true or escape.
@@ -500,35 +406,20 @@ function mhk_help_tip( $tip, $allow_html = false ) {
 }
 
 /**
- * Wrapper for set_time_limit to see if it is enabled.
- *
- * @since 1.0.0
  * @param int $limit Time limit.
  */
 function mhk_set_time_limit( $limit = 0 ) {
 	if ( function_exists( 'set_time_limit' ) && false === strpos( ini_get( 'disable_functions' ), 'set_time_limit' ) && ! ini_get( 'safe_mode' ) ) { // phpcs:ignore PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved
-		@set_time_limit( $limit ); // @codingStandardsIgnoreLine
+		@set_time_limit( $limit );  
 	}
 }
 
-/**
- * Wrapper for nocache_headers which also disables page caching.
- *
- * @since 1.2.0
- */
 function mhk_nocache_headers() {
 	MHK_Cache_Helper::set_nocache_constants();
 	nocache_headers();
 }
 
 /**
- * Get a shared logger instance.
- *
- * Use the muhiku_forms_logging_class filter to change the logging class. You may provide one of the following:
- *     - a class name which will be instantiated as `new $class` with no arguments
- *     - an instance which will be used directly as the logger
- * In either case, the class or instance *must* implement MHK_Logger_Interface.
- *
  * @see MHK_Logger_Interface
  *
  * @return MHK_Logger
@@ -550,7 +441,6 @@ function mhk_get_logger() {
 		mhk_doing_it_wrong(
 			__FUNCTION__,
 			sprintf(
-				/* translators: 1: class name 2: muhiku_forms_logging_class 3: MHK_Logger_Interface */
 				__( 'The class %1$s provided by %2$s filter must implement %3$s.', 'muhiku-plug' ),
 				'<code>' . esc_html( is_object( $class ) ? get_class( $class ) : $class ) . '</code>',
 				'<code>muhiku_forms_logging_class</code>',
@@ -565,13 +455,6 @@ function mhk_get_logger() {
 }
 
 /**
- * Prints human-readable information about a variable.
- *
- * Some server environments blacklist some debugging functions. This function provides a safe way to
- * turn an expression into a printable, readable form without calling blacklisted functions.
- *
- * @since 1.0.0
- *
  * @param mixed $expression The expression to be printed.
  * @param bool  $return     Optional. Default false. Set to true to return the human-readable string.
  *
@@ -616,9 +499,6 @@ function mhk_print_r( $expression, $return = false ) {
 }
 
 /**
- * Registers the default log handler.
- *
- * @since  1.0.0
  * @param  array $handlers Handlers.
  * @return array
  */
@@ -638,9 +518,6 @@ function mhk_register_default_log_handler( $handlers ) {
 add_filter( 'muhiku_forms_register_log_handlers', 'mhk_register_default_log_handler' );
 
 /**
- * Based on wp_list_pluck, this calls a method instead of returning a property.
- *
- * @since 1.0.0
  * @param array      $list              List of objects or arrays.
  * @param int|string $callback_or_field Callback method from the object to place instead of the entire object.
  * @param int|string $index_key         Optional. Field from the object to use as keys for the new array.
@@ -648,29 +525,19 @@ add_filter( 'muhiku_forms_register_log_handlers', 'mhk_register_default_log_hand
  * @return array Array of values.
  */
 function mhk_list_pluck( $list, $callback_or_field, $index_key = null ) {
-	// Use wp_list_pluck if this isn't a callback.
 	$first_el = current( $list );
 	if ( ! is_object( $first_el ) || ! is_callable( array( $first_el, $callback_or_field ) ) ) {
 		return wp_list_pluck( $list, $callback_or_field, $index_key );
 	}
 	if ( ! $index_key ) {
-		/*
-		 * This is simple. Could at some point wrap array_column()
-		 * if we knew we had an array of arrays.
-		 */
 		foreach ( $list as $key => $value ) {
 			$list[ $key ] = $value->{$callback_or_field}();
 		}
 		return $list;
 	}
 
-	/*
-	 * When index_key is not set for a particular item, push the value
-	 * to the end of the stack. This is how array_column() behaves.
-	 */
 	$newlist = array();
 	foreach ( $list as $value ) {
-		// Get index.
 		if ( is_callable( array( $value, $index_key ) ) ) {
 			$newlist[ $value->{$index_key}() ] = $value->{$callback_or_field}();
 		} elseif ( isset( $value->$index_key ) ) {
@@ -682,56 +549,36 @@ function mhk_list_pluck( $list, $callback_or_field, $index_key = null ) {
 	return $newlist;
 }
 
-/**
- * Switch MuhikuPlug to site language.
- *
- * @since 1.0.0
- */
 function mhk_switch_to_site_locale() {
 	if ( function_exists( 'switch_to_locale' ) ) {
 		switch_to_locale( get_locale() );
 
-		// Filter on plugin_locale so load_plugin_textdomain loads the correct locale.
 		add_filter( 'plugin_locale', 'get_locale' );
 
-		// Init MHK locale.
 		mhk()->load_plugin_textdomain();
 	}
 }
 
-/**
- * Switch MuhikuPlug language to original.
- *
- * @since 1.0.0
- */
 function mhk_restore_locale() {
 	if ( function_exists( 'restore_previous_locale' ) ) {
 		restore_previous_locale();
 
-		// Remove filter.
 		remove_filter( 'plugin_locale', 'get_locale' );
 
-		// Init MHK locale.
 		mhk()->load_plugin_textdomain();
 	}
 }
 
 /**
- * Get an item of post data if set, otherwise return a default value.
- *
- * @since  1.0.0
  * @param  string $key     Key.
  * @param  string $default Default.
  * @return mixed value sanitized by mhk_clean
  */
 function mhk_get_post_data_by_key( $key, $default = '' ) {
-	return mhk_clean( mhk_get_var( $_POST[ $key ], $default ) ); // @codingStandardsIgnoreLine
+	return mhk_clean( mhk_get_var( $_POST[ $key ], $default ) ); 
 }
 
 /**
- * Get data if set, otherwise return a default value or null. Prevents notices when data is not set.
- *
- * @since  1.0.0
  * @param  mixed  $var     Variable.
  * @param  string $default Default value.
  * @return mixed
@@ -741,9 +588,6 @@ function mhk_get_var( &$var, $default = null ) {
 }
 
 /**
- * Read in MuhikuPlug headers when reading plugin headers.
- *
- * @since  1.2.0
  * @param  array $headers Headers.
  * @return array
  */
@@ -752,10 +596,8 @@ function mhk_enable_mhk_plugin_headers( $headers ) {
 		include_once dirname( __FILE__ ) . '/admin/plugin-updates/class-mhk-plugin-updates.php';
 	}
 
-	// MHK requires at least - allows developers to define which version of Muhiku Plug the plugin requires to run.
 	$headers[] = MHK_Plugin_Updates::VERSION_REQUIRED_HEADER;
 
-	// MHK tested up to - allows developers to define which version of Muhiku Plug they have tested up to.
 	$headers[] = MHK_Plugin_Updates::VERSION_TESTED_HEADER;
 
 	return $headers;
@@ -764,15 +606,6 @@ add_filter( 'extra_theme_headers', 'mhk_enable_mhk_plugin_headers' );
 add_filter( 'extra_plugin_headers', 'mhk_enable_mhk_plugin_headers' );
 
 /**
- * Delete expired transients.
- *
- * Deletes all expired transients. The multi-table delete syntax is used.
- * to delete the transient record from table a, and the corresponding.
- * transient_timeout record from table b.
- *
- * Based on code inside core's upgrade_network() function.
- *
- * @since  1.0.0
  * @return int Number of transients that were cleared.
  */
 function mhk_delete_expired_transients() {
@@ -797,9 +630,6 @@ function mhk_delete_expired_transients() {
 add_action( 'muhiku_forms_installed', 'mhk_delete_expired_transients' );
 
 /**
- * Make a URL relative, if possible.
- *
- * @since  1.0.0
  * @param  string $url URL to make relative.
  * @return string
  */
@@ -808,9 +638,6 @@ function mhk_get_relative_url( $url ) {
 }
 
 /**
- * See if a resource is remote.
- *
- * @since  1.0.0
  * @param  string $url URL to check.
  * @return bool
  */
@@ -820,9 +647,6 @@ function mhk_is_external_resource( $url ) {
 }
 
 /**
- * See if theme/s is activate or not.
- *
- * @since  1.0.0
  * @param  string|array $theme Theme name or array of theme names to check.
  * @return boolean
  */
@@ -830,11 +654,6 @@ function mhk_is_active_theme( $theme ) {
 	return is_array( $theme ) ? in_array( get_template(), $theme, true ) : get_template() === $theme;
 }
 
-/**
- * Cleans up session data - cron callback.
- *
- * @since 1.0.0
- */
 function mhk_cleanup_session_data() {
 	$session_class = apply_filters( 'muhiku_forms_session_handler', 'MHK_Session_Handler' );
 	$session       = new $session_class();
@@ -846,9 +665,6 @@ function mhk_cleanup_session_data() {
 add_action( 'muhiku_forms_cleanup_sessions', 'mhk_cleanup_session_data' );
 
 /**
- * Return the html selected attribute if stringified $value is found in array of stringified $options
- * or if stringified $value is the same as scalar stringified $options.
- *
  * @param string|int       $value   Value to find within options.
  * @param string|int|array $options Options to go through when looking for value.
  * @return string
@@ -863,20 +679,12 @@ function mhk_selected( $value, $options ) {
 }
 
 /**
- * Retrieve actual fields from a form.
- *
- * Non-posting elements such as section divider, page break, and HTML are
- * automatically excluded. Optionally a white list can be provided.
- *
- * @since 1.0.0
- *
  * @param mixed $form Form data.
  * @param array $whitelist Whitelist args.
  *
  * @return mixed boolean or array
  */
 function mhk_get_form_fields( $form = false, $whitelist = array() ) {
-	// Accept form (post) object or form ID.
 	if ( is_object( $form ) ) {
 		$form = json_decode( $form->post_content );
 	} elseif ( is_numeric( $form ) ) {
@@ -892,7 +700,6 @@ function mhk_get_form_fields( $form = false, $whitelist = array() ) {
 		return false;
 	}
 
-	// White list of field types to allow.
 	$allowed_form_fields = array(
 		'first-name',
 		'last-name',
@@ -933,12 +740,6 @@ function mhk_get_form_fields( $form = false, $whitelist = array() ) {
 }
 
 /**
- * Sanitize a string, that can be a multiline.
- * If WP core `sanitize_textarea_field()` exists (after 4.7.0) - use it.
- * Otherwise - split onto separate lines, sanitize each one, merge again.
- *
- * @since 1.4.1
- *
  * @param string $string Raw string to sanitize.
  *
  * @return string If empty var is passed, or not a string - return unmodified. Otherwise - sanitize.
@@ -958,9 +759,6 @@ function mhk_sanitize_textarea_field( $string ) {
 }
 
 /**
- * Formats, sanitizes, and returns/echos HTML element ID, classes, attributes,
- * and data attributes.
- *
  * @param string $id    Element ID.
  * @param array  $class Class args.
  * @param array  $datas Data args.
@@ -996,8 +794,7 @@ function mhk_html_attributes( $id = '', $class = array(), $datas = array(), $att
 	if ( ! empty( $atts ) ) {
 		foreach ( $atts as $att => $val ) {
 			if ( '0' === $val || ! empty( $val ) ) {
-				if ( $att[0] === '[' ) { //phpcs:ignore
-					// Handle special case for bound attributes in AMP.
+				if ( $att[0] === '[' ) { 
 					$escaped_att = '[' . sanitize_html_class( trim( $att, '[]' ) ) . ']';
 				} else {
 					$escaped_att = sanitize_html_class( $att );
@@ -1017,8 +814,6 @@ function mhk_html_attributes( $id = '', $class = array(), $datas = array(), $att
 }
 
 /**
- * Sanitize string of CSS classes.
- *
  * @param array|string $classes Class names.
  * @param bool         $convert True will convert strings to array and vice versa.
  *
@@ -1045,10 +840,6 @@ function mhk_sanitize_classes( $classes, $convert = false ) {
 }
 
 /**
- * Performs json_decode and unslash.
- *
- * @since 1.0.0
- *
  * @param string $data Data to decode.
  *
  * @return array|bool
@@ -1062,9 +853,6 @@ function mhk_decode( $data ) {
 }
 
 /**
- * Performs json_encode and wp_slash.
- *
- * @since 1.0.0
  *
  * @param mixed $data Data to encode.
  *
@@ -1079,8 +867,6 @@ function mhk_encode( $data = false ) {
 }
 
 /**
- * Crypto rand secure.
- *
  * @param int $min Min value.
  * @param int $max Max value.
  *
@@ -1090,22 +876,20 @@ function mhk_crypto_rand_secure( $min, $max ) {
 	$range = $max - $min;
 	if ( $range < 1 ) {
 		return $min;
-	} // not so random...
+	} 
 	$log    = ceil( log( $range, 2 ) );
-	$bytes  = (int) ( $log / 8 ) + 1; // Length in bytes.
-	$bits   = (int) $log + 1; // Length in bits.
-	$filter = (int) ( 1 << $bits ) - 1; // Set all lower bits to 1.
+	$bytes  = (int) ( $log / 8 ) + 1; 
+	$bits   = (int) $log + 1; 
+	$filter = (int) ( 1 << $bits ) - 1; 
 	do {
 		$rnd = hexdec( bin2hex( openssl_random_pseudo_bytes( $bytes ) ) );
-		$rnd = $rnd & $filter; // Discard irrelevant bits.
+		$rnd = $rnd & $filter; 
 	} while ( $rnd > $range );
 
 	return $min + $rnd;
 }
 
 /**
- * Generate random string.
- *
  * @param int $length Length of string.
  *
  * @return string
@@ -1124,8 +908,6 @@ function mhk_get_random_string( $length = 10 ) {
 }
 
 /**
- * Get all forms.
- *
  * @param  bool $skip_disabled_entries True to skip disabled entries.
  * @return array of form data.
  */
@@ -1137,7 +919,7 @@ function mhk_get_all_forms( $skip_disabled_entries = false ) {
 				'fields'      => 'ids',
 				'status'      => 'publish',
 				'order'       => 'DESC',
-				'numberposts' => -1, // @codingStandardsIgnoreLine
+				'numberposts' => -1, 
 			)
 		)
 	);
@@ -1152,7 +934,6 @@ function mhk_get_all_forms( $skip_disabled_entries = false ) {
 				continue;
 			}
 
-			// Check permissions for forms with viewable.
 			if ( current_user_can( 'muhiku_forms_view_form_entries', $form_id ) ) {
 				$forms[ $form_id ] = $form->post_title;
 			}
@@ -1163,38 +944,29 @@ function mhk_get_all_forms( $skip_disabled_entries = false ) {
 }
 
 /**
- * Get random meta-key for field option.
- *
  * @param  array $field Field data array.
  * @return string
  */
 function mhk_get_meta_key_field_option( $field ) {
-	$random_number = rand( pow( 10, 3 ), pow( 10, 4 ) - 1 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
+	$random_number = rand( pow( 10, 3 ), pow( 10, 4 ) - 1 );
 	return strtolower( str_replace( array( ' ', '/_' ), array( '_', '' ), $field['label'] ) ) . '_' . $random_number;
 }
 
 /**
- * Get current user IP Address.
- *
  * @return string
  */
 function mhk_get_ip_address() {
-	if ( isset( $_SERVER['HTTP_X_REAL_IP'] ) ) { // WPCS: input var ok, CSRF ok.
-		return sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_REAL_IP'] ) );  // WPCS: input var ok, CSRF ok.
-	} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) { // WPCS: input var ok, CSRF ok.
-		// Proxy servers can send through this header like this: X-Forwarded-For: client1, proxy1, proxy2
-		// Make sure we always only send through the first IP in the list which should always be the client IP.
-		return (string) rest_is_ip_address( trim( current( preg_split( '/[,:]/', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ) ) ) ); // WPCS: input var ok, CSRF ok.
-	} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) { // @codingStandardsIgnoreLine
-		return sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ); // @codingStandardsIgnoreLine
+	if ( isset( $_SERVER['HTTP_X_REAL_IP'] ) ) { 
+		return sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_REAL_IP'] ) ); 
+	} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) { 
+		return (string) rest_is_ip_address( trim( current( preg_split( '/[,:]/', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) ) ) ) ); 
+	} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) { 
+		return sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ); 
 	}
 	return '';
 }
 
 /**
- * Get User Agent browser and OS type
- *
- * @since  1.1.0
  * @return array
  */
 function mhk_get_browser() {
@@ -1203,7 +975,6 @@ function mhk_get_browser() {
 	$platform = 'Unknown';
 	$version  = '';
 
-	// First get the platform.
 	if ( preg_match( '/linux/i', $u_agent ) ) {
 		$platform = 'Linux';
 	} elseif ( preg_match( '/macintosh|mac os x/i', $u_agent ) ) {
@@ -1212,12 +983,10 @@ function mhk_get_browser() {
 		$platform = 'Windows';
 	}
 
-	// Next get the name of the useragent yes seperately and for good reason.
 	if ( preg_match( '/MSIE/i', $u_agent ) && ! preg_match( '/Opera/i', $u_agent ) ) {
 		$bname = 'Internet Explorer';
 		$ub    = 'MSIE';
 	} elseif ( preg_match( '/Trident/i', $u_agent ) ) {
-		// this condition is for IE11.
 		$bname = 'Internet Explorer';
 		$ub    = 'rv';
 	} elseif ( preg_match( '/Firefox/i', $u_agent ) ) {
@@ -1237,20 +1006,14 @@ function mhk_get_browser() {
 		$ub    = 'Netscape';
 	}
 
-	// Finally get the correct version number.
-	// Added "|:".
 	$known   = array( 'Version', $ub, 'other' );
 	$pattern = '#(?<browser>' . join( '|', $known ) . ')[/|: ]+(?<version>[0-9.|a-zA-Z.]*)#';
-	if ( ! preg_match_all( $pattern, $u_agent, $matches ) ) { // @codingStandardsIgnoreLine
-		// We have no matching number just continue.
+	if ( ! preg_match_all( $pattern, $u_agent, $matches ) ) { 
 	}
 
-	// See how many we have.
 	$i = count( $matches['browser'] );
 
 	if ( 1 !== $i ) {
-		// we will have two since we are not using 'other' argument yet.
-		// see if version is before or after the name.
 		if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
 			$version = $matches['version'][0];
 		} else {
@@ -1260,7 +1023,6 @@ function mhk_get_browser() {
 		$version = $matches['version'][0];
 	}
 
-	// Check if we have a number.
 	if ( null === $version || '' === $version ) {
 		$version = '';
 	}
@@ -1275,10 +1037,6 @@ function mhk_get_browser() {
 }
 
 /**
- * Get the certain date of a specified day in a specified format.
- *
- * @since 1.1.0
- *
  * @param string $period Supported values: start, end.
  * @param string $timestamp Default is the current timestamp, if left empty.
  * @param string $format Default is a MySQL format.
@@ -1307,8 +1065,6 @@ function mhk_get_day_period_date( $period, $timestamp = '', $format = 'Y-m-d H:i
 }
 
 /**
- * Get field label by meta key
- *
  * @param int    $form_id  Form ID.
  * @param string $meta_key Field's meta key.
  * @param array  $fields Entry Field Data.
@@ -1340,8 +1096,6 @@ function mhk_get_form_data_by_meta_key( $form_id, $meta_key, $fields = array() )
 }
 
 /**
- * Get field type by meta key
- *
  * @param int    $form_id  Form ID.
  * @param string $meta_key Field's meta key.
  *
@@ -1364,8 +1118,6 @@ function mhk_get_field_type_by_meta_key( $form_id, $meta_key ) {
 }
 
 /**
- * Get all the email fields of a Form.
- *
  * @param int $form_id  Form ID.
  */
 function mhk_get_all_email_fields_by_form_id( $form_id ) {
@@ -1385,8 +1137,6 @@ function mhk_get_all_email_fields_by_form_id( $form_id ) {
 }
 
 /**
- * Get all the field's meta-key label pair.
- *
  * @param int $form_id  Form ID.
  * @return array
  */
@@ -1407,8 +1157,6 @@ function mhk_get_all_form_fields_by_form_id( $form_id ) {
 }
 
 /**
- * Check if the string JSON.
- *
  * @param string $string String to check.
  * @return bool
  */
@@ -1418,9 +1166,6 @@ function mhk_isJson( $string ) {
 }
 
 /**
- * Checks whether the content passed contains a specific short code.
- *
- * @since  1.1.4
  * @param  string $tag Shortcode tag to check.
  * @return bool
  */
@@ -1431,11 +1176,6 @@ function mhk_post_content_has_shortcode( $tag = '' ) {
 }
 
 /**
- * Convert a file size provided, such as "2M", to bytes.
- *
- * @since 1.2.0
- * @link http://stackoverflow.com/a/22500394
- *
  * @param string $size Size to convert to bytes.
  *
  * @return int
@@ -1448,7 +1188,6 @@ function mhk_size_to_bytes( $size ) {
 	$suffix = substr( $size, - 1 );
 	$value  = substr( $size, 0, - 1 );
 
-	// @codingStandardsIgnoreStart
 	switch ( strtoupper( $suffix ) ) {
 		case 'P':
 			$value *= 1024;
@@ -1462,16 +1201,11 @@ function mhk_size_to_bytes( $size ) {
 			$value *= 1024;
 			break;
 	}
-	// @codingStandardsIgnoreEnd
 
 	return $value;
 }
 
 /**
- * Convert bytes to megabytes (or in some cases KB).
- *
- * @since 1.2.0
- *
  * @param int $bytes Bytes to convert to a readable format.
  *
  * @return string
@@ -1485,11 +1219,6 @@ function mhk_size_to_megabytes( $bytes ) {
 }
 
 /**
- * Convert a file size provided, such as "2M", to bytes.
- *
- * @since 1.2.0
- * @link http://stackoverflow.com/a/22500394
- *
  * @param  bool $bytes Whether to convert Bytes to a readable format.
  * @return mixed
  */
@@ -1504,56 +1233,14 @@ function mhk_max_upload( $bytes = false ) {
 }
 
 /**
- * Get the required label text, with a filter.
- *
- * @since  1.2.0
  * @return string
  */
 function mhk_get_required_label() {
 	return apply_filters( 'muhiku_forms_required_label', esc_html__( 'This field is required.', 'muhiku-plug' ) );
 }
 
-/**
- * Get a PRO license plan.
- *
- * @since  1.2.0
- * @return bool|string Plan on success, false on failure.
- */
-function mhk_get_license_plan() {
-	$license_key = get_option( 'muhiku-plug-pro_license_key' );
-
-	if ( ! function_exists( 'is_plugin_active' ) ) {
-		include_once ABSPATH . 'wp-admin/includes/plugin.php';
-	}
-
-	if ( $license_key && is_plugin_active( 'muhiku-plug-pro/muhiku-plug-pro.php' ) ) {
-		$license_data = get_transient( 'mhk_pro_license_plan' );
-
-		if ( false === $license_data ) {
-			$license_data = json_decode(
-				MHK_Updater_Key_API::check(
-					array(
-						'license' => $license_key,
-					)
-				)
-			);
-
-			if ( ! empty( $license_data->item_plan ) ) {
-				set_transient( 'mhk_pro_license_plan', $license_data, WEEK_IN_SECONDS );
-			}
-		}
-
-		return isset( $license_data->item_plan ) ? $license_data->item_plan : false;
-	}
-
-	return false;
-}
 
 /**
- * Decode special characters, both alpha- (<) and numeric-based (').
- *
- * @since 1.2.0
- *
  * @param string $string Raw string to decode.
  *
  * @return string
@@ -1567,353 +1254,21 @@ function mhk_decode_string( $string ) {
 }
 add_filter( 'muhiku_forms_email_message', 'mhk_decode_string' );
 
-/**
- * Get Countries.
- *
- * @since  1.2.0
- * @return array
- */
-function mhk_get_countries() {
-	$countries = array(
-		'AF' => esc_html__( 'Afghanistan', 'muhiku-plug' ),
-		'AX' => esc_html__( 'Åland Islands', 'muhiku-plug' ),
-		'AL' => esc_html__( 'Albania', 'muhiku-plug' ),
-		'DZ' => esc_html__( 'Algeria', 'muhiku-plug' ),
-		'AS' => esc_html__( 'American Samoa', 'muhiku-plug' ),
-		'AD' => esc_html__( 'Andorra', 'muhiku-plug' ),
-		'AO' => esc_html__( 'Angola', 'muhiku-plug' ),
-		'AI' => esc_html__( 'Anguilla', 'muhiku-plug' ),
-		'AQ' => esc_html__( 'Antarctica', 'muhiku-plug' ),
-		'AG' => esc_html__( 'Antigua and Barbuda', 'muhiku-plug' ),
-		'AR' => esc_html__( 'Argentina', 'muhiku-plug' ),
-		'AM' => esc_html__( 'Armenia', 'muhiku-plug' ),
-		'AW' => esc_html__( 'Aruba', 'muhiku-plug' ),
-		'AU' => esc_html__( 'Australia', 'muhiku-plug' ),
-		'AT' => esc_html__( 'Austria', 'muhiku-plug' ),
-		'AZ' => esc_html__( 'Azerbaijan', 'muhiku-plug' ),
-		'BS' => esc_html__( 'Bahamas', 'muhiku-plug' ),
-		'BH' => esc_html__( 'Bahrain', 'muhiku-plug' ),
-		'BD' => esc_html__( 'Bangladesh', 'muhiku-plug' ),
-		'BB' => esc_html__( 'Barbados', 'muhiku-plug' ),
-		'BY' => esc_html__( 'Belarus', 'muhiku-plug' ),
-		'BE' => esc_html__( 'Belgium', 'muhiku-plug' ),
-		'PW' => esc_html__( 'Belau', 'muhiku-plug' ),
-		'BZ' => esc_html__( 'Belize', 'muhiku-plug' ),
-		'BJ' => esc_html__( 'Benin', 'muhiku-plug' ),
-		'BM' => esc_html__( 'Bermuda', 'muhiku-plug' ),
-		'BT' => esc_html__( 'Bhutan', 'muhiku-plug' ),
-		'BO' => esc_html__( 'Bolivia', 'muhiku-plug' ),
-		'BQ' => esc_html__( 'Bonaire, Saint Eustatius and Saba', 'muhiku-plug' ),
-		'BA' => esc_html__( 'Bosnia and Herzegovina', 'muhiku-plug' ),
-		'BW' => esc_html__( 'Botswana', 'muhiku-plug' ),
-		'BV' => esc_html__( 'Bouvet Island', 'muhiku-plug' ),
-		'BR' => esc_html__( 'Brazil', 'muhiku-plug' ),
-		'IO' => esc_html__( 'British Indian Ocean Territory', 'muhiku-plug' ),
-		'BN' => esc_html__( 'Brunei', 'muhiku-plug' ),
-		'BG' => esc_html__( 'Bulgaria', 'muhiku-plug' ),
-		'BF' => esc_html__( 'Burkina Faso', 'muhiku-plug' ),
-		'BI' => esc_html__( 'Burundi', 'muhiku-plug' ),
-		'KH' => esc_html__( 'Cambodia', 'muhiku-plug' ),
-		'CM' => esc_html__( 'Cameroon', 'muhiku-plug' ),
-		'CA' => esc_html__( 'Canada', 'muhiku-plug' ),
-		'CV' => esc_html__( 'Cape Verde', 'muhiku-plug' ),
-		'KY' => esc_html__( 'Cayman Islands', 'muhiku-plug' ),
-		'CF' => esc_html__( 'Central African Republic', 'muhiku-plug' ),
-		'TD' => esc_html__( 'Chad', 'muhiku-plug' ),
-		'CL' => esc_html__( 'Chile', 'muhiku-plug' ),
-		'CN' => esc_html__( 'China', 'muhiku-plug' ),
-		'CX' => esc_html__( 'Christmas Island', 'muhiku-plug' ),
-		'CC' => esc_html__( 'Cocos (Keeling) Islands', 'muhiku-plug' ),
-		'CO' => esc_html__( 'Colombia', 'muhiku-plug' ),
-		'KM' => esc_html__( 'Comoros', 'muhiku-plug' ),
-		'CG' => esc_html__( 'Congo (Brazzaville)', 'muhiku-plug' ),
-		'CD' => esc_html__( 'Congo (Kinshasa)', 'muhiku-plug' ),
-		'CK' => esc_html__( 'Cook Islands', 'muhiku-plug' ),
-		'CR' => esc_html__( 'Costa Rica', 'muhiku-plug' ),
-		'HR' => esc_html__( 'Croatia', 'muhiku-plug' ),
-		'CU' => esc_html__( 'Cuba', 'muhiku-plug' ),
-		'CW' => esc_html__( 'Cura&ccedil;ao', 'muhiku-plug' ),
-		'CY' => esc_html__( 'Cyprus', 'muhiku-plug' ),
-		'CZ' => esc_html__( 'Czech Republic', 'muhiku-plug' ),
-		'DK' => esc_html__( 'Denmark', 'muhiku-plug' ),
-		'DJ' => esc_html__( 'Djibouti', 'muhiku-plug' ),
-		'DM' => esc_html__( 'Dominica', 'muhiku-plug' ),
-		'DO' => esc_html__( 'Dominican Republic', 'muhiku-plug' ),
-		'EC' => esc_html__( 'Ecuador', 'muhiku-plug' ),
-		'EG' => esc_html__( 'Egypt', 'muhiku-plug' ),
-		'SV' => esc_html__( 'El Salvador', 'muhiku-plug' ),
-		'GQ' => esc_html__( 'Equatorial Guinea', 'muhiku-plug' ),
-		'ER' => esc_html__( 'Eritrea', 'muhiku-plug' ),
-		'EE' => esc_html__( 'Estonia', 'muhiku-plug' ),
-		'ET' => esc_html__( 'Ethiopia', 'muhiku-plug' ),
-		'FK' => esc_html__( 'Falkland Islands', 'muhiku-plug' ),
-		'FO' => esc_html__( 'Faroe Islands', 'muhiku-plug' ),
-		'FJ' => esc_html__( 'Fiji', 'muhiku-plug' ),
-		'FI' => esc_html__( 'Finland', 'muhiku-plug' ),
-		'FR' => esc_html__( 'France', 'muhiku-plug' ),
-		'GF' => esc_html__( 'French Guiana', 'muhiku-plug' ),
-		'PF' => esc_html__( 'French Polynesia', 'muhiku-plug' ),
-		'TF' => esc_html__( 'French Southern Territories', 'muhiku-plug' ),
-		'GA' => esc_html__( 'Gabon', 'muhiku-plug' ),
-		'GM' => esc_html__( 'Gambia', 'muhiku-plug' ),
-		'GE' => esc_html__( 'Georgia', 'muhiku-plug' ),
-		'DE' => esc_html__( 'Germany', 'muhiku-plug' ),
-		'GH' => esc_html__( 'Ghana', 'muhiku-plug' ),
-		'GI' => esc_html__( 'Gibraltar', 'muhiku-plug' ),
-		'GR' => esc_html__( 'Greece', 'muhiku-plug' ),
-		'GL' => esc_html__( 'Greenland', 'muhiku-plug' ),
-		'GD' => esc_html__( 'Grenada', 'muhiku-plug' ),
-		'GP' => esc_html__( 'Guadeloupe', 'muhiku-plug' ),
-		'GU' => esc_html__( 'Guam', 'muhiku-plug' ),
-		'GT' => esc_html__( 'Guatemala', 'muhiku-plug' ),
-		'GG' => esc_html__( 'Guernsey', 'muhiku-plug' ),
-		'GN' => esc_html__( 'Guinea', 'muhiku-plug' ),
-		'GW' => esc_html__( 'Guinea-Bissau', 'muhiku-plug' ),
-		'GY' => esc_html__( 'Guyana', 'muhiku-plug' ),
-		'HT' => esc_html__( 'Haiti', 'muhiku-plug' ),
-		'HM' => esc_html__( 'Heard Island and McDonald Islands', 'muhiku-plug' ),
-		'HN' => esc_html__( 'Honduras', 'muhiku-plug' ),
-		'HK' => esc_html__( 'Hong Kong', 'muhiku-plug' ),
-		'HU' => esc_html__( 'Hungary', 'muhiku-plug' ),
-		'IS' => esc_html__( 'Iceland', 'muhiku-plug' ),
-		'IN' => esc_html__( 'India', 'muhiku-plug' ),
-		'ID' => esc_html__( 'Indonesia', 'muhiku-plug' ),
-		'IR' => esc_html__( 'Iran', 'muhiku-plug' ),
-		'IQ' => esc_html__( 'Iraq', 'muhiku-plug' ),
-		'IE' => esc_html__( 'Ireland', 'muhiku-plug' ),
-		'IM' => esc_html__( 'Isle of Man', 'muhiku-plug' ),
-		'IL' => esc_html__( 'Israel', 'muhiku-plug' ),
-		'IT' => esc_html__( 'Italy', 'muhiku-plug' ),
-		'CI' => esc_html__( 'Ivory Coast', 'muhiku-plug' ),
-		'JM' => esc_html__( 'Jamaica', 'muhiku-plug' ),
-		'JP' => esc_html__( 'Japan', 'muhiku-plug' ),
-		'JE' => esc_html__( 'Jersey', 'muhiku-plug' ),
-		'JO' => esc_html__( 'Jordan', 'muhiku-plug' ),
-		'KZ' => esc_html__( 'Kazakhstan', 'muhiku-plug' ),
-		'KE' => esc_html__( 'Kenya', 'muhiku-plug' ),
-		'KI' => esc_html__( 'Kiribati', 'muhiku-plug' ),
-		'KW' => esc_html__( 'Kuwait', 'muhiku-plug' ),
-		'XK' => esc_html__( 'Kosovo', 'muhiku-plug' ),
-		'KG' => esc_html__( 'Kyrgyzstan', 'muhiku-plug' ),
-		'LA' => esc_html__( 'Laos', 'muhiku-plug' ),
-		'LV' => esc_html__( 'Latvia', 'muhiku-plug' ),
-		'LB' => esc_html__( 'Lebanon', 'muhiku-plug' ),
-		'LS' => esc_html__( 'Lesotho', 'muhiku-plug' ),
-		'LR' => esc_html__( 'Liberia', 'muhiku-plug' ),
-		'LY' => esc_html__( 'Libya', 'muhiku-plug' ),
-		'LI' => esc_html__( 'Liechtenstein', 'muhiku-plug' ),
-		'LT' => esc_html__( 'Lithuania', 'muhiku-plug' ),
-		'LU' => esc_html__( 'Luxembourg', 'muhiku-plug' ),
-		'MO' => esc_html__( 'Macao', 'muhiku-plug' ),
-		'MK' => esc_html__( 'North Macedonia', 'muhiku-plug' ),
-		'MG' => esc_html__( 'Madagascar', 'muhiku-plug' ),
-		'MW' => esc_html__( 'Malawi', 'muhiku-plug' ),
-		'MY' => esc_html__( 'Malaysia', 'muhiku-plug' ),
-		'MV' => esc_html__( 'Maldives', 'muhiku-plug' ),
-		'ML' => esc_html__( 'Mali', 'muhiku-plug' ),
-		'MT' => esc_html__( 'Malta', 'muhiku-plug' ),
-		'MH' => esc_html__( 'Marshall Islands', 'muhiku-plug' ),
-		'MQ' => esc_html__( 'Martinique', 'muhiku-plug' ),
-		'MR' => esc_html__( 'Mauritania', 'muhiku-plug' ),
-		'MU' => esc_html__( 'Mauritius', 'muhiku-plug' ),
-		'YT' => esc_html__( 'Mayotte', 'muhiku-plug' ),
-		'MX' => esc_html__( 'Mexico', 'muhiku-plug' ),
-		'FM' => esc_html__( 'Micronesia', 'muhiku-plug' ),
-		'MD' => esc_html__( 'Moldova', 'muhiku-plug' ),
-		'MC' => esc_html__( 'Monaco', 'muhiku-plug' ),
-		'MN' => esc_html__( 'Mongolia', 'muhiku-plug' ),
-		'ME' => esc_html__( 'Montenegro', 'muhiku-plug' ),
-		'MS' => esc_html__( 'Montserrat', 'muhiku-plug' ),
-		'MA' => esc_html__( 'Morocco', 'muhiku-plug' ),
-		'MZ' => esc_html__( 'Mozambique', 'muhiku-plug' ),
-		'MM' => esc_html__( 'Myanmar', 'muhiku-plug' ),
-		'NA' => esc_html__( 'Namibia', 'muhiku-plug' ),
-		'NR' => esc_html__( 'Nauru', 'muhiku-plug' ),
-		'NP' => esc_html__( 'Nepal', 'muhiku-plug' ),
-		'NL' => esc_html__( 'Netherlands', 'muhiku-plug' ),
-		'NC' => esc_html__( 'New Caledonia', 'muhiku-plug' ),
-		'NZ' => esc_html__( 'New Zealand', 'muhiku-plug' ),
-		'NI' => esc_html__( 'Nicaragua', 'muhiku-plug' ),
-		'NE' => esc_html__( 'Niger', 'muhiku-plug' ),
-		'NG' => esc_html__( 'Nigeria', 'muhiku-plug' ),
-		'NU' => esc_html__( 'Niue', 'muhiku-plug' ),
-		'NF' => esc_html__( 'Norfolk Island', 'muhiku-plug' ),
-		'MP' => esc_html__( 'Northern Mariana Islands', 'muhiku-plug' ),
-		'KP' => esc_html__( 'North Korea', 'muhiku-plug' ),
-		'NO' => esc_html__( 'Norway', 'muhiku-plug' ),
-		'OM' => esc_html__( 'Oman', 'muhiku-plug' ),
-		'PK' => esc_html__( 'Pakistan', 'muhiku-plug' ),
-		'PS' => esc_html__( 'Palestinian Territory', 'muhiku-plug' ),
-		'PA' => esc_html__( 'Panama', 'muhiku-plug' ),
-		'PG' => esc_html__( 'Papua New Guinea', 'muhiku-plug' ),
-		'PY' => esc_html__( 'Paraguay', 'muhiku-plug' ),
-		'PE' => esc_html__( 'Peru', 'muhiku-plug' ),
-		'PH' => esc_html__( 'Philippines', 'muhiku-plug' ),
-		'PN' => esc_html__( 'Pitcairn', 'muhiku-plug' ),
-		'PL' => esc_html__( 'Poland', 'muhiku-plug' ),
-		'PT' => esc_html__( 'Portugal', 'muhiku-plug' ),
-		'PR' => esc_html__( 'Puerto Rico', 'muhiku-plug' ),
-		'QA' => esc_html__( 'Qatar', 'muhiku-plug' ),
-		'RE' => esc_html__( 'Reunion', 'muhiku-plug' ),
-		'RO' => esc_html__( 'Romania', 'muhiku-plug' ),
-		'RU' => esc_html__( 'Russia', 'muhiku-plug' ),
-		'RW' => esc_html__( 'Rwanda', 'muhiku-plug' ),
-		'BL' => esc_html__( 'Saint Barth&eacute;lemy', 'muhiku-plug' ),
-		'SH' => esc_html__( 'Saint Helena', 'muhiku-plug' ),
-		'KN' => esc_html__( 'Saint Kitts and Nevis', 'muhiku-plug' ),
-		'LC' => esc_html__( 'Saint Lucia', 'muhiku-plug' ),
-		'MF' => esc_html__( 'Saint Martin (French part)', 'muhiku-plug' ),
-		'SX' => esc_html__( 'Saint Martin (Dutch part)', 'muhiku-plug' ),
-		'PM' => esc_html__( 'Saint Pierre and Miquelon', 'muhiku-plug' ),
-		'VC' => esc_html__( 'Saint Vincent and the Grenadines', 'muhiku-plug' ),
-		'SM' => esc_html__( 'San Marino', 'muhiku-plug' ),
-		'ST' => esc_html__( 'S&atilde;o Tom&eacute; and Pr&iacute;ncipe', 'muhiku-plug' ),
-		'SA' => esc_html__( 'Saudi Arabia', 'muhiku-plug' ),
-		'SN' => esc_html__( 'Senegal', 'muhiku-plug' ),
-		'RS' => esc_html__( 'Serbia', 'muhiku-plug' ),
-		'SC' => esc_html__( 'Seychelles', 'muhiku-plug' ),
-		'SL' => esc_html__( 'Sierra Leone', 'muhiku-plug' ),
-		'SG' => esc_html__( 'Singapore', 'muhiku-plug' ),
-		'SK' => esc_html__( 'Slovakia', 'muhiku-plug' ),
-		'SI' => esc_html__( 'Slovenia', 'muhiku-plug' ),
-		'SB' => esc_html__( 'Solomon Islands', 'muhiku-plug' ),
-		'SO' => esc_html__( 'Somalia', 'muhiku-plug' ),
-		'ZA' => esc_html__( 'South Africa', 'muhiku-plug' ),
-		'GS' => esc_html__( 'South Georgia/Sandwich Islands', 'muhiku-plug' ),
-		'KR' => esc_html__( 'South Korea', 'muhiku-plug' ),
-		'SS' => esc_html__( 'South Sudan', 'muhiku-plug' ),
-		'ES' => esc_html__( 'Spain', 'muhiku-plug' ),
-		'LK' => esc_html__( 'Sri Lanka', 'muhiku-plug' ),
-		'SD' => esc_html__( 'Sudan', 'muhiku-plug' ),
-		'SR' => esc_html__( 'Suriname', 'muhiku-plug' ),
-		'SJ' => esc_html__( 'Svalbard and Jan Mayen', 'muhiku-plug' ),
-		'SZ' => esc_html__( 'Swaziland', 'muhiku-plug' ),
-		'SE' => esc_html__( 'Sweden', 'muhiku-plug' ),
-		'CH' => esc_html__( 'Switzerland', 'muhiku-plug' ),
-		'SY' => esc_html__( 'Syria', 'muhiku-plug' ),
-		'TW' => esc_html__( 'Taiwan', 'muhiku-plug' ),
-		'TJ' => esc_html__( 'Tajikistan', 'muhiku-plug' ),
-		'TZ' => esc_html__( 'Tanzania', 'muhiku-plug' ),
-		'TH' => esc_html__( 'Thailand', 'muhiku-plug' ),
-		'TL' => esc_html__( 'Timor-Leste', 'muhiku-plug' ),
-		'TG' => esc_html__( 'Togo', 'muhiku-plug' ),
-		'TK' => esc_html__( 'Tokelau', 'muhiku-plug' ),
-		'TO' => esc_html__( 'Tonga', 'muhiku-plug' ),
-		'TT' => esc_html__( 'Trinidad and Tobago', 'muhiku-plug' ),
-		'TN' => esc_html__( 'Tunisia', 'muhiku-plug' ),
-		'TR' => esc_html__( 'Turkey', 'muhiku-plug' ),
-		'TM' => esc_html__( 'Turkmenistan', 'muhiku-plug' ),
-		'TC' => esc_html__( 'Turks and Caicos Islands', 'muhiku-plug' ),
-		'TV' => esc_html__( 'Tuvalu', 'muhiku-plug' ),
-		'UG' => esc_html__( 'Uganda', 'muhiku-plug' ),
-		'UA' => esc_html__( 'Ukraine', 'muhiku-plug' ),
-		'AE' => esc_html__( 'United Arab Emirates', 'muhiku-plug' ),
-		'GB' => esc_html__( 'United Kingdom (UK)', 'muhiku-plug' ),
-		'US' => esc_html__( 'United States (US)', 'muhiku-plug' ),
-		'UM' => esc_html__( 'United States (US) Minor Outlying Islands', 'muhiku-plug' ),
-		'UY' => esc_html__( 'Uruguay', 'muhiku-plug' ),
-		'UZ' => esc_html__( 'Uzbekistan', 'muhiku-plug' ),
-		'VU' => esc_html__( 'Vanuatu', 'muhiku-plug' ),
-		'VA' => esc_html__( 'Vatican', 'muhiku-plug' ),
-		'VE' => esc_html__( 'Venezuela', 'muhiku-plug' ),
-		'VN' => esc_html__( 'Vietnam', 'muhiku-plug' ),
-		'VG' => esc_html__( 'Virgin Islands (British)', 'muhiku-plug' ),
-		'VI' => esc_html__( 'Virgin Islands (US)', 'muhiku-plug' ),
-		'WF' => esc_html__( 'Wallis and Futuna', 'muhiku-plug' ),
-		'EH' => esc_html__( 'Western Sahara', 'muhiku-plug' ),
-		'WS' => esc_html__( 'Samoa', 'muhiku-plug' ),
-		'YE' => esc_html__( 'Yemen', 'muhiku-plug' ),
-		'ZM' => esc_html__( 'Zambia', 'muhiku-plug' ),
-		'ZW' => esc_html__( 'Zimbabwe', 'muhiku-plug' ),
-	);
-
-	return (array) apply_filters( 'muhiku_forms_countries', $countries );
-}
 
 /**
- * Get U.S. States.
- *
- * @since  1.7.0
- * @return array
- */
-function mhk_get_states() {
-	$states = array(
-		'AL' => esc_html__( 'Alabama', 'muhiku-plug' ),
-		'AK' => esc_html__( 'Alaska', 'muhiku-plug' ),
-		'AZ' => esc_html__( 'Arizona', 'muhiku-plug' ),
-		'AR' => esc_html__( 'Arkansas', 'muhiku-plug' ),
-		'CA' => esc_html__( 'California', 'muhiku-plug' ),
-		'CO' => esc_html__( 'Colorado', 'muhiku-plug' ),
-		'CT' => esc_html__( 'Connecticut', 'muhiku-plug' ),
-		'DE' => esc_html__( 'Delaware', 'muhiku-plug' ),
-		'DC' => esc_html__( 'District of Columbia', 'muhiku-plug' ),
-		'FL' => esc_html__( 'Florida', 'muhiku-plug' ),
-		'GA' => esc_html__( 'Georgia', 'muhiku-plug' ),
-		'HI' => esc_html__( 'Hawaii', 'muhiku-plug' ),
-		'ID' => esc_html__( 'Idaho', 'muhiku-plug' ),
-		'IL' => esc_html__( 'Illinois', 'muhiku-plug' ),
-		'IN' => esc_html__( 'Indiana', 'muhiku-plug' ),
-		'IA' => esc_html__( 'Iowa', 'muhiku-plug' ),
-		'KS' => esc_html__( 'Kansas', 'muhiku-plug' ),
-		'KY' => esc_html__( 'Kentucky', 'muhiku-plug' ),
-		'LA' => esc_html__( 'Louisiana', 'muhiku-plug' ),
-		'ME' => esc_html__( 'Maine', 'muhiku-plug' ),
-		'MD' => esc_html__( 'Maryland', 'muhiku-plug' ),
-		'MA' => esc_html__( 'Massachusetts', 'muhiku-plug' ),
-		'MI' => esc_html__( 'Michigan', 'muhiku-plug' ),
-		'MN' => esc_html__( 'Minnesota', 'muhiku-plug' ),
-		'MS' => esc_html__( 'Mississippi', 'muhiku-plug' ),
-		'MO' => esc_html__( 'Missouri', 'muhiku-plug' ),
-		'MT' => esc_html__( 'Montana', 'muhiku-plug' ),
-		'NE' => esc_html__( 'Nebraska', 'muhiku-plug' ),
-		'NV' => esc_html__( 'Nevada', 'muhiku-plug' ),
-		'NH' => esc_html__( 'New Hampshire', 'muhiku-plug' ),
-		'NJ' => esc_html__( 'New Jersey', 'muhiku-plug' ),
-		'NM' => esc_html__( 'New Mexico', 'muhiku-plug' ),
-		'NY' => esc_html__( 'New York', 'muhiku-plug' ),
-		'NC' => esc_html__( 'North Carolina', 'muhiku-plug' ),
-		'ND' => esc_html__( 'North Dakota', 'muhiku-plug' ),
-		'OH' => esc_html__( 'Ohio', 'muhiku-plug' ),
-		'OK' => esc_html__( 'Oklahoma', 'muhiku-plug' ),
-		'OR' => esc_html__( 'Oregon', 'muhiku-plug' ),
-		'PA' => esc_html__( 'Pennsylvania', 'muhiku-plug' ),
-		'RI' => esc_html__( 'Rhode Island', 'muhiku-plug' ),
-		'SC' => esc_html__( 'South Carolina', 'muhiku-plug' ),
-		'SD' => esc_html__( 'South Dakota', 'muhiku-plug' ),
-		'TN' => esc_html__( 'Tennessee', 'muhiku-plug' ),
-		'TX' => esc_html__( 'Texas', 'muhiku-plug' ),
-		'UT' => esc_html__( 'Utah', 'muhiku-plug' ),
-		'VT' => esc_html__( 'Vermont', 'muhiku-plug' ),
-		'VA' => esc_html__( 'Virginia', 'muhiku-plug' ),
-		'WA' => esc_html__( 'Washington', 'muhiku-plug' ),
-		'WV' => esc_html__( 'West Virginia', 'muhiku-plug' ),
-		'WI' => esc_html__( 'Wisconsin', 'muhiku-plug' ),
-		'WY' => esc_html__( 'Wyoming', 'muhiku-plug' ),
-	);
-
-	return (array) apply_filters( 'muhiku_forms_states', $states );
-}
-
-/**
- * Get builder fields groups.
- *
  * @return array
  */
 function mhk_get_fields_groups() {
 	return (array) apply_filters(
 		'muhiku_forms_builder_fields_groups',
 		array(
-			'general'  => __( 'General Fields', 'muhiku-plug' ),
-			'advanced' => __( 'Advanced Fields', 'muhiku-plug' ),
-			'payment'  => __( 'Payment Fields', 'muhiku-plug' ),
-			'survey'   => __( 'Survey Fields', 'muhiku-plug' ),
+			'general'  => __( 'Genel Alanlar', 'muhiku-plug' ),
+			'advanced' => __( 'Geliştirilmiş Alanlar', 'muhiku-plug' ),
 		)
 	);
 }
 
 /**
- * Get a builder fields type's name.
- *
  * @param string $type Coupon type.
  * @return string
  */
@@ -1923,85 +1278,60 @@ function mhk_get_fields_group( $type = '' ) {
 }
 
 /**
- * Get all fields settings.
- *
  * @return array Settings data.
  */
 function mhk_get_all_fields_settings() {
 	$settings = array(
 		'label'         => array(
 			'id'       => 'label',
-			'title'    => __( 'Label', 'muhiku-plug' ),
-			'desc'     => __( 'Enter text for the form field label. This is recommended and can be hidden in the Advanced Settings.', 'muhiku-plug' ),
-			'default'  => '',
-			'type'     => 'text',
-			'desc_tip' => true,
-		),
-		'meta'          => array(
-			'id'       => 'meta-key',
-			'title'    => __( 'Meta Key', 'muhiku-plug' ),
-			'desc'     => __( 'Enter meta key to be stored in database.', 'muhiku-plug' ),
+			'title'    => __( 'Kısa isim', 'muhiku-plug' ),
 			'default'  => '',
 			'type'     => 'text',
 			'desc_tip' => true,
 		),
 		'description'   => array(
 			'id'       => 'description',
-			'title'    => __( 'Description', 'muhiku-plug' ),
+			'title'    => __( 'Açıklama', 'muhiku-plug' ),
 			'type'     => 'textarea',
-			'desc'     => __( 'Enter text for the form field description.', 'muhiku-plug' ),
 			'default'  => '',
 			'desc_tip' => true,
 		),
 		'required'      => array(
 			'id'       => 'require',
-			'title'    => __( 'Required', 'muhiku-plug' ),
+			'title'    => __( 'Gerekli', 'muhiku-plug' ),
 			'type'     => 'checkbox',
-			'desc'     => __( 'Check this option to mark the field required.', 'muhiku-plug' ),
 			'default'  => 'no',
 			'desc_tip' => true,
 		),
 		'choices'       => array(
 			'id'       => 'choices',
-			'title'    => __( 'Choices', 'muhiku-plug' ),
-			'desc'     => __( 'Add choices for the form field.', 'muhiku-plug' ),
+			'title'    => __( 'Seçenekler', 'muhiku-plug' ),
 			'type'     => 'choices',
 			'desc_tip' => true,
 			'defaults' => array(
-				1 => __( 'First Choice', 'muhiku-plug' ),
-				2 => __( 'Second Choice', 'muhiku-plug' ),
-				3 => __( 'Third Choice', 'muhiku-plug' ),
+				1 => __( '1. Seçenek', 'muhiku-plug' ),
+				2 => __( '2. Seçenek', 'muhiku-plug' ),
+				3 => __( '3. Seçenek', 'muhiku-plug' ),
 			),
 		),
 		'placeholder'   => array(
 			'id'       => 'placeholder',
-			'title'    => __( 'Placeholder Text', 'muhiku-plug' ),
-			'desc'     => __( 'Enter text for the form field placeholder.', 'muhiku-plug' ),
-			'default'  => '',
-			'type'     => 'text',
-			'desc_tip' => true,
-		),
-		'css'           => array(
-			'id'       => 'css',
-			'title'    => __( 'CSS Classes', 'muhiku-plug' ),
-			'desc'     => __( 'Enter CSS class for this field container. Class names should be separated with spaces.', 'muhiku-plug' ),
+			'title'    => __( 'Yer Tutucu Metin', 'muhiku-plug' ),
 			'default'  => '',
 			'type'     => 'text',
 			'desc_tip' => true,
 		),
 		'label_hide'    => array(
 			'id'       => 'label_hide',
-			'title'    => __( 'Hide Label', 'muhiku-plug' ),
+			'title'    => __( 'Alanı Gizle', 'muhiku-plug' ),
 			'type'     => 'checkbox',
-			'desc'     => __( 'Check this option to hide the form field label.', 'muhiku-plug' ),
 			'default'  => 'no',
 			'desc_tip' => true,
 		),
 		'sublabel_hide' => array(
 			'id'       => 'sublabel_hide',
-			'title'    => __( 'Hide Sub-Labels', 'muhiku-plug' ),
+			'title'    => __( 'Alt Alanları Gizle', 'muhiku-plug' ),
 			'type'     => 'checkbox',
-			'desc'     => __( 'Check this option to hide the form field sub-label.', 'muhiku-plug' ),
 			'default'  => 'no',
 			'desc_tip' => true,
 		),
@@ -2011,10 +1341,6 @@ function mhk_get_all_fields_settings() {
 }
 
 /**
- * Helper function to display debug data.
- *
- * @since 1.3.2
- *
  * @param mixed $expression The expression to be printed.
  * @param bool  $return     Optional. Default false. Set to true to return the human-readable string.
  *
@@ -2054,10 +1380,6 @@ function mhk_debug_data( $expression, $return = false ) {
 }
 
 /**
- * String translation function.
- *
- * @since 1.4.9
- *
  * @param int    $form_id Form ID.
  * @param string $field_id Field ID.
  * @param mixed  $value The string that needs to be translated.
@@ -2080,11 +1402,6 @@ function mhk_string_translation( $form_id, $field_id, $value, $suffix = '' ) {
 	return $value;
 }
 
-/**
- * Trigger logging cleanup using the logging class.
- *
- * @since 1.6.2
- */
 function mhk_cleanup_logs() {
 	$logger = mhk_get_logger();
 
@@ -2096,9 +1413,6 @@ add_action( 'muhiku_forms_cleanup_logs', 'mhk_cleanup_logs' );
 
 
 /**
- * Check whether it device is table or not from HTTP user agent
- *
- * @since 1.7.0
  *
  * @return bool
  */
@@ -2107,10 +1421,6 @@ function mhk_is_tablet() {
 }
 
 /**
- * Get user device from user agent from HTTP user agent.
- *
- * @since 1.7.0
- *
  * @return string
  */
 function mhk_get_user_device() {
@@ -2125,12 +1435,6 @@ function mhk_get_user_device() {
 
 
 /**
- * A wp_parse_args() for multi-dimensional array.
- *
- * @see https://developer.wordpress.org/reference/functions/wp_parse_args/
- *
- * @since 1.7.0
- *
  * @param array $args       Value to merge with $defaults.
  * @param array $defaults   Array that serves as the defaults.
  *
@@ -2151,10 +1455,6 @@ function mhk_parse_args( &$args, $defaults ) {
 }
 
 /**
- * Get date of ranges.
- *
- * @since 1.7.0
- *
  * @param string $first Starting date.
  * @param string $last  End date.
  * @param string $step Date step.
@@ -2176,10 +1476,6 @@ function mhk_date_range( $first, $last = '', $step = '+1 day', $format = 'Y/m/d'
 }
 
 /**
- * Process syntaxes in a text.
- *
- * @since 1.7.0
- *
  * @param string $text Text to be processed.
  * @param bool   $escape_html Whether to escape all the htmls before processing or not.
  * @param bool   $trim_trailing_spaces Whether to trim trailing spaces or not.
@@ -2203,10 +1499,6 @@ function mhk_process_syntaxes( $text, $escape_html = true, $trim_trailing_spaces
 }
 
 /**
- * Extract page ids from a text.
- *
- * @since 1.7.0
- *
  * @param string $text Text to extract page ids from.
  *
  * @return mixed
@@ -2228,12 +1520,6 @@ function mhk_extract_page_ids( $text ) {
 }
 
 /**
- * Process hyperlink syntaxes in a text.
- * The syntax used for hyperlink is: [Link Label](Link URL)
- * Example: [Google Search Page](https://google.com)
- *
- * @since 1.7.0
- *
  * @param string $text         Text to process.
  * @param string $use_no_a_tag If set to `true` only the link will be used and no `a` tag. Particularly useful for exporting CSV,
  *                             as the html tags are escaped in a CSV file.
@@ -2251,28 +1537,22 @@ function mhk_process_hyperlink_syntax( $text, $use_no_a_tag = false ) {
 		$class          = '';
 		$page_id        = '';
 
-		// Trim brackets.
 		$label = trim( substr( $label, 1, -1 ) );
 		$link  = trim( substr( $link, 1, -1 ) );
 
-		// Proceed only if label or link is not empty.
 		if ( ! empty( $label ) || ! empty( $link ) ) {
 
-			// Use hash(#) if the link is empty.
 			if ( empty( $link ) ) {
 				$link = '#';
 			}
 
-			// Use link as label if it's empty.
 			if ( empty( $label ) ) {
 				$label = $link;
 			}
 
-			// See if it's a link to a local page.
 			if ( strpos( $link, '?' ) === 0 ) {
 				$class .= ' mhk-privacy-policy-local-page-link';
 
-				// Extract page id.
 				$page_ids = mhk_extract_page_ids( $link );
 
 				if ( false !== $page_ids ) {
@@ -2284,8 +1564,6 @@ function mhk_process_hyperlink_syntax( $text, $use_no_a_tag = false ) {
 					}
 				}
 			}
-
-			// Insert hyperlink html.
 			if ( true === $use_no_a_tag ) {
 				$html = $link;
 			} else {
@@ -2293,7 +1571,6 @@ function mhk_process_hyperlink_syntax( $text, $use_no_a_tag = false ) {
 			}
 			$text = str_replace( $matched_string, $html, $text );
 		} else {
-			// If both label and link are empty then replace it with empty string.
 			$text = str_replace( $matched_string, '', $text );
 		}
 	}
@@ -2302,12 +1579,6 @@ function mhk_process_hyperlink_syntax( $text, $use_no_a_tag = false ) {
 }
 
 /**
- * Process italic syntaxes in a text.
- * The syntax used for italic text is: `text`
- * Just wrap the text with back tick characters. To escape a backtick insert a backslash(\) before the character like "\`".
- *
- * @since 1.7.0
- *
  * @param string $text Text to process.
  *
  * @return string Processed text.
@@ -2328,12 +1599,6 @@ function mhk_process_italic_syntax( $text ) {
 }
 
 /**
- * Process bold syntaxes in a text.
- * The syntax used for bold text is: *text*
- * Just wrap the text with asterisk characters. To escape an asterisk insert a backslash(\) before the character like "\*".
- *
- * @since 1.7.0
- *
  * @param string $text Text to process.
  *
  * @return string Processed text.
@@ -2354,11 +1619,6 @@ function mhk_process_bold_syntax( $text ) {
 }
 
 /**
- * Process underline syntaxes in a text.
- * The syntax used for bold text is: __text__
- * Wrap the text with double underscore characters. To escape an underscore insert a backslash(\) before the character like "\_".
- *
- * @since 1.7.0
  *
  * @param string $text Text to process.
  *
@@ -2381,10 +1641,6 @@ function mhk_process_underline_syntax( $text ) {
 }
 
 /**
- * It replaces `\n` characters with `<br/>` tag because new line `\n` character is not supported in html.
- *
- * @since 1.7.0
- *
  * @param string $text Text to process.
  *
  * @return string Processed text.
@@ -2394,10 +1650,6 @@ function mhk_process_line_breaks( $text ) {
 }
 
 /**
- * Check whether the current page is in AMP mode or not.
- * We need to check for specific functions, as there is no special AMP header.
- *
- * @since 1.8.4
  *
  * @param bool $check_theme_support Whether theme support should be checked. Defaults to true.
  *
@@ -2408,9 +1660,7 @@ function mhk_is_amp( $check_theme_support = true ) {
 	$is_amp = false;
 
 	if (
-	   // AMP by Automattic.
 	   ( function_exists( 'amp_is_request' ) && amp_is_request() ) ||
-	   // Better AMP.
 	   ( function_exists( 'is_better_amp' ) && is_better_amp() )
 	) {
 		$is_amp = true;
@@ -2425,8 +1675,6 @@ function mhk_is_amp( $check_theme_support = true ) {
 
 /**
  * MHK KSES.
- *
- * @since 1.8.2.1
  *
  * @param string $context Context.
  */
@@ -2480,11 +1728,8 @@ function mhk_get_allowed_html_tags( $context = '' ) {
 }
 
 /**
- * Parse Builder Post Data.
- *
  * @param mixed $post_data Post Data.
  *
- * @since 1.8.2.2
  */
 function mhk_sanitize_builder( $post_data = array() ) {
 
@@ -2510,11 +1755,8 @@ function mhk_sanitize_builder( $post_data = array() ) {
 }
 
 /**
- * Entry Post Data.
- *
  * @param mixed $entry Post Data.
  *
- * @since 1.8.2.2
  */
 function mhk_sanitize_entry( $entry = array() ) {
 	if ( empty( $entry ) || ! is_array( $entry ) || empty( $entry['form_fields'] ) ) {
@@ -2578,8 +1820,6 @@ function mhk_sanitize_entry( $entry = array() ) {
 }
 
 /**
- * MHK Get json file contents.
- *
  * @param mixed $file File path.
  * @param mixed $to_array Returned data in array.
  */
@@ -2591,8 +1831,6 @@ function mhk_get_json_file_contents( $file, $to_array = false ) {
 }
 
 /**
- * MHK file get contents.
- *
  * @param mixed $file File path.
  */
 function mhk_file_get_contents( $file ) {

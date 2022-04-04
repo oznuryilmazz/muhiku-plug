@@ -1,24 +1,13 @@
 <?php
 /**
- * Form handler.
- *
- * Contains a bunch of helper methods as well.
- *
  * @package MuhikuPlug
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Form Handler class.
- */
 class MHK_Form_Handler {
 
 	/**
-	 * Fetches forms
-	 *
-	 * @since  1.0.0
 	 * @param  mixed $id   Form ID.
 	 * @param  array $args Form Arguments.
 	 * @return array|bool|null|WP_Post Form object.
@@ -46,7 +35,6 @@ class MHK_Form_Handler {
 				$forms = empty( $args['content_only'] ) ? $the_post : mhk_decode( $the_post->post_content );
 			}
 		} else {
-			// No ID provided, get multiple forms.
 			$args = wp_parse_args(
 				$args,
 				array(
@@ -65,10 +53,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Fetch multiple forms.
-	 *
-	 * @since 1.7.0
-	 *
 	 * @param array $args Additional arguments array.
 	 * @param bool  $content_only True to return post content only.
 	 *
@@ -79,7 +63,6 @@ class MHK_Form_Handler {
 		$user_id = get_current_user_id();
 		$args    = apply_filters( 'muhiku_forms_get_multiple_forms_args', $args, $content_only );
 
-		// No ID provided, get multiple forms.
 		$defaults = array(
 			'orderby'       => 'id',
 			'order'         => 'ASC',
@@ -94,7 +77,6 @@ class MHK_Form_Handler {
 
 		$args['post_type'] = 'muhiku_form';
 
-		// Can user interact, lets check the view capabilities?
 		if ( current_user_can( 'muhiku_forms_view_forms' ) && ! current_user_can( 'muhiku_forms_view_others_forms' ) ) {
 			$args['author'] = $user_id;
 		}
@@ -107,10 +89,8 @@ class MHK_Form_Handler {
 			$args['post__in'] = array( 0 );
 		}
 
-		// For cache lets unset the cap args.
 		unset( $args['cap'] );
 
-		// Fetch posts.
 		$forms = get_posts( $args );
 
 		if ( $content_only ) {
@@ -121,8 +101,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Prepares post content.
-	 *
 	 * @param object $post Post object.
 	 */
 	public function prepare_post_content( $post ) {
@@ -130,9 +108,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Delete forms.
-	 *
-	 * @since  1.0.0
 	 * @param  array $ids Form IDs.
 	 * @return boolean
 	 */
@@ -145,7 +120,6 @@ class MHK_Form_Handler {
 
 		foreach ( $ids as $id ) {
 
-			// Check for permissions.
 			if ( ! current_user_can( 'muhiku_forms_delete', $id ) ) {
 				return false;
 			}
@@ -163,9 +137,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Create new form.
-	 *
-	 * @since  1.0.0
 	 * @param  string $title    Form title.
 	 * @param  string $template Form template.
 	 * @param  array  $args     Form Arguments.
@@ -188,7 +159,6 @@ class MHK_Form_Handler {
 			),
 		);
 
-		// Prevent content filters from corrupting JSON in post_content.
 		$has_kses = ( false !== has_filter( 'content_save_pre', 'wp_filter_post_kses' ) );
 		if ( $has_kses ) {
 			kses_remove_filters();
@@ -198,7 +168,6 @@ class MHK_Form_Handler {
 			wp_remove_targeted_link_rel_filters();
 		}
 
-		// Create a form.
 		$form_id = wp_insert_post(
 			array(
 				'post_title'   => esc_html( $title ),
@@ -243,7 +212,6 @@ class MHK_Form_Handler {
 			}
 		}
 
-		// Restore removed content filters.
 		if ( $has_kses ) {
 			kses_init_filters();
 		}
@@ -257,10 +225,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Updates form
-	 *
-	 * @since    1.0.0
-	 *
 	 * @param string|int $form_id Form ID.
 	 * @param array      $data    Data retrieved from $_POST and processed.
 	 * @param array      $args    Empty by default, may have custom data not intended to be saved.
@@ -281,7 +245,6 @@ class MHK_Form_Handler {
 			$args['cap'] = 'muhiku_forms_edit_form';
 		}
 
-		// Check for permissions.
 		if ( ! empty( $args['cap'] ) && ! current_user_can( $args['cap'], $form_id ) ) {
 			return false;
 		}
@@ -302,15 +265,12 @@ class MHK_Form_Handler {
 
 		$data['form_field_id'] = ! empty( $data['form_field_id'] ) ? absint( $data['form_field_id'] ) : '0';
 
-		// This filter can destroy the JSON when messing with HTML.
 		remove_filter( 'content_save_pre', 'balanceTags', 50 );
 
-		// Don't allow tags for users who do not have appropriate cap.
 		if ( ! current_user_can( 'unfiltered_html' ) ) {
 			$data = map_deep( $data, 'wp_strip_all_tags' );
 		}
 
-		// Prevent content filters from corrupting JSON in post_content.
 		$has_kses = ( false !== has_filter( 'content_save_pre', 'wp_filter_post_kses' ) );
 		if ( $has_kses ) {
 			kses_remove_filters();
@@ -329,18 +289,15 @@ class MHK_Form_Handler {
 		$form    = apply_filters( 'muhiku_forms_save_form_args', $form, $data, $args );
 		$form_id = wp_update_post( $form );
 
-		// Import form styles if present.
 		$style_needed = false;
 		if ( ! empty( $data['form_styles'] ) ) {
 			$style_needed            = true;
 			$form_styles             = get_option( 'muhiku_forms_styles', array() );
 			$form_styles[ $form_id ] = mhk_decode( $data['form_styles'] );
 
-			// Update forms styles.
 			update_option( 'muhiku_forms_styles', $form_styles );
 		}
 
-		// Restore removed content filters.
 		if ( $has_kses ) {
 			kses_init_filters();
 		}
@@ -354,16 +311,11 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Duplicate forms.
-	 *
-	 * @since  1.0.0
-	 *
 	 * @param array $ids Form IDs to duplicate.
 	 *
 	 * @return boolean
 	 */
 	public function duplicate( $ids = array() ) {
-		// Check for permissions.
 		if ( ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 			return false;
 		}
@@ -376,31 +328,25 @@ class MHK_Form_Handler {
 
 		foreach ( $ids as $id ) {
 
-			// Get original entry.
 			$form = get_post( $id );
 
 			if ( ! current_user_can( 'muhiku_forms_view_form', $id ) ) {
 				return false;
 			}
 
-			// Confirm form exists.
 			if ( ! $form || empty( $form ) ) {
 				return false;
 			}
 
-			// Get the form data.
 			$new_form_data = mhk_decode( $form->post_content );
 
-			// Get the form styles.
 			$form_styles = get_option( 'muhiku_forms_styles', array() );
 			if ( ! empty( $form_styles[ $id ] ) ) {
 				$new_form_data['form_styles'] = wp_json_encode( $form_styles[ $id ] );
 			}
 
-			// Remove form ID from title if present.
 			$new_form_data['settings']['form_title'] = str_replace( '(ID #' . absint( $id ) . ')', '', $new_form_data['settings']['form_title'] );
 
-			// Create the duplicate form.
 			$new_form    = array(
 				'post_author'  => $form->post_author,
 				'post_content' => mhk_encode( $new_form_data ),
@@ -415,13 +361,10 @@ class MHK_Form_Handler {
 				return false;
 			}
 
-			// Set new form name.
 			$new_form_data['settings']['form_title'] .= ' (ID #' . absint( $new_form_id ) . ')';
 
-			// Set new form ID.
 			$new_form_data['id'] = absint( $new_form_id );
 
-			// Update new duplicate form.
 			$new_form_id = $this->update( $new_form_id, $new_form_data );
 
 			if ( ! $new_form_id || is_wp_error( $new_form_id ) ) {
@@ -435,9 +378,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Get private meta information for a form.
-	 *
-	 * @since 1.1.0
 	 *
 	 * @param int    $form_id Form ID.
 	 * @param string $field   Field.
@@ -473,9 +413,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Get the next available field ID and increment by one.
-	 *
-	 * @since  1.0.0
 	 * @param  int $form_id  Form ID.
 	 * @return mixed int or false
 	 */
@@ -511,9 +448,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Get private meta information for a form field.
-	 *
-	 * @since  1.0.0
 	 *
 	 * @param int    $form_id  Form ID.
 	 * @param string $field_id Field ID.
@@ -541,10 +475,6 @@ class MHK_Form_Handler {
 	}
 
 	/**
-	 * Get private meta information for a form field.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param int    $form_id  Form ID.
 	 * @param string $field_id Field.
 	 * @param array  $args     Additional arguments.

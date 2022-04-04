@@ -183,12 +183,8 @@
 	}
 }
 
-/**
- * Fonts icons.
- */
 [class^='mhk-icon-'],
 [class*=' mhk-icon-'] {
-	/* use !important to prevent issues with browser extensions that change fonts */
 	font-family: MuhikuPlug !important;
 	speak: none;
 	font-style: normal;
@@ -207,7 +203,6 @@
 	-webkit-font-variant-ligatures: discretionary-ligatures;
 	font-variant-ligatures: discretionary-ligatures;
 
-	/* Better Font Rendering =========== */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }

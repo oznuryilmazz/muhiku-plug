@@ -168,15 +168,6 @@ jQuery(function ($) {
 
       if (!template.plan.includes("free")) {
         var $badge_text = "";
-        if (template.plan.includes("personal")) {
-          $badge_text = "Personal";
-        } else if (template.plan.includes("plus")) {
-          $badge_text = "Plus";
-        } else if (template.plan.includes("professional")) {
-          $badge_text = "Professional";
-        } else {
-          $badge_text = "Agency";
-        }
 
         html +=
           '<span class="muhiku-plug-badge muhiku-plug-badge--success">' +

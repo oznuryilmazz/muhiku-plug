@@ -1,30 +1,19 @@
 <?php
 /**
- * MuhikuPlug Admin Builder Class
- *
  * @package MuhikuPlug\Admin
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'MHK_Admin_Builder', false ) ) :
 
-	/**
-	 * MHK_Admin_Builder Class.
-	 */
 	class MHK_Admin_Builder {
 
 		/**
-		 * Builder pages.
-		 *
 		 * @var array
 		 */
 		private static $builder = array();
 
-		/**
-		 * Include the builder page classes.
-		 */
 		public static function get_builder_pages() {
 			if ( empty( self::$builder ) ) {
 				$builder = array();

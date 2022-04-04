@@ -1,46 +1,28 @@
 <?php
 /**
- * Process form data
- *
  * @package MuhikuPlug
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Form_Task class.
- */
 class MHK_Form_Task {
 
 	/**
-	 * Holds errors.
-	 *
-	 * @since 1.0.0
 	 * @var array
 	 */
 	public $errors;
 
 	/**
-	 * Holds formatted fields.
-	 *
-	 * @since 1.0.0
 	 * @var array
 	 */
 	public $form_fields;
 
 	/**
-	 * Holds the ID of a successful entry.
-	 *
-	 * @since 1.0.0
 	 * @var int
 	 */
 	public $entry_id = 0;
 
 	/**
-	 * Form data and settings.
-	 *
-	 * @since 1.5.0
 	 *
 	 * @var array
 	 */
@@ -53,34 +35,24 @@ class MHK_Form_Task {
 	 */
 	public $is_valid_hash = false;
 
-	/**
-	 * Primary class constructor.
-	 *
-	 * @since 1.0.0
-	 */
 	public function __construct() {
 		add_action( 'wp', array( $this, 'listen_task' ) );
 		add_filter( 'muhiku_forms_field_properties', array( $this, 'load_previous_field_value' ), 99, 3 );
 	}
 
-	/**
-	 * Listen to see if this is a return callback or a posted form entry.
-	 *
-	 * @since 1.0.0
-	 */
 	public function listen_task() {
-		if ( ! empty( $_GET['muhiku_forms_return'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$this->entry_confirmation_redirect( '', sanitize_text_field( wp_unslash( $_GET['muhiku_forms_return'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_GET['muhiku_forms_return'] ) ) { 
+			$this->entry_confirmation_redirect( '', sanitize_text_field( wp_unslash( $_GET['muhiku_forms_return'] ) ) ); 
 		}
 
-		$form_id = ! empty( $_POST['muhiku_forms']['id'] ) ? absint( $_POST['muhiku_forms']['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		$form_id = ! empty( $_POST['muhiku_forms']['id'] ) ? absint( $_POST['muhiku_forms']['id'] ) : 0; 
 
 		if ( ! $form_id ) {
 			return;
 		}
 
-		if ( ! empty( $_POST['muhiku_forms']['id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$this->do_task( mhk_sanitize_entry( wp_unslash( $_POST['muhiku_forms'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! empty( $_POST['muhiku_forms']['id'] ) ) { 
+			$this->do_task( mhk_sanitize_entry( wp_unslash( $_POST['muhiku_forms'] ) ) ); 
 		}
 
 		if ( ! mhk_is_amp() ) {
@@ -88,8 +60,7 @@ class MHK_Form_Task {
 		}
 
 		$settings        = $this->form_data['settings'];
-		$success_message = isset( $settings['successful_form_submission_message'] ) ? $settings['successful_form_submission_message'] : __( 'Thanks for contacting us! We will be in touch with you shortly.', 'muhiku-plug' );
-			// Send 400 Bad Request when there are errors.
+		$success_message = isset( $settings['successful_form_submission_message'] ) ? $settings['successful_form_submission_message'] : __( 'Bizimle önerini paylaştığın için teşekkür ederiz! En kısa zamanda sizinle iletişime geçeceğiz..', 'muhiku-plug' );
 		if ( empty( $this->errors[ $form_id ] ) ) {
 			wp_send_json(
 				array(
@@ -116,9 +87,6 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Do task of form entry
-	 *
-	 * @since 1.0.0
 	 * @param array $entry $_POST object.
 	 */
 	public function do_task( $entry ) {
@@ -134,8 +102,7 @@ class MHK_Form_Task {
 			$this->mhk_notice_print = false;
 			$logger                 = mhk_get_logger();
 
-			// Check nonce for form submission.
-			if ( empty( $_POST[ '_wpnonce' . $form_id ] ) || ! wp_verify_nonce( wp_unslash( sanitize_key( $_POST[ '_wpnonce' . $form_id ] ) ), 'muhiku-plug_process_submit' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( empty( $_POST[ '_wpnonce' . $form_id ] ) || ! wp_verify_nonce( wp_unslash( sanitize_key( $_POST[ '_wpnonce' . $form_id ] ) ), 'muhiku-plug_process_submit' ) ) {  
 				$this->errors[ $form_id ]['header'] = esc_html__( 'We were unable to process your form, please try again.', 'muhiku-plug' );
 				$logger->error(
 					$this->errors[ $form_id ]['header'],
@@ -144,7 +111,6 @@ class MHK_Form_Task {
 				return $this->errors;
 			}
 
-			// Validate form is real and active (published).
 			if ( ! $form || 'publish' !== $form->post_status ) {
 				$this->errors[ $form_id ]['header'] = esc_html__( 'Invalid form. Please check again.', 'muhiku-plug' );
 				$logger->error(
@@ -154,10 +120,8 @@ class MHK_Form_Task {
 				return $this->errors;
 			}
 
-			// Formatted form data for hooks.
 			$this->form_data = apply_filters( 'muhiku_forms_process_before_form_data', mhk_decode( $form->post_content ), $entry );
 
-			// Pre-process/validate hooks and filter. Data is not validated or cleaned yet so use with caution.
 			$entry                      = apply_filters( 'muhiku_forms_process_before_filter', $entry, $this->form_data );
 			$this->form_data['page_id'] = array_key_exists( 'post_id', $entry ) ? $entry['post_id'] : $form_id;
 
@@ -175,10 +139,8 @@ class MHK_Form_Task {
 			$ajax_form_submission = isset( $this->form_data['settings']['ajax_form_submission'] ) ? $this->form_data['settings']['ajax_form_submission'] : 0;
 			if ( '1' === $ajax_form_submission ) {
 
-				// For the sake of validation we completely remove the validator option.
 				update_option( 'mhk_validation_error', '' );
 
-				// Prepare fields for entry_save.
 				foreach ( $this->form_data['form_fields'] as $field ) {
 					if ( '' === isset( $this->form_data['form_fields']['meta-key'] ) ) {
 						continue;
@@ -207,7 +169,6 @@ class MHK_Form_Task {
 				}
 			}
 
-			// Validate fields.
 			foreach ( $this->form_data['form_fields'] as $field ) {
 				$field_id        = $field['id'];
 				$field_type      = $field['type'];
@@ -237,7 +198,6 @@ class MHK_Form_Task {
 				}
 			}
 
-			// If validation issues occur, send the results accordingly.
 			if ( $ajax_form_submission && count( $this->ajax_err ) ) {
 				$response_data['error']    = $this->ajax_err;
 				$response_data['message']  = __( 'Form has not been submitted, please see the errors below.', 'muhiku-plug' );
@@ -249,7 +209,6 @@ class MHK_Form_Task {
 				return $response_data;
 			}
 
-			// reCAPTCHA check.
 			if ( ! apply_filters( 'muhiku_forms_recaptcha_disabled', false ) ) {
 				$recaptcha_type      = get_option( 'muhiku_forms_recaptcha_type', 'v2' );
 				$invisible_recaptcha = get_option( 'muhiku_forms_recaptcha_v2_invisible', 'no' );
@@ -295,7 +254,6 @@ class MHK_Form_Task {
 
 					if ( ! is_wp_error( $raw_response ) ) {
 						$response = json_decode( wp_remote_retrieve_body( $raw_response ) );
-						// Check reCAPTCHA response.
 						if ( empty( $response->success ) || ( 'v3' === $recaptcha_type && $response->score <= get_option( 'muhiku_forms_recaptcha_v3_threshold_score', apply_filters( 'muhiku_forms_recaptcha_v3_threshold', '0.5' ) ) ) ) {
 							if ( 'v3' === $recaptcha_type ) {
 								if ( isset( $response->score ) ) {
@@ -312,9 +270,8 @@ class MHK_Form_Task {
 					}
 				}
 			}
-			// Initial error check.
 			$errors = apply_filters( 'muhiku_forms_process_initial_errors', $this->errors, $this->form_data );
-			if ( isset( $_POST['__amp_form_verify'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( isset( $_POST['__amp_form_verify'] ) ) {
 				if ( empty( $errors[ $form_id ] ) ) {
 					wp_send_json( array(), 200 );
 				} else {
@@ -372,25 +329,20 @@ class MHK_Form_Task {
 				$this->errors = $errors;
 				return $this->errors;
 			}
-
-			// Early honeypot validation - before actual processing.
 			if ( isset( $this->form_data['settings']['honeypot'] ) && '1' === $this->form_data['settings']['honeypot'] && ! empty( $entry['hp'] ) ) {
 				$honeypot = esc_html__( 'Muhiku Plug honeypot field triggered.', 'muhiku-plug' );
 			}
 
 			$honeypot = apply_filters( 'muhiku_forms_process_honeypot', $honeypot, $this->form_fields, $entry, $this->form_data );
 
-			// If spam - return early.
 			if ( $honeypot ) {
 				$logger = mhk_get_logger();
 				$logger->notice( sprintf( 'Spam entry for Form ID %d Response: %s', absint( $this->form_data['id'] ), mhk_print_r( $entry, true ) ), array( 'source' => 'honeypot' ) );
 				return $this->errors;
 			}
 
-			// Pass the form created date into the form data.
 			$this->form_data['created'] = $form->post_date;
 
-			// Format and Sanitize inputs.
 			foreach ( (array) $this->form_data['form_fields'] as $field ) {
 				$field_id        = $field['id'];
 				$field_key       = isset( $field['meta-key'] ) ? $field['meta-key'] : '';
@@ -407,16 +359,12 @@ class MHK_Form_Task {
 				}
 			}
 
-			// This hook is for internal purposes and should not be leveraged.
 			$logger->info(
 				'Muhiku Plug Process Format After.',
 				array( 'source' => 'form-submission' )
 			);
 			do_action( 'muhiku_forms_process_format_after', $this->form_data );
 
-			// Process hooks/filter - this is where most addons should hook
-			// because at this point we have completed all field validation and
-			// formatted the data.
 			$this->form_fields = apply_filters( 'muhiku_forms_process_filter', $this->form_fields, $entry, $this->form_data );
 			$logger->notice( sprintf( 'Muhiku Form Process: %s', mhk_print_r( $this->form_fields, true ) ) );
 
@@ -434,7 +382,6 @@ class MHK_Form_Task {
 			$this->form_fields = apply_filters( 'muhiku_forms_process_after_filter', $this->form_fields, $entry, $this->form_data );
 			$logger->notice( sprintf( 'Muhiku Form Process After: %s', mhk_print_r( $this->form_fields, true ) ) );
 
-			// One last error check - don't proceed if there are any errors.
 			if ( ! empty( $this->errors[ $form_id ] ) ) {
 				if ( empty( $this->errors[ $form_id ]['header'] ) ) {
 					$this->errors[ $form_id ]['header'] = esc_html__( 'Form has not been submitted, please see the errors below.', 'muhiku-plug' );
@@ -447,7 +394,6 @@ class MHK_Form_Task {
 			}
 
 			$logger->notice( sprintf( 'Entry is Saving to DataBase' ) );
-			// Success - add entry to database.
 			$logger->info(
 				__( 'Entry Added to Database.', 'muhiku-plug' ),
 				array( 'source' => 'form-submission' )
@@ -456,24 +402,17 @@ class MHK_Form_Task {
 			$logger->notice( sprintf( 'Entry is Saved to DataBase' ) );
 
 			$logger->notice( sprintf( 'Sending Email' ) );
-			// Success - send email notification.
 			$logger->info(
 				__( 'Sent Email Notification.', 'muhiku-plug' ),
 				array( 'source' => 'form-submission' )
 			);
-			$this->entry_email( $this->form_fields, $entry, $this->form_data, $entry_id, 'entry' );
-			$logger->notice( sprintf( 'Successfully Send the email' ) );
 
-			// @todo remove this way of printing notices.
 			add_filter( 'muhiku_forms_success', array( $this, 'check_success_message' ), 10, 2 );
 
-			// Pass completed and formatted fields in POST.
 			$_POST['muhiku-plug']['complete'] = $this->form_fields;
 
-			// Pass entry ID in POST.
 			$_POST['muhiku-plug']['entry_id'] = $entry_id;
 
-			// Post-process hooks.
 			$logger->info(
 				__( 'Muhiku Plug Process Completed.', 'muhiku-plug' ),
 				array( 'source' => 'form-submission' )
@@ -499,7 +438,7 @@ class MHK_Form_Task {
 		}
 
 		$settings = $this->form_data['settings'];
-		$message  = isset( $settings['successful_form_submission_message'] ) ? $settings['successful_form_submission_message'] : __( 'Thanks for contacting us! We will be in touch with you shortly.', 'muhiku-plug' );
+		$message  = isset( $settings['successful_form_submission_message'] ) ? $settings['successful_form_submission_message'] : __( 'Bizimle önerini paylaştığın için teşekkür ederiz! En kısa zamanda sizinle iletişime geçeceğiz..', 'muhiku-plug' );
 
 		if ( defined( 'MHK_PDF_SUBMISSION_VERSION' ) && 'yes' === get_option( 'muhiku_forms_pdf_download_after_submit', 'no' ) ) {
 			global $__muhiku_form_id;
@@ -508,10 +447,8 @@ class MHK_Form_Task {
 			$__muhiku_form_entry_id = $entry_id;
 		}
 
-		// Check Conditional Logic and get the redirection URL.
 		$submission_redirection_process = apply_filters( 'muhiku_forms_submission_redirection_process', array(), $this->form_fields, $this->form_data );
 
-		// Backward compatibility for mhk form templates.
 		$this->form_data['settings']['redirect_to'] = '0' === $this->form_data['settings']['redirect_to'] ? 'same' : $this->form_data['settings']['redirect_to'];
 
 		if ( '1' === $ajax_form_submission ) {
@@ -529,7 +466,6 @@ class MHK_Form_Task {
 				$response_data['pdf_download_message'] = $pdf_download_message;
 			}
 
-			// Backward Compatibility Check.
 			switch ( $settings['redirect_to'] ) {
 				case '0':
 					$settings['redirect_to'] = 'same';
@@ -544,7 +480,6 @@ class MHK_Form_Task {
 					break;
 			}
 
-			// Check for Submission Redirection in Ajax Submission.
 			if ( empty( $submission_redirection_process ) ) {
 				if ( isset( $settings['redirect_to'] ) && 'external_url' === $settings['redirect_to'] ) {
 					$response_data['redirect_url'] = isset( $settings['external_url'] ) ? esc_url( $settings['external_url'] ) : 'undefined';
@@ -555,11 +490,9 @@ class MHK_Form_Task {
 				$response_data['redirect_url'] = $submission_redirection_process['external_url'];
 			}
 
-			// Add notice only if credit card is populated in form fields.
 			if ( isset( $this->mhk_notice_print ) && $this->mhk_notice_print ) {
 				mhk_add_notice( $message, 'success' );
 			}
-			// $this->entry_confirmation_redirect( $this->form_data );
 			$response_data = apply_filters( 'muhiku_forms_after_success_ajax_message', $response_data, $this->form_data, $entry );
 			return $response_data;
 		} elseif ( ( 'same' === $this->form_data['settings']['redirect_to'] && empty( $submission_redirection_process ) ) || ( ! empty( $submission_redirection_process ) && 'same_page' == $submission_redirection_process['redirect_to'] ) ) {
@@ -576,10 +509,6 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Process AJAX form submission.
-	 *
-	 * @since 1.6.0
-	 *
 	 * @param mixed $posted_data Posted data.
 	 */
 	public function ajax_form_submission( $posted_data ) {
@@ -589,14 +518,10 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Process AJAX redirect.
-	 *
-	 * @since 1.6.0
-	 *
 	 * @param string $url Redirect URL.
 	 */
 	public function ajax_process_redirect( $url ) {
-		$form_id = isset( $_POST['muhiku_forms']['id'] ) ? absint( $_POST['muhiku_forms']['id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		$form_id = isset( $_POST['muhiku_forms']['id'] ) ? absint( $_POST['muhiku_forms']['id'] ) : 0;  
 
 		if ( empty( $form_id ) ) {
 			wp_send_json_error();
@@ -614,8 +539,6 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Check the sucessful message.
-	 *
 	 * @param bool $status Message status.
 	 * @param int  $form_id Form ID.
 	 */
@@ -627,10 +550,6 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Validate the form return hash.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param string $hash Base64-encoded hash of form and entry IDs.
 	 * @return array|false False for invalid or form id.
 	 */
@@ -639,12 +558,10 @@ class MHK_Form_Task {
 
 		parse_str( $query_args, $output );
 
-		// Verify hash matches.
 		if ( wp_hash( $output['form_id'] . ',' . $output['entry_id'] ) !== $output['hash'] ) {
 			return false;
 		}
 
-		// Get lead and verify it is attached to the form we received with it.
 		$entry = mhk_get_entry( $output['entry_id'] );
 
 		if ( empty( $entry->form_id ) ) {
@@ -663,17 +580,12 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Redirects user to a page or URL specified in the form confirmation settings.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array  $form_data Form data and settings.
 	 * @param string $hash      Base64-encoded hash of form and entry IDs.
 	 */
 	public function entry_confirmation_redirect( $form_data = '', $hash = '' ) {
-		$_POST = array(); // Clear fields after successful form submission.
+		$_POST = array(); 
 
-		// Process return hash.
 		if ( ! empty( $hash ) ) {
 			$hash_data = $this->validate_return_hash( $hash );
 
@@ -696,7 +608,6 @@ class MHK_Form_Task {
 
 		$settings = $this->form_data['settings'];
 
-		// Backward Compatibility Check.
 		switch ( $settings['redirect_to'] ) {
 			case '0':
 				$settings['redirect_to'] = 'same';
@@ -738,7 +649,6 @@ class MHK_Form_Task {
 			<?php
 		}
 
-		// Redirect if needed, to either a page or URL, after form processing.
 		if ( ! empty( $this->form_data['settings']['confirmation_type'] ) && 'message' !== $this->form_data['settings']['confirmation_type'] ) {
 			if ( 'redirect' === $this->form_data['settings']['confirmation_type'] ) {
 				$url = apply_filters( 'muhiku_forms_process_smart_tags', $this->form_data['settings']['confirmation_redirect'], $this->form_data, $this->form_fields, $this->entry_id );
@@ -768,8 +678,6 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Add scroll notice class.
-	 *
 	 * @param  array $classes Notice Classes.
 	 * @return array of notice classes.
 	 */
@@ -780,107 +688,14 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Sends entry email notifications.
-	 *
 	 * @param array  $fields    List of fields.
 	 * @param array  $entry     Submitted form entry.
 	 * @param array  $form_data Form data and settings.
 	 * @param int    $entry_id  Saved entry id.
 	 * @param string $context   In which context this email is sent.
 	 */
-	public function entry_email( $fields, $entry, $form_data, $entry_id, $context = '' ) {
-		// Provide the opportunity to override via a filter.
-		if ( ! apply_filters( 'muhiku_forms_entry_email', true, $fields, $entry, $form_data ) ) {
-			return;
-		}
-
-		// Make sure we have an entry id.
-		if ( empty( $this->entry_id ) ) {
-			$this->entry_id = (int) $entry_id;
-		}
-
-		$fields = apply_filters( 'muhiku_forms_entry_email_data', $fields, $entry, $form_data );
-
-		if ( ! isset( $form_data['settings']['email']['connection_1'] ) ) {
-			$old_email_data                                 = $form_data['settings']['email'];
-			$form_data['settings']['email']                 = array();
-			$form_data['settings']['email']['connection_1'] = array( 'connection_name' => __( 'Admin Notification', 'muhiku-plug' ) );
-
-			$email_settings = array( 'mhk_to_email', 'mhk_from_name', 'mhk_from_email', 'mhk_reply_to', 'mhk_email_subject', 'mhk_email_message', 'attach_pdf_to_admin_email', 'show_header_in_attachment_pdf_file', 'conditional_logic_status', 'conditional_option', 'conditionals' );
-			foreach ( $email_settings as $email_setting ) {
-				$form_data['settings']['email']['connection_1'][ $email_setting ] = isset( $old_email_data[ $email_setting ] ) ? $old_email_data[ $email_setting ] : '';
-			}
-		}
-
-		$notifications = isset( $form_data['settings']['email'] ) ? $form_data['settings']['email'] : array();
-
-		foreach ( $notifications as $connection_id => $notification ) :
-
-			// Don't proceed if email notification is not enabled.
-			if ( isset( $notification['enable_email_notification'] ) && '1' !== $notification['enable_email_notification'] ) {
-				continue;
-			}
-
-			$process_email = apply_filters( 'muhiku_forms_entry_email_process', true, $fields, $form_data, $context, $connection_id );
-
-			if ( ! $process_email ) {
-				continue;
-			}
-
-			$email        = array();
-			$mhk_to_email = isset( $notification['mhk_to_email'] ) ? $notification['mhk_to_email'] : '';
-
-			// Setup email properties.
-			/* translators: %s - form name. */
-			$email['subject']        = ! empty( $notification['mhk_email_subject'] ) ? $notification['mhk_email_subject'] : sprintf( esc_html__( 'New %s Entry', 'muhiku-plug' ), $form_data['settings']['form_title'] );
-			$email['address']        = explode( ',', apply_filters( 'muhiku_forms_process_smart_tags', $mhk_to_email, $form_data, $fields, $this->entry_id ) );
-			$email['address']        = array_map( 'sanitize_email', $email['address'] );
-			$email['sender_name']    = ! empty( $notification['mhk_from_name'] ) ? $notification['mhk_from_name'] : get_bloginfo( 'name' );
-			$email['sender_address'] = ! empty( $notification['mhk_from_email'] ) ? $notification['mhk_from_email'] : get_option( 'admin_email' );
-			$email['reply_to']       = ! empty( $notification['mhk_reply_to'] ) ? $notification['mhk_reply_to'] : $email['sender_address'];
-			$email['message']        = ! empty( $notification['mhk_email_message'] ) ? $notification['mhk_email_message'] : '{all_fields}';
-			$email                   = apply_filters( 'muhiku_forms_entry_email_atts', $email, $fields, $entry, $form_data );
-
-			$attachment = '';
-
-			// Create new email.
-			$emails = new MHK_Emails();
-			$emails->__set( 'form_data', $form_data );
-			$emails->__set( 'fields', $fields );
-			$emails->__set( 'entry_id', $entry_id );
-			$emails->__set( 'from_name', $email['sender_name'] );
-			$emails->__set( 'from_address', $email['sender_address'] );
-			$emails->__set( 'reply_to', $email['reply_to'] );
-
-			/**
-			 *  This filter relies on consistent data being passed for the resultant filters to function.
-			 *  The third param passed for the filter, $fields, is derived from validation routine, not the DB.
-			 */
-			$emails->__set( 'attachments', apply_filters( 'muhiku_forms_email_file_attachments', $attachment, $fields, $form_data, 'entry-email', $connection_id, $entry_id ) );
-
-			// Maybe include Cc and Bcc email addresses.
-			if ( 'yes' === get_option( 'muhiku_forms_enable_email_copies' ) ) {
-				if ( ! empty( $notification['mhk_carboncopy'] ) ) {
-					$emails->__set( 'cc', $notification['mhk_carboncopy'] );
-				}
-				if ( ! empty( $notification['mhk_blindcarboncopy'] ) ) {
-					$emails->__set( 'bcc', $notification['mhk_blindcarboncopy'] );
-				}
-			}
-
-			$emails = apply_filters( 'muhiku_forms_entry_email_before_send', $emails );
-
-			// Send entry email.
-			foreach ( $email['address'] as $address ) {
-				$emails->send( trim( $address ), $email['subject'], $email['message'], '', $connection_id );
-			}
-
-		endforeach;
-	}
 
 	/**
-	 * Saves entry to database.
-	 *
 	 * @param array $fields    List of form fields.
 	 * @param array $entry     User submitted data.
 	 * @param int   $form_id   Form ID.
@@ -890,12 +705,10 @@ class MHK_Form_Task {
 	public function entry_save( $fields, $entry, $form_id, $form_data = array() ) {
 		global $wpdb;
 
-		// Check if form has entries disabled.
 		if ( isset( $form_data['settings']['disabled_entries'] ) && '1' === $form_data['settings']['disabled_entries'] ) {
 			return;
 		}
 
-		// Provide the opportunity to override via a filter.
 		if ( ! apply_filters( 'muhiku_forms_entry_save', true, $fields, $entry, $form_data ) ) {
 			return;
 		}
@@ -910,7 +723,6 @@ class MHK_Form_Task {
 		$referer     = ! empty( $_SERVER['HTTP_REFERER'] ) ? esc_url_raw( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
 		$entry_id    = false;
 
-		// GDPR enhancements - If user details are disabled globally discard the IP and UA.
 		if ( 'yes' === get_option( 'muhiku_forms_disable_user_details' ) ) {
 			$user_agent = '';
 			$user_ip    = '';
@@ -935,7 +747,6 @@ class MHK_Form_Task {
 			return new WP_Error( 'no-form-id', __( 'No form ID was found.', 'muhiku-plug' ) );
 		}
 
-		// Create entry.
 		$success = $wpdb->insert( $wpdb->prefix . 'mhk_entries', $entry_data );
 
 		if ( is_wp_error( $success ) || ! $success ) {
@@ -944,25 +755,20 @@ class MHK_Form_Task {
 
 		$entry_id = $wpdb->insert_id;
 
-		// Create meta data.
 		if ( $entry_id ) {
 			foreach ( $fields as $field ) {
 				$field = apply_filters( 'muhiku_forms_entry_save_fields', $field, $form_data, $entry_id );
-				// Add only whitelisted fields to entry meta.
 				if ( in_array( $field['type'], array( 'html', 'title' ), true ) ) {
 					continue;
 				}
 
-				// If empty file is supplied, don't store their data nor send email.
 				if ( in_array( $field['type'], array( 'image-upload', 'file-upload' ), true ) ) {
 
-					// BW compatibility for previous file uploader.
 					if ( isset( $field['value']['file_url'] ) && '' === $field['value']['file_url'] ) {
 						continue;
 					}
 				}
 
-				// If empty label is provided for choice field, don't store their data nor send email.
 				if ( in_array( $field['type'], array( 'radio', 'payment-multiple' ), true ) ) {
 					if ( isset( $field['value']['label'] ) && '' === $field['value']['label'] ) {
 						continue;
@@ -977,10 +783,9 @@ class MHK_Form_Task {
 					$entry_metadata = array(
 						'entry_id'   => $entry_id,
 						'meta_key'   => sanitize_key( $field['meta_key'] ),
-						'meta_value' => maybe_serialize( $field['value'] ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+						'meta_value' => maybe_serialize( $field['value'] ),
 					);
 
-					// Insert entry meta.
 					$wpdb->insert( $wpdb->prefix . 'mhk_entrymeta', $entry_metadata );
 				}
 			}
@@ -988,7 +793,6 @@ class MHK_Form_Task {
 
 		$this->entry_id = $entry_id;
 
-		// Removing Entries Cache.
 		wp_cache_delete( $entry_id, 'mhk-entry' );
 		wp_cache_delete( $entry_id, 'mhk-entrymeta' );
 		wp_cache_delete( $form_id, 'mhk-entries-ids' );
@@ -1002,7 +806,6 @@ class MHK_Form_Task {
 	}
 
 	/**
-	 * Load Previous Field Value.
 	 *
 	 * @param string $properties Value.
 	 * @param mixed  $field Field.
@@ -1011,10 +814,10 @@ class MHK_Form_Task {
 	 */
 	public function load_previous_field_value( $properties, $field, $form_data ) {
 
-		if ( ! isset( $_POST['muhiku_forms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! isset( $_POST['muhiku_forms'] ) ) { 
 			return $properties;
 		}
-		$data = ! empty( $_POST['muhiku_forms']['form_fields'][ $field['id'] ] ) ? wp_unslash( $_POST['muhiku_forms']['form_fields'][ $field['id'] ] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$data = ! empty( $_POST['muhiku_forms']['form_fields'][ $field['id'] ] ) ? wp_unslash( $_POST['muhiku_forms']['form_fields'][ $field['id'] ] ) : array(); 
 
 		if ( 'checkbox' === $field['type'] ) {
 			foreach ( $field['choices'] as $key => $option_value ) {
@@ -1028,7 +831,7 @@ class MHK_Form_Task {
 			}
 		} elseif ( 'radio' === $field['type'] || 'select' === $field['type'] ) {
 			foreach ( $field['choices'] as $key => $option_value ) {
-				if ( $data === $option_value['label'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+				if ( $data === $option_value['label'] ) { 
 					$selected                                = 1;
 					$properties['inputs'][ $key ]['default'] = $selected;
 				}

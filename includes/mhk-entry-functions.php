@@ -1,16 +1,11 @@
 <?php
 /**
- * MuhikuPlug Entry Functions
- *
  * @package MuhikuPlug\Functions
- * @since   1.1.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get entry.
- *
  * @param int|MHK_Entry $id Entry ID or object.
  * @param bool          $with_fields True if empty data should be present.
  * @param array         $args    Additional arguments.
@@ -33,7 +28,6 @@ function mhk_get_entry( $id, $with_fields = false, $args = array() ) {
 		wp_cache_add( $id, $entry, 'mhk-entry' );
 	}
 
-	// BW: Mark entry as read for older entries.
 	if ( is_null( $entry->fields ) && empty( $entry->viewed ) ) {
 		$is_viewed = $wpdb->update(
 			$wpdb->prefix . 'mhk_entries',
@@ -74,8 +68,6 @@ function mhk_get_entry( $id, $with_fields = false, $args = array() ) {
 }
 
 /**
- * Get all entries IDs.
- *
  * @param  int $form_id Form ID.
  * @return int[]
  */
@@ -92,8 +84,6 @@ function mhk_get_entries_ids( $form_id ) {
 }
 
 /**
- * Get entry statuses.
- *
  * @param array $form_data Form data.
  *
  * @return array
@@ -110,8 +100,6 @@ function mhk_get_entry_statuses( $form_data = array() ) {
 }
 
 /**
- * Search entries.
- *
  * @param  array $args Search arguments.
  * @return array
  */
@@ -133,17 +121,14 @@ function mhk_search_entries( $args ) {
 		$args['cap'] = 'muhiku_forms_view_form_entries';
 	}
 
-	// Check if form ID is valid for entries.
 	if ( ! array_key_exists( $args['form_id'], mhk_get_all_forms() ) ) {
 		return array();
 	}
 
-	// Check permission if we can view form entries.
 	if ( ! empty( $args['cap'] ) && ! current_user_can( $args['cap'], $args['form_id'] ) ) {
 		return array();
 	}
 
-	// WHERE clause.
 	$where = array(
 		'default' => "{$wpdb->prefix}mhk_entries.entry_id = {$wpdb->prefix}mhk_entrymeta.entry_id",
 	);
@@ -162,18 +147,15 @@ function mhk_search_entries( $args ) {
 		)
 	);
 
-	// Check if forms are allowed.
 	if ( ! empty( $allowed_forms ) ) {
 		$where['arg_form_id'] = "{$wpdb->prefix}mhk_entries.form_id IN ( {$allowed_forms} )";
 	} else {
 		$where = array( 'return_empty' => '1=0' );
 	}
 
-	// Give developers an ability to modify WHERE (unset clauses, add new, etc).
 	$where     = (array) apply_filters( 'muhiku_forms_search_entries_where', $where, $args );
 	$where_sql = implode( ' AND ', $where );
 
-	// Query object.
 	$query   = array();
 	$query[] = "SELECT DISTINCT {$wpdb->prefix}mhk_entries.entry_id FROM {$wpdb->prefix}mhk_entries INNER JOIN {$wpdb->prefix}mhk_entrymeta WHERE {$where_sql}";
 
@@ -196,7 +178,6 @@ function mhk_search_entries( $args ) {
 		}
 	}
 
-	// Removing Draft Entry (Save and Contd Add-on).
 	if ( empty( $args['status'] ) || 'draft' !== $args['status'] ) {
 		$query[] = $wpdb->prepare( 'AND `status` <> %s', 'draft' );
 	}
@@ -223,8 +204,6 @@ function mhk_search_entries( $args ) {
 }
 
 /**
- * Get total entries counts by status.
- *
  * @param  int $form_id Form ID.
  * @return array
  */
@@ -251,10 +230,6 @@ function mhk_get_count_entries_by_status( $form_id ) {
 }
 
 /**
- * Get total next entries counts by last entry.
- *
- * @since 1.5.0
- *
  * @param  int $form_id    Form ID.
  * @param  int $last_entry Last Form ID.
  * @return int[]
@@ -273,10 +248,6 @@ function mhk_get_count_entries_by_last_entry( $form_id, $last_entry ) {
 }
 
 /**
- * Get all the entries by form id between the start and end date.
- *
- * @since 1.7.0
- *
  * @param int    $form_id    Form ID.
  * @param string $start_date Start date.
  * @param string $end_date   End date.
@@ -302,7 +273,7 @@ function mhk_get_entries_by_form_id( $form_id, $start_date = '', $end_date = '' 
 	$results = wp_cache_get( $form_id, 'mhk-search-entries' );
 
 	if ( false === $results ) {
-		$results = $wpdb->get_results( implode( ' ', $query ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$results = $wpdb->get_results( implode( ' ', $query ), ARRAY_A ); 
 		wp_cache_add( $form_id, $results, 'mhk-search-entries' );
 	}
 

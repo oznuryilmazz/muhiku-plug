@@ -1,21 +1,12 @@
 <?php
 /**
- * MuhikuPlug Admin Forms Class
- *
  * @package MuhikuPlug\Admin
- * @since   1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Admin_Forms class.
- */
 class MHK_Admin_Forms {
 
-	/**
-	 * Initialize the forms admin actions.
-	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'actions' ) );
 		add_action( 'deleted_post', array( $this, 'delete_entries' ) );
@@ -23,27 +14,22 @@ class MHK_Admin_Forms {
 	}
 
 	/**
-	 * Check if is forms page.
-	 *
 	 * @return bool
 	 */
 	private function is_forms_page() {
-		return isset( $_GET['page'] ) && 'mhk-builder' === $_GET['page']; // phpcs:ignore WordPress.Security.NonceVerification
+		return isset( $_GET['page'] ) && 'mhk-builder' === $_GET['page']; 
 	}
 
-	/**
-	 * Page output.
-	 */
 	public static function page_output() {
 		global $current_tab;
 
-		if ( isset( $_GET['form_id'] ) && $current_tab ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$form      = mhk()->form->get( absint( $_GET['form_id'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
-			$form_id   = is_object( $form ) ? absint( $form->ID ) : absint( $_GET['form_id'] ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_GET['form_id'] ) && $current_tab ) { 
+			$form      = mhk()->form->get( absint( $_GET['form_id'] ) ); 
+			$form_id   = is_object( $form ) ? absint( $form->ID ) : absint( $_GET['form_id'] ); 
 			$form_data = is_object( $form ) ? mhk_decode( $form->post_content ) : false;
 
 			include 'views/html-admin-page-builder.php';
-		} elseif ( isset( $_GET['create-form'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		} elseif ( isset( $_GET['create-form'] ) ) { 
 			$templates       = array();
 			$refresh_url     = add_query_arg(
 				array(
@@ -54,16 +40,14 @@ class MHK_Admin_Forms {
 				admin_url( 'admin.php' )
 			);
 			$license_plan    = mhk_get_license_plan();
-			$current_section = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : '_all'; // phpcs:ignore WordPress.Security.NonceVerification
+			$current_section = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : '_all'; 
 
 			if ( '_featured' !== $current_section ) {
-				$category  = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : 'free'; // phpcs:ignore WordPress.Security.NonceVerification
+				$category  = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : 'free'; 
 				$templates = self::get_template_data( $category );
 			}
 
 			/**
-			 * Addon page view.
-			 *
 			 * @uses $templates
 			 * @uses $refresh_url
 			 * @uses $current_section
@@ -75,8 +59,6 @@ class MHK_Admin_Forms {
 	}
 
 	/**
-	 * Get sections for the addons screen.
-	 *
 	 * @return array of objects
 	 */
 	public static function get_sections() {
@@ -94,8 +76,6 @@ class MHK_Admin_Forms {
 	}
 
 	/**
-	 * Get section content for the template screen.
-	 *
 	 * @return array
 	 */
 	public static function get_template_data() {
@@ -103,15 +83,15 @@ class MHK_Admin_Forms {
 
 		if ( false === $template_data ) {
 			$template_data     = mhk_get_json_file_contents( 'assets/extensions-json/templates/all_templates.json' );
-			// Removing directory so the templates can be reinitialized.
+
 			$folder_path = untrailingslashit( plugin_dir_path( MHK_PLUGIN_FILE ) . '/assets/images/templates' );
 
 			foreach ( $template_data->templates as $template_tuple ) {
-				// We retrieve the image, then use them instead of the remote server.
+			
 				$image = wp_remote_get( $template_tuple->image );
 				$type  = wp_remote_retrieve_header( $image, 'content-type' );
 
-				// Remote file check failed, we'll fallback to remote image.
+			
 				if ( ! $type ) {
 					continue;
 				}
@@ -120,7 +100,7 @@ class MHK_Admin_Forms {
 				$relative_path = $folder_path . '/' . end( $temp_name );
 				$exists        = file_exists( $relative_path );
 
-				// If it exists, utilize this file instead of remote file.
+
 				if ( $exists ) {
 					$template_tuple->image = plugin_dir_url( MHK_PLUGIN_FILE ) . 'assets/images/templates/' . end( $temp_name );
 				}
@@ -136,9 +116,6 @@ class MHK_Admin_Forms {
 		}
 	}
 
-	/**
-	 * Table list output.
-	 */
 	public static function table_list_output() {
 		global $forms_table_list;
 
@@ -168,26 +145,18 @@ class MHK_Admin_Forms {
 		<?php
 	}
 
-	/**
-	 * Forms admin actions.
-	 */
 	public function actions() {
 		if ( $this->is_forms_page() ) {
-			// Empty trash.
-			if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) ) {  
 				$this->empty_trash();
 			}
 
-			// Duplicate form.
-			if ( isset( $_REQUEST['action'] ) && 'duplicate_form' === $_REQUEST['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( isset( $_REQUEST['action'] ) && 'duplicate_form' === $_REQUEST['action'] ) {  
 				$this->duplicate_form();
 			}
 		}
 	}
 
-	/**
-	 * Empty Trash.
-	 */
 	private function empty_trash() {
 		check_admin_referer( 'bulk-forms' );
 
@@ -211,15 +180,11 @@ class MHK_Admin_Forms {
 		add_settings_error(
 			'empty_trash',
 			'empty_trash',
-			/* translators: %d: number of forms */
 			sprintf( _n( '%d form permanently deleted.', '%d forms permanently deleted.', $count, 'muhiku-plug' ), $count ),
 			'updated'
 		);
 	}
 
-	/**
-	 * Duplicate form.
-	 */
 	private function duplicate_form() {
 		if ( empty( $_REQUEST['form_id'] ) ) {
 			wp_die( esc_html__( 'No form to duplicate has been supplied!', 'muhiku-plug' ) );
@@ -231,16 +196,11 @@ class MHK_Admin_Forms {
 
 		$duplicate_id = mhk()->form->duplicate( $form_id );
 
-		// Redirect to the edit screen for the new form page.
 		wp_safe_redirect( admin_url( 'admin.php?page=mhk-builder&tab=fields&form_id=' . $duplicate_id ) );
 		exit;
 	}
 
 	/**
-	 * Remove entry and its associated meta.
-	 *
-	 * When form is deleted then it also deletes its entries meta.
-	 *
 	 * @param int $postid Post ID.
 	 */
 	public function delete_entries( $postid ) {
@@ -248,7 +208,6 @@ class MHK_Admin_Forms {
 
 		$entries = mhk_get_entries_ids( $postid );
 
-		// Delete entry.
 		if ( ! empty( $entries ) ) {
 			foreach ( $entries as $entry_id ) {
 				$wpdb->delete( $wpdb->prefix . 'mhk_entries', array( 'entry_id' => $entry_id ), array( '%d' ) );
@@ -258,12 +217,8 @@ class MHK_Admin_Forms {
 	}
 
 	/**
-	 * Untrash form status.
-	 *
-	 * @since 1.7.5
-	 *
-	 * @param string $new_status The new status of the post being restored.
-	 * @param int    $post_id    The ID of the post being restored.
+	 * @param string $new_status 
+	 * @param int    $post_id    
 	 * @return string
 	 */
 	public function untrash_form_status( $new_status, $post_id ) {

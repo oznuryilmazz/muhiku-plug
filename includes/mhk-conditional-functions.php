@@ -1,11 +1,6 @@
 <?php
 /**
- * MuhikuPlug Conditional Functions
- *
- * Functions for determining the current query/page.
- *
  * @package MuhikuPlug/Functions
- * @version 1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,8 +8,6 @@ defined( 'ABSPATH' ) || exit;
 if ( ! function_exists( 'is_ajax' ) ) {
 
 	/**
-	 * Is_ajax - Returns true when the page is loaded via ajax.
-	 *
 	 * @return bool
 	 */
 	function is_ajax() {
@@ -23,8 +16,6 @@ if ( ! function_exists( 'is_ajax' ) ) {
 }
 
 /**
- * Check if the string is JSON.
- *
  * @param  string $string String to check.
  * @return bool
  */
@@ -33,9 +24,6 @@ function mhk_is_json( $string ) {
 }
 
 /**
- * Checks if field exists within the form.
- *
- * @since 1.5.7
  * @param int    $form_id Form ID.
  * @param string $field   Field ID.
  * @return bool  True if the field exists in the form.

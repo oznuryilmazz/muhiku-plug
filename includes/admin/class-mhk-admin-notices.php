@@ -1,28 +1,18 @@
 <?php
 /**
- * Display notices in admin
- *
  * @package MuhikuPlug/Admin
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Admin_Notices Class.
- */
 class MHK_Admin_Notices {
 
 	/**
-	 * Stores notices.
-	 *
 	 * @var array
 	 */
 	private static $notices = array();
 
 	/**
-	 * Array of notices - name => callback.
-	 *
 	 * @var array
 	 */
 	private static $core_notices = array(
@@ -31,9 +21,6 @@ class MHK_Admin_Notices {
 		'survey' => 'survey_notice',
 	);
 
-	/**
-	 * Constructor.
-	 */
 	public static function init() {
 		self::$notices = get_option( 'muhiku_forms_admin_notices', array() );
 
@@ -48,32 +35,21 @@ class MHK_Admin_Notices {
 		}
 	}
 
-	/**
-	 * Store notices to DB
-	 */
 	public static function store_notices() {
 		update_option( 'muhiku_forms_admin_notices', self::get_notices() );
 	}
 
 	/**
-	 * Get notices.
-	 *
 	 * @return array
 	 */
 	public static function get_notices() {
 		return self::$notices;
 	}
 
-	/**
-	 * Remove all notices.
-	 */
 	public static function remove_all_notices() {
 		self::$notices = array();
 	}
 
-	/**
-	 * Reset notices for themes when switched or a new version of MHK is installed.
-	 */
 	public static function reset_admin_notices() {
 		if ( self::is_plugin_active( 'muhiku-plug-stripe/muhiku-plug-stripe.php' ) ) {
 			self::add_notice( 'deprecated_payment_charge' );
@@ -83,8 +59,6 @@ class MHK_Admin_Notices {
 	}
 
 	/**
-	 * Show a notice.
-	 *
 	 * @param string $name Notice name.
 	 */
 	public static function add_notice( $name ) {
@@ -92,9 +66,7 @@ class MHK_Admin_Notices {
 	}
 
 	/**
-	 * Remove a notice from being displayed.
-	 *
-	 * @param string $name Notice name.
+	 * @param string $name
 	 */
 	public static function remove_notice( $name ) {
 		self::$notices = array_diff( self::get_notices(), array( $name ) );
@@ -102,18 +74,13 @@ class MHK_Admin_Notices {
 	}
 
 	/**
-	 * See if a notice is being shown.
-	 *
-	 * @param  string $name Notice name.
+	 * @param  string $name 
 	 * @return boolean
 	 */
 	public static function has_notice( $name ) {
 		return in_array( $name, self::get_notices(), true );
 	}
 
-	/**
-	 * Hide a notice if the GET variable is set.
-	 */
 	public static function hide_notices() {
 		if ( isset( $_GET['mhk-hide-notice'] ) && isset( $_GET['_mhk_notice_nonce'] ) ) {
 			if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_GET['_mhk_notice_nonce'] ) ), 'muhiku_forms_hide_notices_nonce' ) ) {
@@ -134,9 +101,6 @@ class MHK_Admin_Notices {
 		}
 	}
 
-	/**
-	 * Add notices + styles if needed.
-	 */
 	public static function add_notices() {
 		$notices = self::get_notices();
 
@@ -151,14 +115,12 @@ class MHK_Admin_Notices {
 			'plugins',
 		);
 
-		// Notices should only show on Muhiku Plug screens, the main dashboard, and on the plugins screen.
 		if ( ! in_array( $screen_id, mhk_get_screen_ids(), true ) && ! in_array( $screen_id, $show_on_screens, true ) ) {
 			return;
 		}
 
 		wp_enqueue_style( 'muhiku-plug-activation', plugins_url( '/assets/css/activation.css', MHK_PLUGIN_FILE ), array(), MHK_VERSION );
 
-		// Add RTL support.
 		wp_style_add_data( 'muhiku-plug-activation', 'rtl', 'replace' );
 
 		foreach ( $notices as $notice ) {
@@ -171,19 +133,14 @@ class MHK_Admin_Notices {
 	}
 
 	/**
-	 * Add a custom notice.
-	 *
-	 * @param string $name        Notice name.
-	 * @param string $notice_html Notice html.
+	 * @param string $name        
+	 * @param string $notice_html
 	 */
 	public static function add_custom_notice( $name, $notice_html ) {
 		self::add_notice( $name );
 		update_option( 'muhiku_forms_admin_notice_' . $name, wp_kses_post( $notice_html ) );
 	}
 
-	/**
-	 * Output any stored custom notices.
-	 */
 	public static function output_custom_notices() {
 		$notices = self::get_notices();
 
@@ -200,14 +157,11 @@ class MHK_Admin_Notices {
 		}
 	}
 
-	/**
-	 * If we need to update, include a message with the update button.
-	 */
 	public static function update_notice() {
 		if ( MHK_Install::needs_db_update() ) {
 			$updater = new MHK_Background_Updater();
 
-			if ( $updater->is_updating() || ! empty( $_GET['do_update_muhiku_forms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( $updater->is_updating() || ! empty( $_GET['do_update_muhiku_forms'] ) ) {  
 				include 'views/html-notice-updating.php';
 			} else {
 				include 'views/html-notice-update.php';
@@ -218,13 +172,9 @@ class MHK_Admin_Notices {
 		}
 	}
 
-	/**
-	 * If we need reviews, include a message requesting review.
-	 */
 	public static function review_notice() {
 		global $wpdb;
 
-		// Check if another notice is showing.
 		if ( self::survey_notice( true ) ) {
 			return;
 		}
@@ -234,7 +184,6 @@ class MHK_Admin_Notices {
 		$review    = get_option( 'muhiku_forms_review' );
 		$activated = get_option( 'muhiku_forms_activated' );
 
-		// Verify for review.
 		if ( ! $review ) {
 			$review = array(
 				'time'      => $time,
@@ -242,36 +191,29 @@ class MHK_Admin_Notices {
 			);
 			update_option( 'muhiku_forms_review', $review );
 		} else {
-			// Check if it has been dismissed or not.
 			if ( ( isset( $review['dismissed'] ) && ! $review['dismissed'] ) && ( isset( $review['time'] ) && ( ( $review['time'] + DAY_IN_SECONDS ) <= $time ) ) ) {
 				$load = true;
 			}
 		}
 
-		// Continue only if review request criteria meets.
 		if ( $load && class_exists( 'MuhikuPlug_Pro', false ) ) {
 			$entries_count = $wpdb->get_var( "SELECT COUNT(entry_id) FROM {$wpdb->prefix}mhk_entries WHERE `status` = 'publish'" );
 
-			// Only continue if the site has collected at least 50 entries.
 			if ( empty( $entries_count ) || $entries_count < 50 ) {
 				return;
 			}
 		} else {
-			// Only continue if plugin has been installed for at least 14 days.
 			if ( ( $activated + ( WEEK_IN_SECONDS * 2 ) ) > $time ) {
 				return;
 			}
 		}
 
-		// Ask for some love.
 		if ( $load && ( is_super_admin() || current_user_can( 'manage_muhiku_forms' ) ) ) {
 			include 'views/html-notice-review.php';
 		}
 	}
 
 	/**
-	 * If we need survey, include a message requesting survey.
-	 *
 	 * @param boolean $status Twice notice to check.
 	 * @return boolean
 	 */
@@ -286,7 +228,6 @@ class MHK_Admin_Notices {
 			return;
 		}
 
-		// Only continue if plugin has been installed for at least 10 days.
 		if ( ( $activated + ( DAY_IN_SECONDS * 10 ) ) > $time ) {
 			return;
 		}
@@ -299,16 +240,10 @@ class MHK_Admin_Notices {
 
 	}
 
-	/**
-	 * Remove non-MuhikuPlug notices from MuhikuPlug pages.
-	 *
-	 * @since 1.2.0
-	 */
 	public static function hide_unrelated_notices() {
 		global $wp_filter;
 
-		// Bail if we're not on a MuhikuPlug screen or page.
-		if ( empty( $_REQUEST['page'] ) || false === strpos( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ), 'mhk-' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( empty( $_REQUEST['page'] ) || false === strpos( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ), 'mhk-' ) ) {  
 			return;
 		}
 
@@ -320,7 +255,7 @@ class MHK_Admin_Notices {
 							unset( $wp_filter[ $wp_notice ]->callbacks[ $priority ][ $name ] );
 							continue;
 						}
-						if ( ( isset( $_GET['tab'], $_GET['form_id'] ) || isset( $_GET['create-form'] ) ) && 'mhk-builder' === $_REQUEST['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+						if ( ( isset( $_GET['tab'], $_GET['form_id'] ) || isset( $_GET['create-form'] ) ) && 'mhk-builder' === $_REQUEST['page'] ) {  
 							unset( $wp_filter[ $wp_notice ]->callbacks[ $priority ][ $name ] );
 							continue;
 						}
@@ -337,9 +272,7 @@ class MHK_Admin_Notices {
 	}
 
 	/**
-	 * Wrapper for is_plugin_active.
-	 *
-	 * @param string $plugin Plugin to check.
+	 * @param string $plugin
 	 * @return boolean
 	 */
 	protected static function is_plugin_active( $plugin ) {

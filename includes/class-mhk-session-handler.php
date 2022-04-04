@@ -1,65 +1,42 @@
 <?php
 /**
- * Handle data for the current customers session.
- * Implements the MHK_Session abstract class.
- *
  * @package MuhikuPlug\Classes
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Session handler class.
- */
 class MHK_Session_Handler extends MHK_Session {
 
 	/**
-	 * Cookie name used for the session.
-	 *
 	 * @var string cookie name
 	 */
 	protected $_cookie;
 
 	/**
-	 * Stores session expiry.
-	 *
 	 * @var string session due to expire timestamp
 	 */
 	protected $_session_expiring;
 
 	/**
-	 * Stores session due to expire timestamp.
-	 *
 	 * @var string session expiration timestamp
 	 */
 	protected $_session_expiration;
 
 	/**
-	 * True when the cookie exists.
-	 *
 	 * @var bool Based on whether a cookie exists.
 	 */
 	protected $_has_cookie = false;
 
 	/**
-	 * Table name for session data.
-	 *
 	 * @var string Custom session table name
 	 */
 	protected $_table;
 
-	/**
-	 * Constructor for the session class.
-	 */
 	public function __construct() {
 		$this->_cookie = apply_filters( 'muhiku_forms_cookie', 'wp_muhiku_forms_session_' . COOKIEHASH );
 		$this->_table  = $GLOBALS['wpdb']->prefix . 'mhk_sessions';
 	}
 
-	/**
-	 * Init hooks and session data.
-	 */
 	public function init() {
 		$cookie = $this->get_session_cookie();
 
@@ -69,7 +46,6 @@ class MHK_Session_Handler extends MHK_Session {
 			$this->_session_expiring   = $cookie[2];
 			$this->_has_cookie         = true;
 
-			// Update session if its close to expiring.
 			if ( time() > $this->_session_expiring ) {
 				$this->set_session_expiration();
 				$this->update_session_timestamp( $this->_customer_id, $this->_session_expiration );
@@ -90,27 +66,18 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * Return true if the current user has an active session, i.e. a cookie to retrieve values.
-	 *
 	 * @return bool
 	 */
 	public function has_session() {
-		return isset( $_COOKIE[ $this->_cookie ] ) || $this->_has_cookie || is_user_logged_in(); // @codingStandardsIgnoreLine.
+		return isset( $_COOKIE[ $this->_cookie ] ) || $this->_has_cookie || is_user_logged_in();
 	}
 
-	/**
-	 * Set session expiration.
-	 */
 	public function set_session_expiration() {
-		$this->_session_expiring   = time() + intval( apply_filters( 'mhk_session_expiring', 60 * 60 * 47 ) ); // 47 Hours.
-		$this->_session_expiration = time() + intval( apply_filters( 'mhk_session_expiration', 60 * 60 * 48 ) ); // 48 Hours.
+		$this->_session_expiring   = time() + intval( apply_filters( 'mhk_session_expiring', 60 * 60 * 47 ) ); 
+		$this->_session_expiration = time() + intval( apply_filters( 'mhk_session_expiration', 60 * 60 * 48 ) ); 
 	}
 
 	/**
-	 * Generate a unique customer ID for guests, or return user ID if logged in.
-	 *
-	 * Uses Portable PHP password hashing framework to generate a unique cryptographically strong ID.
-	 *
 	 * @return string
 	 */
 	public function generate_customer_id() {
@@ -130,14 +97,10 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * Get the session cookie, if set. Otherwise return false.
-	 *
-	 * Session cookies without a customer ID are invalid.
-	 *
 	 * @return bool|array
 	 */
 	public function get_session_cookie() {
-		$cookie_value = isset( $_COOKIE[ $this->_cookie ] ) ? wp_unslash( $_COOKIE[ $this->_cookie ] ) : false; // @codingStandardsIgnoreLine.
+		$cookie_value = isset( $_COOKIE[ $this->_cookie ] ) ? wp_unslash( $_COOKIE[ $this->_cookie ] ) : false; 
 
 		if ( empty( $cookie_value ) || ! is_string( $cookie_value ) ) {
 			return false;
@@ -149,7 +112,6 @@ class MHK_Session_Handler extends MHK_Session {
 			return false;
 		}
 
-		// Validate hash.
 		$to_hash = $customer_id . '|' . $session_expiration;
 		$hash    = hash_hmac( 'md5', $to_hash, wp_hash( $to_hash ) );
 
@@ -161,8 +123,6 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * Get session data.
-	 *
 	 * @return array
 	 */
 	public function get_session_data() {
@@ -170,19 +130,12 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * Gets a cache prefix. This is used in session names so the entire cache can be invalidated with 1 function call.
-	 *
 	 * @return string
 	 */
 	private function get_cache_prefix() {
 		return MHK_Cache_Helper::get_cache_prefix( MHK_SESSION_CACHE_GROUP );
 	}
-
-	/**
-	 * Save data.
-	 */
 	public function save_data() {
-		// Dirty if something changed - prevents saving nothing new.
 		if ( $this->_dirty && $this->has_session() ) {
 			global $wpdb;
 
@@ -201,9 +154,6 @@ class MHK_Session_Handler extends MHK_Session {
 		}
 	}
 
-	/**
-	 * Destroy all session data.
-	 */
 	public function destroy_session() {
 		mhk_setcookie( $this->_cookie, '', time() - YEAR_IN_SECONDS, apply_filters( 'mhk_session_use_secure_cookie', false ) );
 
@@ -215,8 +165,6 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * When a user is logged out, ensure they have a unique nonce by using the customer/session ID.
-	 *
 	 * @param int $uid User ID.
 	 * @return string
 	 */
@@ -224,13 +172,10 @@ class MHK_Session_Handler extends MHK_Session {
 		return $this->has_session() && $this->_customer_id ? $this->_customer_id : $uid;
 	}
 
-	/**
-	 * Cleanup session data from the database and clear caches.
-	 */
 	public function cleanup_sessions() {
 		global $wpdb;
 
-		$wpdb->query( $wpdb->prepare( "DELETE FROM $this->_table WHERE session_expiry < %d", time() ) ); // @codingStandardsIgnoreLine.
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $this->_table WHERE session_expiry < %d", time() ) ); 
 
 		if ( class_exists( 'MHK_Cache_Helper' ) ) {
 			MHK_Cache_Helper::incr_cache_prefix( MHK_SESSION_CACHE_GROUP );
@@ -238,8 +183,6 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * Returns the session.
-	 *
 	 * @param string $customer_id Customer ID.
 	 * @param mixed  $default Default session value.
 	 * @return string|array
@@ -251,11 +194,10 @@ class MHK_Session_Handler extends MHK_Session {
 			return false;
 		}
 
-		// Try to get it from the cache, it will return false if not present or if object cache not in use.
 		$value = wp_cache_get( $this->get_cache_prefix() . $customer_id, MHK_SESSION_CACHE_GROUP );
 
 		if ( false === $value ) {
-			$value = $wpdb->get_var( $wpdb->prepare( "SELECT session_value FROM $this->_table WHERE session_key = %s", $customer_id ) ); // @codingStandardsIgnoreLine.
+			$value = $wpdb->get_var( $wpdb->prepare( "SELECT session_value FROM $this->_table WHERE session_key = %s", $customer_id ) );
 
 			if ( is_null( $value ) ) {
 				$value = $default;
@@ -268,8 +210,6 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * Delete the session from the cache and database.
-	 *
 	 * @param int $customer_id Customer ID.
 	 */
 	public function delete_session( $customer_id ) {
@@ -277,7 +217,7 @@ class MHK_Session_Handler extends MHK_Session {
 
 		wp_cache_delete( $this->get_cache_prefix() . $customer_id, MHK_SESSION_CACHE_GROUP );
 
-		$wpdb->delete( // @codingStandardsIgnoreLine.
+		$wpdb->delete( 
 			$this->_table,
 			array(
 				'session_key' => $customer_id,
@@ -286,15 +226,12 @@ class MHK_Session_Handler extends MHK_Session {
 	}
 
 	/**
-	 * Update the session expiry timestamp.
-	 *
 	 * @param string $customer_id Customer ID.
 	 * @param int    $timestamp Timestamp to expire the cookie.
 	 */
 	public function update_session_timestamp( $customer_id, $timestamp ) {
 		global $wpdb;
 
-		// @codingStandardsIgnoreStart.
 		$wpdb->update(
 			$this->_table,
 			array(
@@ -307,6 +244,5 @@ class MHK_Session_Handler extends MHK_Session {
 				'%d'
 			)
 		);
-		// @codingStandardsIgnoreEnd.
 	}
 }

@@ -2,22 +2,15 @@
 /**
  * Textarea field.
  *
- * @package MuhikuPlug\Fields
- * @since   1.0.0
+ * @package MuhikuPlug\Fields0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Field_Textarea class.
- */
 class MHK_Field_Textarea extends MHK_Form_Fields {
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
-		$this->name     = esc_html__( 'Paragraph Text', 'muhiku-plug' );
+		$this->name     = esc_html__( 'Paragraf Metin', 'muhiku-plug' );
 		$this->type     = 'textarea';
 		$this->icon     = 'mhk-icon mhk-icon-paragraph';
 		$this->order    = 40;
@@ -48,79 +41,11 @@ class MHK_Field_Textarea extends MHK_Form_Fields {
 		parent::__construct();
 	}
 
-	/**
-	 * Hook in tabs.
-	 */
 	public function init_hooks() {
 		add_action( 'muhiku_forms_shortcode_scripts', array( $this, 'load_assets' ) );
 	}
 
 	/**
-	 * Limit length field option.
-	 *
-	 * @param array $field Field settings.
-	 */
-	public function limit_length( $field ) {
-		// Limit length.
-		$args = array(
-			'slug'    => 'limit_enabled',
-			'content' => $this->field_element(
-				'checkbox',
-				$field,
-				array(
-					'slug'    => 'limit_enabled',
-					'value'   => isset( $field['limit_enabled'] ),
-					'desc'    => esc_html__( 'Limit Length', 'muhiku-plug' ),
-					'tooltip' => esc_html__( 'Check this option to limit text length by characters or words count.', 'muhiku-plug' ),
-				),
-				false
-			),
-		);
-		$this->field_element( 'row', $field, $args );
-
-		// Limit controls.
-		$count = $this->field_element(
-			'text',
-			$field,
-			array(
-				'type'  => 'number',
-				'class' => 'small-text',
-				'slug'  => 'limit_count',
-				'attrs' => array(
-					'min'     => 1,
-					'step'    => 1,
-					'pattern' => '[0-9]',
-				),
-				'value' => ! empty( $field['limit_count'] ) ? absint( $field['limit_count'] ) : 1,
-			),
-			false
-		);
-
-		$mode = $this->field_element(
-			'select',
-			$field,
-			array(
-				'slug'    => 'limit_mode',
-				'class'   => 'limit-select',
-				'value'   => ! empty( $field['limit_mode'] ) ? esc_attr( $field['limit_mode'] ) : 'characters',
-				'options' => array(
-					'characters' => esc_html__( 'Characters', 'muhiku-plug' ),
-					'words'      => esc_html__( 'Words Count', 'muhiku-plug' ),
-				),
-			),
-			false
-		);
-		$args = array(
-			'slug'    => 'limit_controls',
-			'class'   => ! isset( $field['limit_enabled'] ) ? 'muhiku-plug-hidden' : '',
-			'content' => $count . $mode,
-		);
-		$this->field_element( 'row', $field, $args );
-	}
-
-	/**
-	 * Enqueue shortcode scripts.
-	 *
 	 * @param array $atts Shortcode Attributes.
 	 */
 	public function load_assets( $atts ) {
@@ -139,36 +64,24 @@ class MHK_Field_Textarea extends MHK_Form_Fields {
 	}
 
 	/**
-	 * Field preview inside the builder.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field data and settings.
 	 */
 	public function field_preview( $field ) {
 		$placeholder = ! empty( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
 
-		// Label.
 		$this->field_preview_option( 'label', $field );
 
-		// Primary input.
 		echo '<textarea placeholder="' . esc_attr( $placeholder ) . '" class="widefat" disabled></textarea>';
 
-		// Description.
 		$this->field_preview_option( 'description', $field );
 	}
 
 	/**
-	 * Field display on the form front-end.
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param array $field Field Data.
 	 * @param array $field_atts Field attributes.
 	 * @param array $form_data All Form Data.
 	 */
 	public function field_display( $field, $field_atts, $form_data ) {
-		// Define data.
 		$value   = '';
 		$primary = $field['properties']['inputs']['primary'];
 
@@ -177,7 +90,6 @@ class MHK_Field_Textarea extends MHK_Form_Fields {
 			unset( $primary['attr']['value'] );
 		}
 
-		// Limit length.
 		if ( isset( $field['limit_enabled'] ) ) {
 			$limit_count = isset( $field['limit_count'] ) ? absint( $field['limit_count'] ) : 0;
 			$limit_mode  = isset( $field['limit_mode'] ) ? sanitize_key( $field['limit_mode'] ) : 'characters';
@@ -195,7 +107,6 @@ class MHK_Field_Textarea extends MHK_Form_Fields {
 			}
 		}
 
-		// Primary field.
 		printf(
 			'<textarea %s %s >%s</textarea>',
 			mhk_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),

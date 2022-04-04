@@ -1,9 +1,6 @@
 <?php
 /**
- * MuhikuPlug Builder Fields
- *
  * @package MuhikuPlug\Admin
- * @since   1.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,38 +9,20 @@ if ( class_exists( 'MHK_Builder_Fields', false ) ) {
 	return new MHK_Builder_Fields();
 }
 
-/**
- * MHK_Builder_Fields class.
- */
 class MHK_Builder_Fields extends MHK_Builder_Page {
 
 	/**
-	 * Contains information for multi-part forms.
-	 *
-	 * Forms that do not contain parts return false, otherwise returns an array
-	 * that contains the number of total pages and page counter used when
-	 * displaying part rows.
-	 *
-	 * @since 1.3.2
-	 *
 	 * @var array
 	 */
 	public static $parts = array();
 
-	/**
-	 * Constructor.
-	 */
 	public function __construct() {
 		$this->id      = 'fields';
-		$this->label   = __( 'Fields', 'muhiku-plug' );
+		$this->label   = __( 'Alanlar', 'muhiku-plug' );
 		$this->sidebar = true;
 
 		parent::__construct();
 	}
-
-	/**
-	 * Hook in tabs.
-	 */
 	public function init_hooks() {
 		if ( is_object( $this->form ) ) {
 			add_action( 'muhiku_forms_builder_fields', array( $this, 'output_fields' ) );
@@ -52,20 +31,17 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		}
 	}
 
-	/**
-	 * Outputs the builder sidebar.
-	 */
 	public function output_sidebar() {
 		?>
 		<div class="muhiku-plug-fields-tab">
-			<a href="#" id="add-fields" class="fields active"><?php esc_html_e( 'Add Fields', 'muhiku-plug' ); ?></a>
-			<a href="#" id="field-options" class="options"><?php esc_html_e( 'Field Options', 'muhiku-plug' ); ?></a>
+			<a href="#" id="add-fields" class="fields active"><?php esc_html_e( 'Alan Ekle', 'muhiku-plug' ); ?></a>
+			<a href="#" id="field-options" class="options"><?php esc_html_e( 'Alan Özellikleri', 'muhiku-plug' ); ?></a>
 			<?php do_action( 'muhiku_forms_builder_fields_tab', $this->form ); ?>
 		</div>
 		<div class="muhiku-plug-tab-content">
 			<div class="muhiku-plug-add-fields">
 				<div class="muhiku-plug-input-group muhiku-plug-search-input mhk-mb-3">
-					<input id="muhiku-plug-search-fields" class="muhiku-plug-input-control muhiku-plug-search-fields" type="text" placeholder="<?php esc_attr_e( 'Search fields&hellip;', 'muhiku-plug' ); ?>" />
+					<input id="muhiku-plug-search-fields" class="muhiku-plug-input-control muhiku-plug-search-fields" type="text" placeholder="<?php esc_attr_e( 'Alan ara&hellip;', 'muhiku-plug' ); ?>" />
 					<div class="muhiku-plug-input-group__append">
 						<div class="muhiku-plug-input-group__text">
 							<svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" viewBox="0 0 24 24" fill="#a1a4b9"><path d="M21.71,20.29,18,16.61A9,9,0,1,0,16.61,18l3.68,3.68a1,1,0,0,0,1.42,0A1,1,0,0,0,21.71,20.29ZM11,18a7,7,0,1,1,7-7A7,7,0,0,1,11,18Z"/></svg>
@@ -87,9 +63,6 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		<?php
 	}
 
-	/**
-	 * Outputs the builder content.
-	 */
 	public function output_content() {
 		?>
 		<div class="muhiku-plug-preview-wrap">
@@ -107,9 +80,6 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		<?php
 	}
 
-	/**
-	 * Output fields group buttons.
-	 */
 	public function output_fields() {
 		$form_fields = mhk()->form_fields->form_fields();
 
@@ -134,9 +104,6 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		}
 	}
 
-	/**
-	 * Output fields setting options.
-	 */
 	public function output_fields_options() {
 		$fields = isset( $this->form_data['form_fields'] ) ? $this->form_data['form_fields'] : array();
 
@@ -168,9 +135,6 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 		}
 	}
 
-	/**
-	 * Outputs fields preview content.
-	 */
 	public function output_fields_preview() {
 		$form_data = $this->form_data;
 		$form_id   = absint( $form_data['id'] );
@@ -183,11 +147,6 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 			array_keys( $structure )
 		);
 
-		/**
-		 * BW compatiable for multi-parts form.
-		 *
-		 * @todo Remove in Major MHK version 1.6.0
-		 */
 		if ( defined( 'MHK_MULTI_PART_PLUGIN_FILE' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
 			$plugin_data = get_plugin_data( MHK_MULTI_PART_PLUGIN_FILE, false, false );
@@ -221,18 +180,11 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 			}
 		}
 
-		// Allow Multi-Part to be customized.
 		self::$parts[ $form_id ] = apply_filters( 'muhiku_forms_parts_data', self::$parts, $form_data, $form_id );
 
-		// Output the fields preview.
 		echo '<div class="mhk-admin-field-container">';
 		echo '<div class="mhk-admin-field-wrapper">';
 
-		/**
-		 * Hook: muhiku_forms_display_builder_fields_before.
-		 *
-		 * @hooked MuhikuPlug_MultiPart::display_builder_fields_before() Multi-Part markup open.
-		 */
 		do_action( 'muhiku_forms_display_builder_fields_before', $form_data, $form_id );
 
 		foreach ( $structure as $row_id => $row_data ) {
@@ -243,9 +195,6 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 			$active_grid = count( $row_grid ) > 0 ? count( $row_grid ) : 2;
 			$active_grid = $active_grid > $total_grid ? $total_grid : $active_grid;
 
-			/**
-			 * Hook: muhiku_forms_display_row_before.
-			 */
 			do_action( 'muhiku_forms_display_builder_row_before', $row_id, $form_data, $form_id );
 
 			$repeater_field = apply_filters( 'muhiku_forms_display_repeater_fields', false, $row_grid, $fields );
@@ -300,19 +249,9 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 			echo '<div class="clear mhk-clear"></div>';
 			echo '</div >';
 
-			/**
-			 * Hook: muhiku_forms_display_builder_row_after.
-			 *
-			 * @hooked MuhikuPlug_MultiPart::display_builder_row_after() Multi-Part markup (close previous part, open next).
-			 */
 			do_action( 'muhiku_forms_display_builder_row_after', $row_id, $form_data, $form_id );
 		}
 
-		/**
-		 * Hook: muhiku_forms_display_builder_fields_after.
-		 *
-		 * @hooked MuhikuPlug_MultiPart::display_builder_fields_after() Multi-Part markup open.
-		 */
 		do_action( 'muhiku_forms_display_builder_fields_after', $form_data, $form_id );
 
 		echo '</div>';
@@ -331,8 +270,6 @@ class MHK_Builder_Fields extends MHK_Builder_Page {
 	}
 
 	/**
-	 * Single Field preview.
-	 *
 	 * @param array $field Field data and settings.
 	 */
 	public function field_preview( $field ) {

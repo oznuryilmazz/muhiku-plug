@@ -1,74 +1,47 @@
 <?php
 /**
- * Handles CSV export.
- *
  * @package MuhikuPlug/Export
- * @version 1.3.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_CSV_Exporter Class.
- */
 abstract class MHK_CSV_Exporter {
 
 	/**
-	 * Type of export used in filter names.
-	 *
 	 * @var string
 	 */
 	protected $export_type = '';
 
 	/**
-	 * Filename to export to.
-	 *
 	 * @var string
 	 */
 	protected $filename = 'mhk-export.csv';
 
 	/**
-	 * Raw data to export.
-	 *
 	 * @var array
 	 */
 	protected $row_data = array();
 
 	/**
-	 * Columns ids and names.
-	 *
 	 * @var array
 	 */
 	protected $column_names = array();
 
 	/**
-	 * List of columns to export, or empty for all.
-	 *
 	 * @var array
 	 */
 	protected $columns_to_export = array();
 
 	/**
-	 * The delimiter parameter sets the field delimiter (one character only).
-	 *
 	 * @var string
 	 */
 	protected $delimiter = ',';
 
-	/**
-	 * Prepare data that will be exported.
-	 */
 	abstract public function prepare_data_to_export();
 
-	/**
-	 * Get quiz report in CSV format.
-	 */
 	abstract public function get_quiz_report();
 
 	/**
-	 * Return the delimiter to use in CSV file
-	 *
-	 * @since  1.7.0
 	 * @return string
 	 */
 	public function get_delimiter() {
@@ -76,8 +49,6 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Return an array of supported column names and ids.
-	 *
 	 * @return array
 	 */
 	public function get_column_names() {
@@ -85,9 +56,7 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Set column names.
-	 *
-	 * @param array $column_names Column names array.
+	 * @param array $column_names
 	 */
 	public function set_column_names( $column_names ) {
 		$this->column_names = array();
@@ -98,8 +67,6 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Return an array of columns to export.
-	 *
 	 * @return array
 	 */
 	public function get_columns_to_export() {
@@ -107,18 +74,14 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Set columns to export.
-	 *
-	 * @param array $columns Columns array.
+	 * @param array $columns
 	 */
 	public function set_columns_to_export( $columns ) {
 		$this->columns_to_export = array_map( 'mhk_clean', $columns );
 	}
 
 	/**
-	 * See if a column is to be exported or not.
-	 *
-	 * @param  string $column_id ID of the column being exported.
+	 * @param  string $column_id 
 	 * @return boolean
 	 */
 	public function is_column_exporting( $column_id ) {
@@ -137,19 +100,12 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Return default columns.
-	 *
 	 * @return array
 	 */
 	public function get_default_column_names() {
 		return array();
 	}
 
-	/**
-	 * Do the export.
-	 *
-	 * @since 1.3.0
-	 */
 	public function export() {
 		$this->prepare_data_to_export();
 		$this->send_headers();
@@ -157,30 +113,22 @@ abstract class MHK_CSV_Exporter {
 		die();
 	}
 
-	/**
-	 * Export quiz report.
-	 */
 	public function export_quiz_report() {
 		$this->send_headers();
 		$this->send_content( $this->get_quiz_report() );
 		die();
 	}
 
-	/**
-	 * Set the export headers.
-	 *
-	 * @since 1.3.0
-	 */
 	public function send_headers() {
 		if ( function_exists( 'gc_enable' ) ) {
-			gc_enable(); // phpcs:ignore PHPCompatibility.FunctionUse.gc_enableFound
+			gc_enable(); 
 		}
 		if ( function_exists( 'apache_setenv' ) ) {
-			@apache_setenv( 'no-gzip', 1 ); // @codingStandardsIgnoreLine
+			@apache_setenv( 'no-gzip', 1 ); 
 		}
-		@ini_set( 'zlib.output_compression', 'Off' ); // @codingStandardsIgnoreLine
-		@ini_set( 'output_buffering', 'Off' ); // @codingStandardsIgnoreLine
-		@ini_set( 'output_handler', '' ); // @codingStandardsIgnoreLine
+		@ini_set( 'zlib.output_compression', 'Off' ); 
+		@ini_set( 'output_buffering', 'Off' ); 
+		@ini_set( 'output_handler', '' );
 		ignore_user_abort( true );
 		mhk_set_time_limit( 0 );
 		mhk_nocache_headers();
@@ -191,17 +139,13 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Set filename to export to.
-	 *
-	 * @param  string $filename Filename to export to.
+	 * @param  string $filename 
 	 */
 	public function set_filename( $filename ) {
 		$this->filename = sanitize_file_name( str_replace( '.csv', '', $filename ) . '.csv' );
 	}
 
 	/**
-	 * Generate and return a filename.
-	 *
 	 * @return string
 	 */
 	public function get_filename() {
@@ -209,17 +153,13 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Set the export content.
-	 *
-	 * @param string $csv_data All CSV content.
+	 * @param string $csv_data 
 	 */
 	public function send_content( $csv_data ) {
-		echo $csv_data; // @codingStandardsIgnoreLine
+		echo $csv_data; 
 	}
 
 	/**
-	 * Get CSV data for this export.
-	 *
 	 * @return string
 	 */
 	protected function get_csv_data() {
@@ -227,15 +167,12 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Export column headers in CSV format.
-	 *
-	 * @since 3.1.0
 	 * @return string
 	 */
 	protected function export_column_headers() {
 		$columns    = $this->get_column_names();
 		$export_row = array();
-		$buffer     = fopen( 'php://output', 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		$buffer     = fopen( 'php://output', 'w' ); 
 		ob_start();
 
 		foreach ( $columns as $column_id => $column_name ) {
@@ -251,8 +188,6 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Get data that will be exported.
-	 *
 	 * @return array
 	 */
 	protected function get_data_to_export() {
@@ -260,13 +195,11 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Export rows in CSV format.
-	 *
 	 * @return string
 	 */
 	protected function export_rows() {
 		$data   = $this->get_data_to_export();
-		$buffer = fopen( 'php://output', 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		$buffer = fopen( 'php://output', 'w' ); 
 		ob_start();
 
 		array_walk( $data, array( $this, 'export_row' ), $buffer );
@@ -275,11 +208,9 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Export rows to an array ready for the CSV.
-	 *
-	 * @param array    $row_data Data to export.
-	 * @param string   $key Column being exported.
-	 * @param resource $buffer Output buffer.
+	 * @param array    $row_data 
+	 * @param string   $key 
+	 * @param resource $buffer 
 	 */
 	protected function export_row( $row_data, $key, $buffer ) {
 		$columns    = $this->get_column_names();
@@ -300,24 +231,13 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Escape a string to be used in a CSV context
-	 *
-	 * Malicious input can inject formulas into CSV files, opening up the possibility
-	 * for phishing attacks and disclosure of sensitive information.
-	 *
-	 * Additionally, Excel exposes the ability to launch arbitrary commands through
-	 * the DDE protocol.
-	 *
-	 * @see http://www.contextis.com/resources/blog/comma-separated-vulnerabilities/
-	 * @see https://hackerone.com/reports/72785
-	 *
-	 * @param string $data CSV field to escape.
+	 * @param string $data
 	 * @return string
 	 */
 	public function escape_data( $data ) {
 		$active_content_triggers = array( '=', '+', '-', '@' );
 
-		if ( in_array( mb_substr( $data, 0, 1 ), $active_content_triggers, true ) ) { // @codingStandardsIgnoreLine
+		if ( in_array( mb_substr( $data, 0, 1 ), $active_content_triggers, true ) ) {  
 			$data = "'" . $data;
 		}
 
@@ -325,14 +245,12 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Format and escape data ready for the CSV file.
-	 *
-	 * @param  string $data Data to format.
+	 * @param  string $data
 	 * @return string
 	 */
 	public function format_data( $data ) {
 		if ( ! is_scalar( $data ) ) {
-			$data = ''; // Not supported.
+			$data = ''; 
 		} elseif ( is_bool( $data ) ) {
 			$data = $data ? 1 : 0;
 		}
@@ -348,16 +266,12 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Implode CSV cell values using commas by default, and wrapping values
-	 * which contain the separator.
-	 *
 	 * @param  array $values Values to implode.
 	 * @return string
 	 */
 	protected function implode_values( $values ) {
 		$values_to_implode = array();
 
-		// For checkbox and radio.
 		if ( ! empty( $values['label'] ) ) {
 			$values = $values['label'];
 		}
@@ -375,30 +289,20 @@ abstract class MHK_CSV_Exporter {
 	}
 
 	/**
-	 * Write to the CSV file, ensuring escaping works across versions of
-	 * PHP.
-	 *
-	 * PHP 5.5.4 uses '\' as the default escape character. This is not RFC-4180 compliant.
-	 * \0 disables the escape character.
-	 *
-	 * @see https://bugs.php.net/bug.php?id=43225
-	 * @see https://bugs.php.net/bug.php?id=50686
-	 * @see https://github.com/woocommerce/woocommerce/issues/19514
-	 *
-	 * @param resource $buffer Resource we are writing to.
-	 * @param array    $export_row Row to export.
+	 * @param resource $buffer 
+	 * @param array    $export_row 
 	 */
 	protected function fputcsv( $buffer, $export_row ) {
 		if ( version_compare( PHP_VERSION, '5.5.4', '<' ) ) {
 			ob_start();
-			$temp = fopen( 'php://output', 'w' ); // @codingStandardsIgnoreLine
-    		fputcsv( $temp, $export_row, $this->get_delimiter(), '"' ); // @codingStandardsIgnoreLine
-			fclose( $temp ); // @codingStandardsIgnoreLine
+			$temp = fopen( 'php://output', 'w' ); 
+    		fputcsv( $temp, $export_row, $this->get_delimiter(), '"' ); 
+			fclose( $temp ); 
 			$row = ob_get_clean();
 			$row = str_replace( '\\"', '\\""', $row );
-			fwrite( $buffer, $row ); // @codingStandardsIgnoreLine
+			fwrite( $buffer, $row );
 		} else {
-			fputcsv( $buffer, $export_row, $this->get_delimiter(), '"', "\0" ); // @codingStandardsIgnoreLine
+			fputcsv( $buffer, $export_row, $this->get_delimiter(), '"', "\0" ); 
 		}
 	}
 }

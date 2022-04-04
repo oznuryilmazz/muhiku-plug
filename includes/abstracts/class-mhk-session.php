@@ -1,53 +1,33 @@
 <?php
 /**
- * Handle data for the current customers session
- *
- * @version 1.0.0
  * @package MuhikuPlug\Abstracts
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_Session class.
- */
 abstract class MHK_Session {
 
 	/**
-	 * Customer ID.
-	 *
-	 * @var int $_customer_id Customer ID.
+	 * @var int $_customer_id 
 	 */
 	protected $_customer_id;
 
 	/**
-	 * Session Data.
-	 *
-	 * @var array $_data Data array.
+	 * @var array $_data
 	 */
 	protected $_data = array();
 
 	/**
-	 * Dirty when the session needs saving.
-	 *
-	 * @var bool $_dirty When something changes
+	 * @var bool $_dirty
 	 */
 	protected $_dirty = false;
 
-	/**
-	 * Init hooks and session data. Extended by child classes.
-	 */
 	public function init() {}
 
-	/**
-	 * Cleanup session data. Extended by child classes.
-	 */
 	public function cleanup_sessions() {}
 
 	/**
-	 * Magic get method.
-	 *
-	 * @param mixed $key Key to get.
+	 * @param mixed $key 
 	 * @return mixed
 	 */
 	public function __get( $key ) {
@@ -55,19 +35,15 @@ abstract class MHK_Session {
 	}
 
 	/**
-	 * Magic set method.
-	 *
-	 * @param mixed $key Key to set.
-	 * @param mixed $value Value to set.
+	 * @param mixed $key 
+	 * @param mixed $value 
 	 */
 	public function __set( $key, $value ) {
 		$this->set( $key, $value );
 	}
 
 	/**
-	 * Magic isset method.
-	 *
-	 * @param mixed $key Key to check.
+	 * @param mixed $key
 	 * @return bool
 	 */
 	public function __isset( $key ) {
@@ -75,9 +51,7 @@ abstract class MHK_Session {
 	}
 
 	/**
-	 * Magic unset method.
-	 *
-	 * @param mixed $key Key to unset.
+	 * @param mixed $key
 	 */
 	public function __unset( $key ) {
 		if ( isset( $this->_data[ $key ] ) ) {
@@ -87,10 +61,8 @@ abstract class MHK_Session {
 	}
 
 	/**
-	 * Get a session variable.
-	 *
-	 * @param string $key Key to get.
-	 * @param mixed  $default used if the session variable isn't set.
+	 * @param string $key
+	 * @param mixed  $default 
 	 * @return array|string value of session variable
 	 */
 	public function get( $key, $default = null ) {
@@ -99,10 +71,8 @@ abstract class MHK_Session {
 	}
 
 	/**
-	 * Set a session variable.
-	 *
-	 * @param string $key Key to set.
-	 * @param mixed  $value Value to set.
+	 * @param string $key 
+	 * @param mixed  $value 
 	 */
 	public function set( $key, $value ) {
 		if ( $value !== $this->get( $key ) ) {
@@ -112,8 +82,6 @@ abstract class MHK_Session {
 	}
 
 	/**
-	 * Get customer ID.
-	 *
 	 * @return int
 	 */
 	public function get_customer_id() {

@@ -159,38 +159,21 @@
         });
     },
 
-    /**
-     * Displays the copy error message when failure copying.
-     */
     copyFail: function () {
       $(this).closest(".mhk-shortcode-field").find("input").focus().select();
     },
 
-    /**
-     * Page load.
-     *
-     * @since 1.0.0
-     */
     load: function () {
       $(".muhiku-plug-overlay").fadeOut();
     },
 
-    /**
-     * Document ready.
-     *
-     * @since 1.0.0
-     */
     ready: function () {
-      // Cache builder element.
       $builder = $("#muhiku-plug-builder");
 
-      // Bind all actions.
       MHKPanelBuilder.bindUIActions();
 
-      // Bind edit form actions.
       MHKPanelBuilder.bindEditActions();
 
-      // jquery-confirm defaults.
       jconfirm.defaults = {
         closeIcon: true,
         backgroundDismiss: true,
@@ -202,7 +185,6 @@
         columnClass: "mhk-responsive-class",
       };
 
-      // Enable Perfect Scrollbar.
       if ("undefined" !== typeof PerfectScrollbar) {
         var tab_content = $(".muhiku-plug-tab-content"),
           mhk_panel = $(".muhiku-plug-panel");
@@ -228,7 +210,6 @@
         });
       }
 
-      // Enable Limit length.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-limit_enabled input",
@@ -242,7 +223,6 @@
         }
       );
 
-      // Enable enhanced select.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-select .muhiku-plug-field-option-row-enhanced_select input",
@@ -256,7 +236,6 @@
         }
       );
 
-      // Enable Multiple options.
       $builder.on(
         "click",
         ".muhiku-plug-field-option-row-choices .muhiku-plug-btn-group span",
@@ -283,8 +262,6 @@
               "multiple" === $(this).data("selection")
             );
           }
-
-          // Show 'Select All' Checkbox for Dropdown field only if multiple selection is active
           if (
             "multiple" === $(this).data("selection") &&
             "checkbox" === $(this).data("type") &&
@@ -303,7 +280,6 @@
         }
       );
 
-      // By default hide the 'Select All' checkbox for Dropdown field
       $(document.body).on(
         "click",
         '.muhiku-plug-field, .muhiku-plug-field-select[data-field-type="select"]',
@@ -332,11 +308,9 @@
         }
       );
 
-      // Search fields input.
       $builder.on("keyup", ".muhiku-plug-search-fields", function () {
         var searchTerm = $(this).val().toLowerCase();
 
-        // Show/hide fields.
         $(".mhk-registered-item").each(function () {
           var $this = $(this);
           (field_type = $this.data("field-type")),
@@ -354,7 +328,6 @@
           }
         });
 
-        // Show/hide field group.
         $(".muhiku-plug-add-fields-group").each(function () {
           var count = $(this).find(
             ".mhk-registered-item.mhk-searched-item"
@@ -367,7 +340,6 @@
           }
         });
 
-        // Show/hide fields not found indicator.
         if ($(".mhk-registered-item.mhk-searched-item").length) {
           $(".muhiku-plug-fields-not-found").addClass("hidden");
         } else {
@@ -375,15 +347,10 @@
         }
       });
 
-      // Action available for each binding.
       $(document).trigger("muhiku_forms_ready");
     },
 
     /**
-     * Update text fields limit controls.
-     *
-     * @since 1.5.10
-     *
      * @param {number} fieldId Field ID.
      * @param {bool} checked Whether an option is checked or not.
      */
@@ -400,10 +367,6 @@
     },
 
     /**
-     * Enhanced select fields style.
-     *
-     * @since 1.7.1
-     *
      * @param {number} fieldId Field ID.
      * @param {bool} checked Whether an option is checked or not.
      */
@@ -423,10 +386,6 @@
     },
 
     /**
-     * Update enhanced select field component.
-     *
-     * @since 1.7.1
-     *
      * @param {number} fieldId Field ID.
      * @param {bool} isMultiple Whether an option is multiple or not.
      */
@@ -441,37 +400,24 @@
         ),
         selectedChoices = $optionChoicesItems.filter(":checked");
 
-      // Update hidden field value.
       $hiddenField.val(isMultiple ? 1 : 0);
 
-      // Add/remove a `multiple` attribute.
       $primary.prop("multiple", isMultiple);
 
-      // Change a `Choices` fields type:
-      //    radio - needed for single selection
-      //    checkbox - needed for multiple selection
       $optionChoicesItems.prop("type", isMultiple ? "checkbox" : "radio");
 
-      // For single selection we can choose only one.
       if (!isMultiple && selectedChoices.length) {
         $optionChoicesItems.prop("checked", false);
         $(selectedChoices.get(0)).prop("checked", true);
       }
 
-      // Toggle selection for a placeholder.
       if ($placeholder.length && isMultiple) {
         $placeholder.prop("selected", !isMultiple);
       }
 
-      // Update a primary field.
       MHKPanelBuilder.enhancedSelectFieldStyle(fieldId, isMultiple);
     },
 
-    /**
-     * Element bindings.
-     *
-     * @since 1.0.0
-     */
     bindUIActions: function () {
       MHKPanelBuilder.bindDefaultTabs();
       MHKPanelBuilder.checkEmptyGrid();
@@ -499,7 +445,6 @@
       MHKPanelBuilder.init_datepickers();
       MHKPanelBuilder.bindBulkOptionActions();
 
-      // Fields Panel.
       MHKPanelBuilder.bindUIActionsFields();
 
       if (mhk_data.tab === "field-options") {
@@ -515,25 +460,19 @@
       );
     },
 
-    /**
-     * Bind user action handlers for the Add Bulk Options feature.
-     */
     bindBulkOptionActions: function () {
-      // Toggle `Bulk Add` option.
       $(document.body).on("click", ".mhk-toggle-bulk-options", function (e) {
         $(this)
           .closest(".muhiku-plug-field-option")
           .find(".muhiku-plug-field-option-row-add_bulk_options")
           .slideToggle();
       });
-      // Toggle presets list.
       $(document.body).on("click", ".mhk-toggle-presets-list", function (e) {
         $(this)
           .closest(".muhiku-plug-field-option")
           .find(".muhiku-plug-field-option-row .mhk-options-presets")
           .slideToggle();
       });
-      // Add custom list of options.
       $(document.body).on("click", ".mhk-add-bulk-options", function (e) {
         var $option_row = $(this).closest(".muhiku-plug-field-option-row");
         var field_id = $option_row.data("field-id");
@@ -553,7 +492,6 @@
           $bulk_options_container.val("");
         }
       });
-      // Add presets of options.
       $(document.body).on("click", ".mhk-options-preset-label", function (e) {
         var $option_row = $(this).closest(".muhiku-plug-field-option-row");
         var field_id = $option_row.data("field-id");
@@ -574,7 +512,6 @@
           $(this).closest(".mhk-options-presets").slideUp();
         }
       });
-      //Add toggle option for password validation and strength meter.
       $(document.body).on(
         "click",
         ".muhiku-plug-field-option-row-password_strength",
@@ -584,7 +521,6 @@
               .next()
               .find('[type="checkbox"]:first')
               .prop("checked", false);
-            // $(this).prev().find('.muhiku-plug-inner-options').hide();
           }
         }
       );
@@ -607,8 +543,6 @@
     },
 
     /**
-     * Add a list of options at once.
-     *
      * @param {Array<string>} options_texts List of options to add.
      * @param {object} $choices_container Options container where the options should be added.
      */
@@ -621,16 +555,10 @@
       });
     },
 
-    /**
-     * Initialize date pickers like min/max date, disable dates etc.
-     *
-     * @since 1.6.6
-     */
     init_datepickers: function () {
       var date_format = $(".muhiku-plug-disable-dates").data("date-format"),
         selection_mode = "multiple";
 
-      // Initialize "Disable dates" option's date pickers that hasn't been initialized.
       $(".muhiku-plug-disable-dates").each(function () {
         if (!$(this).get(0)._flatpickr) {
           $(this).flatpickr({
@@ -640,7 +568,6 @@
         }
       });
 
-      // Reformat the selected dates input value for `Disable dates` option when the date format changes.
       $(document.body).on("change", ".mhk-date-format", function (e) {
         var $disable_dates = $(
             ".muhiku-plug-field-option:visible .muhiku-plug-disable-dates"
@@ -657,14 +584,12 @@
         $disable_dates.val(formatedDates.join(", "));
       });
 
-      // Clear disabled dates.
       $(document.body).on("click", ".mhk-clear-disabled-dates", function () {
         $(".muhiku-plug-field-option:visible .muhiku-plug-disable-dates")
           .get(0)
           ._flatpickr.clear();
       });
 
-      // Triggring Setting Toggler.
       $(".muhiku-plug-field-date-time").each(function () {
         var id = $(this).attr("data-field-id");
         MHKPanelBuilder.dateSettingToggler(
@@ -674,13 +599,7 @@
       });
     },
 
-    /**
-     * Form edit title actions.
-     *
-     * @since 1.6.0
-     */
     bindEditActions: function () {
-      // Delegates event to toggleEditTitle() on clicking.
       $("#edit-form-name").on("click", function (e) {
         e.stopPropagation();
 
@@ -689,7 +608,6 @@
         }
       });
 
-      // Apply the title change to form name field.
       $("#mhk-edit-form-name")
         .on("change keypress", function (e) {
           var $this = $(this);
@@ -710,7 +628,6 @@
           e.stopPropagation();
         });
 
-      // In case the user goes out of focus from title edit state.
       $(document)
         .not($(".muhiku-plug-title-desc"))
         .on("click", function (e) {
@@ -718,7 +635,6 @@
 
           e.stopPropagation();
 
-          // Only allow flipping state if currently editing.
           if (
             !field.prop("disabled") &&
             field.val() &&
@@ -729,14 +645,12 @@
         });
     },
 
-    // Toggles edit state.
     toggleEditTitle: function (event) {
       var $el = $("#edit-form-name"),
         $input_title = $el.siblings("#mhk-edit-form-name");
 
       event.preventDefault();
 
-      // Toggle disabled property.
       $input_title.prop("disabled", function (_, val) {
         return !val;
       });
@@ -748,15 +662,6 @@
       $input_title.toggleClass("muhku-forms-name-editing");
     },
 
-    //--------------------------------------------------------------------//
-    // Fields Panel
-    //--------------------------------------------------------------------//
-
-    /**
-     * Creates a object from form elements.
-     *
-     * @since 1.6.0
-     */
     formObject: function (el) {
       var form = jQuery(el),
         fields = form.find("[name]"),
@@ -832,13 +737,7 @@
       return json;
     },
 
-    /**
-     * Element bindings for Fields panel.
-     *
-     * @since 1.2.0
-     */
     bindUIActionsFields: function () {
-      // Add new field choice.
       $builder.on(
         "click",
         ".muhiku-plug-field-option-row-choices .add",
@@ -847,7 +746,6 @@
         }
       );
 
-      // Delete field choice.
       $builder.on(
         "click",
         ".muhiku-plug-field-option-row-choices .remove",
@@ -856,7 +754,6 @@
         }
       );
 
-      // Field choices defaults - (before change).
       $builder.on(
         "mousedown",
         ".muhiku-plug-field-option-row-choices input[type=radio]",
@@ -871,7 +768,6 @@
         }
       );
 
-      // Field choices defaults.
       $builder.on(
         "click",
         ".muhiku-plug-field-option-row-choices input[type=radio]",
@@ -898,7 +794,6 @@
         }
       );
 
-      // Field choices update preview area.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-choices input[type=checkbox]",
@@ -911,7 +806,6 @@
         }
       );
 
-      // Updates field choices text in almost real time.
       $builder.on(
         "keyup paste focusout",
         ".muhiku-plug-field-option-row-choices input.label, .muhiku-plug-field-option-row-choices input.value",
@@ -924,7 +818,6 @@
         }
       );
 
-      // Field choices display value toggle.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-show_values input",
@@ -936,7 +829,6 @@
         }
       );
 
-      // Field image choices toggle.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-choices_images input",
@@ -956,7 +848,6 @@
             .find(".muhiku-plug-field-option-row-choices ul")
             .toggleClass("show-images");
 
-          // Trigger columns changes.
           if ($this.is(":checked")) {
             $columnOptions.val("inline").trigger("change");
           } else {
@@ -967,7 +858,6 @@
         }
       );
 
-      // Upload or add an image.
       $builder.on(
         "click",
         ".muhiku-plug-attachment-media-view .upload-button",
@@ -978,13 +868,11 @@
 
           event.preventDefault();
 
-          // If the media frame already exists, reopen it.
           if (file_frame) {
             file_frame.open();
             return;
           }
 
-          // Create the media frame.
           file_frame = wp.media.frames.muhikuforms_media_frame = wp.media({
             title: mhk_data.i18n_upload_image_title,
             className: "media-frame muhiku-plug-media-frame",
@@ -998,7 +886,6 @@
             },
           });
 
-          // When an image is selected, run a callback.
           file_frame.on("select", function () {
             var attachment = file_frame
               .state()
@@ -1025,12 +912,10 @@
             $builder.trigger("muhikuFormsImageUploadAdd", [$el, $wrapper]);
           });
 
-          // Finally, open the modal.
           file_frame.open();
         }
       );
 
-      // Remove and uploaded image.
       $builder.on(
         "click",
         ".muhiku-plug-attachment-media-view .remove-button",
@@ -1050,7 +935,6 @@
         }
       );
 
-      // Field choices image upload add/remove image.
       $builder.on(
         "muhikuFormsImageUploadAdd muhikuFormsImageUploadRemove",
         function (event, $this, $container) {
@@ -1062,7 +946,6 @@
         }
       );
 
-      // Toggle Layout advanced field option.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-input_columns select",
@@ -1086,13 +969,11 @@
         }
       );
 
-      // Field sidebar tab toggle.
       $builder.on("click", ".muhiku-plug-fields-tab a", function (e) {
         e.preventDefault();
         MHKPanelBuilder.fieldTabChoice($(this).attr("id"));
       });
 
-      // Dragged field and hover over tab buttons - multipart.
       $(document).on(
         "mouseenter",
         '.muhiku-plug-tabs li[class*="part_"]',
@@ -1111,7 +992,6 @@
         }
       );
 
-      // Display toggle for "Address" field hidden option.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-address input.hide",
@@ -1125,7 +1005,6 @@
         }
       );
 
-      // Real-time updates for "Show Label" field option.
       $builder.on(
         "input",
         ".muhiku-plug-field-option-row-label input",
@@ -1151,7 +1030,6 @@
 
           $("#muhiku-plug-field-" + id).toggleClass("parameter_name");
 
-          // Toggle "Parameter Name" option.
           if ($(event.target).is(":checked")) {
             $("#muhiku-plug-field-option-row-" + id + "-parameter_name").show();
           } else {
@@ -1159,8 +1037,6 @@
           }
         }
       );
-
-      // Real-time updates for "Description" field option.
       $builder.on(
         "input",
         ".muhiku-plug-field-option-row-description textarea",
@@ -1178,7 +1054,6 @@
         }
       );
 
-      // Real-time updates for "Required" field option.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-required input",
@@ -1187,7 +1062,6 @@
 
           $("#muhiku-plug-field-" + id).toggleClass("required");
 
-          // Toggle "Required Field Message" option.
           if ($(event.target).is(":checked")) {
             $(
               "#muhiku-plug-field-option-row-" + id + "-required-field-message"
@@ -1200,14 +1074,12 @@
         }
       );
 
-      // Real-time updates for "Confirmation" field option.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-confirmation input",
         function (event) {
           var id = $(this).parent().data("field-id");
 
-          // Toggle "Confirmation" field option.
           if ($(event.target).is(":checked")) {
             $("#muhiku-plug-field-" + id)
               .find(".muhiku-plug-confirm")
@@ -1228,7 +1100,6 @@
         }
       );
 
-      // Real-time updates for "Placeholder" field option.
       $builder.on(
         "input",
         ".muhiku-plug-field-option-row-placeholder input",
@@ -1267,7 +1138,6 @@
         }
       );
 
-      // Real-time updates for "Address Placeholder" field options.
       $builder.on(
         "input",
         ".muhiku-plug-field-option-address input.placeholder",
@@ -1282,7 +1152,6 @@
         }
       );
 
-      // Real-time updates for "Confirmation Placeholder" field option.
       $builder.on(
         "input",
         ".muhiku-plug-field-option-row-confirmation_placeholder input",
@@ -1296,7 +1165,6 @@
         }
       );
 
-      // Real-time updates for "Hide Label" field option.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-label_hide input",
@@ -1306,7 +1174,6 @@
         }
       );
 
-      // Real-time updates for Sub Label visbility field option.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-sublabel_hide input",
@@ -1315,8 +1182,6 @@
           $("#muhiku-plug-field-" + id).toggleClass("sublabel_hide");
         }
       );
-
-      // Real-time updates for Date/Time and Name "Format" option.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-datetime_format select, .muhiku-plug-field-option-row-phone_format select, .muhiku-plug-field-option-row-item_price select, .muhiku-plug-field-option-row-format select",
@@ -1335,7 +1200,6 @@
         }
       );
 
-      // Setting options toggler.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-datetime_style select",
@@ -1347,7 +1211,6 @@
         }
       );
 
-      // Enable Min Max Toggler.
       $(
         ".muhiku-plug-field-option-row-time_interval_format [id*=enable_min_max_time]"
       ).each(function () {
@@ -1432,7 +1295,6 @@
         }
       );
 
-      // Time interval changes.
       $builder.on(
         "change",
         ".muhiku-plug-field-option-row-time_interval_format select[id*=time_format]",
@@ -1484,12 +1346,8 @@
       );
     },
 
-    /**
-     * Setting options for Date Picker and Dropdown Toggler.
-     */
     dateSettingToggler: function (id, type) {
       if (type == "picker") {
-        // Picker Date Setting Control
         $("#muhiku-plug-field-option-row-" + id + "-placeholder").show();
         $("#muhiku-plug-field-option-" + id + "-disable_dates").show();
         $(
@@ -1510,7 +1368,6 @@
         $("#muhiku-plug-field-option-" + id + "-enable_min_max")
           .parent()
           .show();
-        //Check if min max date enabled.
         if (
           $("#muhiku-plug-field-option-" + id + "-enable_min_max").prop(
             "checked"
@@ -1540,7 +1397,6 @@
           .parent()
           .hide();
       } else {
-        // Dropdown Date Setting Control
         $("#muhiku-plug-field-option-" + id + "-date_mode-range")
           .parents()
           .find("muhiku-plug-checklist")
@@ -1574,7 +1430,6 @@
         $(
           "label[for=muhiku-plug-field-option-" + id + "-enable_min_max_time]"
         ).show();
-        //Check if min max time enabled.
         if (
           $("#muhiku-plug-field-option-" + id + "-enable_min_max_time").prop(
             "checked"
@@ -1597,10 +1452,6 @@
     },
 
     /**
-     * Make field choices sortable.
-     *
-     * @since 1.0.0
-     *
      * @param {string} selector Selector.
      */
     choicesInit: function (selector) {
@@ -1622,11 +1473,6 @@
       });
     },
 
-    /**
-     * Add new field choice.
-     *
-     * @since 1.6.0
-     */
     choiceAdd: function (event, el, value) {
       if (event && event.preventDefault) {
         event.preventDefault();
@@ -1684,11 +1530,6 @@
       MHKPanelBuilder.choiceUpdate(type, fieldID);
     },
 
-    /**
-     * Delete field choice.
-     *
-     * @since 1.6.0
-     */
     choiceDelete: function (event, el) {
       event.preventDefault();
 
@@ -1720,16 +1561,10 @@
       }
     },
 
-    /**
-     * Update field choices in preview area, for the Fields panel.
-     *
-     * @since 1.6.0
-     */
     choiceUpdate: function (type, id) {
       var $fieldOptions = $("#muhiku-plug-field-option-" + id);
       $primary = $("#muhiku-plug-field-" + id + " .primary-input");
 
-      // Radio and Checkbox use _ template.
       if (
         "radio" === type ||
         "checkbox" === type ||
@@ -1740,7 +1575,6 @@
           formData = MHKPanelBuilder.formObject($fieldOptions),
           settings = formData.form_fields[id];
 
-        // Order of choices for a specific field.
         $("#muhiku-plug-field-option-" + id)
           .find(".mhk-choices-list li")
           .each(function () {
@@ -1894,14 +1728,11 @@
         var field_id = $(this).attr("data-field-id"),
           field_options = $("#muhiku-plug-field-option-" + field_id);
 
-        // Remove form field.
         $(this).remove();
 
-        // Remove field options.
         field_options.remove();
       });
 
-      // Remove row.
       row.remove();
     },
     bindRemoveRow: function () {
@@ -1988,21 +1819,16 @@
           wrapper = $(".mhk-admin-field-wrapper").find("#part_" + current_part);
         }
 
-        // Row clone.
         row_clone.find(".mhk-admin-grid").html("");
         row_clone.attr("data-row-id", max_row_id);
 
-        // Row infos.
         $this.parent().attr("data-total-rows", total_rows);
         $this.parent().attr("data-next-row-id", max_row_id);
 
-        // Row append.
         wrapper.append(row_clone);
 
-        // Initialize fields UI.
         MHKPanelBuilder.bindFields();
         MHKPanelBuilder.checkEmptyGrid();
-        // Trigger event after row add.
         $this.trigger("muhiku-plug-after-add-row", row_clone);
       });
     },
@@ -2106,9 +1932,7 @@
       max_row_id++;
       total_rows++;
 
-      // New row ID.
       row_clone.attr("data-row-id", max_row_id);
-      // Initialize fields UI.
       $(".mhk-add-row").attr("data-total-rows", total_rows);
       $(".mhk-add-row").attr("data-next-row-id", max_row_id);
 
@@ -2131,9 +1955,7 @@
             typeof response.success === "boolean" &&
             response.success === true
           ) {
-            // Row append.
             row.after(row_clone);
-            // Duplicating Fields
             $.each(response.data, function (index, data) {
               var field_id = data.field_id;
               var field_key = data.field_key;
@@ -2144,7 +1966,6 @@
               field.remove();
               $(document.body).trigger("init_field_options_toggle");
             });
-            // Binding fields.
             MHKPanelBuilder.bindFields();
           }
         },
@@ -2256,7 +2077,6 @@
       $("#muhiku-plug-field-option-" + new_key + "-label").val(new_field_label);
       $("#muhiku-plug-field-option-" + new_key + "-meta-key").val(new_meta_key);
 
-      // Field Clone
       newFieldCloned.attr("class", field.attr("class"));
       newFieldCloned.attr("id", "muhiku-plug-field-" + new_key);
       newFieldCloned.attr("data-field-id", new_key);
@@ -2267,9 +2087,8 @@
         .find('[data-field-id="' + old_key + '"]')
         .after(newFieldCloned);
       $(document).trigger("muhiku-form-cloned", [new_key, field_type]);
-      MHKPanelBuilder.switchToFieldOptionPanel(new_key); //switch to cloned field options
+      MHKPanelBuilder.switchToFieldOptionPanel(new_key);
 
-      // Trigger an event indicating completion of render_node action for cloning.
       $(document.body).trigger("mhk_render_node_complete", [
         field_type,
         new_key,
@@ -2492,7 +2311,6 @@
           return;
         }
 
-        // Trigger a handler to let addon manipulate the form data if needed.
         if (
           $form.triggerHandler("muhiku_forms_process_ajax_data", [
             $this,
@@ -2513,7 +2331,6 @@
           },
         });
 
-        /* DB unwanted data erase start */
         var rfields_ids = [];
         $(".muhiku-plug-field[data-field-id]").each(function () {
           rfields_ids.push($(this).attr("data-field-id"));
@@ -2537,7 +2354,6 @@
             }
           }
         }
-        /* DB fix end */
 
         var new_form_data = form_data.concat(structure);
         var data = {
@@ -2859,14 +2675,12 @@
         })
         .disableSelection();
 
-      // Repeatable grid connect to sortable setter.
       $(".mhk-registered-item.mhk-repeater-field").draggable(
         "option",
         "connectToSortable",
         ".mhk-repeatable-grid"
       );
 
-      // Adapt hover behaviour on mouse event.
       $(".mhk-admin-row").on("mouseenter mouseleave", function (event) {
         if (1 > event.buttons) {
           if ("mouseenter" === event.type) {
@@ -2877,16 +2691,12 @@
         }
       });
 
-      // Refresh the position of placeholders on drag scroll.
       $(".muhiku-plug-panel-content").on("scroll", function () {
         $(".mhk-admin-grid").sortable("refreshPositions");
         $(".mhk-admin-field-wrapper").sortable("refreshPositions");
       });
     },
 
-    /**
-     * Toggle fields tabs (Add Fields, Field Options).
-     */
     fieldTabChoice: function (id) {
       $(".muhiku-plug-tab-content").scrollTop(0);
       $(".muhiku-plug-fields-tab a").removeClass("active");
@@ -2977,7 +2787,7 @@
           $(this)
             .children("*")
             .each(function () {
-              grids.append($(this).clone()); // "this" is the current element in the loop
+              grids.append($(this).clone());
             });
         });
         $this_single_row.find(".mhk-admin-grid").remove();
@@ -3100,12 +2910,10 @@
 
           field.remove();
 
-          // Triggers.
           $(document.body).trigger("init_tooltips");
           $(document.body).trigger("init_field_options_toggle");
           $(document.body).trigger("mhk_after_field_append", [dragged_el_id]);
 
-          // Conditional logic append rules.
           MHKPanelBuilder.conditionalLogicAppendField(dragged_el_id);
           MHKPanelBuilder.conditionalLogicAppendFieldIntegration(dragged_el_id);
           MHKPanelBuilder.paymentFieldAppendToQuantity(dragged_el_id);
@@ -3114,10 +2922,8 @@
             field_type
           );
 
-          // Initialization Datepickers.
           MHKPanelBuilder.init_datepickers();
 
-          // Hiding time min max options in setting for Datepickers.
           $(
             "#muhiku-plug-field-option-" +
               dragged_field_id +
@@ -3145,7 +2951,6 @@
             .parent()
             .hide();
 
-          // Trigger an event indicating completion of field_drop action.
           $(document.body).trigger("mhk_field_drop_complete", [
             field_type,
             dragged_field_id,
@@ -3465,13 +3270,6 @@
       });
     },
 
-    /**
-     * Sync an input element with other elements like labels. An element with `sync-input` class will be synced to the elements
-     * specified in `sync-targets` data.
-     *
-     * `Warning:` This is an one way sync, meaning only the text `sync-targets` will be updated when the source element's value changes
-     * and the source element's value will not be updated if the value of `sync-targets` changes.
-     */
     bindSyncedInputActions: function () {
       $("body").on("input", ".sync-input", function (e) {
         var changed_value = $(this).val(),
@@ -3550,8 +3348,6 @@ jQuery(function () {
   );
   jQuery(".mhk-panel-field-options-button.mhk-disabled-tab").hide();
 
-  // Conditional Logic fields for General Settings in Form for Submission Redirection.
-
   jQuery(".muhiku-plug-conditional-field-settings-redirect_to").each(
     function () {
       var conditional_rule_selection = this.value;
@@ -3623,7 +3419,6 @@ jQuery(function () {
 });
 
 jQuery(function ($) {
-  // Add Fields - Open/close.
   $(document.body)
     .on("init_add_fields_toogle", function () {
       $(".muhiku-plug-add-fields").on(
@@ -3650,7 +3445,6 @@ jQuery(function ($) {
     })
     .trigger("init_add_fields_toogle");
 
-  // Fields Options - Open/close.
   $(document.body).on(
     "click",
     ".muhiku-plug-field-option .muhiku-plug-field-option-group > a",
@@ -3666,7 +3460,6 @@ jQuery(function ($) {
     "click",
     ".muhiku-plug-field-option .muhiku-plug-field-option-group a",
     function (event) {
-      // If the user clicks on some form input inside, the box should not be toggled.
       if ($(event.target).filter(":input, option, .sort").length) {
         return;
       }
@@ -3689,7 +3482,6 @@ jQuery(function ($) {
     $(".mhk-smart-tag-lists").hide();
   });
 
-  // Toggle Smart Tags.
   $(document.body).on("click", ".mhk-toggle-smart-tag-display", function (e) {
     e.stopPropagation();
     $(".mhk-smart-tag-lists").hide();
@@ -3741,7 +3533,6 @@ jQuery(function ($) {
     }
   });
 
-  // Toggle form status.
   $(document).on(
     "change",
     ".wp-list-table .muhiku-plug-toggle-form input",
@@ -3756,7 +3547,6 @@ jQuery(function ($) {
     }
   );
 
-  // Toggle email notification.
   $(document).on(
     "change",
     ".mhk-content-email-settings .mhk-toggle-switch input",

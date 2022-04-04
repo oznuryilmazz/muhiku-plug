@@ -1,39 +1,26 @@
 <?php
 /**
- * Template Loader
- *
  * @package MuhikuPlug\Classes
- * @version 1.3.1
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Template loader class.
- */
 class MHK_Template_Loader {
 
 	/**
-	 * Store the form ID.
-	 *
 	 * @var integer
 	 */
 	private static $form_id = 0;
 
 	/**
-	 * Store whether we're processing a form preview inside the_content filter.
-	 *
 	 * @var boolean
 	 */
 	private static $in_content_filter = false;
 
-	/**
-	 * Hook in methods.
-	 */
 	public static function init() {
-		self::$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		self::$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0;  
 
-		if ( ! is_admin() && isset( $_GET['mhk_preview'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! is_admin() && isset( $_GET['mhk_preview'] ) ) {  
 			add_action( 'pre_get_posts', array( __CLASS__, 'pre_get_posts' ) );
 			add_filter( 'edit_post_link', array( __CLASS__, 'edit_form_link' ) );
 			add_filter( 'home_template_hierarchy', array( __CLASS__, 'template_include' ) );
@@ -45,20 +32,15 @@ class MHK_Template_Loader {
 	}
 
 	/**
-	 * Hook into pre_get_posts to limit posts.
-	 *
 	 * @param WP_Query $q Query instance.
 	 */
 	public static function pre_get_posts( $q ) {
-		// Limit one post to query.
 		if ( $q->is_main_query() ) {
 			$q->set( 'posts_per_page', 1 );
 		}
 	}
 
 	/**
-	 * Change edit link of preview page.
-	 *
 	 * @param string $link Edit post link.
 	 */
 	public static function edit_form_link( $link ) {
@@ -70,8 +52,6 @@ class MHK_Template_Loader {
 	}
 
 	/**
-	 *  A list of template candidates.
-	 *
 	 * @param array $templates A list of template candidates, in descending order of priority.
 	 *
 	 * @return array
@@ -81,17 +61,6 @@ class MHK_Template_Loader {
 	}
 
 	/**
-	 * Load a template.
-	 *
-	 * Handles template usage so that we can use our own templates instead of the themes.
-	 *
-	 * Templates are in the 'templates' folder. muhiku-plug looks for theme.
-	 * overrides in /theme/muhiku-plug/ by default.
-	 *
-	 * For beginners, it also looks for a muhiku-plug.php template first. If the user adds.
-	 * this to the theme (containing a muhiku-plug() inside) this will be used for all.
-	 * muhiku-plug templates.
-	 *
 	 * @param string $template Template to load.
 	 * @return string
 	 */
@@ -104,9 +73,6 @@ class MHK_Template_Loader {
 
 		if ( $default_file ) {
 			/**
-			 * Filter hook to choose which files to find before MuhikuPlug does it's own logic.
-			 *
-			 * @since 1.0.0
 			 * @var array
 			 */
 			$search_files = self::get_template_loader_files( $default_file );
@@ -121,9 +87,6 @@ class MHK_Template_Loader {
 	}
 
 	/**
-	 * Get the default filename for a template.
-	 *
-	 * @since  1.0.0
 	 * @return string
 	 */
 	private static function get_template_loader_default_file() {
@@ -131,9 +94,6 @@ class MHK_Template_Loader {
 	}
 
 	/**
-	 * Get an array of filenames to search for a given template.
-	 *
-	 * @since  1.0.0
 	 * @param  string $default_file The default file name.
 	 * @return string[]
 	 */
@@ -151,15 +111,6 @@ class MHK_Template_Loader {
 		return array_unique( $search_files );
 	}
 
-	/*
-	|--------------------------------------------------------------------------
-	| Form Preview Handling
-	|--------------------------------------------------------------------------
-	*/
-
-	/**
-	 * Hook in methods to enhance the form preview.
-	 */
 	public static function form_preview_init() {
 		if ( ! is_user_logged_in() || is_admin() ) {
 			return;
@@ -174,8 +125,6 @@ class MHK_Template_Loader {
 	}
 
 	/**
-	 * Filter the title and insert form preview title.
-	 *
 	 * @param  string $title Existing title.
 	 * @return string
 	 */
@@ -192,7 +141,6 @@ class MHK_Template_Loader {
 				return esc_html( sanitize_text_field( $form['settings']['form_title'] ) );
 			}
 
-			/* translators: %s - Form name. */
 			return sprintf( esc_html__( '%s &ndash; Preview', 'muhiku-plug' ), sanitize_text_field( $form['settings']['form_title'] ) );
 		}
 
@@ -200,8 +148,6 @@ class MHK_Template_Loader {
 	}
 
 	/**
-	 * Filter the content and insert form preview content.
-	 *
 	 * @param  string $content Existing post content.
 	 * @return string
 	 */
@@ -212,7 +158,6 @@ class MHK_Template_Loader {
 
 		self::$in_content_filter = true;
 
-		// Remove the filter we're in to avoid nested calls.
 		remove_filter( 'the_content', array( __CLASS__, 'form_preview_content_filter' ) );
 
 		if ( current_user_can( 'muhiku_forms_view_forms', self::$form_id ) ) {

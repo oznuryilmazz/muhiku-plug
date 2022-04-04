@@ -1,16 +1,11 @@
 <?php
 /**
- * MuhikuPlug Admin Functions
- *
  * @package MuhikuPlug/Admin/Functions
- * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get all MuhikuPlug screen ids.
- *
  * @return array
  */
 function mhk_get_screen_ids() {
@@ -30,13 +25,11 @@ function mhk_get_screen_ids() {
 }
 
 /**
- * Create a page and store the ID in an option.
- *
- * @param mixed  $slug         Slug for the new page.
- * @param string $option       Option name to store the page's ID.
- * @param string $page_title   (default: '') Title for the new page.
- * @param string $page_content (default: '') Content for the new page.
- * @param int    $post_parent  (default: 0) Parent for the new page.
+ * @param mixed  $slug         
+ * @param string $option      
+ * @param string $page_title   
+ * @param string $page_content 
+ * @param int    $post_parent  
  *
  * @return int page ID
  */
@@ -57,16 +50,13 @@ function mhk_create_page( $slug, $option = '', $page_title = '', $page_content =
 			),
 			true
 		) ) {
-			// Valid page is already in place.
 			return $page_object->ID;
 		}
 	}
 
 	if ( strlen( $page_content ) > 0 ) {
-		// Search for an existing page with the specified page content (typically a shortcode).
 		$valid_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status NOT IN ( 'pending', 'trash', 'future', 'auto-draft' ) AND post_content LIKE %s LIMIT 1;", "%{$page_content}%" ) );
 	} else {
-		// Search for an existing page with the specified page slug.
 		$valid_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status NOT IN ( 'pending', 'trash', 'future', 'auto-draft' )  AND post_name = %s LIMIT 1;", $slug ) );
 	}
 
@@ -80,12 +70,9 @@ function mhk_create_page( $slug, $option = '', $page_title = '', $page_content =
 		return $valid_page_found;
 	}
 
-	// Search for a matching valid trashed page.
 	if ( strlen( $page_content ) > 0 ) {
-		// Search for an existing page with the specified page content (typically a shortcode).
 		$trashed_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status = 'trash' AND post_content LIKE %s LIMIT 1;", "%{$page_content}%" ) );
 	} else {
-		// Search for an existing page with the specified page slug.
 		$trashed_page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type='page' AND post_status = 'trash' AND post_name = %s LIMIT 1;", $slug ) );
 	}
 
@@ -118,10 +105,6 @@ function mhk_create_page( $slug, $option = '', $page_title = '', $page_content =
 }
 
 /**
- * Output admin fields.
- *
- * Loops though the MuhikuPlugoptions array and outputs each field.
- *
  * @param array[] $options Opens array to output.
  */
 function muhiku_forms_admin_fields( $options ) {
@@ -133,10 +116,8 @@ function muhiku_forms_admin_fields( $options ) {
 }
 
 /**
- * Update all settings which are passed.
- *
- * @param array $options Options array to output.
- * @param array $data    Optional. Data to use for saving. Defaults to $_POST.
+ * @param array $options 
+ * @param array $data   
  */
 function muhiku_forms_update_options( $options, $data = null ) {
 	if ( ! class_exists( 'MHK_Admin_Settings', false ) ) {
@@ -147,10 +128,8 @@ function muhiku_forms_update_options( $options, $data = null ) {
 }
 
 /**
- * Get a setting from the settings API.
- *
- * @param string $option_name Option name.
- * @param mixed  $default     Default value.
+ * @param string $option_name 
+ * @param mixed  $default    
  *
  * @return string
  */
@@ -163,24 +142,21 @@ function muhiku_forms_settings_get_option( $option_name, $default = '' ) {
 }
 
 /**
- * Outputs fields to be used on panels (settings etc).
- *
- * @param string  $option Option.
- * @param string  $panel  Panel.
- * @param string  $field  Field.
- * @param array   $form_data Form data.
- * @param string  $label  Label.
- * @param array   $args   Arguments.
- * @param boolean $echo   True to echo else return.
+ * @param string  $option 
+ * @param string  $panel 
+ * @param string  $field  
+ * @param array   $form_data
+ * @param string  $label  
+ * @param array   $args   
+ * @param boolean $echo   
  *
  * @return string
  */
 function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, $args = array(), $echo = true ) {
-	// Required params.
+
 	if ( empty( $option ) || empty( $panel ) || empty( $field ) ) {
 		return '';
 	}
-	// Setup basic vars.
 	$panel       = esc_attr( $panel );
 	$field       = esc_attr( $field );
 	$panel_id    = sanitize_html_class( $panel );
@@ -195,7 +171,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 	$data_attr   = '';
 	$output      = '';
 
-	// Check if we should store values in a parent array.
 	if ( ! empty( $parent ) ) {
 		if ( ! empty( $subsection ) ) {
 			$field_name = sprintf( '%s[%s][%s][%s]', $parent, $panel, $subsection, $field );
@@ -211,7 +186,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 		$value      = isset( $form_data[ $panel ][ $field ] ) ? $form_data[ $panel ][ $field ] : $default;
 	}
 
-	// Check for data attributes.
 	if ( ! empty( $args['data'] ) ) {
 		foreach ( $args['data'] as $key => $val ) {
 			if ( is_array( $val ) ) {
@@ -221,10 +195,8 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 		}
 	}
 
-	// Determine what field type to output.
 	switch ( $option ) {
 
-		// Text input.
 		case 'text':
 			$type   = ! empty( $args['type'] ) ? esc_attr( $args['type'] ) : 'text';
 			$output = sprintf(
@@ -240,7 +212,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 			);
 			break;
 
-		// Textarea.
 		case 'textarea':
 			$rows   = ! empty( $args['rows'] ) ? (int) $args['rows'] : '3';
 			$output = sprintf(
@@ -256,7 +227,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 			);
 			break;
 
-		// TinyMCE.
 		case 'tinymce':
 			$arguments                  = wp_parse_args(
 				$tinymce,
@@ -274,7 +244,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 			$output = ob_get_clean();
 			break;
 
-		// Checkbox.
 		case 'checkbox':
 			$checked   = checked( '1', $value, false );
 			$checkbox  = sprintf(
@@ -305,7 +274,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 			$output .= '</label>';
 			break;
 
-		// Radio.
 		case 'radio':
 			$options = $args['options'];
 			$x       = 1;
@@ -341,7 +309,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 			}
 			break;
 
-		// Select.
 		case 'select':
 			$is_multiple = isset( $args['multiple'] ) && true === $args['multiple'];
 			if ( empty( $args['options'] ) && empty( $args['field_map'] ) ) {
@@ -398,7 +365,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 
 	$smarttags_class = ! empty( $args['smarttags'] ) ? 'mhk_smart_tag' : '';
 
-	// Put the pieces together....
 	$field_open  = sprintf(
 		'<div id="muhiku-plug-panel-field-%s-%s-wrap" class="muhiku-plug-panel-field %s %s %s">',
 		sanitize_html_class( $panel_id ),
@@ -451,7 +417,6 @@ function muhiku_forms_panel_field( $option, $panel, $field, $form_data, $label, 
 	$field_close .= '</div>';
 	$output       = $field_open . $field_label . $output . $smart_tag . $field_close;
 
-	// Wash our hands.
 	if ( $echo ) {
 		echo wp_kses( $output, mhk_get_allowed_html_tags( 'builder' ) );
 	} else {

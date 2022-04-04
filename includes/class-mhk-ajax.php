@@ -1,48 +1,30 @@
 <?php
 /**
- * MuhikuPlug MHK_AJAX. AJAX Event Handlers.
- *
  * @class   MHK_AJAX
  * @package MuhikuPlug/Classes
  */
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * MHK_AJAX class.
- */
 class MHK_AJAX {
 
-	/**
-	 * Hook in ajax handlers.
-	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'define_ajax' ), 0 );
 		add_action( 'template_redirect', array( __CLASS__, 'do_mhk_ajax' ), 0 );
 		self::add_ajax_events();
 	}
 
-	/**
-	 * Set MHK AJAX constant and headers.
-	 */
 	public static function define_ajax() {
-		// @codingStandardsIgnoreStart
 		if ( ! empty( $_GET['mhk-ajax'] ) ) {
 			mhk_maybe_define_constant( 'DOING_AJAX', true );
 			mhk_maybe_define_constant( 'MHK_DOING_AJAX', true );
 			if ( ! WP_DEBUG || ( WP_DEBUG && ! WP_DEBUG_DISPLAY ) ) {
-				@ini_set( 'display_errors', 0 ); // Turn off display_errors during AJAX events to prevent malformed JSON.
+				@ini_set( 'display_errors', 0 ); 
 			}
 			$GLOBALS['wpdb']->hide_errors();
 		}
-		// @codingStandardsIgnoreEnd
 	}
 
-	/**
-	 * Send headers for MHK Ajax Requests.
-	 *
-	 * @since 1.0.0
-	 */
 	private static function mhk_ajax_headers() {
 		if ( ! headers_sent() ) {
 			send_origin_headers();
@@ -53,18 +35,15 @@ class MHK_AJAX {
 			status_header( 200 );
 		} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			headers_sent( $file, $line );
-			trigger_error( "mhk_ajax_headers cannot set headers - headers already sent by {$file} on line {$line}", E_USER_NOTICE ); // @codingStandardsIgnoreLine
+			trigger_error( "mhk_ajax_headers cannot set headers - headers already sent by {$file} on line {$line}", E_USER_NOTICE );  
 		}
 	}
 
-	/**
-	 * Check for MHK Ajax request and fire action.
-	 */
 	public static function do_mhk_ajax() {
 		global $wp_query;
 
-		if ( ! empty( $_GET['mhk-ajax'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$wp_query->set( 'mhk-ajax', sanitize_text_field( wp_unslash( $_GET['mhk-ajax'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_GET['mhk-ajax'] ) ) {  
+			$wp_query->set( 'mhk-ajax', sanitize_text_field( wp_unslash( $_GET['mhk-ajax'] ) ) );  
 		}
 
 		$action = $wp_query->get( 'mhk-ajax' );
@@ -77,9 +56,6 @@ class MHK_AJAX {
 		}
 	}
 
-	/**
-	 * Hook in methods - uses WordPress ajax handlers (admin-ajax).
-	 */
 	public static function add_ajax_events() {
 		$ajax_events = array(
 			'save_form'               => false,
@@ -107,17 +83,12 @@ class MHK_AJAX {
 			if ( $nopriv ) {
 				add_action( 'wp_ajax_nopriv_muhiku_forms_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
-				// MHK AJAX can be used for frontend ajax requests.
 				add_action( 'mhk_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
 	}
 
-	/**
-	 * Ajax handler to get next form ID.
-	 */
 	public static function get_next_id() {
-		// Run a security check.
 		check_ajax_referer( 'muhiku_forms_get_next_id', 'security' );
 
 		$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : 0;
@@ -129,7 +100,6 @@ class MHK_AJAX {
 			);
 		}
 
-		// Check permisssions.
 		if ( ! current_user_can( 'muhiku_forms_edit_form', $form_id ) ) {
 			wp_send_json_error();
 		}
@@ -161,15 +131,11 @@ class MHK_AJAX {
 		}
 	}
 
-	/**
-	 * AJAX create new form.
-	 */
 	public static function create_form() {
 		ob_start();
 
 		check_ajax_referer( 'muhiku_forms_create_form', 'security' );
 
-		// Check permissions.
 		if ( ! current_user_can( 'muhiku_forms_create_forms' ) ) {
 			wp_die( -1 );
 		}
@@ -201,15 +167,11 @@ class MHK_AJAX {
 		);
 	}
 
-	/**
-	 * AJAX Form save.
-	 */
 	public static function save_form() {
 		check_ajax_referer( 'muhiku_forms_save_form', 'security' );
 
 		$logger = mhk_get_logger();
 
-		// Check permissions.
 		$logger->info(
 			__( 'Checking permissions.', 'muhiku-plug' ),
 			array( 'source' => 'form-save' )
@@ -222,7 +184,6 @@ class MHK_AJAX {
 			die( esc_html__( 'You do not have permission.', 'muhiku-plug' ) );
 		}
 
-		// Check for form data.
 		$logger->info(
 			__( 'Checking for form data.', 'muhiku-plug' ),
 			array( 'source' => 'form-save' )
@@ -235,15 +196,13 @@ class MHK_AJAX {
 			die( esc_html__( 'No data provided', 'muhiku-plug' ) );
 		}
 
-		$form_post = mhk_sanitize_builder( json_decode( wp_unslash( $_POST['form_data'] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+		$form_post = mhk_sanitize_builder( json_decode( wp_unslash( $_POST['form_data'] ) ) ); 
 
 		$data         = array();
 		$choose_field = array();
 
 		if ( ! is_null( $form_post ) && $form_post ) {
 			foreach ( $form_post as $post_input_data ) {
-				// For input names that are arrays (e.g. `menu-item-db-id[3][4][5]`),
-				// derive the array path keys via regex and set the value in $_POST.
 				preg_match( '#([^\[]*)(\[(.+)\])?#', $post_input_data->name, $matches );
 
 				$array_bits = array( $matches[1] );
@@ -254,7 +213,6 @@ class MHK_AJAX {
 
 				$new_post_data = array();
 
-				// Build the new array value from leaf to trunk.
 				for ( $i = count( $array_bits ) - 1; $i >= 0; $i -- ) {
 					if ( count( $array_bits ) - 1 === $i ) {
 						$new_post_data[ $array_bits[ $i ] ] = wp_slash( $post_input_data->value );
@@ -272,7 +230,6 @@ class MHK_AJAX {
 			}
 		}
 		$data['settings']['choose_pdf_fields'] = $choose_field;
-		// Check for empty meta key.
 		$logger->info(
 			__( 'Check for empty meta key.', 'muhiku-plug' ),
 			array( 'source' => 'form-save' )
@@ -281,7 +238,6 @@ class MHK_AJAX {
 		if ( ! empty( $data['form_fields'] ) ) {
 			foreach ( $data['form_fields'] as $field_key => $field ) {
 				if ( ! empty( $field['label'] ) ) {
-					// Only allow specific html in label.
 					$data['form_fields'][ $field_key ]['label'] = wp_kses(
 						$field['label'],
 						array(
@@ -298,7 +254,6 @@ class MHK_AJAX {
 						)
 					);
 
-					// Register string for translation.
 					mhk_string_translation( $data['id'], $field['id'], $field['label'] );
 				}
 
@@ -315,14 +270,12 @@ class MHK_AJAX {
 				wp_send_json_error(
 					array(
 						'errorTitle'   => esc_html__( 'Meta Key missing', 'muhiku-plug' ),
-						/* translators: %s: empty meta data */
 						'errorMessage' => sprintf( esc_html__( 'Please add Meta key for fields: %s', 'muhiku-plug' ), '<strong>' . implode( ', ', $empty_meta_data ) . '</strong>' ),
 					)
 				);
 			}
 		}
 
-		// Fix for sorting field ordering.
 		$logger->info(
 			__( 'Fix for sorting field ordering.', 'muhiku-plug' ),
 			array( 'source' => 'form-save' )
@@ -365,9 +318,6 @@ class MHK_AJAX {
 		}
 	}
 
-	/**
-	 * Ajax handler for form submission.
-	 */
 	public static function ajax_form_submission() {
 		check_ajax_referer( 'muhiku_forms_ajax_form_submission', 'security' );
 
@@ -381,9 +331,6 @@ class MHK_AJAX {
 		}
 	}
 
-	/**
-	 * Ajax handler for template required addon activation.
-	 */
 	public static function template_activate_addon() {
 		check_ajax_referer( 'muhiku_forms_template_licence_check', 'security' );
 
@@ -411,8 +358,6 @@ class MHK_AJAX {
 	}
 
 	/**
-	 * Ajax handler for licence check.
-	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 */
 	public static function template_licence_check() {
@@ -475,12 +420,6 @@ class MHK_AJAX {
 	}
 
 	/**
-	 * Ajax handler for installing a extension.
-	 *
-	 * @since 1.2.0
-	 *
-	 * @see Plugin_Upgrader
-	 *
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 */
 	public static function install_extension() {
@@ -570,7 +509,6 @@ class MHK_AJAX {
 			$status['errorCode']    = 'unable_to_connect_to_filesystem';
 			$status['errorMessage'] = esc_html__( 'Unable to connect to the filesystem. Please confirm your credentials.', 'muhiku-plug' );
 
-			// Pass through the error from WP_Filesystem if one was raised.
 			if ( $wp_filesystem instanceof WP_Filesystem_Base && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
 				$status['errorMessage'] = esc_html( $wp_filesystem->errors->get_error_message() );
 			}
@@ -601,13 +539,9 @@ class MHK_AJAX {
 		wp_send_json_success( $status );
 	}
 
-	/**
-	 * AJAX Integration connect.
-	 */
 	public static function integration_connect() {
 		check_ajax_referer( 'process-ajax-nonce', 'security' );
 
-		// Check permissions.
 		if ( ! current_user_can( 'muhiku_forms_edit_forms' ) ) {
 			wp_die( -1 );
 		}
@@ -623,13 +557,9 @@ class MHK_AJAX {
 		do_action( 'muhiku_forms_integration_account_connect_' . ( isset( $_POST['source'] ) ? sanitize_text_field( wp_unslash( $_POST['source'] ) ) : '' ), $_POST );
 	}
 
-	/**
-	 * AJAX Email Add.
-	 */
 	public static function new_email_add() {
 		check_ajax_referer( 'process-ajax-nonce', 'security' );
 
-		// Check permissions.
 		if ( ! current_user_can( 'muhiku_forms_edit_forms' ) ) {
 			wp_die( -1 );
 		}
@@ -643,13 +573,9 @@ class MHK_AJAX {
 		);
 	}
 
-	/**
-	 * AJAX Integration disconnect.
-	 */
 	public static function integration_disconnect() {
 		check_ajax_referer( 'process-ajax-nonce', 'security' );
 
-		// Check permissions.
 		if ( ! current_user_can( 'muhiku_forms_edit_forms' ) ) {
 			wp_die( -1 );
 		}
@@ -679,9 +605,6 @@ class MHK_AJAX {
 		}
 	}
 
-	/**
-	 * AJAX plugin deactivation notice.
-	 */
 	public static function deactivation_notice() {
 		global $status, $page, $s;
 
@@ -702,10 +625,6 @@ class MHK_AJAX {
 				'deactivate-plugin_' . MHK_PLUGIN_BASENAME
 			)
 		);
-
-		/* translators: %1$s - deactivation reason page; %2$d - deactivation url. */
-		$deactivation_notice = sprintf( __( 'Before we deactivate Muhiku Plug, would you care to <a href="%1$s" target="_blank">let us know why</a> so we can improve it for you? <a href="%2$s">No, deactivate now</a>.', 'muhiku-plug' ), 'https://wpmuhiku.com/deactivation/muhiku-plug/', $deactivate_url );
-
 		wp_send_json(
 			array(
 				'fragments' => apply_filters(
@@ -718,9 +637,6 @@ class MHK_AJAX {
 		);
 	}
 
-	/**
-	 * Triggered when clicking the rating footer.
-	 */
 	public static function rated() {
 		if ( ! current_user_can( 'manage_muhiku_forms' ) ) {
 			wp_die( -1 );
@@ -729,9 +645,6 @@ class MHK_AJAX {
 		wp_die();
 	}
 
-	/**
-	 * Triggered when clicking the review notice button.
-	 */
 	public static function review_dismiss() {
 		if ( ! current_user_can( 'manage_muhiku_forms' ) ) {
 			wp_die( -1 );
@@ -743,9 +656,6 @@ class MHK_AJAX {
 		wp_die();
 	}
 
-	/**
-	 * Triggered when clicking the survey notice button.
-	 */
 	public static function survey_dismiss() {
 
 		if ( ! current_user_can( 'manage_muhiku_forms' ) ) {
@@ -757,9 +667,6 @@ class MHK_AJAX {
 		wp_die();
 	}
 
-	/**
-	 * Triggered when clicking the form toggle.
-	 */
 	public static function enabled_form() {
 		// Run a security check.
 		check_ajax_referer( 'muhiku_forms_enabled_form', 'security' );
@@ -778,9 +685,6 @@ class MHK_AJAX {
 		mhk()->form->update( $form_id, $form_data );
 	}
 
-	/**
-	 * Import Form ajax.
-	 */
 	public static function import_form_action() {
 		try {
 			check_ajax_referer( 'process-import-ajax-nonce', 'security' );
@@ -794,9 +698,6 @@ class MHK_AJAX {
 		}
 	}
 
-	/**
-	 * Send test email.
-	 */
 	public static function send_test_email() {
 		try {
 			check_ajax_referer( 'process-ajax-nonce', 'security' );

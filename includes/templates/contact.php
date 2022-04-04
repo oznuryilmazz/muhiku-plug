@@ -1,8 +1,6 @@
 <?php
 /**
  * @package MuhikuPlug\Templates
- * @version 1.0.0
- * @since   1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -56,13 +54,13 @@ $form_template['contact'] = array(
 	'settings'      => array(
 		'form_title'                         => $form_title,
 		'form_desc'                          => '',
-		'successful_form_submission_message' => get_option( 'muhiku_forms_successful_form_submission_message', __( 'Thanks for contacting us! We will be in touch with you shortly.', 'muhiku-plug' ) ),
+		'successful_form_submission_message' => get_option( 'muhiku_forms_successful_form_submission_message', __( 'Bizimle önerini paylaştığın için teşekkür ederiz! En kısa zamanda sizinle iletişime geçeceğiz..', 'muhiku-plug' ) ),
 		'redirect_to'                        => 'same',
 		'custom_page'                        => '2',
 		'external_url'                       => '',
 		'layout_class'                       => 'default',
 		'form_class'                         => '',
-		'submit_button_text'                 => get_option( 'muhiku_forms_form_submit_button_label', __( 'Submit', 'muhiku-plug' ) ),
+		'submit_button_text'                 => get_option( 'muhiku_forms_form_submit_button_label', __( 'Gönder', 'muhiku-plug' ) ),
 		'honeypot'                           => '1',
 		'email'                              => array(
 			'connection_1' => array(
@@ -71,7 +69,6 @@ $form_template['contact'] = array(
 				'mhk_from_name'     => get_bloginfo( 'name', 'display' ),
 				'mhk_from_email'    => '{admin_email}',
 				'mhk_reply_to'      => '{field_id="email"}',
-				/* translators: %s: Form Name */
 				'mhk_email_subject' => sprintf( esc_html__( 'New Form Entry %s', 'muhiku-plug' ), $form_name ),
 				'mhk_email_message' => '{all_fields}',
 			),

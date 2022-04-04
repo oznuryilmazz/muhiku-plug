@@ -3,7 +3,6 @@
  * MuhikuPlug Entries Table List
  *
  * @package MuhikuPlug\Admin
- * @since   1.1.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,49 +11,33 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-/**
- * Entries table list class.
- */
 class MHK_Admin_Entries_Table_List extends WP_List_Table {
 
 	/**
-	 * Form ID.
-	 *
 	 * @var int
 	 */
 	public $form_id;
 
 	/**
-	 * Forms object.
-	 *
 	 * @var MHK_Form_Handler
 	 */
 	public $form;
 
 	/**
-	 * Forms object.
-	 *
 	 * @var MHK_Form_Handler[]
 	 */
 	public $forms;
 
 	/**
-	 * Form data as an array.
-	 *
 	 * @var array
 	 */
 	public $form_data;
 
-	/**
-	 * Initialize the log table list.
-	 */
 	public function __construct() {
-		// Fetch all forms.
 		$this->forms = mhk_get_all_forms( true );
 
-		// Check that the user has created at least one form.
 		if ( ! empty( $this->forms ) ) {
-			$this->form_id   = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : apply_filters( 'muhiku_forms_entry_list_default_form_id', key( $this->forms ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			$this->form_id   = ! empty( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : apply_filters( 'muhiku_forms_entry_list_default_form_id', key( $this->forms ) );  
 			$this->form      = mhk()->form->get( $this->form_id );
 			$this->form_data = ! empty( $this->form->post_content ) ? mhk_decode( $this->form->post_content ) : '';
 		}
@@ -69,34 +52,26 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Get the current action selected from the bulk actions dropdown.
-	 *
-	 * @since 1.5.3
 	 *
 	 * @return string|false The action name or False if no action was selected.
 	 */
 	public function current_action() {
-		if ( isset( $_REQUEST['export_action'] ) && ! empty( $_REQUEST['export_action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_REQUEST['export_action'] ) && ! empty( $_REQUEST['export_action'] ) ) {  
 			return false;
 		}
 
-		if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_REQUEST['delete_all'] ) || isset( $_REQUEST['delete_all2'] ) ) {  
 			return 'delete_all';
 		}
 
 		return parent::current_action();
 	}
 
-	/**
-	 * No items found text.
-	 */
 	public function no_items() {
-		esc_html_e( 'Whoops, it appears you do not have any form entries yet.', 'muhiku-plug' );
+		esc_html_e( 'Hata! Henüz herhangi bir form girişiniz yok.', 'muhiku-plug' );
 	}
 
 	/**
-	 * Get list columns.
-	 *
 	 * @return array
 	 */
 	public function get_columns() {
@@ -105,7 +80,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 		$columns            = apply_filters( 'muhiku_forms_entries_table_form_fields_columns', $this->get_columns_form_fields( $columns ), $this->form_id, $this->form_data );
 		$columns['date']    = esc_html__( 'Oluşturulma Tarihi', 'muhiku-plug' );
 		$columns['actions'] = esc_html__( 'Eylemler', 'muhiku-plug' );
-		// Columns Adjustment Settings.
 		if ( defined( 'EFP_VERSION' ) ) {
 			$columns['more'] = '<a href="#" class="muhiku-plug-entries-setting" title="' . esc_attr__( 'More Options', 'muhiku-plug' ) . '" data-mhk-form_id="' . $this->form_id . '"><i class="dashicons dashicons-admin-generic"></i></a>';
 		}
@@ -113,14 +87,12 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Get a list of sortable columns.
-	 *
 	 * @return array
 	 */
 	protected function get_sortable_columns() {
 		$sortable_columns = array();
 
-		if ( isset( $_GET['form_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_GET['form_id'] ) ) { 
 			$sortable_columns = array(
 				'date' => array( 'date_created', false ),
 			);
@@ -135,14 +107,10 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Generates content for a single row of the table.
-	 *
-	 * @since 1.6.0
-	 *
 	 * @param object $entry Entry data.
 	 */
 	public function single_row( $entry ) {
-		if ( empty( $_GET['status'] ) || ( isset( $_GET['status'] ) && 'trash' !== $_GET['status'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( empty( $_GET['status'] ) || ( isset( $_GET['status'] ) && 'trash' !== $_GET['status'] ) ) {  
 			echo '<tr class="' . ( $entry->viewed ? 'read' : 'unread' ) . '">';
 			$this->single_row_columns( $entry );
 			echo '</tr>';
@@ -152,8 +120,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Get the list of fields, that are disallowed to be displayed as column in a table.
-	 *
 	 * @return array
 	 */
 	public static function get_columns_form_disallowed_fields() {
@@ -161,8 +127,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Logic to determine which fields are displayed in the table columns.
-	 *
 	 * @param array $columns List of colums.
 	 * @param int   $display Numbers of columns to display.
 	 *
@@ -181,7 +145,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			}
 		} elseif ( ! empty( $entry_columns ) ) {
 			foreach ( $entry_columns as $id ) {
-				// Check to make sure the field as not been removed.
 				if ( empty( $this->form_data['form_fields'][ $id ] ) ) {
 					continue;
 				}
@@ -194,8 +157,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Column cb.
-	 *
 	 * @param  object $entry Entry object.
 	 * @return string
 	 */
@@ -204,8 +165,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Show specific form fields.
-	 *
 	 * @param  object $entry Entry object.
 	 * @param  string $column_name Column Name.
 	 * @return string
@@ -237,7 +196,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 				}
 			}
 
-			// Limit to 5 lines.
 			if ( false === strpos( $value, 'http' ) ) {
 				$lines = explode( "\n", $value );
 				$value = array_slice( $lines, 0, 4 );
@@ -258,8 +216,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Renders the columns.
-	 *
 	 * @param  object $entry Entry object.
 	 * @param  string $column_name Column Name.
 	 * @return string
@@ -287,8 +243,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Render the actions column.
-	 *
 	 * @param  object $entry Entry object.
 	 * @return string
 	 */
@@ -301,7 +255,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			}
 
 			if ( current_user_can( 'muhiku_forms_delete_entry', $entry->entry_id ) ) {
-				/* translators: %s: entry name */
 				$actions['trash'] = '<a class="submitdelete" aria-label="' . esc_attr__( 'Trash form entry', 'muhiku-plug' ) . '" href="' . esc_url(
 					wp_nonce_url(
 						add_query_arg(
@@ -332,7 +285,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			}
 
 			if ( current_user_can( 'muhiku_forms_delete_entry', $entry->entry_id ) ) {
-				/* translators: %s: entry name */
 				$actions['delete'] = '<a class="submitdelete" aria-label="' . esc_attr__( 'Delete form entry permanently', 'muhiku-plug' ) . '" href="' . esc_url(
 					wp_nonce_url(
 						add_query_arg(
@@ -352,8 +304,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Get the status label for entries.
-	 *
 	 * @param string $status_name Status name.
 	 * @param int    $amount      Amount of entries.
 	 * @return array
@@ -379,8 +329,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Table list views.
-	 *
 	 * @return array
 	 */
 	protected function get_views() {
@@ -388,9 +336,8 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 		$num_entries   = mhk_get_count_entries_by_status( $this->form_id );
 		$total_entries = apply_filters( 'muhiku_forms_total_entries_count', (int) $num_entries['publish'], $num_entries, $this->form_id );
 		$statuses      = array_keys( mhk_get_entry_statuses( $this->form_data ) );
-		$class         = empty( $_REQUEST['status'] ) ? ' class="current"' : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		$class         = empty( $_REQUEST['status'] ) ? ' class="current"' : '';  
 
-		/* translators: %s: count */
 		$status_links['all'] = "<a href='admin.php?page=mhk-entries&amp;form_id=$this->form_id'$class>" . sprintf( _nx( 'All <span class="count">(%s)</span>', 'All <span class="count">(%s)</span>', $total_entries, 'entries', 'muhiku-plug' ), number_format_i18n( $total_entries ) ) . '</a>';
 
 		foreach ( $statuses as $status_name ) {
@@ -400,7 +347,7 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 				continue;
 			}
 
-			if ( isset( $_REQUEST['status'] ) && sanitize_key( wp_unslash( $_REQUEST['status'] ) ) === $status_name ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( isset( $_REQUEST['status'] ) && sanitize_key( wp_unslash( $_REQUEST['status'] ) ) === $status_name ) {  
 				$class = ' class="current"';
 			}
 
@@ -413,34 +360,28 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 	}
 
 	/**
-	 * Get bulk actions.
 	 *
 	 * @return array
 	 */
 	protected function get_bulk_actions() {
-		if ( isset( $_GET['status'] ) && 'trash' === $_GET['status'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_GET['status'] ) && 'trash' === $_GET['status'] ) {  
 			$actions = array(
 				'untrash' => __( 'Restore', 'muhiku-plug' ),
 				'delete'  => __( 'Delete Permanently', 'muhiku-plug' ),
 			);
 		} else {
 			$actions = array(
-				'trash' => __( 'Move to Trash', 'muhiku-plug' ),
+				'trash' => __( 'Çöpe At', 'muhiku-plug' ),
 			);
 		}
 
 		return apply_filters( 'muhiku_forms_entry_bulk_actions', $actions );
 	}
 
-	/**
-	 * Process bulk actions.
-	 *
-	 * @since 1.2.0
-	 */
 	public function process_bulk_action() {
 		$pagenum   = $this->get_pagenum();
 		$doaction  = $this->current_action();
-		$entry_ids = isset( $_REQUEST['entry'] ) ? wp_parse_id_list( wp_unslash( $_REQUEST['entry'] ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification
+		$entry_ids = isset( $_REQUEST['entry'] ) ? wp_parse_id_list( wp_unslash( $_REQUEST['entry'] ) ) : array();  
 		$count     = 0;
 
 		if ( $doaction ) {
@@ -469,7 +410,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 					add_settings_error(
 						'bulk_action',
 						'bulk_action',
-						/* translators: %d: number of entries, %s: entries status */
 						sprintf( _n( '%1$d entry successfully %2$s.', '%1$d entries successfully %2$s.', $count, 'muhiku-plug' ), $count, 'star' === $doaction ? 'starred' : 'unstarred' ),
 						'updated'
 					);
@@ -485,7 +425,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 					add_settings_error(
 						'bulk_action',
 						'bulk_action',
-						/* translators: %d: number of entries, %s: entries status */
 						sprintf( _n( '%1$d entry successfully marked as %2$s.', '%1$d entries successfully marked as %2$s.', $count, 'muhiku-plug' ), $count, $doaction ),
 						'updated'
 					);
@@ -500,7 +439,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 					add_settings_error(
 						'bulk_action',
 						'bulk_action',
-						/* translators: %d: number of entries */
 						sprintf( _n( '%d entry moved to the Trash.', '%d entries moved to the Trash.', $count, 'muhiku-plug' ), $count ),
 						'updated'
 					);
@@ -515,7 +453,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 					add_settings_error(
 						'bulk_action',
 						'bulk_action',
-						/* translators: %d: number of entries */
 						sprintf( _n( '%d entry restored from the Trash.', '%d entries restored from the Trash.', $count, 'muhiku-plug' ), $count ),
 						'updated'
 					);
@@ -530,7 +467,6 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 					add_settings_error(
 						'bulk_action',
 						'bulk_action',
-						/* translators: %d: number of entries */
 						sprintf( _n( '%d entry permanently deleted.', '%d entries permanently deleted.', $count, 'muhiku-plug' ), $count ),
 						'updated'
 					);
@@ -540,20 +476,18 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 
 			wp_safe_redirect( $sendback );
 			exit();
-		} elseif ( ! empty( $_REQUEST['_wp_http_referer'] ) && isset( $_SERVER['REQUEST_URI'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			wp_safe_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		} elseif ( ! empty( $_REQUEST['_wp_http_referer'] ) && isset( $_SERVER['REQUEST_URI'] ) ) {  
+			wp_safe_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );  
 			exit();
 		}
 	}
 
 	/**
-	 * Extra controls to be displayed between bulk actions and pagination.
-	 *
 	 * @param string $which The location of the extra table nav markup.
 	 */
 	protected function extra_tablenav( $which ) {
 		$num_entries = mhk_get_count_entries_by_status( $this->form_id );
-		$show_export = isset( $_GET['status'] ) && 'trash' === $_GET['status'] ? false : true; // phpcs:ignore WordPress.Security.NonceVerification
+		$show_export = isset( $_GET['status'] ) && 'trash' === $_GET['status'] ? false : true;  
 		?>
 		<div class="alignleft actions">
 		<?php
@@ -562,26 +496,22 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			$this->forms_dropdown();
 			submit_button( __( 'Filter', 'muhiku-plug' ), '', 'filter_action', false, array( 'id' => 'post-query-submit' ) );
 
-			// Export CSV submit button.
 			if ( apply_filters( 'muhiku_forms_enable_csv_export', $show_export ) && current_user_can( 'export' ) ) {
-				submit_button( __( 'Export CSV', 'muhiku-plug' ), '', 'export_action', false, array( 'id' => 'export-csv-submit' ) );
+				submit_button( __( 'Dışarı CSV olarak aktar', 'muhiku-plug' ), '', 'export_action', false, array( 'id' => 'export-csv-submit' ) );
 			}
 		}
 
-		if ( $num_entries['trash'] && isset( $_GET['status'] ) && 'trash' === $_GET['status'] && current_user_can( 'manage_muhiku_forms' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			submit_button( __( 'Empty Trash', 'muhiku-plug' ), 'apply', 'delete_all', false );
+		if ( $num_entries['trash'] && isset( $_GET['status'] ) && 'trash' === $_GET['status'] && current_user_can( 'manage_muhiku_forms' ) ) {  
+			submit_button( __( 'Çöpü temizle', 'muhiku-plug' ), 'apply', 'delete_all', false );
 		}
 		?>
 		</div>
 		<?php
 	}
 
-	/**
-	 * Display a form dropdown for filtering entries.
-	 */
 	public function forms_dropdown() {
 		$forms   = mhk_get_all_forms( true );
-		$form_id = isset( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : $this->form_id; // phpcs:ignore WordPress.Security.NonceVerification
+		$form_id = isset( $_REQUEST['form_id'] ) ? absint( $_REQUEST['form_id'] ) : $this->form_id;  
 		?>
 		<label for="filter-by-form" class="screen-reader-text"><?php esc_html_e( 'Filter by form', 'muhiku-plug' ); ?></label>
 		<select name="form_id" id="filter-by-form">
@@ -592,14 +522,10 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 		<?php
 	}
 
-	/**
-	 * Prepare table list items.
-	 */
 	public function prepare_items() {
 		$per_page     = $this->get_items_per_page( 'mhk_entries_per_page' );
 		$current_page = $this->get_pagenum();
 
-		// Query args.
 		$args = array(
 			'status'  => 'publish',
 			'form_id' => $this->form_id,
@@ -607,34 +533,29 @@ class MHK_Admin_Entries_Table_List extends WP_List_Table {
 			'offset'  => $per_page * ( $current_page - 1 ),
 		);
 
-		// Handle the status query.
-		if ( ! empty( $_REQUEST['status'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$args['status'] = sanitize_key( wp_unslash( $_REQUEST['status'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_REQUEST['status'] ) ) { 
+			$args['status'] = sanitize_key( wp_unslash( $_REQUEST['status'] ) ); 
 		}
 
-		// Handle the search query.
-		if ( ! empty( $_REQUEST['s'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$args['search'] = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_REQUEST['s'] ) ) {  
+			$args['search'] = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) );  
 		}
 
-		if ( ! empty( $_REQUEST['orderby'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$args['orderby'] = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_REQUEST['orderby'] ) ) {  
+			$args['orderby'] = sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) );  
 		}
 
-		if ( ! empty( $_REQUEST['order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$args['order'] = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! empty( $_REQUEST['order'] ) ) {  
+			$args['order'] = sanitize_text_field( wp_unslash( $_REQUEST['order'] ) );  
 		}
 
-		// Get the entries.
 		$entries     = mhk_search_entries( $args );
 		$this->items = array_map( 'mhk_get_entry', $entries );
 
-		// Get total items.
 		$args['limit']  = -1;
 		$args['offset'] = 0;
 		$total_items    = count( mhk_search_entries( $args ) );
 
-		// Set the pagination.
 		$this->set_pagination_args(
 			array(
 				'total_items' => $total_items,
